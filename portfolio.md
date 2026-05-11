@@ -8,7 +8,7 @@
 
 ## 0. 소개
 
-빠르게 만들어진 서비스에 합류해 기술 부채를 정리하면서 신규 기능을 함께 만들어온 프론트엔드 엔지니어.
+빠르게 만들어진 서비스에 합류해 기술 부채를 정리하고, 신규 기능 개발과 구조 개선을 함께 진행해 온 프론트엔드 엔지니어예요.
 
 - **세이프닥 (2025.05 ~ 현재)** — 복지몰·CMS·병원 CRM 3개 서비스의 단독 Frontend Engineer.
 - **왓타임 (2024.01 ~ 2024.11)** — ATS 서비스 round의 Electron 크롤러 아키텍처 재설계 + 면접 템플릿 / 채용 페이지 구현.
@@ -23,25 +23,25 @@
 | 모노레포        | Turborepo + pnpm 패키지 분할           | 13개 패키지 + 5개 GitHub Actions workflow                          |
 | 코드베이스      | FSD sub-domain 패턴                    | 25 entities / 20 features 슬라이스                                 |
 
-작업 방향: **검증된 라이브러리 위에 얇은 어댑터**. `@use-funnel/core`, `react-hook-form`, `react-modal-sheet`, `overlay-kit`을 다시 만들지 않고 30~50줄 어댑터로 도메인에 통합. **Rule of Three가 충족된 후에만 추상화**.
+작업 방향은 **검증된 라이브러리 위에 얇은 어댑터를 두는 것**이에요. 사용자 입장에서 더 명확하고 편한 경험이 무엇인지 먼저 판단하고, Rule of Three 이후에만 추상화를 도입해 과한 설계를 피했어요.
 
 ---
 
 ## 1. 세이프닥 (Safedoc) — 2025.05 ~ 현재
 
-병원·의원 복지 할인 플랫폼 3개 서비스 (복지몰 / CMS / 병원 CRM) 단독 Frontend Engineer. 합류 시점 코드베이스는 FSD와 Atomic Design 잔재 혼재, 폼 useState 직접 구현, 디자인 토큰 부재 상태였음. **빅뱅 리팩토링 없이 신규 기능 PR에 해당 영역만 점진 정리**하는 원칙으로 작업.
+병원·의원 복지 할인 플랫폼 3개 서비스 (복지몰 / CMS / 병원 CRM)의 단독 Frontend Engineer로 일하고 있어요. 합류 당시 서비스는 병원 프로그램 탐색과 예약 흐름 중심의 MVP였고, 시술 이후 단계는 앱 안에서 거의 관리되지 않는 상태였어요. 이후 예약 이후 운영 기능, 분석 환경, 관리자 기능까지 확장하며 운영 가능한 제품 구조로 고도화했고, **빅뱅 리팩토링 없이 신규 기능 PR 안에서 해당 영역만 점진적으로 정리**하는 원칙으로 작업했어요.
 
 ---
 
 ### 1.1. Amplitude 241개 이벤트 + 시술상세 개편 역효과 진단
 
-**가장 임팩트 큰 작업**이라고 본인이 평가하는 사례. 본인이 동의해서 구현한 기능이 사용자 행동을 더 나쁘게 만들었음을 데이터로 증명하고 재설계.
+제가 **가장 임팩트가 컸다고 생각하는 작업**이에요. 제가 동의해서 구현한 기능이 실제로는 사용자 행동을 더 나쁘게 만들었다는 점을 데이터로 확인하고 다시 설계했어요.
 
 #### 가설과 측정
 
-디자인팀과 합의해 시술 상세 페이지 개편. 가설은 "정보 풍부 → 신뢰 상승 → 전환율 향상". 본인이 동의하고 구현.
+디자인팀과 합의해 시술 상세 페이지를 개편했어요. 가설은 "정보가 풍부해지면 신뢰가 올라가고, 전환율도 좋아질 것"이었어요. 저도 이 가설에 동의하고 직접 구현했어요.
 
-배포 후 Amplitude 퍼널 측정.
+배포 후에는 마케팅팀이 도입한 Amplitude 환경 위에서 설계해 둔 퍼널 이벤트로 바로 측정했어요.
 
 - 예약 클릭률 -16%
 - 상담 클릭률 -66%
@@ -49,24 +49,24 @@
 
 #### 진단
 
-퍼널 단계별 이탈 추적 → CTA(예약 / 상담)가 스크롤 깊은 곳에 있어 사용자가 도달 전 이탈. **정보가 풍부해진 만큼 페이지가 길어진 부작용**.
+퍼널 단계별 이탈을 추적해 보니 CTA(예약 / 상담)가 스크롤 깊은 곳에 있어 사용자가 도달하기 전에 이탈하고 있었어요. **정보가 풍부해진 만큼 페이지가 길어졌고, 그게 오히려 부작용으로 돌아온 상황**이었어요.
 
 #### 재설계
 
 - 병원 상세 → 시술 상세 → 예약의 3단계 depth → 병원 상세에서 바로 예약 / 상담 가능한 CTA 구조.
 - "더 자세히 보기" 누르지 않은 사용자도 행동 가능하도록 sticky CTA 도입.
-- A/B 테스트 대신 사후 측정 + 즉시 롤백. 회사 단계상 트래픽이 의미있는 표본을 만들기에 빠듯했음.
+- A/B 테스트 대신 사후 측정 후 즉시 롤백했어요. 회사 단계상 트래픽이 충분하지 않아 의미 있는 표본을 만들기엔 빠듯했어요.
 
 #### 한계 / 다시 한다면
 
-- 측정 인프라가 먼저 있어야 진단이 가능했음. 합류 직후 Amplitude 이벤트 설계가 후행됐다면 이 진단도 불가능했을 것.
-- 가설 검증 단계에서 본인이 "지표 기준이 뭔가" 충분히 묻지 않았음. 다음 개편부터는 가설 단계에 측정 지표를 합의하는 것을 원칙으로 함.
+- 측정 인프라가 먼저 있어야 진단이 가능했어요. 합류 직후 Amplitude 이벤트 설계가 더 늦었다면 이 문제도 제대로 확인하지 못했을 거예요.
+- 가설 검증 단계에서 제가 "무슨 지표로 성공을 볼 것인지"를 더 집요하게 물었어야 했어요. 이후부터는 가설 단계에서 측정 지표까지 함께 합의하는 걸 원칙으로 삼았어요.
 
 ---
 
 ### 1.2. 예약 Form 아키텍처 리팩토링 — 1,400줄 → 700줄
 
-`React Hook Form + Zod + @use-funnel/core` 조합으로 정리.
+`React Hook Form + Zod + @use-funnel/core` 조합으로 정리했어요.
 
 #### 기존 문제
 
@@ -94,7 +94,7 @@ export function useZodForm<T extends ZodObject<any>>(props: UseZodFormProps<T>) 
 }
 ```
 
-`z.infer<typeof schema>`로 schema 변경 시 form 타입 자동 동기화. 기존엔 별도 `interface`로 정의해 schema와 drift 발생.
+`z.infer<typeof schema>`를 써서 schema가 바뀌면 form 타입도 자동으로 동기화되게 만들었어요. 기존에는 별도 `interface`를 두고 있어서 schema와 drift가 자주 생겼어요.
 
 #### `superRefine` Cross-Field
 
@@ -114,19 +114,19 @@ const ReviewStep1Schema = z.object({
 });
 ```
 
-흩뿌렸던 if 분기를 schema 한 곳으로 집결.
+흩어져 있던 if 분기를 schema 한 곳으로 모았어요.
 
 #### 결과 / 한계
 
 - 예약 페이지 1,400 → 700줄, 가족 동기화 550 → 55줄 (git diff 기준).
 - 패턴은 리뷰 작성, 상담 신청, 회원정보 수정에 재사용.
-- **한계**: 700줄도 여전히 큰 컴포넌트. 차후 view 단위로 한 번 더 분할 필요. 이번 작업은 "구조 정리" 단계이고 "view 분할" 은 후속 작업으로 남겨둠.
+- **한계**도 있었어요. 700줄도 여전히 큰 컴포넌트라서, 이후에는 view 단위로 한 번 더 쪼개야 했어요. 이번 작업은 우선 "구조 정리"까지 진행했고, "view 분할"은 후속 작업으로 남겨뒀어요.
 
 ---
 
 ### 1.3. 리뷰 작성 플로우 — 0부터 설계한 신규 도메인 (1,290 LOC)
 
-**기존 코드 정리가 아닌, 0부터 설계한 신규 도메인**.
+이 작업은 **기존 코드를 정리한 게 아니라 0부터 설계한 신규 도메인**이었어요.
 
 - 4단계 funnel: 가족 선택 → 평점 + 치료 태그 → 견적 / 보험 → 사진 + 텍스트
 - step별 Zod schema + 통합 `ReviewSchema`
@@ -135,7 +135,7 @@ const ReviewStep1Schema = z.object({
 - step 누적 데이터: `@use-funnel/core` history snapshot, RHF는 step 진입 시 동기화
 - Amplitude 이벤트 세분화
 
-이후 상담 / 견적 요청 플로우의 레퍼런스 구현으로 사용.
+이후 상담 / 견적 요청 플로우를 설계할 때도 레퍼런스 구현으로 계속 활용했어요.
 
 ---
 
@@ -143,20 +143,21 @@ const ReviewStep1Schema = z.object({
 
 #### 합류 시점
 
-- 961 파일 규모. FSD 시도 + Atomic Design 잔재 혼재.
-- widgets / features / entities 경계 모호 → 같은 도메인 코드가 여러 슬라이스에 흩어짐.
-- Public API 기준 부재 → 직접 deep import. 파일명 case 혼재.
+- 961 파일 규모였고, FSD 시도와 Atomic Design 잔재가 함께 섞여 있었어요.
+- widgets / features / entities 경계가 모호해서 같은 도메인 코드가 여러 슬라이스에 흩어져 있었어요.
+- Public API 기준도 없어서 직접 deep import가 많았고, 파일명 case도 섞여 있었어요.
 
 #### 정리
 
 1. **5-layer FSD 표준화**: `app / pages / widgets / features / entities / shared`. (FSD 공식은 5-layer. `processes`는 deprecated)
 2. 25 entities / 20 features 슬라이스 경계와 Public API 기준 정립.
 3. 위반 케이스 점진 정리: widgets 도메인 컴포넌트 → features 이관, 순환 의존 해소, 파일명 kebab-case.
-4. TanStack Query v5 `queryOptions` 패턴 + Server Component prefetch → HydrationBoundary → useSuspenseQuery 흐름 정리.
+4. TanStack Query v5 `queryOptions` 패턴과 Server Component prefetch → HydrationBoundary → `useSuspenseQuery` 흐름도 함께 정리했어요.
+5. 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들었어요.
 
 #### Sub-Domain 패턴 (자체 정립)
 
-FSD 공식에는 없는 패턴. entities / features 안에서 단일 슬라이스의 파일이 30+ 개로 누적되면 평탄한 구조가 가독성을 해침.
+이건 FSD 공식에 있는 패턴은 아니에요. 다만 `entities` / `features` 안에서 단일 슬라이스 파일이 30개 이상 쌓이기 시작하면 평평한 구조가 오히려 가독성을 해친다고 판단했어요.
 
 ```
 entities/settlement/
@@ -167,18 +168,18 @@ entities/settlement/
 └── omission/    # 누락 처리
 ```
 
-도메인 라이프사이클 단계별 분할.
+도메인 라이프사이클 단계에 맞춰 나눴어요.
 
 #### 한계 / 다시 한다면
 
-- sub-domain 도입 시점이 늦었음. 30+ 파일이 누적된 후에야 분할 → 마이그레이션 비용 증가. 슬라이스 파일 15개 시점에 도입 결정 기준을 세웠다면 비용이 절반이었을 것.
-- "sub-domain은 FSD 공식이 아님" → 신규 합류자 학습 비용. 가이드 문서 후행 작성으로 해결했지만, 처음 도입 시점에 문서를 같이 만들었어야 함.
+- sub-domain 도입 시점이 늦었어요. 30개 이상 파일이 쌓인 뒤에야 나누다 보니 마이그레이션 비용이 커졌어요. 슬라이스 파일이 15개쯤 되었을 때 기준을 세웠다면 비용을 훨씬 줄일 수 있었을 거예요.
+- 또 "sub-domain은 FSD 공식 패턴이 아니다" 보니 신규 합류자에게 학습 비용이 있었어요. 가이드 문서를 뒤늦게 추가해 해결했지만, 처음 도입할 때 같이 만들었어야 했어요.
 
 ---
 
 ### 1.5. CMS · 병원 CRM — 13 패키지 모노레포 단독 설계
 
-두 앱이 공통 도메인 (예약, 병원정보, 동의서 등)을 공유하면서 각자 도메인 코드는 분리되어야 하는 환경. 모노레포 + 패키지 분할로 절충.
+두 앱이 공통 도메인(예약, 병원정보, 동의서 등)은 공유하면서도 각자 앱의 도메인 코드는 분리되어야 했어요. 그래서 모노레포와 패키지 분할로 균형을 맞췄어요.
 
 #### 패키지 구조
 
@@ -194,13 +195,13 @@ entities/settlement/
 
 #### `@safedoc/ui` no-build bundled 전환
 
-초기 `tsup` prebuilt 구조 → 패키지 코드 변경 시 빌드 → 앱 HMR 흐름이 느려 DX 나쁨. `package.json`의 `exports`가 src를 직접 가리키도록 변경해 패키지 코드 변경이 즉시 앱 HMR로 반영.
+초기에는 `tsup` 기반 prebuilt 구조였어요. 패키지 코드를 바꿀 때마다 다시 빌드해야 해서 앱 HMR 흐름이 느렸어요. 그래서 `package.json`의 `exports`가 `src`를 직접 가리키게 바꿔서 패키지 변경이 즉시 앱 HMR에 반영되도록 했어요.
 
 #### 트레이드오프
 
-- src 직접 노출은 외부 publish 시 재작업 필요. 사내 패키지 한정.
-- IDE go-to-definition / 타입 추론은 더 빨라짐 (dist 거치지 않음).
-- **단점**: 의존 패키지가 많아질수록 dev 서버 초기 컴파일 시간 증가. 현재는 13 패키지 규모라 문제 없지만, 20+ 가면 빌드 캐시 전략 재검토 필요.
+- `src`를 직접 노출하는 방식이라 외부 publish를 하려면 다시 손봐야 해요. 대신 사내 패키지라는 전제에서는 괜찮았어요.
+- IDE의 go-to-definition과 타입 추론은 더 빨라졌어요. `dist`를 거치지 않기 때문이에요.
+- **단점**도 있었어요. 의존 패키지가 많아질수록 dev 서버 초기 컴파일 시간이 늘어났어요. 지금 13개 패키지 규모에서는 괜찮았지만, 20개를 넘기면 빌드 캐시 전략을 다시 봐야 했어요.
 
 #### Turborepo + GitHub Actions
 
@@ -268,14 +269,14 @@ enum PROGRAM_FORM_NAME_TYPE {
 
 #### 2) Transfer Layer — 서버 ↔ 폼 양방향 변환
 
-서버 응답과 폼 값의 형태가 달라 변환 레이어를 별도 파일로 분리.
+서버 응답과 폼 값의 형태가 달라서 변환 레이어를 별도 파일로 분리했어요.
 
 | 방향      | 함수                               | 역할                                                                            |
 | --------- | ---------------------------------- | ------------------------------------------------------------------------------- |
 | 서버 → 폼 | `programDetailToClientProgramForm` | `Dayjs` 변환, `imageId` → `UploadFile[]`, 템플릿 데이터 → `Form.List` 구조      |
 | 폼 → 서버 | `clientProgramFormToCreateRequest` | `Dayjs` → ISO string, `UploadFile[]` → `imageId` 추출, `before/after` 페어 검증 |
 
-검수는 변경 전후 비교가 필요해 별도 변환 파일 (`program.inspection.transfer.ts`) 에서 `originPrice`, `originDiscountPrice` 같은 변경 전 값을 폼에 같이 주입.
+검수는 변경 전후 비교가 필요해서 별도 변환 파일 (`program.inspection.transfer.ts`)에서 `originPrice`, `originDiscountPrice` 같은 이전 값을 폼에 함께 주입했어요.
 
 #### 3) Form.List + Cascade Validation
 
@@ -293,7 +294,7 @@ enum PROGRAM_FORM_NAME_TYPE {
 ]}>
 ```
 
-`useWatch` + `useDeepCompareEffect`로 부분 유효성을 실시간 체크해 추가 버튼 활성화 / 비활성화 제어.
+`useWatch` + `useDeepCompareEffect`로 부분 유효성을 실시간으로 체크해 추가 버튼 활성화 / 비활성화를 제어했어요.
 
 #### 4) 비동기 이미지 업로드 + validator
 
@@ -316,11 +317,11 @@ enum PROGRAM_FORM_NAME_TYPE {
 </Form.Item>
 ```
 
-업로드 실패 / 진행 중 상태를 별도 state로 관리하지 않고 폼 validator 한 곳에서 판단.
+업로드 실패 / 진행 중 상태를 별도 state로 흩어놓지 않고, 폼 validator 한 곳에서 판단하게 했어요.
 
 #### 5) 검수 흐름 — 단일 폼 인스턴스 + 상태 머신
 
-처음 설계는 "이전 / 새 버전 두 폼 인스턴스 side-by-side" 였지만, **두 폼을 동기화하는 비용이 컸고 변경 추적은 DB 레벨에서 가능** 해 **단일 폼 인스턴스 + Callout 상태 배지** 로 단순화.
+처음에는 "이전 / 새 버전 두 폼 인스턴스를 나란히 두는 방식"으로 생각했어요. 그런데 **두 폼을 동기화하는 비용이 너무 컸고, 변경 추적은 DB 레벨에서도 가능**했어요. 그래서 **단일 폼 인스턴스 + Callout 상태 배지** 구조로 단순화했어요.
 
 - `PROGRAM_INSPECTION_STATUS` enum으로 상태 머신 관리: `Request → Waiting → Confirm | Reject`
 - `Request / Waiting` 만 편집 가능, 나머지는 `disabled` prop으로 폼 잠금
@@ -328,19 +329,19 @@ enum PROGRAM_FORM_NAME_TYPE {
 
 #### 6) Cross-app 추출 (Rule of Three)
 
-처음엔 Admin (CMS) 에만 있던 도메인 → 병원 CRM에도 동일 흐름 필요해짐 → Admin 안정화 후 `@safedoc/features`로 추출.
+처음에는 Admin(CMS)에만 있던 도메인이었는데, 병원 CRM에도 같은 흐름이 필요해졌어요. 그래서 Admin 쪽을 먼저 안정화한 뒤 `@safedoc/features`로 추출했어요.
 
 #### 한계 / 다시 한다면
 
-- **서버 임시저장 부재**: 현재는 `form.resetFields()` 기반 UI 레벨 reset만. 페이지 이탈 시 값 손실 (경고 다이얼로그 없음). 후속으로 `localStorage` 기반 draft + `beforeunload` 가드 도입 필요. 처음 설계 시 draft sub-domain을 만들 계획이었으나 우선순위 조정으로 deprioritize.
-- **Transfer 함수의 단위 테스트 부재**: 변환 로직이 복잡해 (10+ 분기) 회귀 위험이 가장 큰 영역인데 테스트 없음. 보강 우선순위 1순위.
-- **상세 이미지 변환 (`program.transfer.helper.ts` 200+ 줄)**: SafeDoc 템플릿 ↔ 커스텀 이미지 분기가 함수 안에 누적되어 가독성 낮음. 템플릿 종류별로 strategy pattern 분리가 적합했을 것.
+- **서버 임시저장이 없다는 한계**가 있었어요. 현재는 `form.resetFields()` 기반 UI 레벨 reset만 있어서 페이지를 이탈하면 값이 사라졌어요. 이후에는 `localStorage` 기반 draft와 `beforeunload` 가드를 넣어야 했어요. 처음 설계할 때 draft sub-domain까지 생각했지만 우선순위 조정으로 미뤘어요.
+- **Transfer 함수의 단위 테스트도 없었어요.** 변환 로직은 10개 이상 분기가 섞여 있어 회귀 위험이 가장 큰 영역인데, 이 부분은 보강 우선순위 1순위였어요.
+- **상세 이미지 변환(`program.transfer.helper.ts` 200+ 줄)**도 아쉬웠어요. SafeDoc 템플릿과 커스텀 이미지 분기가 한 함수 안에 계속 쌓이면서 가독성이 낮아졌어요. 템플릿 종류별 strategy pattern으로 나눴다면 더 좋았을 거예요.
 
 ---
 
 ### 1.7. 정산 도메인 — Middleware + Optimistic Update
 
-정산은 권한 / 감사 측면에서 별도 호스트 운영. 코드는 단일 레포 유지.
+정산은 권한 / 감사 측면에서 별도 호스트로 운영했지만, 코드는 단일 레포로 유지했어요.
 
 - **Middleware**: `/settlement/*` 진입 시 별도 호스트 redirect, 토큰 위임.
 - **Route Group `(altLayout)/settlement`**: 같은 코드베이스 + 별도 레이아웃.
@@ -359,11 +360,20 @@ mutateAsync({ id, hidden: true }).catch(() => {
 });
 ```
 
-`queryClient.getQueriesData()`로 패턴 매칭되는 모든 쿼리에 일괄 적용 → 정산내역 / 숨김처리 비교 두 탭이 동시 갱신.
+`queryClient.getQueriesData()`로 패턴 매칭되는 모든 쿼리에 일괄 적용해서 정산내역 / 숨김처리 비교 두 탭이 함께 갱신되도록 했어요.
+
+#### Claude skills + 리팩토링 workflow
+
+정산 영역은 외부업체가 개발한 뒤 인수한 코드가 많아서, 대표 패턴을 먼저 정리한 뒤 같은 문맥으로 확장하는 방식이 특히 중요했어요.
+
+- `settlement/program`, `settlement/monthly`의 대표 모달을 먼저 `overlay-kit` 패턴으로 리팩토링했어요.
+- 그다음 Claude Code에 해당 diff와 패턴 맥락을 넘겨 비슷한 모달과 페이지를 같은 방식으로 정리하게 했어요.
+- `.claude` skills 문서에 FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식을 문서화해 반복 작업의 문맥 비용을 줄였어요.
+- PR 전에는 AI agent 코드리뷰를 먼저 돌려 critical한 경계 위반과 Public API 누락을 사전에 점검했고, worktree로 2~3개 작업을 병렬로 진행했어요.
 
 #### 트레이드오프 / 한계
 
-- URL 파라미터 토큰 위임은 브라우저 history / Referer / 서버 access log 노출 위험이 있음. **단일 사용 단명 토큰 + HTTPS 전제** 로 운영하지만, 보안 측면에서 더 단단한 방법은 별도 OAuth-style 인가 코드 교환. 현재는 운영 단계상 절충이며, 트래픽 / 감사 요구가 강해지면 교체 필요.
+- URL 파라미터 토큰 위임은 브라우저 history / Referer / 서버 access log에 남을 위험이 있어요. **단일 사용 단명 토큰 + HTTPS 전제**로 운영했지만, 보안 측면에서는 별도 OAuth-style 인가 코드 교환이 더 단단한 방식이에요. 지금은 운영 단계상 절충한 형태였고, 트래픽이나 감사 요구가 더 커지면 교체가 필요했어요.
 
 ---
 
@@ -378,66 +388,101 @@ mutateAsync({ id, hidden: true }).catch(() => {
 
 ## 2. 왓타임 (Whattime / round) — 2024.01 ~ 2024.11
 
-캘린더 기반 일정 조율 + ATS 솔루션 SaaS. ATS 서비스 round 담당.
+캘린더 기반 일정 조율 + ATS 솔루션 SaaS에서 ATS 서비스 round를 담당했어요.
 
-### 2.1. Electron 크롤러 아키텍처 재설계 — MVC + DI + Factory Pattern
+### 2.1. Electron Desktop 크롤러 아키텍처 재설계
 
-#### 배경
+가장 기술적으로 밀도 높았던 작업은 Electron Desktop 크롤러 구조를 다시 세운 일이에요. round는 점핏 / 잡플래닛 / 게임잡 같은 외부 채용 플랫폼에서 후보자 데이터를 수집해 자체 DB에 통합하고 있었는데, 플랫폼마다 로그인 방식, 상세 진입, 파일 다운로드, 페이지네이션이 조금씩 달라 공통 흐름이 반복 / 복제되고 있었어요.
 
-채용 플랫폼 (점핏 / 잡플래닛 / 게임잡)에서 인재 정보 수집 → 자체 DB 통합. 플랫폼마다 별도 구현체 + 공통 흐름 (로그인 → 검색 → 수집 → 업로드)이 반복 / 변형.
-
-- 플랫폼 N개 = 비슷하지만 미묘하게 다른 코드 N개. 한쪽 버그 픽스가 다른 쪽 누락.
-- 신규 플랫폼 추가 시 기존 코드 복사 + 차이점 패치 = **3개 플랫폼 평균 3일 (본인이 직접 도입했던 작업 시간 기준)**.
-
-#### 구조
-
-```
-Controller (CandidateServiceHelper)
-   ├── Model (CandidateRepository: S3, DB 어댑터)
-   └── PlatformAdapter (플랫폼별 DOM 조작)
-         └── Factory (PlatformAdapterFactory)
-```
+핵심은 `CandidateServiceHelper` 추상 클래스로 수집 프로세스를 4단계로 표준화한 거예요.
 
 ```ts
-class CandidateServiceHelper {
-  constructor(
-    private adapter: PlatformAdapter,
-    private repository: CandidateRepository,
-  ) {}
-
-  async run() {
-    await this.adapter.login();
-    const candidates = await this.adapter.search(criteria);
-    const data = await this.adapter.collect(candidates);
-    await this.repository.upload(data);
-  }
+export abstract class CandidateServiceHelper<T> {
+  abstract createInsertCandidates(): Promise<void>;
+  abstract roundCandidateFilter(): Promise<void>;
+  abstract createRoundCandidates(): Promise<void>;
+  abstract uploadResumes(props: UploadResumes): Promise<{ successCount: number }>;
 }
 ```
 
-- 공통 흐름은 한 곳, 플랫폼별 차이점은 adapter 안에만.
-- 신규 플랫폼: `PlatformAdapter` 인터페이스 구현 + factory 등록만. **3일 → 1일 (본인 측정)**.
-- DI로 단위 테스트 가능 구조.
+- `createInsertCandidates` — 플랫폼에서 수집 대상 후보자 목록 생성
+- `roundCandidateFilter` — round 기준 중복 후보자 필터링
+- `createRoundCandidates` — round 후보자 등록 및 업로드 대상 생성
+- `uploadResumes` — 이력서를 S3에 업로드하고 URL 갱신
+
+플랫폼별 서비스 / repository 구현체는 DOM 조작과 API 차이만 맡고, 공통 흐름은 helper에 남겼어요. 결과적으로 신규 플랫폼 연동 방식이 "기존 코드 복사 후 패치"에서 "정해진 단계 구현"으로 바뀌었고, 코드 중복 70% 감소 / 신규 플랫폼 연동 기간 3일 → 1일 단축으로 이어졌어요.
 
 #### 한계 / 다시 한다면
 
-- DOM 셀렉터 / 로그인 흐름은 플랫폼이 UI 변경하면 바로 깨짐. 재설계는 구조를 정리했지만 **DOM 변경에 대한 회복 탄력성은 별도**. 셀렉터 헬스체크 + 알람을 같이 만들었다면 운영 비용이 더 줄었을 것.
-- DI는 도입했지만 실제 단위 테스트는 시간 부족으로 못 작성. 구조만 갖춰두고 테스트는 후행이 된 케이스.
+- DOM 셀렉터 / 로그인 흐름은 플랫폼 UI 변경에 취약해요. 구조는 정리했지만 운영 안정성은 별도 문제였고, 셀렉터 헬스체크나 감지 알람까지 붙였다면 더 좋았을 거예요.
+- DI 가능한 구조는 갖췄지만 실제 단위 테스트는 후행이 됐어요.
 
 ---
 
-### 2.2. 면접 템플릿 / 온보딩 4단계 funnel
+### 2.2. 후보자 평가 / 피드백 / 칸반 관리 화면 고도화
 
-`useFunnel` (단계 전환) + `usePromiseSessionStorage` (단계 데이터 자동 백업, 새로고침 / 탭 닫힘 후 복원) + `FormDirtyContext` (변경 있음 전역 노출, `beforeunload` + 라우터 이벤트 confirm) 통합. 면접 템플릿 / 온보딩 / 자동화 규칙 / 평가 템플릿 4가지 흐름에 동일 패턴 재사용.
+입사 초반에는 후보자 평가와 채용 단계 관리 UX를 집중적으로 맡았어요.
+
+- 평가 제출 / 상세 조회 / 읽기 전용 모드 분리
+- 평가 템플릿 cache key 문제 수정과 search / sort 추가
+- 후보자 quick memo, 단계별 메모, 상세 피드백 처리
+- 칸반 보드 기반 stage 이동 UX 개선
+
+특히 칸반 보드는 `@dnd-kit` 기반으로 구현했어요.
+
+- `DndContext` + `SortableContext` + `PointerSensor` + `arrayMove`
+- 드래그 중 로컬 상태를 먼저 갱신한 뒤 서버 mutation
+- 실패 시 이전 stage로 롤백
+- 평가 미완료 / 면접 진행 중 같은 도메인 조건은 confirm dialog로 제어
+
+단순한 카드 정렬 UI가 아니라, 평가 상태와 채용 단계 규칙이 얽힌 관리 화면을 다뤘다는 점에서 의미가 있었어요.
 
 ---
 
-### 2.3. 그 외 왓타임 작업
+### 2.3. 채용 페이지 / 지원서 설정 / 템플릿 폼 구조 개선
 
-- **채용 페이지 / 지원서 설정 폼**: `React Hook Form` + `useFieldArray` + `FormProvider` + `useYupValidation`. 세이프닥 `useZodForm`의 yup 버전 원형.
-- **메일 / 알림 템플릿**: `@whattime/quill` 기반 WYSIWYG + 템플릿 변수 시스템 (`{{candidateName}}` placeholder 치환). quill blot 시스템으로 변수를 atomic node 처리.
-- **Server State 표준화**: `@lukemorales/query-key-factory`로 candidate / recruit / member / interviewAlarm 도메인 query key 표준화. 무효화 누락 / 키 drift 제거.
-- **DnD 공고 정렬**: `@dnd-kit` (DndContext + SortableContext + PointerSensor + arrayMove). optimistic update + 자동 롤백.
-- **roundhr.com 랜딩**: Next.js + GSAP ScrollTrigger + Notion CMS + `react-notion-x`.
+채용 페이지와 지원서 설정은 동적 질문, 중첩된 하위 폼, 조건부 validation이 많은 영역이었어요.
+
+- `React Hook Form` + `useFieldArray`로 질문 추가 / 삭제 / 재정렬
+- `FormProvider`로 하위 컴포넌트에 form context 전달
+- `useYupValidation` 기반 schema validation 통합
+- 메일 / 면접 알림 템플릿 작성 UI를 `@whattime/quill` 기반 WYSIWYG로 개선
+
+템플릿 시스템에서는 `{{candidate-name}}`, `{{organization-name}}` 같은 변수를 삽입하고, 미리보기에서 실제 값으로 치환하는 흐름을 정리했어요. WYSIWYG 내부 표현과 실제 데이터 표현을 분리해 운영자가 반복적으로 쓰는 메시지 작성 UX를 다듬었어요.
+
+---
+
+### 2.4. 면접 템플릿 / 온보딩 — 4단계 funnel 패턴 정리
+
+면접 템플릿 생성 플로우는 4단계로 나뉘어 있었고, 각 단계의 데이터가 다음 단계 validation에 이어지는 구조였어요. 실제 구현은 yup schema를 단계별로 `pick` / `concat` 해서 확장하는 방식이었어요.
+
+- 1단계: 시간 유형 / 가능 시간 / 템플릿 이름
+- 2단계: 면접 장소 / 설명 / 시간 범위
+- 3단계: 참여자 확인 방식 / 일정 조율 규칙
+- 4단계: 이메일 제목 / 본문
+
+여기에 `useFunnel` 기반 단계 전환을 얹어, 면접 템플릿과 온보딩 checklist 같은 멀티스텝 경험을 하나의 패턴으로 정리했어요. 이 시기 경험이 이후 세이프닥에서 funnel + schema 패턴을 더 강하게 발전시키는 기반이 됐어요.
+
+---
+
+### 2.5. Server State 표준화 — `@lukemorales/query-key-factory`
+
+TanStack Query를 쓰고 있었지만 도메인별 query key와 invalidate 기준이 파일마다 흩어져 있어 캐시 drift가 자주 생겼어요.
+
+```ts
+export const candidateDetailKeys = createQueryKeys('CandidateDetail', {
+  detail: ({ candidateId }) => ({
+    queryKey: [candidateId],
+    queryFn: () => candidatesApi.show({ candidateId }),
+    contextQueries: {
+      quick_memo: { queryKey: null, queryFn: () => candidatesQuickMemosApi.index(candidateId!) },
+      timelineHistories: { queryKey: null, queryFn: () => candidatesHistoriesApi.timeline(candidateId!) },
+    },
+  }),
+});
+```
+
+`createQueryKeys` + `contextQueries` 조합으로 candidate / recruit / member / interviewAlarm 등 주요 도메인의 query key를 계층적으로 표준화했어요. detail, memo, histories처럼 함께 조회되는 데이터를 같은 문맥 안에서 관리할 수 있었고, invalidate 기준이 명시적으로 드러나 캐시 누락과 중복 fetch를 줄였어요.
 
 ---
 
@@ -452,7 +497,7 @@ class CandidateServiceHelper {
 | `react-hot-toast`                   | 사내 toast wrapper   | ~43줄  |
 | `react-modal-sheet` + `overlay-kit` | BottomSheet compound | ~100줄 |
 
-검증된 라이브러리는 a11y / 엣지 케이스 / 브라우저 호환성을 이미 풀어둠.
+검증된 라이브러리는 a11y / 엣지 케이스 / 브라우저 호환성을 이미 풀어두고 있었어요.
 
 ### 3.2. Rule of Three
 
@@ -465,9 +510,9 @@ class CandidateServiceHelper {
 
 ### 3.3. 빅뱅 리팩토링은 하지 않는다
 
-- 신규 기능 PR 안에 해당 영역만 함께 정리.
-- widgets → features 이관, kebab-case 표준화 등은 점진적 누적.
-- 이유: 회귀 리스크, 리뷰어 부담, 비즈니스 흐름 정지.
+- 신규 기능 PR 안에서 해당 영역만 함께 정리했어요.
+- widgets → features 이관, kebab-case 표준화 같은 작업도 점진적으로 누적했어요.
+- 이유는 회귀 리스크와 리뷰어 부담을 줄이고, 비즈니스 흐름을 멈추지 않기 위해서였어요.
 
 ### 3.4. 상태 도구 분리
 
@@ -477,6 +522,12 @@ class CandidateServiceHelper {
 | Form          | RHF / AntD Form |
 | UI 전역       | Zustand         |
 | 컴포넌트 로컬 | useState        |
+
+### 3.5. AI Workflow
+
+- `jira-branch` 명령으로 JIRA 티켓과 브랜치 맥락을 읽고 계획을 세운 뒤, 구현 후에는 커밋과 PR 생성까지 자동화했어요.
+- PR 전에는 AI agent 코드리뷰를 거쳐 critical한 부분을 먼저 점검했고, skills에는 코드 패턴과 기획 맥락을 문서화해 반복 작업의 문맥 비용을 줄였어요.
+- worktree를 활용해 2~3개의 작업을 병렬로 진행하며 개발 흐름을 운영했어요.
 
 ---
 
