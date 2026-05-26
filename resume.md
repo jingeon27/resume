@@ -51,12 +51,12 @@
 - **`@core` 디자인 시스템 — 20개 Primitive Component**
   - Radix UI / Headless UI 위에 `Button`, `Input`, `BottomSheet`, `Dialog`, `Toast`, `Tooltip`, `Callout`, `Checkbox`, `Radio`, `Toggle`, `Tabs`, `Chip`, `Menu` 등을 공통화했습니다.
   - `tailwind-variants`로 size / intent / state 3축을 표준화해 inline `className` override 안티패턴을 줄였습니다.
-  - BottomSheet Compound (`Root/Header/Content/Footer`)와 `react-modal-sheet`, `overlay-kit`을 통합해 route change / popstate / backdrop pointer-events / `setTimeout` cleanup 같은 모바일 엣지 케이스를 라이프사이클 레이어 한 곳에서 처리했습니다.
+  - BottomSheet Compound (`Root/Header/Content/Footer`)를 `react-modal-sheet` 위에 설계하고 `overlay-kit` imperative API로 호출하도록 구성해, 뒤로가기(`popstate`) 닫기 · backdrop tap 닫기 · snap point/detent를 `Root` 라이프사이클 레이어 한 곳에서 처리했습니다.
 
 - **SafeDoc App 프론트 아키텍처 정리**
   - 961 파일 규모의 코드베이스에서 FSD와 Atomic Design 잔재가 섞여 있던 구조를 5-layer FSD (`app / pages / widgets / features / entities / shared`)로 표준화했고, 25개 entities / 20개 features 슬라이스의 경계와 Public API 기준을 정립했습니다.
   - widgets → features 이관, 순환 의존 해소, 파일명 kebab-case 정리를 점진적으로 진행했습니다.
-  - TanStack Query v5 `queryOptions` 패턴과 Server Component prefetch → HydrationBoundary → `useSuspenseQuery` 흐름을 정리했고, infinite query는 `infiniteSetData` 헬퍼로 nested page 안의 개별 아이템을 업데이트할 수 있게 했습니다.
+  - TanStack Query v5 `queryOptions` 패턴과 Server Component prefetch → HydrationBoundary → `useSuspenseQuery` 흐름을 정리했고, infinite query는 사내 `infiniteSetData` 헬퍼를 활용해 nested page 안의 개별 아이템을 업데이트했습니다.
   - 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 구조를 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들었고, 하위 page 전환 시 server-level 중복 fetch를 줄였습니다.
 
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계**
@@ -195,7 +195,7 @@
 
 - **React Hook Form**: `useForm` proxy 기반 selective re-render 메커니즘 → `useZodForm` 어댑터 설계 시 참고.
 - **Toss Slash** (`@use-funnel/core`, `overlay-kit`): funnel history snapshot + overlay 라이프사이클 → 사내 funnel wrapper / BottomSheet compound 설계 시 참고.
-- **TanStack Query**: `queryOptions` 패턴 + infinite query cache 구조 → 사내 query key 표준 + `infiniteSetData` 헬퍼 설계 시 참고.
+- **TanStack Query**: `queryOptions` 패턴 + infinite query cache 구조 → 사내 query key 표준 설계 시 참고.
 
 ---
 
