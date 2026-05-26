@@ -56,7 +56,7 @@
 - **SafeDoc App 프론트 아키텍처 정리**
   - 961 파일 규모의 코드베이스에서 FSD와 Atomic Design 잔재가 섞여 있던 구조를 5-layer FSD (`app / pages / widgets / features / entities / shared`)로 표준화했고, 25개 entities / 20개 features 슬라이스의 경계와 Public API 기준을 정립했습니다.
   - widgets → features 이관, 순환 의존 해소, 파일명 kebab-case 정리를 점진적으로 진행했습니다.
-  - TanStack Query v5 `queryOptions` 패턴과 Server Component prefetch → HydrationBoundary → `useSuspenseQuery` 흐름을 정리했고, infinite query는 사내 `infiniteSetData` 헬퍼를 활용해 nested page 안의 개별 아이템을 업데이트했습니다.
+  - `ensureQueryData` + props drilling로 캐시를 구독하지 않아 무효화가 화면에 반영되지 않던 구조를, `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 전환해 구독을 호출 지점으로 분산했습니다. infinite query는 사내 `infiniteSetData` 헬퍼로 nested page 내 개별 아이템을 갱신했습니다.
   - 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 구조를 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들었고, 하위 page 전환 시 server-level 중복 fetch를 줄였습니다.
 
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계**
