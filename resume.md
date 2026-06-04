@@ -11,10 +11,13 @@
 빠르게 만들어진 서비스에 합류해 기술 부채를 정리하고, 신규 기능 개발과 구조 개선을 함께 진행해 온 프론트엔드 엔지니어입니다. 2026.01부터 세이프닥 복지몰·CMS·병원 CRM 3개 서비스의 단독 Frontend Engineer로 신규 기능 개발·운영·구조 개선을 담당하고 있습니다. React, Next.js(App Router), TypeScript 기반에서 복잡한 사용자 플로우를 운영 가능한 구조로 정리하고, 사용자 입장에서 더 명확하고 편한 경험이 무엇인지 먼저 판단하며 구현해 왔습니다.
 
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측 지원** — PO가 분석한 결과, 최종 예약 전환율은 유의미한 변화가 없었지만 가입 후 예약까지의 소요시간 14분 → 11분 감소와 프로그램 기준 리뷰 수요 확대를 확인했고, 이를 바탕으로 CTA 및 후속 과제를 재설계
+- **신규 가입 UTM 유실 원인 규명** — OAuth 식별자 분리 / 신규 속성 추가 가설을 검증한 뒤, Amplitude Data의 `unexpected` 속성 상태가 원인임을 찾아 코드 수정 없이 해결
 - **예약 폼 1,400 → 700줄, 가족 동기화 550 → 55줄** (`React Hook Form + Zod + @use-funnel/core`)
+- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 10,000+ 라인 규모의 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화
 - **`@core` 디자인 시스템 20개 Primitive Component** 표준화 (Radix UI 기반)
 - **SafeDoc App 961 파일 5-layer FSD 정리** + sub-domain 패턴 자체 정립 (25 entities / 20 features 슬라이스)
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계** (Turborepo + pnpm)
+- **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 login-CSRF / open redirect 방어 추가
 - **Electron 크롤러 MVC + DI + Factory Pattern 재설계** — 신규 플랫폼 연동 3일 → 1일 (3개 플랫폼 도입 후 본인 측정)
 
 스타트업 환경에서 단위 테스트 비용과 유지보수 부담을 줄이기 위해, 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화를 도입합니다.
@@ -38,9 +41,11 @@
   - 디자인팀의 가설("정보 풍부 → 신뢰 → 전환율")에 맞춰 시술상세 개편을 구현하고, 배포 전후 비교가 가능하도록 퍼널·행동 이벤트를 설계해 PO가 분석할 수 있는 계측 기반을 만들었습니다.
   - PO 분석 결과, 최종 예약 전환율은 유의미한 변화가 없었지만 가입 후 예약까지의 소요시간은 14분에서 11분으로 줄었고, 예약 페이지 진입 후 최종 신청까지의 전환은 개선되었습니다.
   - 또한 시술상세 진입 사용자 중 25%가 리뷰를 조회했고(병원상세 8%), 리뷰 조회 사용자의 예약 전환율이 비조회 사용자보다 약 15%p 높다는 점이 확인되어 프로그램 기준 리뷰 분리와 CTA 재배치를 후속 과제로 도출했습니다.
+  - 신규 가입 유저의 UTM 유실 문제에서는 OAuth 로그인 전후 식별자 분리와 신규 속성 추가 가설을 먼저 검증했고, 실제 원인이 Amplitude Data의 `initial_utm_source` 속성 상태(`unexpected`)임을 찾아 코드 수정 / 배포 없이 해결했습니다.
 
 - **예약 Form 아키텍처 리팩토링 — 1,400 → 700줄**
   - `useState` 30개와 props drilling, `useEffect` 5~6개로 얽혀 있던 가족 동기화 코드를 `React Hook Form + Zod + @use-funnel/core` 조합으로 정리했습니다.
+  - 날짜 선택 상태가 local state와 Zustand store에 중복 저장되고, 가족 목록이 React Query cache와 store에 이중 관리되던 구조를 FormProvider 중심으로 재정리해 상태 소유권을 단일화했습니다.
   - 가족 데이터 동기화 로직을 550줄에서 55줄로 줄였고, cross-field 검증을 if 분기에서 `superRefine` 선언형 schema로 옮겼습니다.
   - 이 패턴은 리뷰 작성 / 상담 신청 / 회원정보 수정에도 재사용했습니다.
 
@@ -61,8 +66,8 @@
 
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계**
   - 13개 패키지(3 config + 5 shared + 2 lib + entities + features)를 설계했고, workspace protocol과 pnpm catalog로 공통 의존성을 관리했습니다.
+  - CMS와 병원 CRM의 중복 구현을 줄이기 위해 `entities`, `features`, `shared`, `config`, `lib` 패키지 경계를 나누고, 공통 도메인은 패키지로 추출해 두 앱에서 같은 구현을 재사용하도록 설계했습니다.
   - `@safedoc/ui` 패키지 빌드 방식을 `prebuilt(tsup)`에서 `no-build bundled`로 전환해 패키지 ↔ 앱 변경이 즉시 HMR에 반영되도록 했습니다.
-  - Turborepo와 GitHub Actions 5 workflows(prod/stage/dev deploy + lint + slack-alarm), `dorny/paths-filter` 기반 변경 감지로 CMS / Hospital 선택 배포를 구성했습니다.
 
 - **Claude skills 기반 개발 문서화 및 workflow 변경**
   - `.claude` 설정과 skills 문서를 정리해 FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식, 기획 맥락 같은 반복 지식을 문서화했습니다.
@@ -74,11 +79,11 @@
   - sub-feature 패턴 (`features/program/ui/{detail, modal}`)으로 UI 블록 의존성을 폴더 트리에서 가시화했습니다.
   - **한계**: 30+ 누적 후에야 도입 → 마이그레이션 비용 증가. 15개 시점에 도입 기준이 있었다면 비용 절반.
 
-- **Program 도메인 폼 설계 — sub-domain + Transfer Layer**
-  - CMS / 병원 CRM이 공유하는 도메인을 `program/{common, inspection}`으로 나눴고, AntD Form 기반으로 설계했습니다.
+- **Program 도메인 폼 설계 — 10,000+ 라인 복합 폼 시스템**
+  - CMS / 병원 CRM이 공유하는 38개 필드 규모의 Program 관리 폼을 `program/{common, inspection}` sub-domain으로 나눴고, AntD Form 기반으로 설계했습니다.
   - 2-tier `FORM_NAME` enum을 통해 `@safedoc/types` 공통 enum과 CMS 전용 enum이 같은 값을 재참조하도록 만들어 공통 필드 변경을 양쪽에 동기화했습니다.
   - Transfer Layer (`programDetailToClientProgramForm` / `clientProgramFormToCreateRequest`)로 서버 ↔ 폼 변환 로직을 분리했고, Dayjs / UploadFile / 템플릿 데이터를 양방향으로 변환했습니다.
-  - `Form.List` + `useWatch` 기반 cascade validation으로 시술 전후 이미지 페어를 검증했고, 비동기 이미지 업로드는 `customRequest` + validator가 응답 객체(`response.src`) 존재 여부로 판단하도록 구성했습니다.
+  - `Form.List`, `useWatch`, `shouldUpdate`, custom validator를 조합해 조건부 렌더링, 시술 전후 이미지 페어 검증, 비동기 이미지 업로드 응답 검증, cascade validation을 구현했습니다.
   - 검수는 단일 폼 인스턴스와 상태 머신 (`PROGRAM_INSPECTION_STATUS`: `Request → Waiting → Confirm | Reject`), Callout 배지 조합으로 단순화했습니다.
   - Admin 안정화 후 `@safedoc/features`로 추출해 CMS / 병원 CRM이 함께 쓰도록 확장했습니다.
 
@@ -87,10 +92,16 @@
 
 - **정산 리펙토링 + 운영건 작업**
   - Next.js Middleware + Route Group `(altLayout)/settlement`로 별도 호스트를 분리하면서도 단일 코드베이스를 유지했습니다. 동시에 legacy `fetch/apis` 구조를 FSD `entities/features` 구조로 마이그레이션했습니다.
+  - 서로 다른 registrable domain 간 HttpOnly 쿠키를 공유할 수 없는 문제를 해결하기 위해 정산 메뉴 클릭 시 토큰을 handoff하는 흐름을 설계했고, URL query 방식에서 form POST BFF 방식으로 전환해 access log / Referer 노출 위험을 제거했습니다.
+  - BFF에는 Origin / Referer 검증, `Cache-Control: no-store`, `303 See Other`, `next` pathname 정규화 기반 open redirect 방어를 추가했고, 미들웨어는 도메인 라우팅만 담당하도록 handoff 책임을 별도 API 라우트로 분리했습니다.
   - `queryClient.setQueriesData`로 즉시 반영하고, 실패 시 catch 블록에서 자동 롤백되도록 구성해 정산내역 / 숨김처리 비교 두 탭이 함께 갱신되도록 했습니다.
   - 정산 `entities`를 `common / omission / disapproval / deposit / contract` sub-domain으로 나누고, `features/settlement`는 URL 기준 `dashboard / monthly / program / contract` 구조로 재편했습니다. `settlement/program`과 `settlement/monthly` 페이지는 SearchFilter / Table / hook / modal 단위로 분리해 레거시 page 중심 구조를 걷어냈습니다.
   - 레거시 `forwardRef` 기반 모달은 `overlay-kit` 패턴으로 전환했습니다. `settlement/program`과 `settlement/monthly`의 대표 모달을 먼저 리팩토링한 뒤, 그 컨텍스트를 Claude Code에 넘겨 비슷한 패턴의 모달과 페이지를 같은 방식으로 정리했고, PR 전 AI agent 코드리뷰로 critical한 경계 위반과 Public API 문제를 먼저 점검했습니다.
   - 이 과정에서 `handleUpdate` 계열 로직은 curried 함수 → 단일 함수 통합 + 실패 폴백 추가로 정리했고, settlement mutation은 optimistic update 패턴으로 통일했습니다.
+
+- **운영자 도구 UX 및 백오피스 도메인 표준화**
+  - 예약, 프로그램 검수, 정산, 병원 계약, 리뷰, 채팅, 홈 설정, 기업 / 대학교 관리처럼 운영자가 반복적으로 사용하는 CMS / 병원 CRM 화면을 도메인 단위로 분리했습니다.
+  - SearchFilter / Table / Modal / Drawer / Detail Form 패턴을 반복 가능한 단위로 정리해 레거시 page 중심 구조에서 기능 단위 구조로 옮겼습니다.
 
 - **병원 검색**
   - `geolib` 거리 계산 + `naver-maps` SDK + `react-intersection-observer` 무한 스크롤 + 자동완성 / 인기 검색어 / 실시간 검색 카운트.
@@ -147,19 +158,21 @@
 
 - Compound Pattern + Custom Hook 추상화로 디자인 시스템 / 폼 도메인 직접 설계.
 - `useSuspenseQuery` + `getQueryClient` + `HydrationBoundary` SSR 데이터 페칭 표준화.
+- 외부 mutable store를 React state로 억지로 감싸지 않고 `useSyncExternalStore` 기반 adapter로 연결해 React 18 external store contract에 맞춘 구독 구조 설계.
 - BottomSheet Compound (`Root/Header/Content/Footer`) + `overlay-kit` 라이프사이클 명시화로 4가지 모바일 엣지 케이스 처리.
 - 스타트업 환경에서 검증된 라이브러리를 우선 활용하고 필요한 만큼만 래핑해, 직접 구현 비용과 단위 테스트 부담을 함께 줄이는 방향으로 설계했습니다.
 
 ### TypeScript 5
 
 - Variadic tuple 단계별 폼 타입 합성, recursive type nested key path 추론, mapped type + key remapping 도메인 타입 자동 생성.
+- class instance에서 method key만 추론하는 mapped type 유틸을 만들어 core 자료구조 API를 React hook adapter로 노출.
 - Zod schema 추론 제네릭 (`z.infer<ZodObject<T>>`) → schema 변경 시 form 타입 자동 동기화.
 - Discriminated Union 도메인 적용: 콜인 / 워크인 동의서 폼 타입 분리.
 - `satisfies` + `as const` 도메인 상수 객체 좁은 추론.
 
 ### Next.js 15 App Router
 
-- **Middleware**: `/settlement/*` 별도 호스트 분리, 토큰 위임. 단일 코드베이스 + 환경 게이팅. URL 파라미터 토큰 위임의 보안 트레이드오프 (Referer / 로그 노출 가능성) 인지하고 단명 토큰 + HTTPS 전제로 운영.
+- **Middleware / BFF**: `/settlement/*` 별도 호스트 분리, handoff API 라우트, form POST 기반 토큰 위임. URL token 방식의 access log / Referer 노출 위험을 제거하고 Origin / Referer 검증, `no-store`, `303`, open redirect 방어 적용.
 - **Route Group**: `(altLayout)/settlement` 별도 레이아웃 + 단일 코드베이스.
 - **Streaming SSR + Suspense**: boundary 단위 chunk 분할.
 - **Caching**: `cookies()` / `searchParams` dynamic 강제 트리거, fetch caching 옵션 (`force-cache` / `no-store` / `revalidate` / `tags`) 도메인별 적용. `revalidatePath` vs `revalidateTag` 차이 기반 무효화 전략.
@@ -168,14 +181,15 @@
 ### Architecture
 
 - **FSD 5-layer + sub-domain 자체 정립**: 961 파일 코드베이스 표준화. sub-domain은 FSD 공식이 아닌 자체 패턴, 슬라이스 파일 수 + 변경 빈도 기준으로 도입 시점 판단.
-- **Monorepo (Turborepo + pnpm)**: 13 패키지 단독 설계. 5 workflows + `dorny/paths-filter` 변경 감지 선택 배포.
+- **Monorepo (Turborepo + pnpm)**: 13 패키지 단독 설계. `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
+- **Library Adapter Design**: core 로직과 React binding을 분리하고, observer + `useSyncExternalStore`로 imperative 자료구조를 hook API로 노출.
 - **MVC + DI + Factory Pattern**: Electron 크롤러 재설계 (왓타임).
 - **Compound / Composition Pattern**: BottomSheet, Tabs, Form 핵심 UI 도메인 적용.
 
 ### Form & Validation
 
 - **React Hook Form + Zod**: `useZodForm` 어댑터 (schema → form 타입 자동 동기화). step별 schema 분리 + 통합 schema, `superRefine` cross-field validation.
-- **Ant Design Form**: `Form.List` + `shouldUpdate` + `useWatch` cascade validation, `Form.Item` custom trigger (`onDragTable`), 비동기 이미지 업로드 + `customRequest` + validator 응답 객체 존재 여부 판단.
+- **Ant Design Form**: 10,000+ 라인 복합 폼에서 `Form.List` + `shouldUpdate` + `useWatch` cascade validation, `Form.Item` custom trigger (`onDragTable`), 비동기 이미지 업로드 + `customRequest` + validator 응답 객체 존재 여부 판단.
 
 ### State & Data Fetching
 
@@ -196,6 +210,16 @@
 - **React Hook Form**: `useForm` proxy 기반 selective re-render 메커니즘 → `useZodForm` 어댑터 설계 시 참고.
 - **Toss Slash** (`@use-funnel/core`, `overlay-kit`): funnel history snapshot + overlay 라이프사이클 → 사내 funnel wrapper / BottomSheet compound 설계 시 참고.
 - **TanStack Query**: `queryOptions` 패턴 + infinite query cache 구조 → 사내 query key 표준 설계 시 참고.
+
+---
+
+## Side Projects
+
+### data-structure-ts
+
+- core 자료구조 패키지와 React binding 패키지를 분리하고, Queue / Heap / PriorityQueue를 observer 기반 외부 store로 모델링했습니다.
+- React adapter는 `useSyncExternalStore`로 구독하고, `bindMethods<T>` mapped type으로 class instance의 method key만 추론해 hook API로 노출했습니다.
+- core logic과 React binding을 분리해 자료구조 동작은 core에서, hook 구독 동작은 adapter 레벨에서 검증할 수 있게 설계했습니다.
 
 ---
 
