@@ -13,14 +13,14 @@
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측 지원** — PO가 분석한 결과, 최종 예약 전환율은 유의미한 변화가 없었지만 가입 후 예약까지의 소요시간 14분 → 11분 감소와 프로그램 기준 리뷰 수요 확대를 확인했고, 이를 바탕으로 CTA 및 후속 과제를 재설계
 - **신규 가입 UTM 유실 원인 규명** — OAuth 식별자 분리 / 신규 속성 추가 가설을 검증한 뒤, Amplitude Data의 `unexpected` 속성 상태가 원인임을 찾아 코드 수정 없이 해결
 - **예약 폼 1,400 → 700줄, 가족 동기화 550 → 55줄** (`React Hook Form + Zod + @use-funnel/core`)
-- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 10,000+ 라인 규모의 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화
+- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 대규모 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화
 - **`@core` 디자인 시스템 20개 Primitive Component** 표준화 (Radix UI 기반)
 - **SafeDoc App 961 파일 5-layer FSD 정리** + sub-domain 패턴 자체 정립 (25 entities / 20 features 슬라이스)
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계** (Turborepo + pnpm)
 - **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 login-CSRF / open redirect 방어 추가
 - **Electron 크롤러 MVC + DI + Factory Pattern 재설계** — 신규 플랫폼 연동 3일 → 1일 (3개 플랫폼 도입 후 본인 측정)
 
-스타트업 환경에서 단위 테스트 비용과 유지보수 부담을 줄이기 위해, 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화를 도입합니다.
+스타트업 환경에서 검증 범위와 유지보수 비용을 함께 고려하며, 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화를 도입합니다.
 
 ---
 
@@ -71,16 +71,16 @@
 
 - **Claude skills 기반 개발 문서화 및 workflow 변경**
   - `.claude` 설정과 skills 문서를 정리해 FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식, 기획 맥락 같은 반복 지식을 문서화했습니다.
-  - `jira-branch` 명령으로 이슈와 브랜치 맥락을 읽고 계획을 세운 뒤, 구현 후 커밋 / PR 생성까지 자동화하는 흐름을 만들었습니다.
-  - PR 전에는 AI agent 코드리뷰를 먼저 수행해 critical한 경계 위반, 네이밍, Public API 누락 같은 이슈를 사전에 점검했고, worktree를 활용해 2~3개의 작업을 병렬로 진행하는 workflow를 운영했습니다.
+  - `jira-branch` 명령으로 이슈와 브랜치 맥락을 읽고 작업 계획 초안을 만들 수 있게 했고, 반복되는 커밋 / PR 작성 흐름을 명령화해 문맥 전환 비용을 줄였습니다.
+  - PR 전에는 AI agent 코드리뷰를 보조 점검 단계로 활용해 경계 위반, 네이밍, Public API 누락 같은 이슈를 먼저 확인했고, worktree를 활용해 2~3개의 작업을 병렬로 진행하는 workflow를 운영했습니다.
 
 - **FSD sub-domain 패턴 자체 정립**
   - 단일 슬라이스 파일이 30개 이상 누적되면 평평한 구조가 가독성을 해친다고 판단해 `entities/settlement/{common, contract, deposit, disapproval, omission}` 형태로 도메인 라이프사이클 단계별 분할을 도입했습니다.
   - sub-feature 패턴 (`features/program/ui/{detail, modal}`)으로 UI 블록 의존성을 폴더 트리에서 가시화했습니다.
   - **한계**: 30+ 누적 후에야 도입 → 마이그레이션 비용 증가. 15개 시점에 도입 기준이 있었다면 비용 절반.
 
-- **Program 도메인 폼 설계 — 10,000+ 라인 복합 폼 시스템**
-  - CMS / 병원 CRM이 공유하는 38개 필드 규모의 Program 관리 폼을 `program/{common, inspection}` sub-domain으로 나눴고, AntD Form 기반으로 설계했습니다.
+- **Program 도메인 폼 설계 — 대규모 복합 폼 시스템**
+  - CMS / 병원 CRM이 공유하는 38개 필드 규모의 Program 관리 폼을 `program/{common, inspection}` sub-domain으로 나눴고, 폼 / 서버 변환 / 검수 UI / 상세 설명 템플릿을 포함한 AntD Form 도메인으로 설계했습니다.
   - 2-tier `FORM_NAME` enum을 통해 `@safedoc/types` 공통 enum과 CMS 전용 enum이 같은 값을 재참조하도록 만들어 공통 필드 변경을 양쪽에 동기화했습니다.
   - Transfer Layer (`programDetailToClientProgramForm` / `clientProgramFormToCreateRequest`)로 서버 ↔ 폼 변환 로직을 분리했고, Dayjs / UploadFile / 템플릿 데이터를 양방향으로 변환했습니다.
   - `Form.List`, `useWatch`, `shouldUpdate`, custom validator를 조합해 조건부 렌더링, 시술 전후 이미지 페어 검증, 비동기 이미지 업로드 응답 검증, cascade validation을 구현했습니다.
@@ -96,15 +96,21 @@
   - BFF에는 Origin / Referer 검증, `Cache-Control: no-store`, `303 See Other`, `next` pathname 정규화 기반 open redirect 방어를 추가했고, 미들웨어는 도메인 라우팅만 담당하도록 handoff 책임을 별도 API 라우트로 분리했습니다.
   - `queryClient.setQueriesData`로 즉시 반영하고, 실패 시 catch 블록에서 자동 롤백되도록 구성해 정산내역 / 숨김처리 비교 두 탭이 함께 갱신되도록 했습니다.
   - 정산 `entities`를 `common / omission / disapproval / deposit / contract` sub-domain으로 나누고, `features/settlement`는 URL 기준 `dashboard / monthly / program / contract` 구조로 재편했습니다. `settlement/program`과 `settlement/monthly` 페이지는 SearchFilter / Table / hook / modal 단위로 분리해 레거시 page 중심 구조를 걷어냈습니다.
-  - 레거시 `forwardRef` 기반 모달은 `overlay-kit` 패턴으로 전환했습니다. `settlement/program`과 `settlement/monthly`의 대표 모달을 먼저 리팩토링한 뒤, 그 컨텍스트를 Claude Code에 넘겨 비슷한 패턴의 모달과 페이지를 같은 방식으로 정리했고, PR 전 AI agent 코드리뷰로 critical한 경계 위반과 Public API 문제를 먼저 점검했습니다.
+  - 레거시 `forwardRef` 기반 모달은 `overlay-kit` 패턴으로 전환했습니다. `settlement/program`과 `settlement/monthly`의 대표 모달을 먼저 리팩토링한 뒤, 동일한 컨벤션과 체크리스트를 바탕으로 비슷한 패턴의 모달과 페이지를 같은 방식으로 정리했고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 점검했습니다.
   - 이 과정에서 `handleUpdate` 계열 로직은 curried 함수 → 단일 함수 통합 + 실패 폴백 추가로 정리했고, settlement mutation은 optimistic update 패턴으로 통일했습니다.
 
 - **운영자 도구 UX 및 백오피스 도메인 표준화**
   - 예약, 프로그램 검수, 정산, 병원 계약, 리뷰, 채팅, 홈 설정, 기업 / 대학교 관리처럼 운영자가 반복적으로 사용하는 CMS / 병원 CRM 화면을 도메인 단위로 분리했습니다.
   - SearchFilter / Table / Modal / Drawer / Detail Form 패턴을 반복 가능한 단위로 정리해 레거시 page 중심 구조에서 기능 단위 구조로 옮겼습니다.
+  - 정립한 `entities` / `DetailDrawer` / SearchFilter 패턴 위에서 신규 쿠폰 템플릿 관리 도메인(목록 / 등록 / 복제 prefill / 상태 일괄변경)을 12파일 규모로 추가해, 표준화된 구조가 신규 어드민 도메인 개발 속도로 회수되는 것을 확인했습니다.
 
 - **병원 검색**
   - `geolib` 거리 계산 + `naver-maps` SDK + `react-intersection-observer` 무한 스크롤 + 자동완성 / 인기 검색어 / 실시간 검색 카운트.
+
+- **동적 sitemap / robots 설계 (SEO)**
+  - 병원 / 프로그램 / 공지 / 혜택 탐색 / 진료과·시술·세부시술 검색 경로를 5개 API에서 `Promise.all`로 수집해 sitemap을 동적 생성했고, 페이지 유형별 우선순위(`MULTI / SINGLE / ETC / FORM`) taxonomy를 부여했습니다.
+  - `page:1, size:1`로 `totalCnt`를 먼저 조회한 뒤 `size=totalCnt`로 전량을 수집했고, Next.js가 `<loc>`를 XML 이스케이프하지 않는 문제를 직접 escape 처리로 보완했습니다.
+  - 세부시술 allowlist와 `revalidate=86400`(24h ISR)로 sitemap 비대화와 빌드 부하를 함께 제어했고, `robots.ts`의 disallow 경로를 정리했습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
 
@@ -141,7 +147,7 @@
 
 ### 시그니처
 
-- 스타트업 환경에서 단위 테스트 비용과 유지보수 부담을 줄이기 위해 검증된 라이브러리 위에 얇은 어댑터를 둡니다.
+- 스타트업 환경에서 검증 범위와 유지보수 부담을 함께 고려해 검증된 라이브러리 위에 얇은 어댑터를 둡니다.
 - Rule of Three 이후에만 추상화를 도입하고, 신규 기능 PR 안에서 해당 영역만 점진적으로 정리해 초기 과설계를 피합니다.
 - Server / Form / UI 전역 / 로컬 상태의 역할을 분리해 한 도구에 과도하게 책임을 몰지 않습니다.
 - FP 스타일과 `es-toolkit`, `ts-pattern`을 활용해 선언적으로 표현하되, 과한 추상화는 지양합니다.
@@ -150,8 +156,8 @@
 
 ### AI Workflow
 
-- `jira-branch` 명령으로 JIRA 티켓과 브랜치 맥락을 읽고 계획을 세운 뒤, 구현 후에는 커밋과 PR 생성까지 자동화했습니다.
-- PR 전에는 AI agent 코드리뷰를 거쳐 critical한 부분을 먼저 점검했고, skills에는 코드 패턴과 기획 맥락을 문서화해 반복 작업의 문맥 비용을 줄였습니다.
+- `jira-branch` 명령으로 JIRA 티켓과 브랜치 맥락을 읽어 작업 계획 초안을 만들고, 반복되는 커밋 / PR 작성 흐름을 명령화했습니다.
+- PR 전에는 AI agent 코드리뷰를 보조 점검 단계로 활용했고, skills에는 코드 패턴과 기획 맥락을 문서화해 반복 작업의 문맥 비용을 줄였습니다.
 - worktree를 활용해 2~3개의 작업을 병렬로 진행하며 개발 흐름을 운영했습니다.
 
 ### React 18
@@ -160,7 +166,7 @@
 - `useSuspenseQuery` + `getQueryClient` + `HydrationBoundary` SSR 데이터 페칭 표준화.
 - 외부 mutable store를 React state로 억지로 감싸지 않고 `useSyncExternalStore` 기반 adapter로 연결해 React 18 external store contract에 맞춘 구독 구조 설계.
 - BottomSheet Compound (`Root/Header/Content/Footer`) + `overlay-kit` 라이프사이클 명시화로 4가지 모바일 엣지 케이스 처리.
-- 스타트업 환경에서 검증된 라이브러리를 우선 활용하고 필요한 만큼만 래핑해, 직접 구현 비용과 단위 테스트 부담을 함께 줄이는 방향으로 설계했습니다.
+- 스타트업 환경에서 검증된 라이브러리를 우선 활용하고 필요한 만큼만 래핑해, 직접 구현 범위와 검증해야 할 표면적을 함께 줄이는 방향으로 설계했습니다.
 
 ### TypeScript 5
 
@@ -189,7 +195,7 @@
 ### Form & Validation
 
 - **React Hook Form + Zod**: `useZodForm` 어댑터 (schema → form 타입 자동 동기화). step별 schema 분리 + 통합 schema, `superRefine` cross-field validation.
-- **Ant Design Form**: 10,000+ 라인 복합 폼에서 `Form.List` + `shouldUpdate` + `useWatch` cascade validation, `Form.Item` custom trigger (`onDragTable`), 비동기 이미지 업로드 + `customRequest` + validator 응답 객체 존재 여부 판단.
+- **Ant Design Form**: 대규모 복합 폼에서 `Form.List` + `shouldUpdate` + `useWatch` cascade validation, `Form.Item` custom trigger (`onDragTable`), 비동기 이미지 업로드 + `customRequest` + validator 응답 객체 존재 여부 판단.
 
 ### State & Data Fetching
 
