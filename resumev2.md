@@ -14,7 +14,7 @@
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측** — 최종 예약 전환율은 변화가 없었지만 가입 후 예약까지 소요시간 14분 → 11분 단축, 리뷰 조회 사용자의 예약 전환율 +15%p를 확인해 CTA 재배치 등 후속 과제 도출
 - **예약 폼 아키텍처 리팩토링** — `React Hook Form + Zod + @use-funnel/core`로 상태 소유권 단일화 (1,400 → 700줄), 동일 패턴을 리뷰 작성 / 상담 신청 / 회원정보 수정 3개 플로우에 재사용
 - **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계 + SafeDoc App 961파일 5-layer FSD 표준화** — 정립한 패턴 위에서 신규 쿠폰 도메인을 12파일 규모로 추가하며 구조 투자가 개발 속도로 회수됨을 확인
-- **Compound Engineering — 누적되는 개발 생산성** — 패턴·스킬·에이전트에 누적 투자해 개발 속도를 점진적으로 끌어올립니다. Jira 티켓·API 스펙·Figma 와이어프레임을 묶어 원샷 plan → 표준 스킬(`/component`·`/drawer`·`/query`) + `@core` 패턴 조립 → `code-reviewer` 게이트 → worktree 병렬. 디자이너·시안 의존 없이 단독으로 신규 쿠폰 도메인 3종(템플릿 관리·기업 쿠폰팩·감사 로그, 28파일)을 출시했고, 표준 패턴 덕에 **도메인 초기 구현은 ~30분**(첫 feat 커밋 → PR 머지)까지 단축
+- **Compound Engineering — 누적되는 개발 생산성** — 패턴·스킬·에이전트에 누적 투자해 개발 속도를 지속적으로 끌어올리는 중입니다. Jira 티켓·API 스펙·Figma 와이어프레임을 묶어 원샷 plan → 표준 스킬(`/component`·`/drawer`·`/query`) + `@core` 패턴 조립 → `code-reviewer` 게이트 → worktree 병렬. 디자이너·시안 의존 없이 단독으로 신규 쿠폰 도메인 3종(템플릿 관리·기업 쿠폰팩·감사 로그, 28파일)을 출시했고, 표준 패턴 덕에 **도메인 초기 구현은 ~30분**(첫 feat 커밋 → PR 머지)까지 단축
 - **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 CSP `form-action` 고정 + open redirect 방어 추가
 
 스타트업 환경에서 검증 범위와 유지보수 비용을 함께 고려하며, 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화를 도입합니다.
@@ -148,7 +148,7 @@
 
 - 스타트업 환경에서 검증 범위와 유지보수 부담을 함께 고려해 검증된 라이브러리 위에 얇은 어댑터를 둡니다.
 - Rule of Three 이후에만 추상화를 도입하고, 신규 기능 PR 안에서 해당 영역만 점진적으로 정리해 초기 과설계를 피합니다.
-- **Compound engineering** — 반복으로 검증된 패턴을 `@core` / FSD / sub-domain으로 추출하고, `.claude` 스킬(`/component`·`/drawer`·`/query`)과 `code-reviewer` 에이전트로 codify해 *매 작업이 다음 작업의 비용을 낮추도록* 누적 투자합니다. 그 결과 신규 어드민 도메인 초기 구현이 ~30분까지 짧아지는 등 개발 속도가 점진적으로 빨라졌습니다.
+- **Compound engineering** — 반복으로 검증된 패턴을 `@core` / FSD / sub-domain으로 추출하고, `.claude` 스킬(`/component`·`/drawer`·`/query`)과 `code-reviewer` 에이전트로 codify해 *매 작업이 다음 작업의 비용을 낮추도록* 누적 투자하며, 개발 생산성을 지속적으로 끌어올리는 중입니다. 신규 어드민 도메인 초기 구현 ~30분이 그 현재 결과입니다.
 - Server / Form / UI 전역 / 로컬 상태의 역할을 분리해 한 도구에 과도하게 책임을 몰지 않습니다.
 - FP 스타일과 `es-toolkit`, `ts-pattern`을 활용해 선언적으로 표현하되, 과한 추상화는 지양합니다.
 - 리스트 virtual scroll, 검색·필터 구조 개선, 모달 패턴 공통화처럼 제품 성능과 운영 경험을 함께 개선하는 제안을 지속해 왔습니다.
