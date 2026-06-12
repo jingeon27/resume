@@ -14,7 +14,7 @@
 - **팀이 재사용하는 자산화** — FSD 경계·Public API 기준·모달 패턴을 `.claude` skills로 문서화, 공통 도메인을 `@safedoc/features` 패키지로 추출해 CMS / 병원 CRM이 함께 사용
 - **리뷰 문화** — PR 전 AI agent 코드리뷰로 경계 위반·네이밍·Public API 누락을 사전 점검하는 흐름 운영
 - **트레이드오프 커뮤니케이션** — UI 일관성·사용자 인지·기존 패턴 정합성을 근거로 디자이너·기획자와 소통하며 의사결정
-- **측정 가능한 임팩트** — 가입~예약 14분 → 11분, 리뷰 조회 사용자 전환율 +15%p 확인, 예약 폼 1,400 → 700줄
+- **측정 가능한 임팩트** — 가입~예약 14분 → 11분, 리뷰 조회 사용자 전환율 +15%p 확인, 예약 폼 가족 동기화 520 → 55줄
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 방향을 선호하며, Rule of Three 이후에만 추상화를 도입해 과한 설계를 피합니다.
 
@@ -36,8 +36,8 @@
   - CMS / 병원 CRM이 공유하는 Program 도메인을 안정화 후 `@safedoc/features` 패키지로 추출해 두 앱이 함께 사용하도록 확장.
   - PR 전 AI agent 코드리뷰로 critical한 경계 위반·네이밍·Public API 누락을 사전 점검하는 리뷰 흐름을 운영.
 
-- **예약 Form 아키텍처 리팩토링 — 1,400 → 700줄**
-  - `useState` 30개 + props drilling + `useEffect` 5~6개로 얽힌 가족 동기화를 `React Hook Form + Zod + @use-funnel/core`로 정리, 동기화 로직 550줄 → 55줄.
+- **예약 Form 아키텍처 리팩토링 — 가족 동기화 520 → 55줄**
+  - `useState` 30개 + props drilling + `useEffect` 5~6개로 얽힌 가족 동기화를 `React Hook Form + Zod + @use-funnel/core`로 정리, 동기화 로직(ReservationPersonSelector) 520줄 → 55줄.
   - `superRefine` 선언형 schema로 cross-field 검증을 이전하고, 이 패턴을 리뷰 작성 / 상담 신청 / 회원정보 수정 등 **여러 도메인에 재사용 가능한 형태로** 정리.
 
 - **`@core` 디자인 시스템 — 디자이너와 함께 토큰 표준화**
@@ -50,7 +50,7 @@
   - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하도록 바꿔 페이지 간 `/program/detail` 중복 호출을 request-scoped 캐시로 재사용.
 
 - **CMS · 병원 CRM 모노레포 + 도메인 폼 설계**
-  - 13패키지(Turborepo + pnpm) 구조로 공통 의존성·도메인을 관리, GitHub Actions 5 workflows + `dorny/paths-filter`로 선택 배포 구성.
+  - 동료가 설계한 기능별 shared 5분할 모노레포(Turborepo + pnpm)를 인수해 entities/features 신설 + 단일 `@safedoc/shared` 통합으로 13→9개 패키지 재편, GitHub Actions 5 workflows + `dorny/paths-filter`로 선택 배포 구성.
   - 2-tier `FORM_NAME` enum으로 공통 enum과 CMS 전용 enum이 같은 값을 재참조하게 해 **공통 필드 변경을 양쪽 앱에 자동 동기화** → 두 제품 간 정합성 유지.
   - Transfer Layer로 서버↔폼 변환을 격리, 검수는 상태 머신(`PROGRAM_INSPECTION_STATUS`)으로 단순화.
 

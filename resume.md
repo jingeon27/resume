@@ -12,12 +12,12 @@
 
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측 지원** — PO가 분석한 결과, 최종 예약 전환율은 유의미한 변화가 없었지만 가입 후 예약까지의 소요시간 14분 → 11분 감소와 프로그램 기준 리뷰 수요 확대를 확인했고, 이를 바탕으로 CTA 및 후속 과제를 재설계
 - **신규 가입 UTM 유실 원인 규명** — OAuth 식별자 분리 / 신규 속성 추가 가설을 검증한 뒤, Amplitude Data의 `unexpected` 속성 상태가 원인임을 찾아 코드 수정 없이 해결
-- **예약 폼 1,400 → 700줄, 가족 동기화 550 → 55줄** (`React Hook Form + Zod + @use-funnel/core`)
-- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 대규모 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화
+- **예약 폼 상태 소유권 단일화, 가족 동기화 520 → 55줄(−89%)** (`React Hook Form + Zod + @use-funnel/core`)
+- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 대규모 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화 ([글](https://jingeon27.tistory.com/18))
 - **`@core` 디자인 시스템 20개 Primitive Component** 표준화 (Radix UI 기반)
 - **SafeDoc App 961 파일 5-layer FSD 정리** + sub-domain 패턴 자체 정립 (25 entities / 20 features 슬라이스)
-- **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계** (Turborepo + pnpm)
-- **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 login-CSRF / open redirect 방어 추가
+- **CMS · 병원 CRM 모노레포 경계 재설계 — entities/features 신설 + shared 통합 (13→9개 패키지)** (Turborepo + pnpm)
+- **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 login-CSRF / open redirect 방어 추가 ([글](https://jingeon27.tistory.com/19))
 - **Electron 크롤러 MVC + DI + Factory Pattern 재설계** — 신규 플랫폼 연동 3일 → 1일 (3개 플랫폼 도입 후 본인 측정)
 
 스타트업 환경에서 검증 범위와 유지보수 비용을 함께 고려하며, 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화를 도입합니다.
@@ -43,13 +43,13 @@
   - 또한 시술상세 진입 사용자 중 25%가 리뷰를 조회했고(병원상세 8%), 리뷰 조회 사용자의 예약 전환율이 비조회 사용자보다 약 15%p 높다는 점이 확인되어 프로그램 기준 리뷰 분리와 CTA 재배치를 후속 과제로 도출했습니다.
   - 신규 가입 유저의 UTM 유실 문제에서는 OAuth 로그인 전후 식별자 분리와 신규 속성 추가 가설을 먼저 검증했고, 실제 원인이 Amplitude Data의 `initial_utm_source` 속성 상태(`unexpected`)임을 찾아 코드 수정 / 배포 없이 해결했습니다.
 
-- **예약 Form 아키텍처 리팩토링 — 1,400 → 700줄**
+- **예약 Form 아키텍처 리팩토링 — 가족 동기화 520 → 55줄** ([글](https://jingeon27.tistory.com/11))
   - `useState` 30개와 props drilling, `useEffect` 5~6개로 얽혀 있던 가족 동기화 코드를 `React Hook Form + Zod + @use-funnel/core` 조합으로 정리했습니다.
   - 날짜 선택 상태가 local state와 Zustand store에 중복 저장되고, 가족 목록이 React Query cache와 store에 이중 관리되던 구조를 FormProvider 중심으로 재정리해 상태 소유권을 단일화했습니다.
-  - 가족 데이터 동기화 로직을 550줄에서 55줄로 줄였고, cross-field 검증을 if 분기에서 `superRefine` 선언형 schema로 옮겼습니다.
+  - 가족 데이터 동기화 로직(ReservationPersonSelector)을 520줄에서 55줄로 줄였고, cross-field 검증을 if 분기에서 `superRefine` 선언형 schema로 옮겼습니다.
   - 이 패턴은 리뷰 작성 / 상담 신청 / 회원정보 수정에도 재사용했습니다.
 
-- **리뷰 작성 플로우 — 0부터 설계한 신규 도메인 (1,290 LOC)**
+- **리뷰 작성 플로우 — 0부터 설계한 신규 도메인 (1,290 LOC)** ([글](https://jingeon27.tistory.com/15))
   - 4단계 funnel, step별 Zod schema, 통합 schema를 설계했습니다. 가족 정보는 prefetch 후 form에 주입했습니다.
   - 이후 상담 / 견적 요청 플로우를 설계할 때 레퍼런스 구현으로 활용했습니다.
 
@@ -64,8 +64,8 @@
   - `ensureQueryData` + props drilling로 캐시를 구독하지 않아 무효화가 화면에 반영되지 않던 구조를, `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 전환해 구독을 호출 지점으로 분산했습니다. infinite query는 사내 `infiniteSetData` 헬퍼로 nested page 내 개별 아이템을 갱신했습니다.
   - 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 구조를 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들었고, 하위 page 전환 시 server-level 중복 fetch를 줄였습니다.
 
-- **CMS · 병원 CRM 13개 패키지 모노레포 단독 설계**
-  - 13개 패키지(3 config + 5 shared + 2 lib + entities + features)를 설계했고, workspace protocol과 pnpm catalog로 공통 의존성을 관리했습니다.
+- **CMS · 병원 CRM 모노레포 운영·경계 재설계 — 13→9개 패키지**
+  - 초기 기능별 shared 5분할 구조(동료 설계)를 인수해 운영하며 도메인 공유 패키지(entities/features)를 신설했고(13개), shared 5개(ui/types/utils/hooks/layout)가 import 경로만 분산시킨다고 진단해 단일 `@safedoc/shared`로 통합 — 9개로 재편했습니다. workspace protocol과 pnpm catalog로 공통 의존성을 관리합니다.
   - CMS와 병원 CRM의 중복 구현을 줄이기 위해 `entities`, `features`, `shared`, `config`, `lib` 패키지 경계를 나누고, 공통 도메인은 패키지로 추출해 두 앱에서 같은 구현을 재사용하도록 설계했습니다.
   - `@safedoc/ui` 패키지 빌드 방식을 `prebuilt(tsup)`에서 `no-build bundled`로 전환해 패키지 ↔ 앱 변경이 즉시 HMR에 반영되도록 했습니다.
 
@@ -187,7 +187,7 @@
 ### Architecture
 
 - **FSD 5-layer + sub-domain 자체 정립**: 961 파일 코드베이스 표준화. sub-domain은 FSD 공식이 아닌 자체 패턴, 슬라이스 파일 수 + 변경 빈도 기준으로 도입 시점 판단.
-- **Monorepo (Turborepo + pnpm)**: 13 패키지 단독 설계. `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
+- **Monorepo (Turborepo + pnpm)**: 13→9 패키지 경계 재설계 주도(entities/features 신설). `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
 - **Library Adapter Design**: core 로직과 React binding을 분리하고, observer + `useSyncExternalStore`로 imperative 자료구조를 hook API로 노출.
 - **MVC + DI + Factory Pattern**: Electron 크롤러 재설계 (왓타임).
 - **Compound / Composition Pattern**: BottomSheet, Tabs, Form 핵심 UI 도메인 적용.
