@@ -49,7 +49,7 @@
 - 반복 검증된 패턴을 `@core`/FSD로 추출하고 `.claude` 스킬(`/component`·`/drawer`·`/query`)·`code-reviewer` 에이전트로 codify해 *매 작업이 다음 작업의 비용을 낮추도록* 누적.
 - 디자인 시안 없이 와이어프레임만 있는 어드민은 **Jira·API 스펙·Figma를 묶어 원샷 plan → Figma Dev Mode MCP로 컨텍스트 추출 → 표준 스킬·패턴 조립 → `code-reviewer` 게이트 → worktree 병렬**로 처리.
 - 결과: 신규 쿠폰 도메인 3종(템플릿 관리·기업 쿠폰팩·감사 로그, 28파일)을 단독 출시, **도메인 초기 구현 ~30분**(이후는 기획 합의 반복).
-- **AI 출력 비판적 감독** — 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 게이트. `force-dynamic` 같은 손쉬운 우회는 근본 원인(`'use client'` 누락)으로, codegen·과한 추상화 제안은 근거 대고 reject. AI가 만든 mutation 훅의 create/update 겸용 `router.push` 버그를 진단해 분리.
+- **AI 출력 비판적 감독** — 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 게이트. `force-dynamic` 같은 손쉬운 우회는 근본 원인(`'use client'` 누락)으로, UI 트릭·과한 추상화 제안은 근거 대고 reject. AI가 만든 mutation 훅의 create/update 겸용 `router.push` 버그를 진단해 분리. (OpenAPI JSON→컨벤션 타입 생성은 스킬로 표준화해 AI가 직접 생성)
 
 **정산 — Cross-domain 토큰 핸드오프 (보안)** ([글](https://jingeon27.tistory.com/19))
 - 서로 다른 registrable domain 간 HttpOnly 쿠키 공유 불가 문제를, 정산 진입 시 토큰을 넘기는 흐름으로 해결 — URL query → **form POST BFF**로 전환해 access log/Referer 노출 제거.

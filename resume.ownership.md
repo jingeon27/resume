@@ -16,7 +16,7 @@
 - **아키텍처 패턴 자체 정립** — FSD sub-domain 패턴, 2-tier FORM_NAME enum, 서버↔폼 Transfer Layer
 - **데이터 기반 의사결정** — Amplitude 241개 이벤트 설계 후 시술상세 실험을 직접 분석해 후속 과제 재설계
 - **AI 워크플로우 단독 구축** — `.claude` skills를 자체 작성해 FSD 경계·정산 리팩토링 방식을 박제, worktree로 2~3개 작업 병렬 운영
-- **AI 출력 비판적 감독** — 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 게이트. 손쉬운 우회(force-dynamic)·틀린 자동화(codegen)·과한 추상화를 근거 대고 reject, AI 생성 mutation 훅의 router.push 버그 진단·분리
+- **AI 출력 비판적 감독** — 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 게이트. 손쉬운 우회(force-dynamic)·UI 트릭·과한 추상화를 근거 대고 reject, AI 생성 mutation 훅의 router.push 버그 진단·분리. OpenAPI JSON→컨벤션 타입 생성은 스킬로 표준화해 AI가 직접 생성
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 방향을 선호하며, Rule of Three 이후에만 추상화를 도입해 과한 설계를 피합니다.
 

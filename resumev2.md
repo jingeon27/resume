@@ -76,12 +76,13 @@
 
 - **Claude skills 기반 개발 문서화 및 workflow 변경**
   - `.claude` 설정과 skills 문서를 정리해 FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식, 기획 맥락 같은 반복 지식을 문서화했습니다.
+  - OpenAPI JSON → 컨벤션 인지 타입 생성을 스킬로 표준화 — 제네릭 codegen(kubb)이 `x-enum-varnames` 부재 시 PascalCase enum·Transfer Layer를 못 맞추는 문제를, AI가 스펙을 읽어 컨벤션대로 타입을 생성하도록 절차를 명시해 충족했습니다.
   - `jira-branch` 명령으로 이슈와 브랜치 맥락을 읽고 작업 계획 초안을 만들 수 있게 했고, 반복되는 커밋 / PR 작성 흐름을 명령화해 문맥 전환 비용을 줄였습니다.
   - PR 전에는 AI agent 코드리뷰를 보조 점검 단계로 활용해 경계 위반, 네이밍, Public API 누락 같은 이슈를 먼저 확인했고, worktree를 활용해 2~3개의 작업을 병렬로 진행하는 workflow를 운영했습니다.
 
 - **AI 출력 비판적 감독 — 생성 코드를 컨벤션으로 게이트**
   - AI 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 검증·교정했습니다 — 과한 추상화·간접 레이어·손쉬운 우회를 일관되게 reject하고 더 단순·정확한 구조로 정리.
-  - 빌드 프리렌더 실패에 `force-dynamic`을 덧붙이려는 것을 막고 `'use client'` 누락이라는 근본 원인을 고쳐 전 라우트 dynamic 통과를 검증했고, OpenAPI→TS codegen(kubb) 제안은 `x-enum-varnames` 부재 시 enum이 깨진다는 이유로 거부하고 컨벤션 수기 이식을 유지했습니다.
+  - 빌드 프리렌더 실패에 `force-dynamic`을 덧붙이려는 것을 막고 `'use client'` 누락이라는 근본 원인을 고쳐 전 라우트 dynamic 통과를 검증했고, `window.scrollTo` 트릭·단일 사용처 추상화 같은 제안은 프레임워크 기본 동작·호출부 정리로 되돌렸습니다.
   - AI가 만든 mutation 훅이 create/update 겸용이라 *수정 시에도* `router.push`가 발동하던 버그를 진단해 훅 분리 + navigation을 호출부로 이동했고, 조회 래퍼 훅은 금지하되 부수효과가 묶이는 mutation 훅은 예외로 두는 식으로 규칙 경계를 구분했습니다.
 
 - **FSD sub-domain 패턴 자체 정립**
