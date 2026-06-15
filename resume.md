@@ -13,7 +13,7 @@
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측 지원** — PO가 분석한 결과, 최종 예약 전환율은 유의미한 변화가 없었지만 가입 후 예약까지의 소요시간 14분 → 11분 감소와 프로그램 기준 리뷰 수요 확대를 확인했고, 이를 바탕으로 CTA 및 후속 과제를 재설계
 - **신규 가입 UTM 유실 원인 규명** — OAuth 식별자 분리 / 신규 속성 추가 가설을 검증한 뒤, Amplitude Data의 `unexpected` 속성 상태가 원인임을 찾아 코드 수정 없이 해결
 - **예약 폼 상태 소유권 단일화, 가족 동기화 520 → 55줄(−89%)** (`React Hook Form + Zod + @use-funnel/core`)
-- **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 대규모 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화 ([글](https://jingeon27.tistory.com/18))
+- **Program 관리 v2 전면 구축** — CMS · 병원 CRM 공통 Program 업무 흐름(목록 / 등록·수정 / 삭제 검수 / 임시저장 / 검수 내역)을 `FORM_NAME` enum + Transfer Layer + `common / inspection / draft` sub-domain 구조로 재설계 ([글](https://jingeon27.tistory.com/18))
 - **`@core` 디자인 시스템 20개 Primitive Component** 표준화 (Radix UI 기반)
 - **SafeDoc App 961 파일 5-layer FSD 정리** + sub-domain 패턴 자체 정립 (25 entities / 20 features 슬라이스)
 - **CMS · 병원 CRM 모노레포 구조 단독 재설계 — entities/features 신설 + shared 통합 (13→9개 패키지)** (Turborepo + pnpm)
@@ -93,13 +93,13 @@
   - sub-feature 패턴 (`features/program/ui/{detail, modal}`)으로 UI 블록 의존성을 폴더 트리에서 가시화했습니다.
   - **한계**: 30+ 누적 후에야 도입 → 마이그레이션 비용 증가. 15개 시점에 도입 기준이 있었다면 비용 절반.
 
-- **Program 도메인 폼 설계 — 대규모 복합 폼 시스템**
-  - CMS / 병원 CRM이 공유하는 38개 필드 규모의 Program 관리 폼을 `program/{common, inspection}` sub-domain으로 나눴고, 폼 / 서버 변환 / 검수 UI / 상세 설명 템플릿을 포함한 AntD Form 도메인으로 설계했습니다.
-  - 2-tier `FORM_NAME` enum을 통해 `@safedoc/types` 공통 enum과 CMS 전용 enum이 같은 값을 재참조하도록 만들어 공통 필드 변경을 양쪽에 동기화했습니다.
-  - Transfer Layer (`programDetailToClientProgramForm` / `clientProgramFormToCreateRequest`)로 서버 ↔ 폼 변환 로직을 분리했고, Dayjs / UploadFile / 템플릿 데이터를 양방향으로 변환했습니다.
+- **Program 관리 v2 전면 구축 — 업무 흐름 재설계 + 대규모 복합 폼 시스템**
+  - 기존 병원 CRM 프로그램/검수 관리 흐름을 대체하기 위해 목록, 등록·수정, 삭제 검수 요청, 임시저장, 검수 내역, 상세 확인까지 Program 관리 v2 업무 흐름을 새로 구축했습니다.
+  - CMS / 병원 CRM이 공유하는 38개 필드 규모의 Program 관리 폼을 `program/{common, inspection, draft}` sub-domain으로 나누고, 공통 Program 원본 / 검수 요청 / 임시저장의 서로 다른 생명주기를 코드 구조에 반영했습니다.
+  - 2-tier `FORM_NAME` enum을 통해 공통 필드는 `PROGRAM_FORM_NAME_TYPE_COMMON`으로 표준화하고, CMS / 병원 CRM 전용 enum이 같은 값을 재참조하도록 만들어 공통 필드 변경을 양쪽 앱에 동기화했습니다.
+  - Transfer Layer (`programDetailToClientProgramForm` / `clientProgramFormToCreateRequest` / `clientProgramFormToProgramInspection`)로 서버 응답·요청과 AntD Form 값을 분리했고, Dayjs / UploadFile / 상세 이미지 템플릿 데이터를 양방향으로 변환했습니다.
+  - 상세 이미지 템플릿(`SafedocTemplate` / `CustomImage`)은 `@safedoc/features`의 공통 `ProgramDetailImageFormSection`으로 추출하고, CMS / 병원 CRM은 각자 설정·검수·노출 필드만 앱별 section으로 조립하도록 구성했습니다.
   - `Form.List`, `useWatch`, `shouldUpdate`, custom validator를 조합해 조건부 렌더링, 시술 전후 이미지 페어 검증, 비동기 이미지 업로드 응답 검증, cascade validation을 구현했습니다.
-  - 검수는 단일 폼 인스턴스와 상태 머신 (`PROGRAM_INSPECTION_STATUS`: `Request → Waiting → Confirm | Reject`), Callout 배지 조합으로 단순화했습니다.
-  - Admin 안정화 후 `@safedoc/features`로 추출해 CMS / 병원 CRM이 함께 쓰도록 확장했습니다.
 
 - **콜인 / 워크인 듀얼 패스 동의서**
   - `PROXY_RESERVATION_INFLOW_TYPE` enum (`CallIn` / `WalkIn`)으로 진입을 분기했고, `AgreementCallInFormValues`(4개 동의 필드)와 `AgreementWalkInFormValues`(1개 필드)를 분리했습니다. CMS / 병원 CRM 양쪽에서 동의서 콘텐츠는 공통 패키지로 공유했습니다.
