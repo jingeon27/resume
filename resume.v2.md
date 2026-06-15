@@ -10,7 +10,7 @@
 
 2년차에 **3개 서비스(B2C 복지몰 · CMS · 병원 CRM)의 단독 Frontend Engineer**로 0→1 설계와 운영을 동시에 수행하는 엔지니어입니다. 검증된 라이브러리 위에 얇은 어댑터를 두는 방향을 선호하며, Rule of Three 이후에만 추상화를 도입해 과한 설계를 피합니다.
 
-- **단독 책임 범위** — SafeDoc App 961 파일 5-layer FSD 정리 + 모노레포(Turborepo + pnpm) 경계 재설계(entities/features 신설, 13→9개 패키지)
+- **단독 책임 범위** — SafeDoc App 961 파일 5-layer FSD 정리 + 모노레포(Turborepo + pnpm) 구조 단독 재설계(entities/features 신설, 13→9개 패키지)
 - **측정 가능한 임팩트** — 예약 폼 가족 동기화 520 → 55줄 / 가입~예약 14분 → 11분 / 신규 플랫폼 연동 3일 → 1일
 - **데이터 기반 의사결정** — Amplitude 241개 이벤트 설계 후 시술상세 실험 분석으로 후속 과제 재설계, 리뷰 조회 사용자 전환율 +15%p 확인
 - **아키텍처 패턴 자체 정립** — FSD sub-domain 패턴(`entities/settlement/{common, contract, deposit, ...}`), 2-tier FORM_NAME enum, Transfer Layer 패턴
@@ -69,9 +69,9 @@
 - sub-feature 패턴(`features/program/ui/{detail, modal}`)으로 UI 블록 의존성을 폴더 트리에서 가시화.
 - **한계 인지**: 30+ 누적 후에야 도입 → 마이그레이션 비용 증가. 15개 시점에 도입 기준이 있었다면 비용 절반.
 
-#### CMS · 병원 CRM 모노레포 경계 재설계 — entities/features 신설 + shared 통합 (13→9)
+#### CMS · 병원 CRM 모노레포 구조 단독 재설계 — entities/features 신설 + shared 통합 (13→9)
 
-- 초기 기능별 shared 5분할 구조(동료 설계)를 인수해 도메인 공유 패키지(entities/features)를 신설(13개), 이후 shared 5개의 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합 — **9개로 재편**. workspace protocol과 pnpm catalog로 공통 의존성 관리.
+- 초기 패키지 구조(기능별 shared 5분할 등)는 이전 개발자들 설계였고, 인수 이후 구조 설계는 단독 — 도메인 공유 패키지(entities/features) 신설(13개), shared 5개의 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합 **9개로 재편**. workspace protocol과 pnpm catalog로 공통 의존성 관리.
 - `@safedoc/ui` 패키지 빌드를 `prebuilt(tsup)` → **`no-build bundled`** 로 전환 → 패키지 ↔ 앱 변경이 즉시 HMR 반영.
 - Turborepo + GitHub Actions **5 workflows**(prod/stage/dev deploy + lint + slack-alarm) + `dorny/paths-filter` 기반 변경 감지로 CMS / Hospital 선택 배포 구성.
 
@@ -163,7 +163,7 @@
 ### Architecture
 
 - **FSD 5-layer + sub-domain 자체 정립**: 961 파일 코드베이스 표준화. sub-domain은 FSD 공식이 아닌 자체 패턴 — 슬라이스 파일 수 + 변경 빈도 기준으로 도입 시점 판단.
-- **Monorepo (Turborepo + pnpm)**: 13→9 패키지 경계 재설계 주도(entities/features 신설). 5 workflows + `dorny/paths-filter` 변경 감지 기반 선택 배포.
+- **Monorepo (Turborepo + pnpm)**: 인수 이후 구조 단독 재설계(13→9 패키지, entities/features 신설). 5 workflows + `dorny/paths-filter` 변경 감지 기반 선택 배포.
 - **MVC + DI + Factory Pattern**: Electron 크롤러 재설계 (왓타임).
 - **Compound / Composition Pattern**: BottomSheet, Tabs, Form 핵심 UI 도메인 적용.
 

@@ -33,7 +33,7 @@
 - 상품 관리(38필드 규모 Program 폼), 주문/예약, **정산**, 쿠폰 기획전, 병원 계약 등 운영 화면을 SearchFilter / Table / Modal / Drawer / Detail Form **반복 패턴**으로 표준화 — 레거시 page 중심 구조를 기능 단위로 재편 ([글](https://jingeon27.tistory.com/18)).
 - 정산은 서로 다른 도메인 간 쿠키 공유 불가 문제를 **form POST BFF 토큰 핸드오프**로 해결(URL 토큰의 access log/Referer 노출 제거, CSP `form-action` 고정 + open redirect 방어). 기획 협의 전 엔지니어링 관점에서 자율 설계한 사례 ([글](https://jingeon27.tistory.com/19)).
 - 표준화한 패턴 위에서 신규 어드민 도메인을 12파일 규모로 빠르게 추가 — 구조 투자가 개발 속도로 회수됨을 확인.
-- CMS·병원 CRM **모노레포 패키지 경계 재설계**(Turborepo + pnpm) — 인수한 기능별 shared 5분할 구조의 한계(import 분산·컴파일 비용)를 진단, 단일 `@safedoc/shared`로 통합하고 도메인 공유 패키지(entities/features)를 신설해 **13→9개 패키지**로 재편. 레이어별 CLAUDE.md·architecture 문서로 경계 규율을 문서화.
+- CMS·병원 CRM **모노레포 구조 단독 재설계**(Turborepo + pnpm) — 이전 개발자들이 만든 OLD 구조를 인수, 이후 설계는 단독으로: shared 5분할의 한계(import 분산·컴파일 비용)를 진단해 단일 `@safedoc/shared`로 통합하고 도메인 공유 패키지(entities/features)를 신설해 **13→9개 패키지**로 재편. 레이어별 CLAUDE.md·architecture 문서로 경계 규율을 문서화.
 
 **데이터 기반 실험·개선 (Amplitude)**
 - 시술상세 개편에 맞춰 퍼널·행동 이벤트 241개를 설계해 배포 전후 비교 기반 마련.

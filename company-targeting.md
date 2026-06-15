@@ -49,7 +49,7 @@
 > 2년차에 3개 서비스의 단독 Frontend Engineer로 **문제 정의부터 구현·배포·측정까지 한 사람이 책임지는 환경**에서 일해왔습니다. 받은 명세를 구현하는 것보다, 운영 데이터로 가설을 검증하고 다음 과제를 재설계하는 사이클을 선호합니다.
 
 ### 본문에서 강조할 항목 (순서 조정)
-1. **단독 책임 범위** — 3개 서비스 + 모노레포 경계 재설계(13→9개 패키지) (오너십 시그널)
+1. **단독 책임 범위** — 3개 서비스 + 모노레포 구조 단독 재설계(13→9개 패키지) (오너십 시그널)
 2. **Amplitude 실험 분석 → 후속 과제 재설계** (가설 검증 + 의사결정)
 3. 예약 폼 상태 소유권 단일화, 가족 동기화 520 → 55줄 (**속도와 임팩트**)
 4. AI Workflow (반복 작업 자동화로 *속도* 증폭)
@@ -71,7 +71,7 @@
 ### 회사가 보는 시그널
 - ✅ **단일 스택 비종속** → 본인 React/TS/Next.js 전부 강함
 - ✅ 자체 디자인 시스템 `bezier-react` → 본인 `@core` 20개 표준화 강력 매칭
-- ✅ Yarn workspace 모노레포(core/react-core/extension/util) → 본인 모노레포 경계 재설계(13→9패키지) 매칭
+- ✅ Yarn workspace 모노레포(core/react-core/extension/util) → 본인 모노레포 구조 단독 재설계(13→9패키지) 매칭
 - ✅ ProseMirror 기반 에디터 → 본인 quill 기반 WYSIWYG 경험 (왓타임) 연결 가능
 - ⚠️ **CS 기초·알고리즘** 가장 강조 → 본인 마이스터고 출신, *최대 약점*
 - ⚠️ 1차 + 2차 라이브 코딩 각 2시간 (총 4시간) → 알고리즘 PS 준비 필수
@@ -82,7 +82,7 @@
 
 ### 본문에서 강조할 항목 (순서 조정)
 1. **`@core` 디자인 시스템 20개 + tailwind-variants 3축** (bezier-react 결)
-2. **모노레포 경계 재설계(13→9패키지) + no-build bundled 패키지** (yarn workspace 결)
+2. **모노레포 구조 단독 재설계(13→9패키지) + no-build bundled 패키지** (yarn workspace 결)
 3. **Open Source Reading** 섹션 (RHF / Toss Slash / TanStack 내부) — *엔지니어링 기초*
 4. WYSIWYG + 변수 시스템 (quill blot, 왓타임) — *에디터 경험*
 5. AI Workflow + Claude skills 자체 작성

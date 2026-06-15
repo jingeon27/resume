@@ -13,7 +13,7 @@
 - **AI 상담 챗봇 스트리밍 연결 계층 설계** — 레거시 apiv3 SSE를 `@tanstack/ai` adapter 계약에 맞춰 연결하고, AI 생성 / 자체 SSE 두 채널 분리 렌더 구조 설계
 - **Amplitude 241개 이벤트 설계 + 시술상세 실험 계측** — 최종 예약 전환율은 변화가 없었지만 가입 후 예약까지 소요시간 14분 → 11분 단축, 리뷰 조회 사용자의 예약 전환율 +15%p를 확인해 CTA 재배치 등 후속 과제 도출
 - **예약 폼 아키텍처 리팩토링** — `React Hook Form + Zod + @use-funnel/core`로 상태 소유권 단일화 (가족 동기화 520 → 55줄), 동일 패턴을 리뷰 작성 / 상담 신청 / 회원정보 수정 3개 플로우에 재사용
-- **CMS · 병원 CRM 모노레포 경계 재설계(entities/features 신설, 13→9개 패키지) + SafeDoc App 961파일 5-layer FSD 표준화** — 정립한 패턴 위에서 신규 쿠폰 도메인을 12파일 규모로 추가하며 구조 투자가 개발 속도로 회수됨을 확인
+- **CMS · 병원 CRM 모노레포 구조 단독 재설계(entities/features 신설, 13→9개 패키지) + SafeDoc App 961파일 5-layer FSD 표준화** — 정립한 패턴 위에서 신규 쿠폰 도메인을 12파일 규모로 추가하며 구조 투자가 개발 속도로 회수됨을 확인
 - **Compound Engineering — 누적되는 개발 생산성** — 패턴·스킬·에이전트에 누적 투자해 개발 속도를 지속적으로 끌어올리는 중입니다. Jira 티켓·API 스펙·Figma 와이어프레임을 묶어 원샷 plan → 표준 스킬(`/component`·`/drawer`·`/query`) + `@core` 패턴 조립 → `code-reviewer` 게이트 → worktree 병렬. 디자이너·시안 의존 없이 단독으로 신규 쿠폰 도메인 3종(템플릿 관리·기업 쿠폰팩·감사 로그, 28파일)을 출시했고, 표준 패턴 덕에 **도메인 초기 구현은 ~30분**(첫 feat 커밋 → PR 머지)까지 단축
 - **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 CSP `form-action` 고정 + open redirect 방어 추가 ([글](https://jingeon27.tistory.com/19))
 
@@ -69,8 +69,8 @@
   - 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 구조를 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들어, 상세 → 상담 전환 플로우 기준 해당 API 서버 호출을 2회에서 1회로 줄였습니다.
   - RSC의 캐시 가능성을 보존하기 위해 axios 인터셉터의 서버사이드 토큰 첨부를 제거했고(서버에서 `cookies()`를 호출하지 않아 sitemap 등 정적 생성이 dynamic으로 강등되지 않음), 인증이 필요한 `member/info`만 native `fetch`로 분리해 request memoization으로 한 렌더 패스 내 중복 호출을 dedup했습니다. (Next.js 캐싱 모델 — request memoization / Data Cache / dynamic 강등을 구분해 설계)
 
-- **CMS · 병원 CRM 모노레포 운영·경계 재설계 — 13→9개 패키지**
-  - 초기 기능별 shared 5분할 구조(동료 설계)를 인수해 운영하며 도메인 공유 패키지(entities/features)를 신설했고(13개), shared 5개(ui/types/utils/hooks/layout)가 import 경로만 분산시킨다고 진단해 단일 `@safedoc/shared`로 통합 — 9개로 재편했습니다. workspace protocol과 pnpm catalog로 공통 의존성을 관리합니다.
+- **CMS · 병원 CRM 모노레포 구조 단독 재설계 — 13→9개 패키지**
+  - 초기 패키지 구조(기능별 shared 5분할 등)는 이전 개발자들 설계였고, 인수 이후 구조 설계는 단독으로 진행했습니다 — 도메인 공유 패키지(entities/features) 신설, shared 5개(ui/types/utils/hooks/layout)가 import 경로만 분산시킨다고 진단해 단일 `@safedoc/shared`로 통합(13→9개). workspace protocol과 pnpm catalog로 공통 의존성을 관리합니다.
   - CMS와 병원 CRM의 중복 구현을 줄이기 위해 `entities`, `features`, `shared`, `config`, `lib` 패키지 경계를 나누고, 공통 도메인은 패키지로 추출해 두 앱에서 같은 구현을 재사용하도록 설계했습니다.
   - `@safedoc/ui` 패키지 빌드 방식을 `prebuilt(tsup)`에서 `no-build bundled`로 전환해 패키지 ↔ 앱 변경이 즉시 HMR에 반영되도록 했습니다.
 
@@ -189,7 +189,7 @@
 ### Architecture
 
 - **FSD 5-layer + sub-domain 자체 정립**: 961 파일 코드베이스 표준화. sub-domain은 FSD 공식이 아닌 자체 패턴, 슬라이스 파일 수 + 변경 빈도 기준으로 도입 시점 판단.
-- **Monorepo (Turborepo + pnpm)**: 13→9 패키지 경계 재설계 주도(entities/features 신설). `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
+- **Monorepo (Turborepo + pnpm)**: 인수 이후 구조 단독 재설계(13→9 패키지, entities/features 신설). `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
 - **Library Adapter Design**: core 로직과 React binding을 분리하고, observer + `useSyncExternalStore`로 imperative 자료구조를 hook API로 노출.
 - **MVC + DI + Factory Pattern**: Electron 크롤러 재설계 (왓타임).
 - **Compound / Composition Pattern**: BottomSheet, Tabs, Form 핵심 UI 도메인 적용.

@@ -16,7 +16,7 @@
 - **CMS · 병원 CRM 공유 Program 폼 시스템** — 38개 필드 × 2개 앱이 공유하는 대규모 AntD Form 도메인을 `FORM_NAME` enum + Transfer Layer + sub-domain 구조로 표준화 ([글](https://jingeon27.tistory.com/18))
 - **`@core` 디자인 시스템 20개 Primitive Component** 표준화 (Radix UI 기반)
 - **SafeDoc App 961 파일 5-layer FSD 정리** + sub-domain 패턴 자체 정립 (25 entities / 20 features 슬라이스)
-- **CMS · 병원 CRM 모노레포 경계 재설계 — entities/features 신설 + shared 통합 (13→9개 패키지)** (Turborepo + pnpm)
+- **CMS · 병원 CRM 모노레포 구조 단독 재설계 — entities/features 신설 + shared 통합 (13→9개 패키지)** (Turborepo + pnpm)
 - **Cross-domain token handoff 보안 설계** — URL token handoff의 access log / Referer 노출 위험을 form POST BFF 방식으로 전환하고 login-CSRF / open redirect 방어 추가 ([글](https://jingeon27.tistory.com/19))
 - **Electron 크롤러 MVC + DI + Factory Pattern 재설계** — 신규 플랫폼 연동 3일 → 1일 (3개 플랫폼 도입 후 본인 측정)
 
@@ -64,8 +64,8 @@
   - `ensureQueryData` + props drilling로 캐시를 구독하지 않아 무효화가 화면에 반영되지 않던 구조를, `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 전환해 구독을 호출 지점으로 분산했습니다. infinite query는 사내 `infiniteSetData` 헬퍼로 nested page 내 개별 아이템을 갱신했습니다.
   - 공통 부모 `layout.tsx` 단계에서 program 상세 정보를 prefetch하도록 구조를 바꿔, 기존에 프로그램 상세 페이지와 상담 페이지가 각각 별도로 호출하던 `/program/detail` API를 request-scoped 캐시 안에서 재사용하게 만들었고, 하위 page 전환 시 server-level 중복 fetch를 줄였습니다.
 
-- **CMS · 병원 CRM 모노레포 운영·경계 재설계 — 13→9개 패키지**
-  - 초기 기능별 shared 5분할 구조(동료 설계)를 인수해 운영하며 도메인 공유 패키지(entities/features)를 신설했고(13개), shared 5개(ui/types/utils/hooks/layout)가 import 경로만 분산시킨다고 진단해 단일 `@safedoc/shared`로 통합 — 9개로 재편했습니다. workspace protocol과 pnpm catalog로 공통 의존성을 관리합니다.
+- **CMS · 병원 CRM 모노레포 구조 단독 재설계 — 13→9개 패키지**
+  - 초기 패키지 구조(기능별 shared 5분할 등)는 이전 개발자들 설계였고, **인수 이후 구조 설계는 단독으로** 진행했습니다 — 도메인 공유 패키지(entities/features) 신설, shared 5분할이 import 경로만 분산시킨다고 진단해 단일 `@safedoc/shared`로 통합(13→9개), FSD sub-domain·queryOptions 컨벤션 정립. workspace protocol과 pnpm catalog로 공통 의존성을 관리합니다.
   - CMS와 병원 CRM의 중복 구현을 줄이기 위해 `entities`, `features`, `shared`, `config`, `lib` 패키지 경계를 나누고, 공통 도메인은 패키지로 추출해 두 앱에서 같은 구현을 재사용하도록 설계했습니다.
   - `@safedoc/ui` 패키지 빌드 방식을 `prebuilt(tsup)`에서 `no-build bundled`로 전환해 패키지 ↔ 앱 변경이 즉시 HMR에 반영되도록 했습니다.
 
@@ -187,7 +187,7 @@
 ### Architecture
 
 - **FSD 5-layer + sub-domain 자체 정립**: 961 파일 코드베이스 표준화. sub-domain은 FSD 공식이 아닌 자체 패턴, 슬라이스 파일 수 + 변경 빈도 기준으로 도입 시점 판단.
-- **Monorepo (Turborepo + pnpm)**: 13→9 패키지 경계 재설계 주도(entities/features 신설). `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
+- **Monorepo (Turborepo + pnpm)**: 인수 이후 구조 단독 재설계(13→9 패키지, entities/features 신설). `entities` / `features` / `shared` / `config` / `lib` 경계로 CMS와 병원 CRM의 공통 도메인 구현 공유.
 - **Library Adapter Design**: core 로직과 React binding을 분리하고, observer + `useSyncExternalStore`로 imperative 자료구조를 hook API로 노출.
 - **MVC + DI + Factory Pattern**: Electron 크롤러 재설계 (왓타임).
 - **Compound / Composition Pattern**: BottomSheet, Tabs, Form 핵심 UI 도메인 적용.

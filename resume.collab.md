@@ -50,7 +50,7 @@
   - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하도록 바꿔 페이지 간 `/program/detail` 중복 호출을 request-scoped 캐시로 재사용.
 
 - **CMS · 병원 CRM 모노레포 + 도메인 폼 설계**
-  - 동료가 설계한 기능별 shared 5분할 모노레포(Turborepo + pnpm)를 인수해 entities/features 신설 + 단일 `@safedoc/shared` 통합으로 13→9개 패키지 재편, GitHub Actions 5 workflows + `dorny/paths-filter`로 선택 배포 구성.
+  - 이전 개발자들이 만든 모노레포(Turborepo + pnpm) 구조를 인수해, 이후 구조 설계는 단독으로 — entities/features 신설 + 단일 `@safedoc/shared` 통합으로 13→9개 패키지 재설계, GitHub Actions 5 workflows + `dorny/paths-filter`로 선택 배포 구성.
   - 2-tier `FORM_NAME` enum으로 공통 enum과 CMS 전용 enum이 같은 값을 재참조하게 해 **공통 필드 변경을 양쪽 앱에 자동 동기화** → 두 제품 간 정합성 유지.
   - Transfer Layer로 서버↔폼 변환을 격리, 검수는 상태 머신(`PROGRAM_INSPECTION_STATUS`)으로 단순화.
 

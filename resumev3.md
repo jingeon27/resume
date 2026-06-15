@@ -11,7 +11,7 @@
 
 - **AI 상담 챗봇 SSE 스트리밍 계층 설계** — 레거시 apiv3 SSE를 `@tanstack/ai` adapter 계약에 맞춰 연결(callback→AsyncGenerator push→pull 브릿지), AI 생성/자체 SSE 두 채널 분리 렌더
 - **RSC 캐싱 설계** — request memoization / Data Cache / dynamic 강등을 구분해, 서버 토큰 첨부 제거로 정적 생성 보존 + `member/info` 중복 호출 dedup
-- **CMS·병원 CRM 모노레포 경계 재설계(entities/features 신설, 13→9개 패키지)** + SafeDoc App 961파일 5-layer FSD 표준화
+- **CMS·병원 CRM 모노레포 구조 단독 재설계(entities/features 신설, 13→9개 패키지)** + SafeDoc App 961파일 5-layer FSD 표준화
 - **Compound Engineering** — 표준 패턴·`.claude` 스킬·`code-reviewer` 에이전트를 누적해 신규 어드민 도메인 **초기 구현 ~30분**(첫 feat 커밋→PR 머지)까지 단축
 - **Cross-domain 토큰 핸드오프 보안 설계** — URL 토큰의 access log/Referer 노출을 form POST BFF로 제거(CSP `form-action` 고정 + open redirect 방어)
 
@@ -41,8 +41,8 @@
 - Radix/Headless 위 20개 primitive를 `tailwind-variants`(size/intent/state 3축 토큰)로 표준화, inline `className` override 안티패턴 제거.
 - BottomSheet Compound(`Root/Header/Content/Footer`)를 `react-modal-sheet` + `overlay-kit`로 설계 — 뒤로가기(`popstate`)·backdrop tap·snap point를 `Root` 라이프사이클 한 곳에서 처리.
 
-**모노레포 경계 재설계 (Turborepo + pnpm)**
-- 공통 도메인을 entities/features 패키지로 추출해 CMS·병원 CRM 두 앱이 같은 구현을 재사용 — 인수한 기능별 shared 5분할은 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합(13→9개).
+**모노레포 구조 단독 재설계 (Turborepo + pnpm)**
+- OLD 패키지 구조는 이전 개발자들 설계였고, 인수 이후 구조 설계는 단독 — 공통 도메인을 entities/features 패키지로 추출해 CMS·병원 CRM 두 앱이 같은 구현을 재사용, 기능별 shared 5분할은 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합(13→9개).
 - 961파일 코드베이스의 FSD/Atomic 잔재를 5-layer FSD로 표준화(25 entities / 20 features), sub-domain 분할 기준 자체 정립.
 
 **Compound Engineering — 개발 생산성**

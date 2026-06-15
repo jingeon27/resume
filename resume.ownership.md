@@ -10,7 +10,7 @@
 
 빠르게 만들어진 서비스를 **단독으로 떠안아 기능·구조·인프라까지 끝까지 책임지는** 프론트엔드 엔지니어입니다. 2026.01부터 세이프닥 복지몰·CMS·병원 CRM **3개 서비스의 단독 Frontend Engineer**로, 신규 기능 개발부터 아키텍처 표준·배포 인프라까지 스스로 결정하고 결과를 책임집니다.
 
-- **단독 소유 범위** — SafeDoc App 961 파일 5-layer FSD 표준화 + 모노레포(Turborepo + pnpm) 운영·경계 재설계(entities/features 신설, 13→9개 패키지)
+- **단독 소유 범위** — SafeDoc App 961 파일 5-layer FSD 표준화 + 모노레포(Turborepo + pnpm) 구조 단독 재설계(entities/features 신설, 13→9개 패키지)
 - **자율적 의사결정 + 한계까지 책임** — 추상화 도입 시점, sub-domain 분할 기준을 직접 판단하고, 잘못 잡은 도입 시점(30+ 누적 후 도입)까지 회고로 명시
 - **기술부채 단독 청산** — 외부업체가 만든 정산 영역을 계약 종료 후 FSD 전환·컴포넌트 분리·모달 패턴 공통화까지 인수해 운영 가능한 상태로 정리
 - **아키텍처 패턴 자체 정립** — FSD sub-domain 패턴, 2-tier FORM_NAME enum, 서버↔폼 Transfer Layer
@@ -53,8 +53,8 @@
   - `ensureQueryData` + props drilling로 캐시를 구독하지 않아 무효화가 화면에 반영되지 않던 구조를, `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 전환해 구독을 호출 지점으로 분산. infinite query는 `infiniteSetData` 헬퍼로 nested page 내 개별 아이템을 갱신.
   - 공통 부모 `layout.tsx` 단계에서 program 상세를 prefetch하도록 구조를 바꿔 `/program/detail` 중복 호출을 request-scoped 캐시로 재사용, 하위 page 전환 시 server-level 중복 fetch 제거.
 
-- **CMS · 병원 CRM 모노레포 운영·경계 재설계 — 13→9개 패키지**
-  - 초기 기능별 shared 5분할(동료 설계)을 인수해 entities/features 패키지를 신설(13개), shared 5개의 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합 — 9개로 재편. workspace protocol + pnpm catalog로 공통 의존성을 관리.
+- **CMS · 병원 CRM 모노레포 구조 단독 재설계 — 13→9개 패키지**
+  - OLD 패키지 구조는 이전 개발자들 설계였고, 인수 이후 구조 설계는 단독 — entities/features 패키지 신설(13개), shared 5개의 import 분산 비용을 진단해 단일 `@safedoc/shared`로 통합 9개로 재편. workspace protocol + pnpm catalog로 공통 의존성을 관리.
   - `@safedoc/ui` 빌드를 `prebuilt(tsup)` → `no-build bundled`로 전환해 패키지 ↔ 앱 변경이 즉시 HMR 반영.
   - Turborepo + GitHub Actions 5 workflows + `dorny/paths-filter` 변경 감지로 CMS / Hospital 선택 배포를 구성.
 
