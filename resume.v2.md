@@ -14,7 +14,7 @@
 - **측정 가능한 임팩트** — 예약 폼 가족 동기화 520 → 55줄 / 가입~예약 14분 → 11분 / 신규 플랫폼 연동 3일 → 1일
 - **데이터 기반 의사결정** — Amplitude 241개 이벤트 설계 후 시술상세 실험 분석으로 후속 과제 재설계, 리뷰 조회 사용자 전환율 +15%p 확인
 - **아키텍처 패턴 자체 정립** — FSD sub-domain 패턴(`entities/settlement/{common, contract, deposit, ...}`), 2-tier FORM_NAME enum, Transfer Layer 패턴
-- **AI 워크플로우 운영** — `.claude` 스킬 22개·커맨드 15개 자체 작성(usermall + 모노레포), jira-branch / drawer-refactoring / full-deploy 등 반복 작업 자동화, worktree 기반 2~3개 작업 병렬 진행
+- **AI 워크플로우 운영** — `.claude` 스킬 39개·커맨드 15개 자체 작성(usermall + 모노레포), jira-branch / drawer-refactoring / full-deploy 등 반복 작업 자동화, worktree 기반 2~3개 작업 병렬 진행
 - **오픈소스 내부 reading** — React Hook Form / Toss Slash / TanStack Query 내부 구조 분석 후 사내 어댑터(`useZodForm`, BottomSheet compound, `infiniteSetData`) 설계
 
 ---
@@ -93,7 +93,7 @@
 
 #### AI Workflow — Claude skills 기반 개발 자동화
 
-- `.claude` 설정과 스킬 22개·커맨드 15개를 자체 작성해 **FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식**을 문서화. architecture 문서·error-handling 정책·레이어별 CLAUDE.md로 경계 규율을 박제해 반복 작업의 문맥 비용 감소.
+- `.claude` 설정과 스킬 39개·커맨드 15개를 자체 작성해 **FSD 경계, Public API 기준, 모달 제작 패턴, 정산 도메인 리팩토링 방식**을 문서화. architecture 문서·error-handling 정책·레이어별 CLAUDE.md로 경계 규율을 박제해 반복 작업의 문맥 비용 감소.
 - `jira-branch` 명령으로 JIRA 티켓과 브랜치 맥락을 읽고 계획 → 구현 → 커밋 → PR 생성까지 자동화.
 - PR 전에 AI agent 코드리뷰를 먼저 수행해 critical한 경계 위반·네이밍·Public API 누락을 사전 점검.
 - **worktree로 2~3개 작업 병렬 진행**. `/full-deploy` 커맨드로 commit → push → PR → merge → stage-deploy를 단일 명령으로 실행.
@@ -186,7 +186,7 @@
 
 ### AI Workflow
 
-- **Claude 스킬 22개·커맨드 15개 자체 작성** — FSD 경계, Public API 기준, 모달 제작 패턴, 정산 리팩토링 방식, drawer-refactoring 등 반복 작업 문맥을 파일로 박제.
+- **Claude 스킬 39개·커맨드 15개 자체 작성** — FSD 경계, Public API 기준, 모달 제작 패턴, 정산 리팩토링 방식, drawer-refactoring 등 반복 작업 문맥을 파일로 박제.
 - `jira-branch`로 티켓 → 브랜치 → 계획 → 구현 → PR 자동화. `/full-deploy`로 commit → push → PR → merge → stage-deploy 단일 명령 실행.
 - PR 전 AI agent 코드리뷰로 경계 위반·Public API 누락·네이밍 사전 점검.
 - worktree 기반 2~3개 작업 병렬 진행.
