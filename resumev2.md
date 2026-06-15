@@ -79,6 +79,11 @@
   - `jira-branch` 명령으로 이슈와 브랜치 맥락을 읽고 작업 계획 초안을 만들 수 있게 했고, 반복되는 커밋 / PR 작성 흐름을 명령화해 문맥 전환 비용을 줄였습니다.
   - PR 전에는 AI agent 코드리뷰를 보조 점검 단계로 활용해 경계 위반, 네이밍, Public API 누락 같은 이슈를 먼저 확인했고, worktree를 활용해 2~3개의 작업을 병렬로 진행하는 workflow를 운영했습니다.
 
+- **AI 출력 비판적 감독 — 생성 코드를 컨벤션으로 게이트**
+  - AI 생성 코드를 수동 수용하지 않고 `.claude` 컨벤션으로 검증·교정했습니다 — 과한 추상화·간접 레이어·손쉬운 우회를 일관되게 reject하고 더 단순·정확한 구조로 정리.
+  - 빌드 프리렌더 실패에 `force-dynamic`을 덧붙이려는 것을 막고 `'use client'` 누락이라는 근본 원인을 고쳐 전 라우트 dynamic 통과를 검증했고, OpenAPI→TS codegen(kubb) 제안은 `x-enum-varnames` 부재 시 enum이 깨진다는 이유로 거부하고 컨벤션 수기 이식을 유지했습니다.
+  - AI가 만든 mutation 훅이 create/update 겸용이라 *수정 시에도* `router.push`가 발동하던 버그를 진단해 훅 분리 + navigation을 호출부로 이동했고, 조회 래퍼 훅은 금지하되 부수효과가 묶이는 mutation 훅은 예외로 두는 식으로 규칙 경계를 구분했습니다.
+
 - **FSD sub-domain 패턴 자체 정립**
   - 단일 슬라이스 파일이 30개 이상 누적되면 평평한 구조가 가독성을 해친다고 판단해 `entities/settlement/{common, contract, deposit, disapproval, omission}` 형태로 도메인 라이프사이클 단계별 분할을 도입했습니다.
   - sub-feature 패턴 (`features/program/ui/{detail, modal}`)으로 UI 블록 의존성을 폴더 트리에서 가시화했습니다.
@@ -234,6 +239,12 @@
 ## Education
 
 ### 대덕소프트웨어마이스터고등학교 | 소프트웨어 개발과 | 2021.03 - 2024.01
+
+---
+
+## Awards
+
+- **D:CHAMPS 본선 진출** — 참가자 18,927명 중 TOP 30 (상위 0.16%) | 2023.09
 
 ---
 

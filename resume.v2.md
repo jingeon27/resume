@@ -97,6 +97,7 @@
 - `jira-branch` 명령으로 JIRA 티켓과 브랜치 맥락을 읽고 계획 → 구현 → 커밋 → PR 생성까지 자동화.
 - PR 전에 AI agent 코드리뷰를 먼저 수행해 critical한 경계 위반·네이밍·Public API 누락을 사전 점검.
 - **worktree로 2~3개 작업 병렬 진행**. `/full-deploy` 커맨드로 commit → push → PR → merge → stage-deploy를 단일 명령으로 실행.
+- **AI 출력 비판적 감독** — 생성 코드를 `.claude` 컨벤션으로 게이트. `force-dynamic` 우회를 근본 원인(`'use client'` 누락)으로, codegen(kubb)·과한 추상화 제안을 근거 대고 reject. AI가 만든 mutation 훅의 create/update 겸용 `router.push` 버그 진단·분리. 조회 래퍼 훅 금지 vs 부수효과 mutation 훅 예외로 규칙 경계 구분.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
 
@@ -204,6 +205,12 @@
 ## Education
 
 **대덕소프트웨어마이스터고등학교** | 소프트웨어 개발과 | 2021.03 - 2024.01
+
+---
+
+## Awards
+
+- **D:CHAMPS 본선 진출** — 참가자 18,927명 중 TOP 30 (상위 0.16%) | 2023.09
 
 ---
 

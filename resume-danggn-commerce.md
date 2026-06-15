@@ -33,6 +33,7 @@
 - 상품 관리(38필드 규모 Program 폼), 주문/예약, **정산**, 쿠폰 기획전, 병원 계약 등 운영 화면을 SearchFilter / Table / Modal / Drawer / Detail Form **반복 패턴**으로 표준화 — 레거시 page 중심 구조를 기능 단위로 재편 ([글](https://jingeon27.tistory.com/18)).
 - 정산은 서로 다른 도메인 간 쿠키 공유 불가 문제를 **form POST BFF 토큰 핸드오프**로 해결(URL 토큰의 access log/Referer 노출 제거, CSP `form-action` 고정 + open redirect 방어). 기획 협의 전 엔지니어링 관점에서 자율 설계한 사례 ([글](https://jingeon27.tistory.com/19)).
 - 표준화한 패턴 위에서 신규 어드민 도메인을 12파일 규모로 빠르게 추가 — 구조 투자가 개발 속도로 회수됨을 확인.
+- 1,800줄 규모 검수 화면 PR 리뷰에서 AntD 내장 Form을 두고 검증을 수동 구현한 부분을 짚어, `rules` + 제출 시점 `validateFields`로 대체 가능함을 제시 — 받은 코드를 비판적으로 검증하는 리뷰.
 - CMS·병원 CRM **모노레포 구조 단독 재설계**(Turborepo + pnpm) — 이전 개발자들이 만든 OLD 구조를 인수, 이후 설계는 단독으로: shared 5분할의 한계(import 분산·컴파일 비용)를 진단해 단일 `@safedoc/shared`로 통합하고 도메인 공유 패키지(entities/features)를 신설해 **13→9개 패키지**로 재편. 레이어별 CLAUDE.md·architecture 문서로 경계 규율을 문서화.
 
 **데이터 기반 실험·개선 (Amplitude)**
@@ -78,7 +79,8 @@
 
 ---
 
-## Education & Certification
+## Awards & Education
 
+- **D:CHAMPS 본선 진출** — 참가자 18,927명 중 TOP 30 (상위 0.16%) | 2023.09
 - **대덕소프트웨어마이스터고등학교** 소프트웨어개발과 (2021.03 – 2024.01)
 - 정보처리기능사 | 한국산업인력공단 (2023.04)
