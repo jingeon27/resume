@@ -7,7 +7,7 @@
 
 ## Summary
 
-2년차에 세이프닥 **복지몰·CMS·병원 CRM 3개 서비스를 단독 Frontend Engineer**로 맡아, 빠르게 찍어낸 MVP의 부채를 갈아엎고 운영 가능한 구조로 끌어올려 왔습니다. (재직 중 순수 코드 **+128K 라인, 그중 94%가 재작성 churn** — 신규보다 *레거시 개선* 비중이 큼.) 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화하며, 패턴·스킬·에이전트를 누적해 개발 속도를 복리로 올리는 방식으로 일합니다.
+세이프닥 **복지몰·CMS·병원 CRM 3개 서비스를 단독 Frontend Engineer**로 맡아, 빠르게 찍어낸 MVP의 부채를 갈아엎고 운영 가능한 구조로 끌어올려 왔습니다. (재직 중 순수 코드 **+128K 라인, 그중 94%가 재작성 churn** — 신규보다 *레거시 개선* 비중이 큼.) 검증된 라이브러리 위에 얇은 어댑터를 두고 Rule of Three 이후에만 추상화하며, 패턴·스킬·에이전트를 누적해 개발 속도를 복리로 올리는 방식으로 일합니다.
 
 - **AI 상담 챗봇 SSE 스트리밍 계층 설계** — 레거시 apiv3 SSE를 `@tanstack/ai` adapter 계약에 맞춰 연결(callback→AsyncGenerator push→pull 브릿지), AI 생성/자체 SSE 두 채널 분리 렌더
 - **RSC 캐싱 설계** — request memoization / Data Cache / dynamic 강등을 구분해, 서버 토큰 첨부 제거로 정적 생성 보존 + `member/info` 중복 호출 dedup
