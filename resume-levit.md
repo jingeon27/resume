@@ -8,13 +8,12 @@
 
 ## Summary
 
-받은 명세를 구현하기보다 **문제를 직접 발견하고 근거를 들어 솔루션을 제안하는** 프론트엔드 엔지니어입니다. 2026.01부터 복지몰·CMS·병원 CRM 3개 서비스를 맡아 아키텍처 설계부터 출시·운영까지 전 과정을 책임졌고, 가설은 Amplitude 데이터로 검증해 실질 임팩트로 이었습니다. 특히 **AI 개발 툴을 워크플로우에 깊게 통합하되 출력을 비판적으로 감독**해 개발 생산성과 품질을 함께 끌어올려 왔습니다. 주장보다 근거를 우선하고, 데이터로 틀린 게 확인되면 바로 정정합니다.
+받은 명세를 그대로 구현하기보다 문제를 직접 찾아 근거를 들고 제안하는 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡아 설계부터 출시·운영까지 끌고 왔고, 만든 기능은 Amplitude로 검증해 다음 과제를 데이터로 뽑았습니다. AI 도구를 작업 흐름에 깊게 넣되 그 출력은 그대로 받지 않고 컨벤션으로 한 번 거릅니다. 주장보다 근거를 앞에 두고, 데이터로 틀린 게 보이면 바로 고칩니다.
 
-- **AI 개발 툴 활용·통제** — Claude Code 기반 `.claude` 스킬·커맨드를 자체 작성해 작업→생성→검증→배포를 자동화, AI 생성 코드는 컨벤션으로 비판적 게이트
-- **주도적 문제 해결** — 제안된 토큰 위임의 노출 위험을 짚어 form POST BFF로 재설계, 7년차 PR에서 프레임워크 재발명 지적, 캐시 미구독 결함 진단
-- **데이터로 임팩트** — Amplitude 241개 이벤트, 가입→예약 14분→11분 / 리뷰 조회 사용자 전환율 +15%p 확인 → 후속 과제 도출
-- **빠른 개발·배포 주도** — 명령 체인(`/jira-branch`→생성→`/full-deploy`)과 worktree 병렬로 신규 어드민 도메인 초기 구현 ~30분
-- **플랫폼/트랜잭션 도메인** — 상품·주문·정산·쿠폰을 SearchFilter/Table/Modal/Drawer 반복 패턴으로 표준화
+- Claude Code 기반 `.claude` 스킬·커맨드를 직접 짜서 작업~배포를 자동화하고, AI가 낸 코드는 컨벤션으로 검증
+- 제안된 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계, 7년차 PR에서 프레임워크 재발명을 지적
+- Amplitude로 가입→예약 14분→11분, 리뷰 조회 전환율 +15%p 확인 후 과제 도출
+- 상품·예약·정산·쿠폰 같은 플랫폼/트랜잭션 화면을 반복 패턴으로 정리
 
 ---
 
@@ -22,59 +21,58 @@
 
 ### 세이프닥 | Frontend Engineer | 2025.05 – 현재
 
-병원 복지 할인 플랫폼의 **복지몰(B2C)·CMS·병원 CRM** 프론트엔드. 단독 책임 범위에서 아키텍처 설계부터 출시·운영까지 수행하며, 동료·디자인·마케팅·PO와 협업.
+병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드를 혼자 담당합니다. 설계부터 출시·운영까지 끌고 가면서 동료·디자인·마케팅·PO와 같이 일했습니다.
 
-- **AI 개발 툴 활용 + 비판적 감독**
-  - Claude Code 기반 `.claude` 스킬·커맨드를 자체 작성해 FSD 경계·모달 패턴·OpenAPI→타입 생성을 codify하고, 작업 시작→코드 생성→검증→배포 흐름을 자동화 (worktree로 2~3개 병렬)
-  - AI 생성 코드를 수동 수용하지 않고 컨벤션으로 게이트 — `force-dynamic` 우회를 근본 원인(`'use client'` 누락)으로 되돌리고, AI가 만든 mutation 훅의 create/update 겸용 `router.push` 버그를 진단해 분리. 손쉬운 우회·과한 추상화는 근거 대고 reject
+**AI 도구 활용과 비판적 감독**
 
-- **주도적 문제 발견 → 솔루션 제안**
-  - 정산 크로스 도메인 인증을 URL 토큰으로 위임하려던 초안에서 access log·Referer 노출 위험을 짚고 **form POST BFF**로 재설계 (CSP `form-action` 고정 + open redirect 방어) ([글](https://jingeon27.tistory.com/19))
-  - 7년차 동료의 1,800줄 검수 PR 리뷰에서 AntD 내장 Form을 두고 검증을 수동 구현한 부분을 `rules`+`validateFields`로 대체 가능함을 제시 — 원칙이 아니라 코드 근거로
-  - `dehydrate`한 캐시를 props로 받아 *구독하지 않아* `invalidate`가 무력화되던 구조를 진단, `useSuspenseQuery` 구독으로 단일 소스화
+- Claude Code 기반 `.claude` 스킬·커맨드를 직접 짜서 작업 시작부터 코드 생성·검증·배포까지 이어지게 했고, FSD 경계나 OpenAPI→타입 생성 같은 반복 지식을 스킬에 박아뒀습니다. worktree로 두세 개를 동시에 돌립니다.
+- AI가 낸 코드는 그대로 받지 않습니다. 빌드가 깨질 때 `force-dynamic`을 덧붙이는 대신 `'use client'` 누락을 고쳤고, create/update 겸용이라 수정할 때도 `router.push`가 튀던 mutation 훅을 분리했습니다. 손쉬운 우회나 과한 추상화는 근거를 대고 돌려보냅니다.
 
-- **데이터로 임팩트 (Amplitude)**
-  - 시술상세 개편 퍼널·행동 이벤트 241개 설계 → 가입→예약 14분→11분, 리뷰 조회 사용자 전환율 +15%p 확인 → 프로그램 기준 리뷰 분리·CTA 재배치 도출 (디자인·마케팅·PO 협업)
-  - 신규 가입 UTM 유실을 가설 검증 후 Amplitude 속성 상태(`unexpected`)가 원인임을 규명, **코드 수정 없이** 해결
+**직접 찾아서 푼 문제들**
 
-- **개발 생산성·환경 개선**
-  - 정립한 패턴 위에서 신규 쿠폰 도메인을 12파일 규모로 빠르게 추가 — 구조 투자가 개발 속도로 회수됨을 확인
-  - SafeDoc App 961파일 5-layer FSD 표준화, CMS·병원 CRM 모노레포는 인수 후 entities/features 신설 + shared 통합으로 13→9개 패키지 재설계 (Turborepo + pnpm)
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 access log·Referer 노출이 걸려서, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
+- 7년차 동료의 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 `rules`·`validateFields`로 대체된다고 짚었습니다.
+- 서버에서 `dehydrate`한 캐시를 props로만 받아 쓰다 무효화가 화면에 안 먹던 구조를, `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 
-- **제품·폼**
-  - 상품(38필드 Program)·정산·쿠폰·예약을 도메인 단위 반복 패턴으로 표준화 ([글](https://jingeon27.tistory.com/18))
-  - 예약/리뷰/상담 폼을 `RHF + Zod + @use-funnel/core`로 통합, 가족 동기화 **520→55줄(−89%)** ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
-  - `@core` 20개 primitive를 `tailwind-variants`로 표준화, BottomSheet Compound + `overlay-kit`로 모바일 엣지케이스 일관 처리
+**데이터로 검증 (Amplitude)**
+
+- 시술상세 개편에 맞춰 퍼널·행동 이벤트 241개를 깔았습니다. 가입→예약이 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
+- 신규 가입 UTM이 빠지던 건 Amplitude 속성 상태(`unexpected`)가 원인이라 코드 손 안 대고 해결했습니다.
+
+**개발 환경과 아키텍처**
+
+- 정리해 둔 패턴 덕에 신규 쿠폰 도메인 하나를 12파일 정도로 빠르게 붙였습니다.
+- SafeDoc App 961파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 기능별 shared 5개를 단일 `@safedoc/shared`로 합치고 공유 도메인을 entities/features로 빼서 13개를 9개로 줄였습니다.
+- 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳐 가족 동기화를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- **Electron 크롤러 재설계 (MVC + DI + Factory)** — 플랫폼별 구현을 `PlatformAdapter`+`Factory`로 분리, **신규 연동 3일→1일**(직접 측정). *한계: 단위 테스트 후행*
-- **다단계 funnel** — `useFunnel` + sessionStorage 자동 복원 + `FormDirtyContext`를 4개 흐름에 재사용. **DnD 정렬** `@dnd-kit` + optimistic update/롤백
+- 채용 플랫폼마다 흩어져 있던 Electron 크롤러를 `PlatformAdapter` + `Factory` 구조로 다시 짰습니다. 신규 연동이 3일에서 1일로 줄었고(직접 측정), 단위 테스트는 후행됐습니다.
+- `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 흐름에 재사용했습니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
 
 ---
 
 ## Skills
 
-**시그니처** — Server/Form/UI 전역/로컬 상태의 역할을 분리하고, 검증된 라이브러리 내부를 읽어 얇은 어댑터를 설계합니다. Rule of Three 이후에만 추상화하며, 변경마다 *왜 그렇게 했는지* 근거를 남깁니다.
+검증된 라이브러리 내부를 읽고 그 위에 얇은 어댑터를 두는 편입니다. Server·Form·UI 상태의 역할을 섞지 않고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
 
-- **TypeScript / JavaScript** — Zod schema 추론으로 폼 타입 자동 동기화, mapped type·discriminated union 도메인 모델링, `satisfies` 좁은 추론
-- **React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary` SSR, `useSyncExternalStore` 어댑터
-- **Next.js App Router** — Middleware/**BFF**, 캐싱 모델(request memoization / Data Cache / dynamic 강등) 구분, RSC 경계
-- **상태/데이터** — **TanStack Query v5**(`queryOptions`, optimistic + 롤백), **Zustand**, RHF + Zod
-- **아키텍처/생산성** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, **Claude Code 기반 AI 워크플로우 + 비판적 감독**
-- **Open Source Reading** — RHF / Toss Slash / TanStack Query 내부를 읽고 사내 어댑터 설계에 반영
+- **TypeScript / JavaScript** — Zod 스키마 추론으로 폼 타입 동기화, mapped type·discriminated union 도메인 모델링
+- **React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터
+- **Next.js App Router** — Middleware/BFF, 캐싱 모델 구분, RSC 경계
+- **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod
+- **아키텍처/생산성** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, Claude Code 기반 워크플로우 + 비판적 감독
 
-**GraphQL/Relay·React Native는 미경험**이나, REST/axios·TanStack Query·BFF 경험과 라이브러리 내부를 읽고 흡수해 온 트랙레코드로 빠르게 적응할 수 있습니다.
+GraphQL/Relay와 React Native는 아직 안 써봤습니다. REST/axios·TanStack Query·BFF를 다뤄왔고 라이브러리를 내부까지 읽고 흡수하는 편이라 빠르게 적응할 수 있습니다.
 
 ---
 
 ## Side Project — data-structure-ts
 
-- core 자료구조(Queue/Heap/PriorityQueue)를 observer 외부 store로 모델링하고 React binding을 분리. `useSyncExternalStore` 구독 + `bindMethods<T>` mapped type으로 class method key만 추론해 hook API로 노출. (Jest로 store/hook 분리 테스트)
+- Queue/Heap/PriorityQueue를 observer 기반 외부 store로 만들고 React binding을 분리한 라이브러리입니다. `useSyncExternalStore`로 구독하고, `bindMethods<T>` mapped type으로 class instance의 method key만 추려 hook으로 노출했습니다. 자료구조 동작은 core에서, hook 구독은 adapter에서 각각 Jest로 검증했습니다.
 
 ---
 
 ## Education & Certification
 
-- **대덕소프트웨어마이스터고등학교** 소프트웨어개발과 (2021.03 – 2024.01)
+- 대덕소프트웨어마이스터고등학교 소프트웨어개발과 (2021.03 – 2024.01)
 - 정보처리기능사 | 한국산업인력공단 (2023.04)
