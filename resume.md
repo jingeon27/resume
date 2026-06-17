@@ -34,7 +34,7 @@
 
 **직접 판단해서 바꾼 것들**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 login-CSRF·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 7년차 동료의 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 단일·교차 필드·교차 행 검증까지 대체된다고 봤습니다.
 - 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드 손 안 대고 해결했습니다.
@@ -107,7 +107,7 @@
 
 - Next.js Middleware + Route Group `(altLayout)/settlement`로 별도 호스트를 분리하면서 코드베이스는 하나로 뒀고, 동시에 legacy `fetch/apis`를 FSD `entities/features`로 옮겼습니다.
 - 도메인이 달라 HttpOnly 쿠키를 공유할 수 없는 문제를, 정산 진입 시 토큰을 넘기는 흐름으로 풀었습니다. URL query에서 form POST BFF로 바꿔 access log·Referer 노출을 없앴고요.
-- BFF에는 Origin/Referer 검증, `no-store`, `303`, `next` pathname 정규화 기반 open redirect 방어를 넣고, 미들웨어는 도메인 라우팅만 하게 핸드오프를 별도 API 라우트로 뗐습니다.
+- BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, `303`(GET 강제), `next` pathname 정규화 기반 open redirect 방어를 넣고, 미들웨어는 도메인 라우팅만 하게 핸드오프를 별도 API 라우트로 뗐습니다.
 - `queryClient.setQueriesData`로 즉시 반영하고 실패하면 catch에서 롤백되게 해서, 정산내역과 숨김처리 비교 두 탭이 같이 갱신되게 했습니다.
 - 정산 `entities`는 `common/omission/disapproval/deposit/contract`로, `features/settlement`는 URL 기준 `dashboard/monthly/program/contract`로 나눴습니다. 대표 페이지는 SearchFilter/Table/hook/modal 단위로 쪼개 레거시 page 구조를 걷어냈고요.
 - 레거시 `forwardRef` 모달은 `overlay-kit`으로 바꿨습니다. 대표 모달 둘을 먼저 정리한 뒤 같은 체크리스트로 나머지를 같은 방식으로 옮겼고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 봤습니다.
@@ -184,7 +184,7 @@
 
 ### Next.js App Router
 
-- Middleware/BFF: `/settlement/*` 호스트 분리, 핸드오프 API 라우트, form POST 토큰 전달. Origin/Referer 검증, `no-store`, `303`, open redirect 방어.
+- Middleware/BFF: `/settlement/*` 호스트 분리, 핸드오프 API 라우트, form POST 토큰 전달. `referrer-policy`·CSP `form-action`·`X-Frame-Options`·`no-store`·`303`(GET 강제)·open redirect 방어.
 - Route Group `(altLayout)/settlement` 별도 레이아웃 + 단일 코드베이스.
 - Streaming SSR + Suspense boundary 분할.
 - 캐싱: `cookies()`/`searchParams` dynamic 트리거, fetch 옵션(`force-cache`/`no-store`/`revalidate`/`tags`) 도메인별 적용, `revalidatePath` vs `revalidateTag` 구분.
