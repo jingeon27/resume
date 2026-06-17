@@ -8,12 +8,12 @@
 
 ## Summary
 
-기술 자체보다 그 기술로 어떤 문제를 푸는지를 먼저 보는 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡아 상품·예약·정산·쿠폰처럼 돈과 운영이 얽힌 화면을 다뤘고, 만든 기능은 Amplitude로 검증해 다음 과제를 데이터로 뽑았습니다. "이 정도면 됐다"보다 "한 번 더 깎으면 운영 비용이 절반"인 지점을 찾는 편이고, 바꿀 때마다 무엇을 줄였고 무엇이 뒤로 밀렸는지 같이 정리합니다.
+상품과 운영 화면을 같이 다뤄온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡아 상품·예약·정산·쿠폰처럼 매출과 운영이 얽힌 화면을 만들었고, 만든 기능은 Amplitude로 검증해 다음 과제를 데이터로 뽑았습니다. 기능을 빨리 내는 것에서 멈추지 않고, 사용자 경험과 사업 지표가 같이 좋아지는 지점을 찾는 편입니다.
 
 - 시술상세 개편을 데이터로 검증: 가입→예약 14분→11분, 리뷰 조회 사용자 전환율 +15%p
 - 상품(38필드 Program)·예약·정산·쿠폰 기획전 등 판매자/운영자 화면을 반복 패턴으로 정리
 - 제안된 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계
-- `.claude` 스킬·커맨드를 직접 짜서 반복 작업을 줄이고, AI가 낸 코드는 컨벤션으로 검증
+- 기존/신규 기능을 기획·디자인·마케팅과 같이 고민하고, 빠른 실험을 위해 `.claude` 스킬·커맨드로 반복 작업을 줄임
 
 ---
 
@@ -37,11 +37,11 @@
 **직접 판단해서 바꾼 것들**
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 붙였습니다. 기획 협의 전에 제가 판단한 건입니다. ([글](https://jingeon27.tistory.com/19))
-- 7년차 동료의 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. 원칙이 아니라 `rules`·`validateFields`로 대체된다는 코드로 얘기했고요.
+- 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. 원칙이 아니라 `rules`·`validateFields`로 대체된다는 코드로 얘기했고요.
 
-**빠르게 만들고 배포 (AI 워크플로우)**
+**빠르게 실험하고 배포 (AI 워크플로우)**
 
-- `.claude` 스킬·커맨드를 직접 짜서 작업 시작부터 배포까지 이어지게 했고, worktree로 두세 개를 동시에 돌립니다.
+- `.claude` 스킬·커맨드를 직접 짜서 작업 시작부터 배포까지 이어지게 했고, worktree로 두세 개 과제를 병렬로 검토합니다.
 - AI가 낸 코드는 그대로 받지 않습니다. 빌드가 깨질 때 `force-dynamic`을 덧붙이는 대신 `'use client'` 누락을 고쳤고, create/update 겸용이라 수정할 때도 `router.push`가 튀던 mutation 훅을 분리했습니다.
 
 **폼·아키텍처·모바일**
@@ -52,7 +52,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- 채용 플랫폼마다 흩어져 있던 Electron 크롤러를 `PlatformAdapter` + `Factory` 구조로 다시 짰습니다. 신규 연동이 3일에서 1일로 줄었고(직접 측정), 단위 테스트는 시간에 밀려 후행됐습니다.
+- 채용 플랫폼마다 흩어져 있던 Electron 크롤러를 `PlatformAdapter` + `Factory` 구조로 다시 짰습니다. 신규 연동이 3일에서 1일로 줄었고(직접 측정), 플랫폼별 차이는 adapter 경계로 분리했습니다.
 - `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 흐름에 재사용했습니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
 
 ---
@@ -66,7 +66,7 @@
 - **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod, AntD Form
 - **아키텍처/UI** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, 인앱 웹뷰 브릿지
 
-React Native는 아직 안 써봤지만, 모바일 우선 B2C와 네이티브 웹뷰 브릿지, popstate/backdrop/snap 같은 모바일 라이프사이클을 다뤄왔고 라이브러리를 내부까지 읽고 흡수하는 편이라 빠르게 적응할 수 있습니다.
+모바일 우선 B2C, 네이티브 웹뷰 브릿지, popstate/backdrop/snap 같은 모바일 라이프사이클을 다뤄왔습니다. React Native 같은 새 스택도 라이브러리의 내부 계약부터 읽고 흡수하는 방식으로 빠르게 따라갑니다.
 
 ---
 
