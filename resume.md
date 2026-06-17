@@ -18,7 +18,7 @@
 - SafeDoc App 961파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 25 / features 20).
 - CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
-- (왓타임) Electron 크롤러를 MVC + DI + Factory로 다시 짜 신규 플랫폼 연동을 3일에서 1일로 줄였습니다(직접 측정).
+- (왓타임) 기존 ATS Electron 크롤러를 사이트별 service registry, factory, dependency injection 기반 구조로 재설계했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 3일에서 1일로 줄었습니다(직접 측정).
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 편이고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
 
@@ -131,23 +131,20 @@
 
 캘린더 기반 일정 조율과 ATS SaaS인 round에서 신규 기능과 유지보수를 담당했습니다.
 
-**Electron 크롤러 재설계 (MVC + DI + Factory)**
+**기존 ATS Electron 크롤러 구조 재설계와 신규 연동**
 
-- 채용 플랫폼(점핏/잡플래닛/게임잡)마다 구현이 따로였고 공통 흐름(로그인→검색→수집→업로드)이 반복·변형되던 걸 다시 짰습니다.
-- `CandidateServiceHelper` 컨트롤러와 `PlatformAdapter` 인터페이스, `PlatformAdapterFactory`로 나눠, 새 플랫폼은 adapter 구현과 factory 등록만으로 붙게 했습니다.
+- 기존 크롤러 구조를 넘겨받아, 채용 플랫폼마다 흩어져 있던 로그인→수집→중복 체크→업로드 흐름을 사이트별 service registry, factory, dependency injection 기반 구조와 `CandidateServiceHelper` 공통 프로세스로 다시 정리했습니다.
+- 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 붙였습니다.
 - 신규 플랫폼 연동이 3일에서 1일로 줄었습니다(3개 도입 후 직접 측정).
-- DI 구조는 갖췄지만 단위 테스트는 시간에 밀려 후행됐습니다. DOM 셀렉터 변경 헬스체크/알람까지 만들었으면 운영 비용을 더 줄였을 거고요.
+- 단위 테스트와 DOM 셀렉터 변경 헬스체크는 시간에 밀려 후행됐습니다.
 
-**면접 템플릿 / 온보딩 4단계 funnel**
+**자동화·운영 화면과 인터랙션 기능**
 
-- `useFunnel`(단계 전환), `usePromiseSessionStorage`(sessionStorage 자동 백업, 새로고침/탭 닫힘 후 복원), `FormDirtyContext`(`beforeunload` + 라우터 confirm)를 묶었습니다. 면접 템플릿·온보딩·자동화 규칙·평가 템플릿 네 흐름에 같은 패턴을 썼고요.
-
-**그 외**
-
-- 채용 페이지/지원서 폼은 `RHF + useFieldArray + FormProvider + useYupValidation`으로 짰습니다. 세이프닥 `useZodForm`의 yup 버전 원형입니다.
-- 메일/알림 템플릿은 `@whattime/quill` WYSIWYG에 변수 치환(`{{candidateName}}`)을 붙였고, quill blot으로 변수를 atomic node로 처리했습니다.
+- 채용 자동화와 온보딩 흐름을 포함한 기존 운영 화면을 계속 확장했습니다. 지원서/면접/리뷰 자동화 페이지, 후보자 생성 플로우, 워크태스크 온보딩 같은 흐름을 개편하면서 관련 UI와 상태 흐름을 정리했습니다.
+- 메일/알림 템플릿 관리 화면과 미리보기를 구현했습니다. `@whattime/quill` 기반 WYSIWYG 위에 변수 치환(`{{candidateName}}`)이 반영된 템플릿 작성 경험을 붙였습니다.
 - `@lukemorales/query-key-factory`로 도메인별 query key를 정리해 무효화 누락과 key drift를 줄였습니다.
 - 공고 DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였습니다.
+- 채용 페이지/지원서 폼은 `RHF + useFieldArray + FormProvider + useYupValidation`으로 구현했습니다.
 - roundhr.com 랜딩은 Next.js에 Notion CMS + `react-notion-x` + Strapi를 엮어 간단한 콘텐츠 운영 서버로 구성했습니다.
 
 ---
@@ -195,7 +192,7 @@
 - FSD 5-layer + sub-domain: 961파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함.
 - Monorepo(Turborepo + pnpm): 넘겨받은 구조에서 13→9개로 재설계, entities/features 신설.
 - Library Adapter: core 로직과 React binding 분리, observer + `useSyncExternalStore`로 imperative 자료구조를 hook으로 노출.
-- MVC + DI + Factory: Electron 크롤러 (왓타임).
+- 사이트별 service registry + factory + dependency injection 기반 공통 수집 흐름: Electron 크롤러 (왓타임).
 - Compound/Composition: BottomSheet, Tabs, Form.
 
 ### Form & Validation
