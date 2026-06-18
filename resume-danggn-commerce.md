@@ -6,7 +6,7 @@
 
 ## Summary
 
-급하게 만들어진 MVP를 넘겨받아 운영 가능한 제품으로 다시 세워온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있고, 상품 탐색·예약·정산·쿠폰처럼 돈과 운영이 얽힌 화면을 주로 다뤘습니다. 기획이 확정되기 전이라도 엔지니어링 관점에서 판단이 서면 먼저 제안하고 만듭니다.
+급하게 만들어진 MVP를 넘겨받아 운영 가능한 제품으로 다시 세워온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있고, 프로그램 탐색·예약·정산·쿠폰처럼 돈과 운영이 얽힌 화면을 주로 다뤘습니다. 기획이 확정되기 전이라도 엔지니어링 관점에서 판단이 서면 먼저 제안하고 만듭니다.
 
 검증된 도구를 골라 얇게 감싸 쓰고, 반복 작업은 Claude Code 기반 워크플로우에 넘겨 확보한 시간을 사용자 경험과 운영 안정성에 씁니다. AI가 낸 코드는 그대로 받지 않고 팀 컨벤션과 실제 동작으로 검증합니다.
 
@@ -59,12 +59,12 @@
 
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌는 상태였습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 전역 상태도 정리했습니다. 유저 정보 Context를 걷어내 React Query로 모으고, Zustand store는 7개에서 4개로, 흩어진 에러 처리는 `QueryCache.onError` 한 곳으로 모았습니다.
-- axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다.
+- axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다. ([글](https://jingeon27.tistory.com/21))
 - `code-reviewer`, Zod·타입 경계, 도메인별 패턴으로 반복 회귀를 줄였습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- 채용 플랫폼마다 흩어져 있던 Electron 크롤러를 `PlatformAdapter` + `Factory` 구조로 다시 짰습니다. 신규 연동이 3일에서 1일로 줄었습니다(직접 측정). 플랫폼별 차이는 adapter 경계로 분리했습니다.
+- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 3일에서 1일로 줄었습니다(직접 측정). 단위 테스트는 후행됐고요.
 - `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 개 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형이 된 패턴입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였습니다.
 
 ---

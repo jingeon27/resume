@@ -18,7 +18,7 @@
 - SafeDoc App 961파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 25 / features 20).
 - CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
-- (왓타임) 기존 ATS Electron 크롤러를 사이트별 service registry, factory, dependency injection 기반 구조로 재설계했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 3일에서 1일로 줄었습니다(직접 측정).
+- (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 3일에서 1일로 줄었습니다(직접 측정).
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 편이고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
 
@@ -125,7 +125,7 @@
 
 - 병원·프로그램·공지·혜택 탐색·검색 경로를 5개 API에서 `Promise.all`로 모아 sitemap을 동적으로 만들었고, 페이지 유형별 우선순위를 줬습니다.
 - `page:1, size:1`로 `totalCnt`를 먼저 받고 `size=totalCnt`로 전량을 가져왔습니다. Next.js가 `<loc>`를 XML 이스케이프하지 않아서 직접 escape를 넣었고요.
-- 세부시술 allowlist와 `revalidate=86400`(24h ISR)로 sitemap이 너무 커지거나 빌드가 무거워지는 걸 같이 막았고, `robots.ts`의 disallow 경로도 정리했습니다.
+- 세부시술 allowlist와 `revalidate=86400`(24h ISR)로 sitemap이 너무 커지거나 빌드가 무거워지는 걸 같이 막았고, `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
 
@@ -133,7 +133,7 @@
 
 **기존 ATS Electron 크롤러 구조 재설계와 신규 연동**
 
-- 기존 크롤러 구조를 넘겨받아, 채용 플랫폼마다 흩어져 있던 로그인→수집→중복 체크→업로드 흐름을 사이트별 service registry, factory, dependency injection 기반 구조와 `CandidateServiceHelper` 공통 프로세스로 다시 정리했습니다.
+- 사이트마다 복붙되던 로그인→수집→중복 체크→업로드 흐름을, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스 구조로 설계하고 팀에 공유했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 붙습니다.
 - 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 붙였습니다.
 - 신규 플랫폼 연동이 3일에서 1일로 줄었습니다(3개 도입 후 직접 측정).
 - 단위 테스트와 DOM 셀렉터 변경 헬스체크는 시간에 밀려 후행됐습니다.
@@ -192,7 +192,7 @@
 - FSD 5-layer + sub-domain: 961파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함.
 - Monorepo(Turborepo + pnpm): 넘겨받은 구조에서 13→9개로 재설계, entities/features 신설.
 - Library Adapter: core 로직과 React binding 분리, observer + `useSyncExternalStore`로 imperative 자료구조를 hook으로 노출.
-- 사이트별 service registry + factory + dependency injection 기반 공통 수집 흐름: Electron 크롤러 (왓타임).
+- NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 크롤러 구조 설계 (왓타임).
 - Compound/Composition: BottomSheet, Tabs, Form.
 
 ### Form & Validation

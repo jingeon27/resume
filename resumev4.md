@@ -13,7 +13,7 @@
 - 제안된 토큰 전달 방식의 노출 위험을 짚어 form POST BFF로 다시 설계
 - 7년차 동료의 1,800줄 PR에서 프레임워크를 두고 직접 구현한 검증 로직을 지적
 - Amplitude로 가설을 검증해 다음 과제를 데이터로 도출 (가입→예약 14분→11분, 리뷰 조회 전환율 +15%p)
-- 상품·예약·정산·쿠폰 같은 판매자/운영자 화면을 반복 패턴으로 정리
+- 프로그램·예약·정산·쿠폰 같은 판매자/운영자 화면을 반복 패턴으로 정리
 
 ---
 
@@ -55,7 +55,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- 채용 플랫폼마다 흩어져 있던 Electron 크롤러를 `PlatformAdapter` + `Factory` 구조로 다시 짰습니다. 신규 연동이 3일에서 1일로 줄었고(직접 측정), 단위 테스트는 시간에 밀려 후행됐습니다.
+- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 3일에서 1일로 줄었습니다(직접 측정). 단위 테스트는 시간에 밀려 후행됐고요.
 - `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
 
 ---
