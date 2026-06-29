@@ -18,7 +18,7 @@
 - SafeDoc App 961파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 25 / features 20).
 - CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
-- (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 3일에서 1일로 줄었습니다(직접 측정).
+- (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 체감상 3일에서 1일 정도로 줄었습니다.
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 편이고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
 
@@ -36,14 +36,14 @@
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
-- 7년차 동료의 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 단일·교차 필드·교차 행 검증까지 대체된다고 봤습니다.
+- 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고, 확장 diff가 근거입니다(개방-폐쇄).
 - 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드 손 안 대고 해결했습니다.
 
 **MVP 이후 제품 확장**
 
 - 예약까지만 있던 MVP를 유저용 프로그램 상세, 관리자용 프로그램 검수, 검색 필터까지 넓혔습니다.
 - 마케팅팀이 깔아둔 Amplitude 위에 예약 전후 퍼널 이벤트를 설계해, 기능 우선순위와 개편 효과를 데이터로 판단할 수 있게 했습니다.
-- 시술 이후 금액 변동(업셀링/다운셀링)을 못 보던 공백을 메우려 기업 쿠폰과 정산 기능을 붙였습니다. 외주가 만든 정산 영역은 계약 종료 후 넘겨받아 FSD 전환, 컴포넌트 분리, 모달 공통화까지 정리했습니다.
+- 시술 이후 금액 변동(업셀링/다운셀링)을 못 보던 공백을 메우려 기업 쿠폰과 정산 기능을 붙였습니다. 외부에서 만든 정산 영역은 계약 종료 후 넘겨받아 FSD 전환, 컴포넌트 분리, 모달 공통화까지 정리했습니다.
 
 **데이터로 검증 (Amplitude)**
 
@@ -57,9 +57,9 @@
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
 - 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고, if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
-**리뷰 작성 플로우 (0부터 설계, 1,290 LOC)** ([글](https://jingeon27.tistory.com/15))
+**리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** ([글](https://jingeon27.tistory.com/15))
 
-- 4단계 funnel, step별 Zod schema, 통합 schema를 설계했습니다. 가족 정보는 prefetch한 뒤 폼에 주입했고요. 이후 상담·견적 요청 플로우를 짤 때 레퍼런스로 썼습니다.
+- 3단계 funnel, step별 Zod schema, 통합 schema를 설계했습니다. 가족 정보는 prefetch한 뒤 폼에 주입했고요. 이후 상담·견적 요청 플로우를 짤 때 레퍼런스로 썼습니다.
 
 **`@core` 디자인 시스템 (primitive 20개)**
 
@@ -135,7 +135,7 @@
 
 - 사이트마다 복붙되던 로그인→수집→중복 체크→업로드 흐름을, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스 구조로 설계하고 팀에 공유했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 붙습니다.
 - 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 붙였습니다.
-- 신규 플랫폼 연동이 3일에서 1일로 줄었습니다(3개 도입 후 직접 측정).
+- 신규 플랫폼 연동이 체감상 3일에서 1일 정도로 줄었습니다(점핏·잡플래닛·게임잡 3개 도입 후 체감).
 - 단위 테스트와 DOM 셀렉터 변경 헬스체크는 시간에 밀려 후행됐습니다.
 
 **자동화·운영 화면과 인터랙션 기능**
@@ -174,7 +174,7 @@
 
 ### TypeScript 5
 
-- variadic tuple 단계별 폼 타입 합성, recursive nested key path 추론, mapped type + key remapping 도메인 타입 생성.
+- 폼 값 타입으로 좁힌 `getFieldValue`/`setFieldValue` 래퍼(`createTypedForm`) — 잘못된 필드 경로는 컴파일 에러. recursive nested key path 추론, mapped type + key remapping 도메인 타입 생성.
 - class instance에서 method key만 추론하는 mapped type으로 자료구조 API를 hook으로 노출.
 - Zod 스키마 추론(`z.infer<ZodObject<T>>`)으로 스키마 바뀌면 폼 타입도 따라감.
 - discriminated union(콜인/워크인 동의서 폼 분리), `satisfies` + `as const` 좁은 추론.
@@ -203,6 +203,7 @@
 ### State & Data
 
 - TanStack Query v5: `queryOptions`로 useQuery/useSuspenseQuery/prefetch/getQueryData 통합, infinite query + intersection observer, `setQueriesData` optimistic + 롤백.
+- 캐시 일관성은 `invalidateQueries` → `setQueryData` → 정규화 순으로, 네트워크·즉시성·오프라인 비용에 따라 escalation으로 판단.
 - Zustand: UI 전역 상태(최근 본 프로그램, 검색 필터) 정도만.
 
 ### UI & Styling
