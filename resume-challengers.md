@@ -25,7 +25,7 @@
 
 **데이터로 검증해서 비즈니스에 기여 (Amplitude)**
 
-- 디자인팀 가설("정보가 많으면 신뢰가 오르고 전환율도 오른다")에 맞춰 시술상세를 개편하고, 마케팅팀이 쓰던 Amplitude 위에 퍼널·행동 이벤트 241개를 깔아 배포 전후를 비교할 수 있게 했습니다.
+- 디자인팀 가설("정보가 많으면 신뢰가 오르고 전환율도 오른다")에 맞춰 시술상세를 개편하고, 마케팅팀이 쓰던 Amplitude 위에 퍼널·행동 이벤트 약 240개를 깔아 배포 전후를 비교할 수 있게 했습니다.
 - 가입에서 예약까지가 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나왔습니다. 여기서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 - 신규 가입 UTM이 빠지던 건 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다. 기술이 아니라 데이터로 푼 케이스입니다.
 
@@ -47,7 +47,7 @@
 **폼·아키텍처·모바일**
 
 - 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳐 가족 동기화를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
-- SafeDoc App 961파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다.
+- SafeDoc App 약 1,100파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다.
 - `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet은 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11

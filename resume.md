@@ -13,9 +13,9 @@
 - 시술상세 개편을 Amplitude로 검증했습니다. 최종 예약 전환율은 큰 변화가 없었지만 가입에서 예약까지가 14분→11분으로 줄고 프로그램 기준 리뷰 수요가 확인돼, CTA와 후속 과제를 다시 잡았습니다.
 - 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
 - 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod + @use-funnel/core`).
-- CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 `FORM_NAME` enum + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
+- CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 타입 안전 폼(`createTypedForm`) + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
-- SafeDoc App 961파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 25 / features 20).
+- SafeDoc App 약 1,100파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21).
 - CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 체감상 3일에서 1일 정도로 줄었습니다.
@@ -51,13 +51,13 @@
 - 최종 예약 전환율 자체는 큰 변화가 없었지만 가입에서 예약까지가 14분→11분으로 줄었고, 예약 페이지에 들어온 뒤 신청까지의 전환은 나아졌습니다.
 - 시술상세에 들어온 사용자 중 25%가 리뷰를 봤고(병원상세는 8%), 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높았습니다. 여기서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 
-**예약 폼 리팩토링 (가족 동기화 520 → 55줄)** ([글](https://jingeon27.tistory.com/11))
+**예약 폼 리팩토링 (가족 동기화 520 → 55줄)** · 2025.06 ([글](https://jingeon27.tistory.com/11))
 
 - `useState` 30개에 props drilling, `useEffect` 대여섯 개로 얽혀 있던 가족 동기화를 `RHF + Zod + @use-funnel/core`로 정리했습니다.
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
 - 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고, if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
-**리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** ([글](https://jingeon27.tistory.com/15))
+**리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** · 2025.05 ([글](https://jingeon27.tistory.com/15))
 
 - 3단계 funnel, step별 Zod schema, 통합 schema를 설계했습니다. 가족 정보는 prefetch한 뒤 폼에 주입했고요. 이후 상담·견적 요청 플로우를 짤 때 레퍼런스로 썼습니다.
 
@@ -69,7 +69,7 @@
 
 **SafeDoc App 아키텍처 정리**
 
-- 961파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 5-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 25 / features 20). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
+- 약 1,100파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 5-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
 - `ensureQueryData` + props drilling로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했고요.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 
@@ -94,7 +94,7 @@
 
 - 기존 병원 CRM의 프로그램/검수 흐름을 대체해, 목록·등록·수정·삭제 검수·임시저장·검수 내역·상세까지 새로 짰습니다.
 - CMS/병원 CRM이 공유하는 38필드짜리 폼을 `program/{common, inspection, draft}`로 나눠, 원본·검수 요청·임시저장의 다른 생명주기를 구조에 반영했습니다.
-- 공통 필드는 2-tier `FORM_NAME` enum(`PROGRAM_FORM_NAME_TYPE_COMMON`)으로 묶어 CMS/병원 CRM 전용 enum이 같은 값을 재참조하게 했고, 그래서 공통 필드를 바꾸면 양쪽에 같이 반영됩니다.
+- 공통 폼 값 타입을 두고 각 앱이 자기 필드를 더한 타입으로 `createTypedForm`을 만들어, 공통 필드 정의를 한 곳에서 바꾸면 양쪽 앱에 같이 반영됩니다.
 - 서버 응답·요청과 AntD Form 값 사이는 Transfer Layer(`programDetailToClientProgramForm` 등)로 분리해 Dayjs/UploadFile/상세 이미지 템플릿을 양방향으로 변환했습니다.
 - 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`)은 `@safedoc/features`의 `ProgramDetailImageFormSection`으로 빼고, 각 앱은 자기 설정·검수·노출 필드만 조립하게 했습니다.
 - `Form.List`·`useWatch`·`shouldUpdate`·custom validator로 조건부 렌더링, 시술 전후 이미지 페어 검증, 비동기 이미지 업로드 응답 검증, cascade validation을 붙였습니다.
@@ -103,11 +103,11 @@
 
 - `PROXY_RESERVATION_INFLOW_TYPE` enum(`CallIn`/`WalkIn`)으로 진입을 나누고, `AgreementCallInFormValues`(4개 필드)와 `AgreementWalkInFormValues`(1개 필드)를 분리했습니다. 동의서 콘텐츠는 양쪽 앱이 공통 패키지로 같이 씁니다.
 
-**정산 리팩토링과 운영**
+**정산 리팩토링과 운영** · 2026.04–06
 
 - Next.js Middleware + Route Group `(altLayout)/settlement`로 별도 호스트를 분리하면서 코드베이스는 하나로 뒀고, 동시에 legacy `fetch/apis`를 FSD `entities/features`로 옮겼습니다.
 - 도메인이 달라 HttpOnly 쿠키를 공유할 수 없는 문제를, 정산 진입 시 토큰을 넘기는 흐름으로 풀었습니다. URL query에서 form POST BFF로 바꿔 access log·Referer 노출을 없앴고요.
-- BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, `303`(GET 강제), `next` pathname 정규화 기반 open redirect 방어를 넣고, 미들웨어는 도메인 라우팅만 하게 핸드오프를 별도 API 라우트로 뗐습니다.
+- BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, `next` pathname 정규화 기반 open redirect 방어를 넣고, 미들웨어는 도메인 라우팅만 하게 핸드오프를 별도 API 라우트로 뗐습니다.
 - `queryClient.setQueriesData`로 즉시 반영하고 실패하면 catch에서 롤백되게 해서, 정산내역과 숨김처리 비교 두 탭이 같이 갱신되게 했습니다.
 - 정산 `entities`는 `common/omission/disapproval/deposit/contract`로, `features/settlement`는 URL 기준 `dashboard/monthly/program/contract`로 나눴습니다. 대표 페이지는 SearchFilter/Table/hook/modal 단위로 쪼개 레거시 page 구조를 걷어냈고요.
 - 레거시 `forwardRef` 모달은 `overlay-kit`으로 바꿨습니다. 대표 모달 둘을 먼저 정리한 뒤 같은 체크리스트로 나머지를 같은 방식으로 옮겼고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 봤습니다.
@@ -115,7 +115,7 @@
 **백오피스 도메인 정리**
 
 - 예약·프로그램 검수·정산·병원 계약·리뷰·채팅·홈 설정·기업/대학교 관리처럼 운영자가 자주 쓰는 화면을 도메인 단위로 나눴습니다.
-- SearchFilter/Table/Modal/Drawer/Detail Form을 재사용 가능한 단위로 정리해 page 중심 구조에서 기능 단위로 옮겼습니다. 그 위에서 신규 쿠폰 템플릿 관리 도메인(목록/등록/복제 prefill/상태 일괄변경)을 12파일 정도로 빠르게 붙였습니다.
+- SearchFilter/Table/Modal/Drawer/Detail Form을 재사용 가능한 패턴으로 정리하고, 그 위에서 신규 쿠폰 템플릿 관리 도메인(목록/등록/복제 prefill/상태 일괄변경)을 12파일 정도로 빠르게 붙였습니다.
 
 **병원 검색**
 
@@ -181,7 +181,7 @@
 
 ### Next.js App Router
 
-- Middleware/BFF: `/settlement/*` 호스트 분리, 핸드오프 API 라우트, form POST 토큰 전달. `referrer-policy`·CSP `form-action`·`X-Frame-Options`·`no-store`·`303`(GET 강제)·open redirect 방어.
+- Middleware/BFF: `/settlement/*` 호스트 분리, 핸드오프 API 라우트, form POST 토큰 전달. `referrer-policy`·CSP `form-action`·`X-Frame-Options`·`no-store`·open redirect 방어.
 - Route Group `(altLayout)/settlement` 별도 레이아웃 + 단일 코드베이스.
 - Streaming SSR + Suspense boundary 분할.
 - 캐싱: `cookies()`/`searchParams` dynamic 트리거, fetch 옵션(`force-cache`/`no-store`/`revalidate`/`tags`) 도메인별 적용, `revalidatePath` vs `revalidateTag` 구분.
@@ -189,7 +189,7 @@
 
 ### Architecture
 
-- FSD 5-layer + sub-domain: 961파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함.
+- FSD 5-layer + sub-domain: 약 1,100파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함.
 - Monorepo(Turborepo + pnpm): 넘겨받은 구조에서 13→9개로 재설계, entities/features 신설.
 - Library Adapter: core 로직과 React binding 분리, observer + `useSyncExternalStore`로 imperative 자료구조를 hook으로 노출.
 - NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 크롤러 구조 설계 (왓타임).

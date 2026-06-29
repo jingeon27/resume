@@ -25,7 +25,7 @@
 
 **판매자/운영자 관리 도구 (백오피스)**
 
-- 프로그램 관리(38필드짜리 Program 폼), 예약, 정산, 쿠폰 기획전, 병원 계약 같은 운영 화면을 SearchFilter / Table / Modal / Drawer / Detail Form 몇 가지 패턴으로 정리했습니다. page 단위로 흩어져 있던 레거시를 기능 단위로 옮긴 작업입니다. ([글](https://jingeon27.tistory.com/18))
+- 프로그램 관리는 시술 상세 개편에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰 기획전·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었는데, 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸렸습니다. form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 붙였습니다. 기획 협의 전에 제가 판단해서 설계한 건입니다. ([글](https://jingeon27.tistory.com/19))
 - 정리해 둔 패턴 덕에 신규 어드민 도메인 하나를 12파일 정도로 빠르게 붙일 수 있었습니다.
 - 대형 검수 화면 PR을 리뷰하면서, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤고요.
@@ -38,12 +38,12 @@
 **AI 워크플로우 (Claude Code)**
 
 - `.claude` 스킬과 명령(`/component`·`/drawer`·`/query`·`/jira-branch`), `code-reviewer` 에이전트를 직접 짜서 작업 시작부터 코드 생성, 검증, 배포까지 이어지게 했습니다.
-- 시안 없이 와이어프레임만 있는 화면은 Jira·API 스펙·Figma를 묶어 plan을 세우고, Figma Dev Mode MCP로 맥락을 뽑은 뒤 표준 패턴으로 조립합니다. 쿠폰/기획전 도메인 3종(28파일)은 이렇게 첫 구현까지 30분 정도 걸렸습니다.
+- 시안 없이 와이어프레임만 있는 화면은 Jira·API 스펙·Figma를 묶어 plan을 세우고, Figma Dev Mode MCP로 맥락을 뽑은 뒤 표준 패턴으로 조립합니다. 쿠폰/기획전 같은 신규 도메인을 이 방식으로 빠르게 세웠습니다.
 - AI가 낸 코드는 컨벤션으로 거릅니다. 빌드가 깨질 때 `force-dynamic`을 덧붙이려는 걸 막고 `'use client'` 누락이라는 원인을 고쳤고, create/update 겸용이라 수정할 때도 `router.push`가 튀던 mutation 훅을 분리했습니다.
 
 **데이터로 검증 (Amplitude)**
 
-- 시술상세 개편에 맞춰 퍼널·행동 이벤트 241개를 깔아 배포 전후를 비교할 수 있게 했습니다.
+- 시술상세 개편에 맞춰 퍼널·행동 이벤트 약 240개를 깔아 배포 전후를 비교할 수 있게 했습니다.
 - 가입에서 예약까지 걸리는 시간이 14분에서 11분으로, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나왔습니다. 여기서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 - 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
 - 배포 전후 퍼널과 행동 이벤트를 기준으로 UX 가설을 검증하고, 다음 실험 후보를 프로그램별 리뷰 분리와 CTA 위치 조정으로 정리했습니다.
@@ -58,7 +58,7 @@
 **데이터 레이어 & RSC 캐싱**
 
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌는 상태였습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
-- 전역 상태도 정리했습니다. 유저 정보 Context를 걷어내 React Query로 모으고, Zustand store는 7개에서 4개로, 흩어진 에러 처리는 `QueryCache.onError` 한 곳으로 모았습니다.
+- 전역 상태도 정리했습니다. 유저 정보 Context를 걷어내 React Query로 모으고, Zustand store에 흩어져 있던 폼 상태 관리를 React Hook Form으로 통합했습니다.
 - axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다. ([글](https://jingeon27.tistory.com/21))
 - `code-reviewer`, Zod·타입 경계, 도메인별 패턴으로 반복 회귀를 줄였습니다.
 

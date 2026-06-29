@@ -11,7 +11,7 @@
 급하게 만들어진 MVP를 넘겨받아 운영 가능한 제품으로 다시 세워온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있고, 받은 명세를 그대로 구현하기보다 제안된 설계의 약점을 먼저 따져보는 편입니다. 새 도구는 직접 만들기보다 검증된 걸 골라 얇게 감싸 쓰고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
 
 - 제안된 토큰 전달 방식의 노출 위험을 짚어 form POST BFF로 다시 설계
-- 7년차 동료의 1,800줄 PR에서 프레임워크를 두고 직접 구현한 검증 로직을 지적
+- 1,800줄짜리 대형 검수 PR에서 프레임워크를 두고 직접 구현한 검증 로직을 지적
 - Amplitude로 가설을 검증해 다음 과제를 데이터로 도출 (가입→예약 14분→11분, 리뷰 조회 전환율 +15%p)
 - 프로그램·예약·정산·쿠폰 같은 판매자/운영자 화면을 반복 패턴으로 정리
 
@@ -27,11 +27,11 @@
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props로만 받아 쓰다 보니 무효화해도 화면이 안 바뀌었습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
-- 7년차 동료의 1,800줄짜리 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤습니다.
+- 1,800줄짜리 대형 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤습니다.
 
 **Program 관리 v2**
 
-- CMS와 병원 CRM이 같이 쓰는 38필드짜리 Program 폼을 다뤘습니다. 공통 원본·검수 요청·임시저장이 생명주기가 달라서 `common/inspection/draft`로 나누고, 필드명은 2-tier `FORM_NAME` enum, 서버↔폼 변환은 Transfer Layer로 분리했습니다. `Form.List`·`useWatch`·custom validator로 cascade validation을 붙였고요. ([글](https://jingeon27.tistory.com/18))
+- CMS와 병원 CRM이 같이 쓰는 38필드짜리 Program 폼을 다뤘습니다. 공통 원본·검수 요청·임시저장이 생명주기가 달라서 `common/inspection/draft`로 나누고, 필드명은 `createTypedForm`으로 타입 안전하게 좁히고, 서버↔폼 변환은 Transfer Layer로 분리했습니다. `Form.List`·`useWatch`·custom validator로 cascade validation을 붙였고요. ([글](https://jingeon27.tistory.com/18))
 
 **폼 정리**
 
@@ -39,13 +39,13 @@
 
 **아키텍처**
 
-- SafeDoc App 961파일을 5-layer FSD로 정리했습니다(entities 25 / features 20). 슬라이스가 30개를 넘으면 평평한 구조가 읽기 어려워져서, 도메인 라이프사이클 단계로 나누는 sub-domain 패턴을 따로 뒀습니다.
+- SafeDoc App 약 1,100파일을 5-layer FSD로 정리했습니다(entities 26 / features 21). 슬라이스가 30개를 넘으면 평평한 구조가 읽기 어려워져서, 도메인 라이프사이클 단계로 나누는 sub-domain 패턴을 따로 뒀습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세→상담으로 넘어갈 때 `/program/detail`을 두 번 호출하던 걸 한 번으로 줄였습니다.
 - CMS·병원 CRM 모노레포는 이전 개발자들이 만든 구조를 넘겨받았습니다. 기능별 shared 5개가 import만 흩뜨려서 단일 `@safedoc/shared`로 합치고, 공유 도메인은 entities/features로 빼서 13개를 9개로 줄였습니다.
 
 **데이터로 검증 (Amplitude)**
 
-- 시술상세 개편에 맞춰 퍼널·행동 이벤트 241개를 깔았습니다. 가입에서 예약까지가 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
+- 시술상세 개편에 맞춰 퍼널·행동 이벤트 약 240개를 깔았습니다. 가입에서 예약까지가 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 - 신규 가입 UTM이 빠지던 건 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
 
 **AI 워크플로우**

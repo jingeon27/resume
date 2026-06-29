@@ -36,13 +36,13 @@
 
 **데이터로 검증 (Amplitude)**
 
-- 시술상세 개편에 맞춰 퍼널·행동 이벤트 241개를 깔았습니다. 가입→예약이 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
+- 시술상세 개편에 맞춰 퍼널·행동 이벤트 약 240개를 깔았습니다. 가입→예약이 14분→11분, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 - 신규 가입 UTM이 빠지던 건 Amplitude 속성 상태(`unexpected`)가 원인이라 코드 손 안 대고 해결했습니다.
 
 **개발 환경과 아키텍처**
 
 - 정리해 둔 패턴 덕에 신규 쿠폰 도메인 하나를 12파일 정도로 빠르게 붙였습니다.
-- SafeDoc App 961파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 기능별 shared 5개를 단일 `@safedoc/shared`로 합치고 공유 도메인을 entities/features로 빼서 13개를 9개로 줄였습니다.
+- SafeDoc App 약 1,100파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 기능별 shared 5개를 단일 `@safedoc/shared`로 합치고 공유 도메인을 entities/features로 빼서 13개를 9개로 줄였습니다.
 - 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳐 가족 동기화를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 - FE 개발 환경은 Claude Code 스킬·명령, OpenAPI 기반 타입 생성, 레이어별 CLAUDE.md로 반복 지식을 문서와 자동화에 남겼습니다.
 
