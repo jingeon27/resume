@@ -1,6 +1,10 @@
 # 김진건
 
-**Frontend Engineer** · <jingeon27@gmail.com> · 010-6865-8208 · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/) 복지몰·CMS·병원 CRM 단독 담당 · Claude Code 기반 AI 워크플로우 구축 산업기능요원 현역 복무 중 (2025.08 – 2028.06)
+**Frontend Engineer** · <jingeon27@gmail.com> · 010-6865-8208 · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+
+복지몰·CMS·병원 CRM 단독 담당 · Claude Code 기반 AI 워크플로우 구축
+
+산업기능요원 현역 복무 중 (2025.08 – 2028.06)
 
 ---
 
@@ -46,7 +50,6 @@
 - 시술상세 개편에 맞춰 퍼널·행동 이벤트 약 240개를 깔아 배포 전후를 비교할 수 있게 했습니다.
 - 가입에서 예약까지 걸리는 시간이 소폭 줄었고, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나왔습니다. 여기서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
 - 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
-- 배포 전후 퍼널과 행동 이벤트를 기준으로 UX 가설을 검증하고, 다음 실험 후보를 프로그램별 리뷰 분리와 CTA 위치 조정으로 정리했습니다.
 
 **제품 UX & 모바일**
 
@@ -77,9 +80,9 @@
 
 **프론트엔드** — TypeScript 5, React 18(Compound/Custom Hook, `useSuspenseQuery`, `useSyncExternalStore` 어댑터, SSE push→pull 브릿지), Next.js App Router(Middleware/BFF, 캐싱 모델, RSC 경계).
 
-**상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod(`useZodForm`, `superRefine`). REST/axios 기반에서 서버 상태·캐시 일관성·BFF 경계를 다뤄왔고, RHF·Zod·use-funnel·Radix를 내부 코드까지 읽고 도입해 온 편이라 새 스택은 빨리 따라갑니다.
+**상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod(`useZodForm`, `superRefine`). REST/axios 기반에서 서버 상태·캐시 일관성·BFF 경계를 다뤄왔습니다. GraphQL/Relay는 아직 안 써봤지만, RHF·Zod·use-funnel·Radix를 내부 코드까지 읽고 도입해 온 방식으로 빠르게 따라갑니다.
 
-**아키텍처/UI** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, Framer Motion, 인앱 웹뷰 브릿지.
+**아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, Framer Motion, 인앱 웹뷰 브릿지.
 
 ---
 
