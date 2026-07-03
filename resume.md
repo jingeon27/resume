@@ -15,7 +15,7 @@
 - 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod + @use-funnel/core`).
 - CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 타입 안전 폼(`createTypedForm`) + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
-- SafeDoc App 약 1,100파일을 5-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21).
+- SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
 - CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 체감상 3일에서 1일 정도로 줄었습니다.
@@ -69,7 +69,7 @@
 
 **SafeDoc App 아키텍처 정리**
 
-- 약 1,100파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 5-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
+- 약 1,100파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
 - `ensureQueryData` + props drilling로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했고요.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 
@@ -189,7 +189,7 @@
 
 ### Architecture
 
-- FSD 5-layer + sub-domain: 약 1,100파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함.
+- FSD 6-layer + sub-domain: 약 1,100파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함. 경계는 자체 ESLint 플러그인으로 강제.
 - Monorepo(Turborepo + pnpm): 넘겨받은 구조에서 13→9개로 재설계, entities/features 신설.
 - Library Adapter: core 로직과 React binding 분리, observer + `useSyncExternalStore`로 imperative 자료구조를 hook으로 노출.
 - NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 크롤러 구조 설계 (왓타임).
@@ -210,9 +210,16 @@
 
 - tailwind-variants(size/intent/state 토큰), Radix/Headless(Compound, asChild + Slot), overlay-kit, Framer Motion.
 
-### Open Source Reading
+### Open Source
 
-검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했습니다.
+검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했으며, 발견한 문제는 upstream PR로 기여했습니다.
+
+**기여**
+
+- toss/slash — `useFunnel`의 `NonEmptyArray` 타입 오류 수정 PR 머지 (2024.05, [PR #363](https://github.com/toss/slash/pull/363))
+- TanStack/ai — `useChat`이 `ChatClient`를 `useMemo`(성능 힌트일 뿐 시맨틱 보장 아님)로 생성하는 문제를 `useState` lazy init으로 바꾸는 PR 제출 (2026.06, 리뷰 중, [PR #864](https://github.com/TanStack/ai/pull/864))
+
+**Reading**
 
 - React Hook Form: `useForm` proxy 기반 selective re-render → `useZodForm` 설계에 참고.
 - Toss Slash(`@use-funnel/core`, `overlay-kit`): funnel history snapshot, overlay 라이프사이클 → 사내 funnel/BottomSheet 설계에 참고.

@@ -39,7 +39,7 @@
 
 **아키텍처**
 
-- SafeDoc App 약 1,100파일을 5-layer FSD로 정리했습니다(entities 26 / features 21). 슬라이스가 30개를 넘으면 평평한 구조가 읽기 어려워져서, 도메인 라이프사이클 단계로 나누는 sub-domain 패턴을 따로 뒀습니다.
+- SafeDoc App 약 1,100파일을 6-layer FSD로 정리했습니다(entities 26 / features 21). 슬라이스가 30개를 넘으면 평평한 구조가 읽기 어려워져서, 도메인 라이프사이클 단계로 나누는 sub-domain 패턴을 따로 뒀습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세→상담으로 넘어갈 때 `/program/detail`을 두 번 호출하던 걸 한 번으로 줄였습니다.
 - CMS·병원 CRM 모노레포는 이전 개발자들이 만든 구조를 넘겨받았습니다. 기능별 shared 5개가 import만 흩뜨려서 단일 `@safedoc/shared`로 합치고, 공유 도메인은 entities/features로 빼서 13개를 9개로 줄였습니다.
 
@@ -67,9 +67,9 @@
 - **TypeScript 5 / React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터, Zod 스키마 추론으로 폼 타입 동기화
 - **Next.js App Router** — Middleware/BFF, 캐싱 모델(request memoization / Data Cache / dynamic 강등) 구분, RSC 경계
 - **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod, AntD Form(대규모 복합 폼)
-- **아키텍처/AI** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, Claude Code 기반 워크플로우 + 비판적 감독
+- **아키텍처/AI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, Claude Code 기반 워크플로우 + 비판적 감독
 
-REST/axios 기반이라 GraphQL/Relay·React Native는 아직 안 써봤습니다. 대신 라이브러리를 내부까지 읽고 도입해 온 편이라 새 스택은 빨리 따라갑니다.
+REST/axios 기반이라 GraphQL/Relay·React Native는 아직 안 써봤습니다. 대신 라이브러리를 내부까지 읽고 도입해 온 편이라 새 스택은 빨리 따라갑니다. 이런 방식으로 toss/slash `useFunnel`의 타입 오류를 고쳐 머지된 기여가 있습니다(2024.05, [PR #363](https://github.com/toss/slash/pull/363)).
 
 ---
 
