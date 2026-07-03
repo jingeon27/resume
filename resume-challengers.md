@@ -8,7 +8,7 @@
 
 ## Summary
 
-시술·프로그램과 운영 화면을 같이 다뤄온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡아 프로그램·예약·정산·쿠폰처럼 매출과 운영이 얽힌 화면을 만들었고, 만든 기능은 Amplitude로 검증해 다음 과제를 데이터로 뽑았습니다. 기능을 빨리 내는 것에서 멈추지 않고, 사용자 경험과 사업 지표가 같이 좋아지는 지점을 찾는 편입니다.
+시술·프로그램과 운영 화면을 같이 다뤄온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡아 프로그램·예약·정산·쿠폰처럼 매출과 운영이 얽힌 화면을 만들었고, 만든 기능은 Amplitude로 검증해 다음 과제를 데이터로 뽑았습니다. 경력은 만 2년이지만, 완성된 서비스 세 개를 개발·배포·운영까지 단독으로 책임지고 있습니다. 기능을 빨리 내는 것에서 멈추지 않고, 사용자 경험과 사업 지표가 같이 좋아지는 지점을 찾는 편입니다.
 
 - 시술상세 개편을 데이터로 검증: 가입→예약 소요시간 소폭 감소, 리뷰 조회 사용자 전환율 +15%p
 - 프로그램(38필드 Program)·예약·정산·쿠폰 기획전 등 판매자/운영자 화면을 반복 패턴으로 정리
@@ -47,7 +47,7 @@
 **폼·아키텍처·모바일**
 
 - 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳐 가족 동기화를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
-- SafeDoc App 약 1,100파일을 5-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다.
+- SafeDoc App 약 1,100파일을 6-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 넘겨받은 구조에서 entities/features를 새로 빼고 shared를 합쳐 13개를 9개로 줄였습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제해 위반이 lint에서 잡힙니다.
 - `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet은 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
@@ -64,9 +64,9 @@
 - **TypeScript 5 / React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터, Zod 스키마 추론
 - **Next.js App Router** — Middleware/BFF, 캐싱 모델 구분, RSC 경계
 - **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod, AntD Form
-- **아키텍처/UI** — FSD 5-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, 인앱 웹뷰 브릿지
+- **아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, 인앱 웹뷰 브릿지
 
-모바일 우선 B2C, 네이티브 웹뷰 브릿지, popstate/backdrop/snap 같은 모바일 라이프사이클을 다뤄왔습니다. React Native 같은 새 스택도 라이브러리의 내부 계약부터 읽고 흡수하는 방식으로 빠르게 따라갑니다.
+모바일 우선 B2C, 네이티브 웹뷰 브릿지, popstate/backdrop/snap 같은 모바일 라이프사이클을 다뤄왔습니다. React Native 같은 새 스택도 라이브러리의 내부 계약부터 읽고 흡수하는 방식으로 빠르게 따라갑니다. 실제로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있고, 실전에서 쓰는 TanStack/ai에도 `useChat` 인스턴스 안정성 리팩토링 PR을 제출해 리뷰 중입니다. ([toss/slash #363](https://github.com/toss/slash/pull/363) · [TanStack/ai #864](https://github.com/TanStack/ai/pull/864))
 
 ---
 

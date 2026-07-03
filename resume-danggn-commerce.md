@@ -38,6 +38,7 @@
 
 - CMS와 병원 CRM 모노레포에서 기능별 shared 5개가 import 경로를 흩뜨리고 컴파일도 느리게 했습니다.
 - 단일 `@safedoc/shared`로 합치고, 두 앱이 공유할 도메인은 entities/features 패키지로 따로 빼서 13개를 9개로 줄였습니다. 경계 규칙은 레이어별 CLAUDE.md와 문서로 남겼습니다.
+- 복지몰의 FSD 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제해, 위반이 문서나 리뷰가 아니라 lint 단계에서 잡히게 했습니다.
 
 **AI 워크플로우 (Claude Code)**
 
@@ -53,7 +54,7 @@
 
 **제품 UX & 모바일**
 
-- AI 상담 챗봇은 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, AI 생성 스트림과 자체 SSE 두 채널을 나눠 렌더했습니다. ([글](https://jingeon27.tistory.com/20))
+- AI 상담 챗봇은 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, AI 생성 스트림과 자체 SSE 두 채널을 나눠 렌더했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://jingeon27.tistory.com/20))
 - `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet은 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
 - 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳤습니다. 가족 동기화는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 - 웹과 인앱 웹뷰에서 같은 예약/상담 흐름이 깨지지 않도록 bridge, popstate, BottomSheet, backdrop 동작을 함께 봤습니다.
@@ -80,7 +81,7 @@
 
 **프론트엔드** — TypeScript 5, React 18(Compound/Custom Hook, `useSuspenseQuery`, `useSyncExternalStore` 어댑터, SSE push→pull 브릿지), Next.js App Router(Middleware/BFF, 캐싱 모델, RSC 경계).
 
-**상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod(`useZodForm`, `superRefine`). REST/axios 기반에서 서버 상태·캐시 일관성·BFF 경계를 다뤄왔습니다. GraphQL/Relay는 아직 안 써봤지만, RHF·Zod·use-funnel·Radix를 내부 코드까지 읽고 도입해 온 방식으로 빠르게 따라갑니다.
+**상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod(`useZodForm`, `superRefine`). REST/axios 기반에서 서버 상태·캐시 일관성·BFF 경계를 다뤄왔습니다. GraphQL/Relay는 아직 안 써봤지만, RHF·Zod·use-funnel·Radix를 내부 코드까지 읽고 도입해 온 방식으로 빠르게 따라갑니다. 실제로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있습니다([PR #363](https://github.com/toss/slash/pull/363)).
 
 **아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, Framer Motion, 인앱 웹뷰 브릿지.
 
