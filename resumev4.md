@@ -41,7 +41,7 @@
 
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리했습니다(entities 26 / features 21). 슬라이스가 30개를 넘으면 평평한 구조가 읽기 어려워져서, 도메인 라이프사이클 단계로 나누는 sub-domain 패턴을 따로 뒀습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세→상담으로 넘어갈 때 `/program/detail`을 두 번 호출하던 걸 한 번으로 줄였습니다.
-- CMS·병원 CRM 모노레포는 이전 개발자들이 만든 구조를 넘겨받았습니다. 기능별 shared 5개가 import만 흩뜨려서 단일 `@safedoc/shared`로 합치고, 공유 도메인은 entities/features로 빼서 13개를 9개로 줄였습니다.
+- CMS·병원 CRM 모노레포는 이전 개발자들이 만든 구조를 넘겨받았습니다. 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), import만 흩뜨리던 기능별 shared 5개를 FSD에 맞게 단일 `@safedoc/shared`로 통합해 9개로 정리했습니다.
 
 **데이터로 검증 (Amplitude)**
 

@@ -15,9 +15,9 @@
 검증된 도구를 골라 얇게 감싸 쓰고, 반복 작업은 Claude Code 기반 워크플로우에 넘겨 확보한 시간을 사용자 경험과 운영 안정성에 씁니다. AI가 낸 코드는 그대로 받지 않고 팀 컨벤션과 실제 동작으로 검증합니다.
 
 - 단독 FE로 세 서비스의 개발·운영·구조 개선을 처음부터 끝까지 책임
-- 프로그램 등록·예약 전환 흐름·정산·쿠폰 기획전 등 판매자/운영자 화면을 반복 패턴으로 정리
+- 프로그램 등록·예약 전환 흐름·정산·쿠폰 등 판매자/운영자 화면을 반복 패턴으로 정리
 - Amplitude로 가설을 검증해 다음 과제를 데이터로 뽑아냄 (가입→예약 소요시간 소폭 감소 등)
-- 모바일 우선 B2C, 인앱 웹뷰 브릿지, 빠른 기획전 배포를 위한 `@core` 디자인 시스템
+- 모바일 우선 B2C, 인앱 웹뷰 브릿지, 신규 화면을 빠르게 조립하기 위한 `@core` 디자인 시스템
 
 ---
 
@@ -29,7 +29,7 @@
 
 **판매자/운영자 관리 도구 (백오피스)**
 
-- 프로그램 관리는 시술 상세 개편에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰 기획전·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
+- 프로그램 관리는 시술 상세 개편에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었는데, 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸렸습니다. form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 붙였습니다. 기획 협의 전에 제가 판단해서 설계한 건입니다. ([글](https://jingeon27.tistory.com/19))
 - 정리해 둔 패턴 덕에 신규 어드민 도메인 하나를 12파일 정도로 빠르게 붙일 수 있었습니다.
 - 대형 검수 화면 PR을 리뷰하면서, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤고요.
@@ -37,13 +37,13 @@
 **모노레포 재설계 (Turborepo + pnpm)**
 
 - CMS와 병원 CRM 모노레포에서 기능별 shared 5개가 import 경로를 흩뜨리고 컴파일도 느리게 했습니다.
-- 단일 `@safedoc/shared`로 합치고, 두 앱이 공유할 도메인은 entities/features 패키지로 따로 빼서 13개를 9개로 줄였습니다. 경계 규칙은 레이어별 CLAUDE.md와 문서로 남겼습니다.
+- 두 앱이 공유할 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 단일 `@safedoc/shared`로 통합해 9개로 정리했습니다. 경계 규칙은 레이어별 CLAUDE.md와 문서로 남겼습니다.
 - 복지몰의 FSD 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제해, 위반이 문서나 리뷰가 아니라 lint 단계에서 잡히게 했습니다.
 
 **AI 워크플로우 (Claude Code)**
 
 - `.claude` 스킬과 명령(`/component`·`/drawer`·`/query`·`/jira-branch`), `code-reviewer` 에이전트를 직접 짜서 작업 시작부터 코드 생성, 검증, 배포까지 이어지게 했습니다.
-- 시안 없이 와이어프레임만 있는 화면은 Jira·API 스펙·Figma를 묶어 plan을 세우고, Figma Dev Mode MCP로 맥락을 뽑은 뒤 표준 패턴으로 조립합니다. 쿠폰/기획전 같은 신규 도메인을 이 방식으로 빠르게 세웠습니다.
+- 시안 없이 와이어프레임만 있는 화면은 Jira·API 스펙·Figma를 묶어 plan을 세우고, Figma Dev Mode MCP로 맥락을 뽑은 뒤 표준 패턴으로 조립합니다. 쿠폰 템플릿 관리 같은 신규 도메인을 이 방식으로 빠르게 세웠습니다.
 - AI가 낸 코드는 컨벤션으로 거릅니다. 빌드가 깨질 때 `force-dynamic`을 덧붙이려는 걸 막고 `'use client'` 누락이라는 원인을 고쳤고, create/update 겸용이라 수정할 때도 `router.push`가 튀던 mutation 훅을 분리했습니다.
 
 **데이터로 검증 (Amplitude)**
