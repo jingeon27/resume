@@ -34,7 +34,6 @@
 
 - Radix/Headless 위에 primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet은 Compound + `overlay-kit`로 만들어 popstate·backdrop·snap을 라이프사이클 한곳에서 처리했습니다.
 - RHF·Toss Slash·TanStack Query 내부를 읽고 `useZodForm`(스키마→타입 동기화)과 `infiniteSetData`(무한 쿼리 페이지를 `select` 단계에서 평탄화해 캐시 원본 보존) 같은 어댑터를 만들었습니다. nested page 안 개별 아이템 갱신은 `getQueriesData` 순회로 처리했고요.
-- 이렇게 내부를 읽다 발견한 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류는 PR로 고쳐 머지됐습니다. ([PR #363](https://github.com/toss/slash/pull/363))
 
 **타입 레벨 / 기초**
 
@@ -56,7 +55,7 @@
 
 ## Skills
 
-라이브러리를 내부까지 읽고 왜 그런 API인지 이해한 뒤 얇은 어댑터를 둡니다. Server·Form·UI·외부 구독 상태의 역할을 섞지 않고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
+라이브러리를 내부까지 읽고 왜 그런 API인지 이해한 뒤 얇은 어댑터를 둡니다. Server·Form·UI·외부 구독 상태의 역할을 섞지 않고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다. 이런 방식으로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있습니다(2024.05, [PR #363](https://github.com/toss/slash/pull/363)).
 
 - **TypeScript 5 (타입 레벨)** — mapped type + key remapping, recursive nested key path(타입 안전 Form), discriminated union, `satisfies`
 - **React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 외부 store 어댑터, SSE push→pull 브릿지, WYSIWYG atomic node
