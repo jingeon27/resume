@@ -29,7 +29,7 @@
 
 **판매자/운영자 관리 도구 (백오피스)**
 
-- 프로그램 관리는 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
+- 프로그램 관리는 시술상세 추가에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었는데, 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸렸습니다. form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 붙였습니다. 기획 협의 전에 제가 판단해서 설계한 건입니다. ([글](https://jingeon27.tistory.com/19))
 - 정리해 둔 패턴 덕에 신규 어드민 도메인 하나를 12파일 정도로 빠르게 붙일 수 있었습니다.
 - 대형 검수 화면 PR을 리뷰하면서, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤고요.
