@@ -25,7 +25,7 @@
 
 **직접 판단해서 바꾼 것들**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props로만 받아 쓰다 보니 무효화해도 화면이 안 바뀌었습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 1,800줄짜리 대형 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤습니다.
 
@@ -56,7 +56,7 @@
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
 - ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다. 단위 테스트는 시간에 밀려 후행됐고요.
-- `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 가지 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
+- `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 가지 흐름에 재사용했습니다. 이 패턴이 세이프닥 `useZodForm`의 원형입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
 
 ---
 

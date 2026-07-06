@@ -10,14 +10,14 @@
 
 급하게 만들어진 서비스를 넘겨받아 기술 부채를 정리하면서 신규 기능과 구조 개선을 같이 해온 프론트엔드 개발자입니다. 2026년 1월부터 세이프닥 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있습니다. React·Next.js(App Router)·TypeScript로 복잡한 사용자 흐름을 운영 가능한 구조로 정리하고, 받은 명세를 그대로 구현하기보다 사용자에게 더 나은 쪽이 뭔지 먼저 따져보는 편입니다.
 
-- 시술상세 개편을 Amplitude로 검증했습니다. 최종 예약 전환율은 큰 변화가 없었지만 가입에서 예약까지의 소요 시간이 소폭 줄고 프로그램 기준 리뷰 수요가 확인돼, CTA와 후속 과제를 다시 잡았습니다.
+- 시술상세 개편을 Amplitude로 검증했습니다. 최종 예약 전환율은 큰 변화가 없었지만 가입에서 예약까지의 소요 시간이 소폭 줄고 프로그램 기준 리뷰 수요가 확인돼, CTA 위치 조정 등 후속 과제를 다시 잡았습니다.
 - 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드에 손 안 대고 해결했습니다.
-- 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod`).
+- 예약 폼의 가족 동기화 컴포넌트를 520줄에서 55줄로 줄였습니다 (`RHF + Zod`).
 - CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 타입 안전 폼(`createTypedForm`) + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
 - CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다 (Turborepo + pnpm).
-- 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산 크로스 도메인 인증은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 체감상 3일에서 1일 정도로 줄었습니다.
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 편이고, 추상화는 같은 패턴이 세 번 나온 뒤에 합니다.
@@ -34,7 +34,7 @@
 
 **직접 판단해서 바꾼 것들**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고, 확장 diff가 근거입니다(개방-폐쇄).
 - 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드에 손 안 대고 해결했습니다.
@@ -75,7 +75,7 @@
 
 **모노레포 재설계 (13 → 9개 패키지)**
 
-- 초기 패키지 구조(기능별 shared 5분할 등)는 이전 개발자들이 만든 것이고, 넘겨받은 뒤 구조 설계는 제가 했습니다. shared 5개가 import 경로만 흩뜨려서 단일 `@safedoc/shared`로 합치고, 두 앱이 공유할 도메인은 entities/features로 따로 뺐습니다.
+- 초기 패키지 구조(기능별 shared 5분할 등)는 이전 개발자들이 만든 것이고, 넘겨받은 뒤 구조 설계는 제가 했습니다. 두 앱이 공유할 도메인을 entities/features로 먼저 따로 빼고, import 경로만 흩뜨리던 shared 5개는 단일 `@safedoc/shared`로 합쳤습니다.
 - `entities`·`features`·`shared`·`config`·`lib` 경계로 CMS와 병원 CRM의 공통 도메인을 한 번만 만들어 같이 쓰게 했습니다.
 - `@safedoc/ui`는 `prebuilt(tsup)`에서 `no-build bundled`로 바꿔, 패키지를 고치면 앱 HMR에 바로 반영되게 했습니다.
 
