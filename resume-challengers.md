@@ -12,7 +12,7 @@
 
 - 시술상세 개편을 데이터로 검증: 가입→예약 소요시간 소폭 감소, 리뷰 조회 사용자 전환율 +15%p
 - 프로그램(38필드 Program)·예약·정산·쿠폰 등 판매자/운영자 화면을 반복 패턴으로 정리
-- 제안된 토큰 전달 방식의 노출 위험을 짚어 form POST BFF로 다시 설계
+- 첫 구현이던 URL 토큰 전달의 로그 노출 위험을 확인해 form POST BFF로 다시 설계
 - 기존/신규 기능을 기획·디자인·마케팅과 같이 고민하고, 빠른 실험을 위해 `.claude` 스킬·커맨드로 반복 작업을 줄임
 
 ---
@@ -46,7 +46,7 @@
 
 **폼·아키텍처·모바일**
 
-- 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳐 가족 동기화를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
+- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고 다단계 리뷰 작성은 `@use-funnel/core`로 구조화해, 가족 동기화 컴포넌트를 520줄에서 55줄로 줄였습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 두 앱이 공유할 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제해 위반이 lint에서 잡힙니다.
 - `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet는 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
 

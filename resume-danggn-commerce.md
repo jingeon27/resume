@@ -54,9 +54,9 @@
 
 **제품 UX & 모바일**
 
-- AI 상담 챗봇은 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, AI 생성 스트림과 자체 SSE 두 채널을 나눠 렌더했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://jingeon27.tistory.com/20))
+- AI 상담 챗봇은 포맷을 바꿀 수 없는 외부 세션 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, 렌더는 세션 SSE 하나로 일원화하되 AI 생성 스트림은 연결 유지용으로 분리했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://jingeon27.tistory.com/20))
 - `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet는 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
-- 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳤습니다. 가족 동기화는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
+- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고, 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. 가족 동기화 컴포넌트는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 - 웹과 인앱 웹뷰에서 같은 예약/상담 흐름이 깨지지 않도록 bridge, popstate, BottomSheet, backdrop 동작을 함께 봤습니다.
 
 **데이터 레이어 & RSC 캐싱**

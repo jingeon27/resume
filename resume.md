@@ -12,7 +12,7 @@
 
 - 시술상세 개편을 Amplitude로 검증했습니다. 최종 예약 전환율은 큰 변화가 없었지만 가입에서 예약까지의 소요 시간이 소폭 줄고 프로그램 기준 리뷰 수요가 확인돼, CTA와 후속 과제를 다시 잡았습니다.
 - 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드에 손 안 대고 해결했습니다.
-- 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod + @use-funnel/core`).
+- 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod`).
 - CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 타입 안전 폼(`createTypedForm`) + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
@@ -53,7 +53,7 @@
 
 **예약 폼 리팩토링 (가족 동기화 520 → 55줄)** · 2025.06 ([글](https://jingeon27.tistory.com/11))
 
-- `useState` 30개에 props drilling, `useEffect` 대여섯 개로 얽혀 있던 가족 동기화를 `RHF + Zod + @use-funnel/core`로 정리했습니다.
+- `useState` 30개에 props drilling, `useEffect` 4개로 얽혀 있던 가족 동기화를 `RHF + Zod`로 정리했습니다.
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
 - 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고, if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
@@ -125,7 +125,7 @@
 
 - 병원·프로그램·공지·혜택 탐색·검색 경로를 5개 API에서 `Promise.all`로 모아 sitemap을 동적으로 만들었고, 페이지 유형별 우선순위를 줬습니다.
 - `page:1, size:1`로 `totalCnt`를 먼저 받고 `size=totalCnt`로 전량을 가져왔습니다. Next.js가 `<loc>`를 XML 이스케이프하지 않아서 직접 escape를 넣었고요.
-- 세부시술 allowlist와 `revalidate=86400`(24h ISR)로 sitemap이 너무 커지거나 빌드가 무거워지는 걸 같이 막았고, `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
+- 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 걸 같이 막았고, `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
 

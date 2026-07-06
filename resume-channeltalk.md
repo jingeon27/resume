@@ -8,10 +8,10 @@
 
 ## Summary
 
-메시지 스트림, 외부 store, 자료구조처럼 상태와 순서가 중요한 문제를 좋아하는 프론트엔드 개발자입니다. 상담 메신저에서는 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞추는 i/o 브릿지를 만들었고, 자료구조 라이브러리에서는 Queue/Heap/PriorityQueue를 직접 구현해 React binding과 core 로직을 분리했습니다. 라이브러리를 쓸 때도 API 표면보다 내부 계약, 시간복잡도, 구독 모델, 실패 전파 방식을 먼저 확인하는 편입니다.
+메시지 스트림, 외부 store, 자료구조처럼 상태와 순서가 중요한 문제를 좋아하는 프론트엔드 개발자입니다. 상담 메신저에서는 외부 세션 SSE를 `@tanstack/ai` 어댑터 계약에 맞추는 i/o 브릿지를 만들었고, 자료구조 라이브러리에서는 Queue/Heap/PriorityQueue를 직접 구현해 React binding과 core 로직을 분리했습니다. 라이브러리를 쓸 때도 API 표면보다 내부 계약, 시간복잡도, 구독 모델, 실패 전파 방식을 먼저 확인하는 편입니다.
 
-- 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞추는 push→pull 브릿지 설계
-- AI 생성 스트림과 자체 SSE를 분리해 중복 렌더, malformed payload, 연결 상태를 제어
+- 외부 세션 SSE를 `@tanstack/ai` 어댑터 계약에 맞추는 push→pull 브릿지 설계
+- 렌더 채널을 세션 SSE로 일원화하고 AI 생성 스트림은 연결 유지용으로 분리해 중복 렌더·malformed payload·연결 상태를 제어
 - Queue/Heap/PriorityQueue를 직접 구현하고 React binding을 `useSyncExternalStore`로 분리
 - WYSIWYG 변수 노드, 디자인 시스템 primitive, mapped type 등 GUI/core-library 성격의 문제를 다룸
 
@@ -25,8 +25,8 @@
 
 **상담 메신저 — multi-source i/o 브릿지**
 
-- AI 상담 챗봇에서는 레거시 세션 SSE를 `@tanstack/ai`의 `SubscribeConnectionAdapter` 계약에 맞춰야 했습니다. 콜백으로 오는 SSE 이벤트를 async generator로 바꾸는 push→pull 브릿지(`createPushStream`)를 만들었습니다.
-- AI 생성 스트림과 자체 SSE 두 채널을 나누고, 렌더는 SSE를 단일 소스로 둬 같은 메시지가 두 번 그려지지 않게 했습니다.
+- AI 상담 챗봇에서는 포맷을 바꿀 수 없는 외부 세션 SSE를 `@tanstack/ai`의 어댑터 계약에 맞춰야 했습니다. 자체 어댑터(`SubscribeConnectionAdapter`)와, 콜백으로 오는 SSE 이벤트를 async generator로 바꾸는 push→pull 브릿지(`createPushStream`)를 만들었습니다.
+- 수신 채널은 세션 SSE 하나로 일원화하고 AI 생성 스트림은 연결 유지용으로만 두어, 두 채널이 같은 메시지를 중복 렌더하지 않게 했습니다.
 - 서버 status를 기준으로 두고 클라이언트 `connecting` 상태로 보강했습니다. malformed SSE가 와도 스트림이 죽지 않도록 Zod `.catch()`로 필드별 fallback을 두고, 메시지 파싱 실패가 연결 종료로 번지지 않게 했습니다.
 - 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`(성능 힌트일 뿐 시맨틱 보장이 아님)로 생성하는 문제를 발견해, `useState` lazy init으로 바꾸는 PR을 TanStack/ai에 제출했습니다. ([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중)
 
