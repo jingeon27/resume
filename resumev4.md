@@ -35,7 +35,7 @@
 
 **폼 정리**
 
-- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. `useState` 30개에 props drilling으로 얽혀 있던 가족 동기화 컴포넌트가 520줄에서 55줄로 줄었고, 흩어진 if 검증은 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
+- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. props drilling으로 얽혀 있던 가족 동기화 컴포넌트가 520줄에서 55줄로 줄었고, 흩어진 if 검증은 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 
 **아키텍처**
 

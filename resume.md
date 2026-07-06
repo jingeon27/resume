@@ -53,7 +53,7 @@
 
 **예약 폼 리팩토링 (가족 동기화 520 → 55줄)** · 2025.06 ([글](https://jingeon27.tistory.com/11))
 
-- `useState` 30개에 props drilling, `useEffect` 4개로 얽혀 있던 가족 동기화를 `RHF + Zod`로 정리했습니다.
+- props drilling과 `useEffect` 4개로 얽혀 있던 가족 동기화를 `RHF + Zod`로 정리했습니다.
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
 - 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고, if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
