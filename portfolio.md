@@ -14,14 +14,14 @@
 - **왓타임 (2024.01 ~ 2024.11)** — ATS 서비스 round의 Electron 크롤러 아키텍처 재설계 + 면접 템플릿 / 채용 페이지 구현.
 
 | 영역            | 작업                                   | 결과                                                               |
-| --------------- | -------------------------------------- | ------------------------------------------------------------------ |
-| 제품 분석       | 시술상세 개편 역효과 진단 → CTA 재설계 | 예약 -16% / 상담 -66% / 최종 -40% 진단                             |
-| 폼 아키텍처     | 예약 페이지 리팩토링                   | RHF + Zod로 상태 소유권 단일화                                     |
-| 폼 아키텍처     | 가족 데이터 동기화 로직                | 520 → 55줄                                                         |
-| 데스크톱 크롤러 | Electron 아키텍처 재설계               | 신규 플랫폼 연동 체감상 3일 → 1일 정도 (점핏/잡플래닛/게임잡 3개 도입 후 체감) |
-| 디자인 시스템   | `@core` Primitive Component            | 20개 컴포넌트 표준화                                               |
-| 모노레포        | 구조 단독 재설계(entities/features 신설) | 13 → 9개 통합 + 5개 GitHub Actions workflow                        |
-| 코드베이스      | FSD sub-domain 패턴                    | 25 entities / 20 features 슬라이스                                 |
+| --------------- | -------------------------------------- | -------------------------------------------------------------|
+| 제품 분석       | 시술상세 개편 역효과 진단 → CTA 재설계 | 예약 -16% / 상담 -66% / 최종 -40% 진단                                                 |
+| 폼 아키텍처     | 예약 페이지 리팩토링                   | RHF + Zod로 상태 소유권 단일화                                                      |
+| 폼 아키텍처     | 가족 데이터 동기화 로직                | 520 → 55줄                                                                   |
+| 데스크톱 크롤러 | Electron 아키텍처 재설계               | 신규 플랫폼 연동 3일 → 1일 정도 (점핏/잡플래닛/게임잡 3개 도입 후 체감)                              |
+| 디자인 시스템   | `@core` Primitive Component            | 20개 컴포넌트 표준화                                                       |
+| 모노레포        | 구조 단독 재설계(entities/features 신설) | 13 → 9개 패키지 통합                                                          |
+| 코드베이스      | FSD sub-domain 패턴                    | 25 entities / 20 features 슬라이스                                      |
 
 작업 방향은 **검증된 라이브러리 위에 얇은 어댑터를 두는 것**이에요. 사용자 입장에서 더 명확하고 편한 경험이 무엇인지 먼저 판단하고, Rule of Three 이후에만 추상화를 도입해 과한 설계를 피했어요.
 
@@ -149,7 +149,7 @@ const ReviewStep1Schema = z.object({
 
 #### 정리
 
-1. **5-layer FSD 표준화**: `app / pages / widgets / features / entities / shared`. (FSD 공식은 5-layer. `processes`는 deprecated)
+1. **6-layer FSD 표준화**: `app / pages / widgets / features / entities / shared`. (`processes`는 deprecated라 제외)
 2. 25 entities / 20 features 슬라이스 경계와 Public API 기준 정립.
 3. 위반 케이스 점진 정리: widgets 도메인 컴포넌트 → features 이관, 순환 의존 해소, 파일명 kebab-case.
 4. TanStack Query v5 `queryOptions` 패턴과 Server Component prefetch → HydrationBoundary → `useSuspenseQuery` 흐름도 함께 정리했어요.
@@ -410,7 +410,7 @@ export abstract class CandidateServiceHelper<T> {
 - `createRoundCandidates` — round 후보자 등록 및 업로드 대상 생성
 - `uploadResumes` — 이력서를 S3에 업로드하고 URL 갱신
 
-플랫폼별 서비스 / repository 구현체는 DOM 조작과 API 차이만 맡고, 공통 흐름은 helper에 남겼어요. 결과적으로 신규 플랫폼 연동 방식이 "기존 코드 복사 후 패치"에서 "정해진 단계 구현"으로 바뀌었고, 코드 중복이 크게 줄고 신규 플랫폼 연동 기간도 체감상 3일 → 1일 정도로 줄어든 느낌이었어요.
+플랫폼별 서비스 / repository 구현체는 DOM 조작과 API 차이만 맡고, 공통 흐름은 helper에 남겼어요. 결과적으로 신규 플랫폼 연동 방식이 "기존 코드 복사 후 패치"에서 "정해진 단계 구현"으로 바뀌었고, 코드 중복이 크게 줄고 신규 플랫폼 연동 기간도 3일 → 1일 정도로 줄어든 느낌이었어요.
 
 #### 한계 / 다시 한다면
 
