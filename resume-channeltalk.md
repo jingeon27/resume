@@ -48,7 +48,7 @@
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
 - ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다.
-- 다단계 funnel은 sessionStorage 복원과 함께 네 가지 흐름에 재사용했습니다. 폼 dirty 상태, 복원, DnD optimistic update처럼 UI 상태와 저장소 상태가 엇갈리는 케이스를 주로 다뤘습니다.
+- 폼 dirty 추적·복원 패턴을 네 흐름에 재사용했고, 다단계 입력은 funnel로 구조화했습니다. 폼 dirty 상태, 복원, DnD optimistic update처럼 UI 상태와 저장소 상태가 엇갈리는 케이스를 주로 다뤘습니다.
 - `@whattime/quill` 기반 WYSIWYG에 템플릿 변수 치환을 붙였습니다. quill blot으로 변수를 atomic node로 처리해 사용자가 편집 중 변수 내부를 깨뜨리지 않게 했습니다.
 
 ---
