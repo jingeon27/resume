@@ -8,15 +8,15 @@
 
 ## Summary
 
-급하게 만들어진 서비스를 넘겨받아 기술 부채를 정리하면서 신규 기능과 구조 개선을 같이 해온 프론트엔드 개발자입니다. 2026년 1월부터 세이프닥 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있습니다. React·Next.js(App Router)·TypeScript로 복잡한 사용자 흐름을 운영 가능한 구조로 정리하고, 받은 명세를 그대로 만들기보다 사용자에게 더 나은 쪽이 뭔지 먼저 따져보는 편입니다.
+급하게 만들어진 서비스를 넘겨받아 기술 부채를 정리하면서 신규 기능과 구조 개선을 같이 해온 프론트엔드 개발자입니다. 2026년 1월부터 세이프닥 복지몰·CMS·병원 CRM 세 서비스를 혼자 맡고 있습니다. React·Next.js(App Router)·TypeScript로 복잡한 사용자 흐름을 운영 가능한 구조로 정리하고, 받은 명세를 그대로 구현하기보다 사용자에게 더 나은 쪽이 뭔지 먼저 따져보는 편입니다.
 
 - 시술상세 개편을 Amplitude로 검증했습니다. 최종 예약 전환율은 큰 변화가 없었지만 가입에서 예약까지의 소요 시간이 소폭 줄고 프로그램 기준 리뷰 수요가 확인돼, CTA와 후속 과제를 다시 잡았습니다.
-- 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
+- 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드에 손 안 대고 해결했습니다.
 - 예약 폼의 가족 동기화를 520줄에서 55줄로 줄였습니다 (`RHF + Zod + @use-funnel/core`).
 - CMS·병원 CRM이 같이 쓰는 Program 관리 v2(목록/등록·수정/삭제 검수/임시저장/검수 내역)를 타입 안전 폼(`createTypedForm`) + Transfer Layer + `common/inspection/draft` 구조로 다시 짰습니다. ([글](https://jingeon27.tistory.com/18))
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
-- CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 단일 통합해 9개로 정리했습니다 (Turborepo + pnpm).
+- CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 처음 안이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 복붙되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용해 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 붙였습니다. 신규 연동은 체감상 3일에서 1일 정도로 줄었습니다.
 
@@ -30,14 +30,14 @@
 
 병원·의원 복지 할인 플랫폼에서 SafeDoc App(복지몰)·CMS·병원 CRM 프론트엔드를 담당합니다.
 
-합류했을 때는 병원 탐색과 예약 흐름 중심의 MVP였고, 시술 이후 단계는 앱에서 거의 다뤄지지 않았습니다. 이후 예약 이후 운영 기능, 분석 환경, 관리자 기능까지 넓히며 운영 가능한 제품으로 만들었습니다.
+합류했을 때는 병원 탐색과 예약 흐름 중심의 MVP였고, 시술 이후 단계는 앱에서 거의 다뤄지지 않았습니다. 이어서 예약 이후 운영 기능, 분석 환경, 관리자 기능까지 넓히며 운영 가능한 제품으로 만들었습니다.
 
 **직접 판단해서 바꾼 것들**
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 안이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남는 게 걸려서, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 붙였습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고, 확장 diff가 근거입니다(개방-폐쇄).
-- 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드 손 안 대고 해결했습니다.
+- 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드에 손 안 대고 해결했습니다.
 
 **MVP 이후 제품 확장**
 
@@ -65,12 +65,12 @@
 
 - Radix/Headless 위에 Button·Input·BottomSheet·Dialog·Toast·Tooltip·Callout·Checkbox·Radio·Toggle·Tabs·Chip·Menu 등을 공통으로 만들었습니다.
 - `tailwind-variants`로 size/intent/state 세 축을 묶어, 호출부마다 inline `className`으로 덮어쓰는 걸 줄였습니다.
-- BottomSheet은 Compound(`Root/Header/Content/Footer`)로 `react-modal-sheet` 위에 짜고 `overlay-kit`로 호출하게 해서, 뒤로가기(`popstate`)·backdrop tap·snap point를 `Root` 라이프사이클 한 곳에서 처리했습니다.
+- BottomSheet는 Compound(`Root/Header/Content/Footer`)로 `react-modal-sheet` 위에 짜고 `overlay-kit`로 호출하게 해서, 뒤로가기(`popstate`)·backdrop tap·snap point를 `Root` 라이프사이클 한 곳에서 처리했습니다.
 
 **SafeDoc App 아키텍처 정리**
 
 - 약 1,100파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
-- `ensureQueryData` + props drilling로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했고요.
+- `ensureQueryData` + props drilling으로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했고요.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 
 **모노레포 재설계 (13 → 9개 패키지)**
@@ -94,7 +94,7 @@
 
 - 기존 병원 CRM의 프로그램/검수 흐름을 대체해, 목록·등록·수정·삭제 검수·임시저장·검수 내역·상세까지 새로 짰습니다.
 - CMS/병원 CRM이 공유하는 38필드짜리 폼을 `program/{common, inspection, draft}`로 나눠, 원본·검수 요청·임시저장의 다른 생명주기를 구조에 반영했습니다.
-- 공통 폼 값 타입을 두고 각 앱이 자기 필드를 더한 타입으로 `createTypedForm`을 만들어, 공통 필드 정의를 한 곳에서 바꾸면 양쪽 앱에 같이 반영됩니다.
+- 공통 폼 값 타입을 두고 각 앱이 자기 필드를 더한 타입으로 `createTypedForm`을 만들어, 공통 필드 정의를 한 곳에서 바꾸면 양쪽 앱에 같이 반영되게 했습니다.
 - 서버 응답·요청과 AntD Form 값 사이는 Transfer Layer(`programDetailToClientProgramForm` 등)로 분리해 Dayjs/UploadFile/상세 이미지 템플릿을 양방향으로 변환했습니다.
 - 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`)은 `@safedoc/features`의 `ProgramDetailImageFormSection`으로 빼고, 각 앱은 자기 설정·검수·노출 필드만 조립하게 했습니다.
 - `Form.List`·`useWatch`·`shouldUpdate`·custom validator로 조건부 렌더링, 시술 전후 이미지 페어 검증, 비동기 이미지 업로드 응답 검증, cascade validation을 붙였습니다.
@@ -110,7 +110,7 @@
 - BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, 토큰 수신 POST 라우트의 `303`(POST→GET 강제, 재제출 방지), `next` pathname 정규화 기반 open redirect 방어를 넣고, 미들웨어는 도메인 라우팅만 하게 핸드오프를 별도 API 라우트로 뗐습니다.
 - `queryClient.setQueriesData`로 즉시 반영하고 실패하면 catch에서 롤백되게 해서, 정산내역과 숨김처리 비교 두 탭이 같이 갱신되게 했습니다.
 - 정산 `entities`는 `common/omission/disapproval/deposit/contract`로, `features/settlement`는 URL 기준 `dashboard/monthly/program/contract`로 나눴습니다. 대표 페이지는 SearchFilter/Table/hook/modal 단위로 쪼개 레거시 page 구조를 걷어냈고요.
-- 레거시 `forwardRef` 모달은 `overlay-kit`으로 바꿨습니다. 대표 모달 둘을 먼저 정리한 뒤 같은 체크리스트로 나머지를 같은 방식으로 옮겼고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 봤습니다.
+- 레거시 `forwardRef` 모달은 `overlay-kit`으로 바꿨습니다. 대표 모달 둘을 먼저 정리한 뒤 같은 체크리스트로 나머지를 옮겼고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 봤습니다.
 
 **백오피스 도메인 정리**
 
@@ -133,14 +133,14 @@
 
 **기존 ATS Electron 크롤러 구조 재설계와 신규 연동**
 
-- 사이트마다 복붙되던 로그인→수집→중복 체크→업로드 흐름을, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스 구조로 설계하고 팀에 공유했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 붙습니다.
+- 사이트마다 복붙되던 로그인→수집→중복 체크→업로드 흐름을, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 붙습니다.
 - 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 붙였습니다.
-- 신규 플랫폼 연동이 체감상 3일에서 1일 정도로 줄었습니다(점핏·잡플래닛·게임잡 3개 도입 후 체감).
-- 단위 테스트와 DOM 셀렉터 변경 헬스체크는 시간에 밀려 후행됐습니다.
+- 신규 플랫폼 연동이 3일에서 1일 정도로 줄었습니다(점핏·잡플래닛·게임잡 3개 도입 후 체감).
+- 단위 테스트와 DOM 셀렉터 변경 헬스체크는 시간에 밀려 뒤로 미뤄졌습니다.
 
 **자동화·운영 화면과 인터랙션 기능**
 
-- 채용 자동화와 온보딩 흐름을 포함한 기존 운영 화면을 계속 확장했습니다. 지원서/면접/리뷰 자동화 페이지, 후보자 생성 플로우, 워크태스크 온보딩 같은 흐름을 개편하면서 관련 UI와 상태 흐름을 정리했습니다.
+- 채용 자동화와 온보딩 흐름을 포함한 기존 운영 화면을 계속 확장했습니다. 지원서/면접/리뷰 자동화 페이지, 후보자 생성 플로우, 워크태스크 온보딩 등을 개편하면서 관련 UI와 상태 흐름을 정리했습니다.
 - 메일/알림 템플릿 관리 화면과 미리보기를 구현했습니다. `@whattime/quill` 기반 WYSIWYG 위에 변수 치환(`{{candidateName}}`)이 반영된 템플릿 작성 경험을 붙였습니다.
 - `@lukemorales/query-key-factory`로 도메인별 query key를 정리해 무효화 누락과 key drift를 줄였습니다.
 - 공고 DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였습니다.
@@ -212,7 +212,7 @@
 
 ### Open Source
 
-검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했으며, 발견한 문제는 upstream PR로 기여했습니다.
+검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했으며, 발견한 문제는 upstream에 PR을 보내 기여했습니다.
 
 **기여**
 

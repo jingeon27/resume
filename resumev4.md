@@ -46,17 +46,17 @@
 **데이터로 검증 (Amplitude)**
 
 - 복지몰 전반에 퍼널·행동 이벤트 약 240개를 먼저 설계해 깔아뒀고, 시술상세 개편의 배포 전후를 이 계측으로 비교했습니다. 가입에서 예약까지의 소요 시간이 소폭 줄었고, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나와서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
-- 신규 가입 UTM이 빠지던 건 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
+- 신규 가입 UTM이 빠지던 건 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드에 손 안 대고 해결했습니다.
 
 **AI 워크플로우**
 
-- `.claude` 스킬·커맨드를 직접 짜서 작업 시작부터 배포까지 이어지게 했고, worktree로 두세 개를 동시에 돌립니다.
+- `.claude` 스킬·커맨드를 직접 짜서 작업 시작부터 배포까지 이어지게 했고, worktree로 작업 두세 개를 동시에 돌립니다.
 - AI가 낸 코드는 컨벤션으로 거릅니다. 빌드가 깨질 때 `force-dynamic`을 덧붙이는 대신 `'use client'` 누락을 고쳤고, create/update 겸용으로 만들어져 수정할 때도 `router.push`가 튀던 mutation 훅을 분리했습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다. 단위 테스트는 시간에 밀려 후행됐고요.
-- `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
+- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다. 단위 테스트는 시간에 밀려 후행됐고요.
+- `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 가지 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였고요.
 
 ---
 

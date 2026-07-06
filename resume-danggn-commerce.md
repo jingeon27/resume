@@ -29,7 +29,7 @@
 
 **판매자/운영자 관리 도구 (백오피스)**
 
-- 프로그램 관리는 시술상세 추가에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하는 방식으로 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
+- 프로그램 관리는 시술상세 추가에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하도록 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했고요. ([글](https://jingeon27.tistory.com/18))
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었는데, 처음 안이던 URL 토큰 전달은 access log·Referer에 토큰이 남는 게 걸렸습니다. form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 붙였습니다. 기획 협의 전에 제가 판단해서 설계한 건입니다. ([글](https://jingeon27.tistory.com/19))
 - 정리해 둔 패턴 덕에 신규 어드민 도메인 하나를 12파일 정도로 빠르게 붙일 수 있었습니다.
 - 대형 검수 화면 PR을 리뷰하면서, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤고요.
@@ -50,12 +50,12 @@
 
 - 복지몰 전반에 퍼널·행동 이벤트 약 240개를 먼저 설계해 깔아뒀고, 시술상세 개편의 배포 전후를 이 계측으로 비교했습니다.
 - 가입에서 예약까지 걸리는 시간이 소폭 줄었고, 리뷰를 본 사용자의 예약 전환율이 안 본 쪽보다 15%p 높게 나왔습니다. 여기서 프로그램별 리뷰 분리와 CTA 위치 조정을 다음 과제로 잡았습니다.
-- 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드 손 안 대고 해결했습니다.
+- 신규 가입 UTM이 빠지던 문제는 코드가 아니라 Amplitude 속성 상태(`unexpected`)가 원인이라, 코드에 손 안 대고 해결했습니다.
 
 **제품 UX & 모바일**
 
 - AI 상담 챗봇은 레거시 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, AI 생성 스트림과 자체 SSE 두 채널을 나눠 렌더했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://jingeon27.tistory.com/20))
-- `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet은 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
+- `@core` primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet는 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
 - 예약·리뷰·상담 폼을 `RHF + Zod + @use-funnel/core`로 합쳤습니다. 가족 동기화는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
 - 웹과 인앱 웹뷰에서 같은 예약/상담 흐름이 깨지지 않도록 bridge, popstate, BottomSheet, backdrop 동작을 함께 봤습니다.
 
@@ -68,7 +68,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다. 단위 테스트는 후행됐고요.
+- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다. 단위 테스트는 후행됐고요.
 - `useFunnel` + sessionStorage 복원 + `FormDirtyContext`를 네 개 흐름에 재사용했습니다. 세이프닥 `useZodForm`의 원형이 된 패턴입니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 붙였습니다.
 
 ---
