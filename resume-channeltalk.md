@@ -32,10 +32,10 @@
 
 **core-library / 디자인 시스템**
 
-- Radix/Headless 위에 primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet는 Compound + `overlay-kit`로 만들어 popstate·backdrop·snap을 라이프사이클 한곳에서 처리했습니다.
-- RHF·Toss Slash·TanStack Query 내부를 읽고 `useZodForm`(스키마→타입 동기화)과 `infiniteSetData`(무한 쿼리 페이지를 `select` 단계에서 평탄화해 캐시 원본 보존) 같은 어댑터를 만들었습니다. nested page 안 개별 아이템 갱신은 `getQueriesData` 순회로 처리했습니다.
+- Radix 위에 primitive 20개를 `tailwind-variants` 토큰으로 묶고, BottomSheet는 Compound + `overlay-kit`로 만들어 popstate·backdrop·snap을 라이프사이클 한곳에서 처리했습니다.
+- RHF·TanStack Query 위에 `useZodForm`(스키마→타입 동기화)과 `infiniteSetData`(무한 쿼리 페이지를 `select` 단계에서 평탄화해 캐시 원본 보존) 같은 얇은 어댑터를 얹어 폼·서버 상태 패턴을 표준화했습니다. nested page 안 개별 아이템 갱신은 `getQueriesData` 순회로 처리했습니다.
 
-**타입 레벨 / 기초**
+**타입 레벨**
 
 - Zod 스키마 추론(`z.infer`), class instance에서 method key만 뽑는 mapped type(`bindMethods`), 폼 값 타입으로 좁힌 recursive nested key path 추론(`createTypedForm`)처럼 타입 레벨 기법을 실무에 썼습니다.
 
