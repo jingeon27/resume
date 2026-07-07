@@ -70,7 +70,7 @@
 **SafeDoc App 아키텍처 정리**
 
 - 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 통일했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
-- 서버 모델(wire 안전용 Zod)은 `entities`, 폼 상태·입력 UX validation은 `features`에 두고 그 사이를 Transfer Layer로 어댑트했습니다. FSD의 도메인 중심 분리를 그대로 따르기보다, 프론트엔드의 서버·클라이언트 두 모델이 안정된 인터페이스 뒤에서 독립적으로 진화하도록 하는 걸 기준으로 삼았습니다.
+- 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고, page마다 달라지는 특이 UI는 page에서 조립했습니다. FSD처럼 도메인이 나오자마자 분리하지 않고 두 번째 사용처(재사용)가 신호일 때 분리하며, page는 로직 없이 연결만 하는 얇은 adapter로 뒀습니다.
 - `ensureQueryData` + props drilling으로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 
