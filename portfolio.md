@@ -2,7 +2,7 @@
 
 > Frontend Engineer
 >
-> jingeon27@gmail.com · 010-6865-8208 · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+> jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
 
 ---
 
@@ -534,6 +534,5 @@ export const candidateDetailKeys = createQueryKeys('CandidateDetail', {
 ## 4. 연락처
 
 - jingeon27@gmail.com
-- 010-6865-8208
 - [GitHub @jingeon27](https://github.com/jingeon27)
 - [Blog](https://jingeon27.tistory.com/)

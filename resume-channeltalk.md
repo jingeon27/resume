@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · 010-6865-8208 · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
 
 산업기능요원 현역 복무 중 (2025.08 – 2028.06)
 
@@ -21,7 +21,7 @@
 
 ### 세이프닥 | Frontend Engineer | 2025.05 – 현재
 
-병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드를 혼자 담당하며, 설계부터 운영까지 끌고 갑니다.
+병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드 오너십을 맡아 설계부터 운영까지 다룹니다.
 
 **상담 메신저 — multi-source i/o 브릿지**
 
@@ -42,14 +42,14 @@
 **개발 환경과 아키텍처**
 
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인(flat config)으로 강제해 위반이 lint에서 잡힙니다.
-- `.claude` 스킬·커맨드를 직접 짜서 반복 작업을 줄이고, AI가 낸 코드는 컨벤션으로 거릅니다.
+- `.claude` 스킬·커맨드를 직접 작성해 반복 작업을 줄이고, AI 생성 코드는 컨벤션으로 검증합니다.
 - 정산은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- ATS 크롤러가 사이트마다 복붙되던 걸, NestJS의 module/DI/factory 패턴을 Electron에 적용해 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 붙어서, 신규 연동이 체감상 3일에서 1일 정도로 줄었습니다.
+- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후 신규 연동 기간이 기존 약 3일에서 약 1일 수준으로 줄었습니다.
 - 폼 dirty 추적·복원 패턴을 네 흐름에 재사용했고, 다단계 입력은 funnel로 구조화했습니다. 폼 dirty 상태, 복원, DnD optimistic update처럼 UI 상태와 저장소 상태가 엇갈리는 케이스를 주로 다뤘습니다.
-- `@whattime/quill` 기반 WYSIWYG에 템플릿 변수 치환을 붙였습니다. quill blot으로 변수를 atomic node로 처리해 사용자가 편집 중 변수 내부를 깨뜨리지 않게 했습니다.
+- `@whattime/quill` 기반 WYSIWYG에 템플릿 변수 치환을 구현했습니다. quill blot으로 변수를 atomic node로 처리해 사용자가 편집 중 변수 내부를 깨뜨리지 않게 했습니다.
 
 ---
 
