@@ -41,7 +41,8 @@
 
 **개발 환경과 아키텍처**
 
-- SafeDoc App 약 1,100파일을 6-layer FSD로 정리했고, CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인(flat config)으로 강제해 위반이 lint에서 잡힙니다.
+- 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD로 통일했고, CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인(flat config)으로 강제해 위반이 lint에서 잡힙니다.
+- FSD의 도메인 중심 분리를 그대로 따르기보다, 서버 모델(wire 안전용 Zod → `entities`)과 클라이언트 모델(폼 상태·입력 UX validation → `features`)을 레이어로 나누고 그 사이를 Transfer Layer로 어댑트했습니다. 두 모델을 같은 곳에 두면 다시 섞이므로, 안정된 인터페이스 뒤에서 독립적으로 진화하게 두는 걸 기준으로 삼습니다.
 - `.claude` 스킬·커맨드를 직접 작성해 반복 작업을 줄이고, AI 생성 코드는 컨벤션으로 검증합니다.
 - 정산은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 

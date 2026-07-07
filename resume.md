@@ -43,7 +43,7 @@
 
 - 예약까지만 있던 MVP를 유저용 프로그램 상세, 관리자용 프로그램 검수, 검색 필터까지 넓혔습니다.
 - 마케팅팀이 깔아둔 Amplitude 위에 예약 전후 퍼널 이벤트를 설계해, 기능 우선순위와 개편 효과를 데이터로 판단할 수 있게 했습니다.
-- 시술 이후 금액 변동(업셀링/다운셀링)을 확인하지 못하던 공백을 메우기 위해 기업 쿠폰과 정산 기능을 구현했습니다. 기존에 별도로 개발돼 있던 정산 영역을 넘겨받아 FSD 전환, 컴포넌트 분리, 모달 공통화까지 정리했습니다.
+- 시술 이후 금액 변동(업셀링/다운셀링)을 확인하지 못하던 공백을 메우기 위해 기업 쿠폰과 정산 기능을 구현했습니다. 기존에 별도로 개발돼 있던 정산 영역을 넘겨받아 FSD 정리, 컴포넌트 분리, 모달 공통화까지 진행했습니다.
 
 **데이터로 검증 (Amplitude)**
 
@@ -69,7 +69,8 @@
 
 **SafeDoc App 아키텍처 정리**
 
-- 약 1,100파일 규모에서 FSD와 Atomic Design 잔재가 섞여 있던 걸 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 정리했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
+- 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 통일했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
+- 서버 모델(wire 안전용 Zod)은 `entities`, 폼 상태·입력 UX validation은 `features`에 두고 그 사이를 Transfer Layer로 어댑트했습니다. FSD의 도메인 중심 분리를 그대로 따르기보다, 프론트엔드의 서버·클라이언트 두 모델이 안정된 인터페이스 뒤에서 독립적으로 진화하도록 하는 걸 기준으로 삼았습니다.
 - `ensureQueryData` + props drilling으로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 

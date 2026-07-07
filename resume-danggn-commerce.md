@@ -63,6 +63,7 @@
 
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌는 상태였습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 전역 상태도 정리했습니다. 유저 정보 Context를 걷어내 React Query로 모으고, Zustand store에 흩어져 있던 폼 상태 관리를 React Hook Form으로 통합했습니다.
+- 아키텍처는 FSD의 도메인 중심 분리를 그대로 따르기보다, 서버 모델(wire 안전용 Zod → `entities`)과 클라이언트 모델(폼 상태·입력 UX validation → `features`)을 레이어로 나누고 그 사이를 Transfer Layer로 어댑트하는 걸 기준으로 삼았습니다. 두 모델을 같은 곳에 두면 다시 섞이므로, 안정된 인터페이스 뒤에서 독립적으로 진화하게 둡니다. (전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 상태를 FSD로 통일한 뒤 이 방향으로 개선했습니다.)
 - axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다. ([글](https://jingeon27.tistory.com/21))
 - `code-reviewer`, Zod·타입 경계, 도메인별 패턴으로 반복 회귀를 줄였습니다.
 
