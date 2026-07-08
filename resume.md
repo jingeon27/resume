@@ -63,7 +63,7 @@
 
 **`@core` 디자인 시스템 (primitive 20개)**
 
-- Radix/Headless 위에 Button·Input·BottomSheet·Dialog·Toast·Tooltip·Callout·Checkbox·Radio·Toggle·Tabs·Chip·Menu 등을 공통으로 만들었습니다.
+- Radix 위에 Button·Input·BottomSheet·Dialog·Toast·Tooltip·Callout·Checkbox·Radio·Toggle·Tabs·Chip·Menu 등을 공통으로 만들었습니다.
 - `tailwind-variants`로 size/intent/state 세 축을 묶어, 호출부마다 inline `className`으로 덮어쓰는 걸 줄였습니다.
 - BottomSheet는 Compound(`Root/Header/Content/Footer`)로 `react-modal-sheet` 위에 구성하고 `overlay-kit`로 호출하게 해서, 뒤로가기(`popstate`)·backdrop tap·snap point를 `Root` 라이프사이클 한 곳에서 처리했습니다.
 
@@ -209,7 +209,7 @@
 
 ### UI & Styling
 
-- tailwind-variants(size/intent/state 토큰), Radix/Headless(Compound, asChild + Slot), overlay-kit, Framer Motion.
+- tailwind-variants(size/intent/state 토큰), Radix(Compound, asChild + Slot), overlay-kit, Framer Motion.
 
 ### Open Source
 

@@ -64,7 +64,7 @@
 - **TypeScript 5 / React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터, Zod 스키마 추론
 - **Next.js App Router** — Middleware/BFF, 캐싱 모델 구분, RSC 경계
 - **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod, AntD Form
-- **아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, 인앱 웹뷰 브릿지
+- **아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix, overlay-kit, 인앱 웹뷰 브릿지
 
 모바일 우선 B2C, 네이티브 웹뷰 브릿지, popstate/backdrop/snap 같은 모바일 라이프사이클을 다뤄왔습니다. React Native 같은 새 스택도 라이브러리의 내부 계약부터 읽고 흡수하는 방식으로 빠르게 학습할 수 있습니다. 실제로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있고, 실전에서 쓰는 TanStack/ai에도 `useChat` 인스턴스 안정성 리팩토링 PR을 제출해 리뷰를 받고 있습니다. ([toss/slash #363](https://github.com/toss/slash/pull/363) · [TanStack/ai #864](https://github.com/TanStack/ai/pull/864))
 

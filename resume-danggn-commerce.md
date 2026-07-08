@@ -84,7 +84,7 @@
 
 **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod(`useZodForm`, `superRefine`). REST/axios 기반에서 서버 상태·캐시 일관성·BFF 경계를 다뤄왔습니다. GraphQL/Relay는 아직 사용 경험이 없지만, RHF·Zod·use-funnel·Radix를 내부 코드까지 읽고 도입해 온 방식으로 빠르게 학습할 수 있습니다. 실제로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있습니다([PR #363](https://github.com/toss/slash/pull/363)).
 
-**아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix/Headless, overlay-kit, Framer Motion, 인앱 웹뷰 브릿지.
+**아키텍처/UI** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, tailwind-variants, Radix, overlay-kit, Framer Motion, 인앱 웹뷰 브릿지.
 
 ---
 
