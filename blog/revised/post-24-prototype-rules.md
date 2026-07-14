@@ -35,8 +35,9 @@ form, query, drawer 같은 반복 구현은 별도 skill에 실제 codebase의 p
 
 > router, locale, theme처럼 이미 공통 provider가 소유한 값을 관계없는 중간 component들이 전달만 하지 않는다. 반면 부모가 계산한 화면 데이터와 component의 명시적 입력은 props로 전달한다.
 
+수정 전에는 관계없는 component 두 개가 locale을 전달만 했다.
+
 ```tsx
-// 관계없는 component 두 개가 locale을 전달만 한다.
 function Page() {
   const locale = useLocale();
   return <Section locale={locale} />;
@@ -45,8 +46,19 @@ function Page() {
 function Section({ locale }: { locale: Locale }) {
   return <ProductCard locale={locale} />;
 }
+```
 
-// 순수 UI 바로 위, 가장 가까운 소비 지점에서 hook을 읽는다.
+수정 후에는 순수 UI 바로 위, 가장 가까운 소비 지점에서 hook을 읽는다.
+
+```tsx
+function Page() {
+  return <Section />;
+}
+
+function Section() {
+  return <ProductCard />;
+}
+
 function ProductCard() {
   const locale = useLocale();
   return <ProductName locale={locale} />;

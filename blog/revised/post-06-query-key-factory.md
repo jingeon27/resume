@@ -49,7 +49,7 @@ candidateCollectionKeys.config.queryKey;
 // ['CandidateCollection', 'config']
 ```
 
-기존 글에서는 `config` 키와 `list` 호출 예제가 서로 섞여 있었는데, 고정 query와 파라미터 query는 위처럼 구분된다.
+고정 query(`config`)와 파라미터 query(`list`)는 위처럼 정의 형태가 구분된다.
 
 ## 상세 하위 쿼리는 contextQueries로 묶기
 

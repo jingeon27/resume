@@ -50,7 +50,7 @@ export type FieldNamePath<T> =
   | Exclude<ArrayPaths<T>, []>;
 ```
 
-`createTypedForm<T>()`은 Ant Design Form을 감싸고 `Item`, `List`, `useForm`, `useWatch`, `useFormInstance`를 같은 `T`로 좁힌다. 팩토리 본체는 antd 원본을 그대로 감싸되 `name` 계열 타입만 `FieldNamePath`로 바꾸는 것이 전부다.
+`createTypedForm<T>()`은 Ant Design Form을 감싸고 `Item`, `List`, `useForm`, `useWatch`, `useFormInstance`가 받는 `name` 경로를 같은 `T` 기준으로 좁힌다. 팩토리 본체는 antd 원본을 그대로 감싸되 `name` 계열 타입만 `FieldNamePath`로 바꾸는 것이 전부다.
 
 ```tsx
 export function createTypedForm<Values extends object>() {
@@ -86,19 +86,18 @@ interface ProgramFormValues {
 }
 
 const ProgramForm = createTypedForm<ProgramFormValues>();
-const [form] = ProgramForm.useForm();
 
-form.getFieldValue('programName');
-// string
+<ProgramForm.Item name="programName" />;
+// OK
 
-form.getFieldValue(['highlights', 0, 'title']);
-// string
+<ProgramForm.Item name={['highlights', 0, 'title']} />;
+// OK — 중첩 배열 경로도 좁혀진다
 
-form.getFieldValue('progamName');
-// 컴파일 오류
+<ProgramForm.Item name="progamName" />;
+// 컴파일 오류 — 오타를 사용하는 지점에서 바로 잡는다
 ```
 
-adapter 내부에는 Ant Design의 넓은 타입과 연결하기 위한 단언이 남는다. 대신 그 비용을 한 파일에 가두고 실제 FormItem과 helper에서는 잘못된 field path를 바로 발견한다.
+adapter 내부에는 Ant Design의 넓은 타입과 연결하기 위한 단언이 남는다. 대신 그 비용을 한 파일에 가두고 실제 FormItem과 helper에서는 잘못된 field path를 바로 발견한다. 다만 이 팩토리가 좁히는 것은 어디까지나 `name` 경로다. `getFieldValue`의 반환 타입은 여전히 antd의 넓은 타입이라, 반환값까지 경로 기준으로 좁히려면 `useForm` 반환을 한 번 더 재타이핑하는 래핑이 필요하다. 그 작업은 후속 과제로 남겼다.
 
 ## 2. 공통 타입과 앱 전용 타입을 분리하기
 
@@ -178,7 +177,7 @@ function serverToForm(response: ProgramResponse): ProgramFormCommon {
 }
 ```
 
-기존 글의 `isNil(value)`만 사용한 toggle 변환은 빈 배열을 `PROVIDED`로 처리했다. 배열은 길이까지 확인해야 "항목 없음"을 정확히 표현할 수 있다.
+처음에 `isNil(value)`만 확인하던 toggle 변환은 빈 배열을 `PROVIDED`로 처리하는 버그가 있었다. 배열은 길이까지 확인해야 "항목 없음"을 정확히 표현할 수 있다.
 
 제출 방향은 form 전용 필드를 제거하고 API가 요구하는 순서를 다시 만든다.
 

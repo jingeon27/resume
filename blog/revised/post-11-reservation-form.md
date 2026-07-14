@@ -194,7 +194,7 @@ function ReservationDateTimePicker() {
 }
 ```
 
-동기화 hook과 달리 picker는 `useFieldArray` 컨텍스트 밖에 있으므로 `replace` 대신 `setValue`로 배열 전체를 갱신한다. 날짜를 local state와 store에 각각 쓰던 흐름이 폼 업데이트 하나로 합쳐졌다.
+같은 name의 `useFieldArray` 인스턴스를 여러 곳에 두지 않고 동기화 hook 한 곳이 소유하기로 했으므로, picker에서는 `replace` 대신 `setValue`로 배열 전체를 갱신한다. 날짜를 local state와 store에 각각 쓰던 흐름이 폼 업데이트 하나로 합쳐졌다.
 
 ## 결과와 트레이드오프
 

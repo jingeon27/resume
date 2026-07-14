@@ -47,7 +47,7 @@ export function getQueryClient() {
 }
 ```
 
-기존 글의 `typeof window !== undefined`는 항상 참이었다. `typeof`의 결과는 문자열이므로 직접 검사하려면 `typeof window === 'undefined'`여야 한다. 여기서는 TanStack Query가 제공하는 `isServer`를 사용해 의도를 더 분명하게 했다.
+흔히 실수하는 `typeof window !== undefined`는 항상 참이다. `typeof`의 결과는 문자열이므로 직접 검사하려면 `typeof window === 'undefined'`여야 한다. 여기서는 TanStack Query가 제공하는 `isServer`를 사용해 의도를 더 분명하게 했다.
 
 서버에서는 호출마다 새 QueryClient를 만든다. 브라우저에서는 모듈 범위의 인스턴스를 재사용한다. 한 요청 안에서 여러 컴포넌트가 같은 인스턴스를 공유해야 한다면 `getQueryClient`를 React의 `cache()`로 감싸 요청 단위로 메모이즈해야 한다.
 

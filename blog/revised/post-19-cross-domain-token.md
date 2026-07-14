@@ -1,5 +1,3 @@
-<!-- 원문 대비 유실 가능 구간: 게시본 후반부(2단계~정리)는 발췌로만 대조 확인했고, 본문 복원은 로컬 초안(blog/cross-domain-token-handoff.md)을 기준으로 했다. 게시본과 초안 사이에 소소한 문구 차이가 있을 수 있다. -->
-
 # 정산 도메인을 별도 호스트로 분리하면서 크로스 도메인 토큰 위임을 설계한 과정
 
 > 단일 Next.js 코드베이스를 유지한 채 정산만 다른 호스트(메인 호스트 → 정산 호스트)로 분리하면서,
@@ -309,6 +307,8 @@ return new NextResponse(html, {
 여기서 **"토큰을 구독하는 방식"이 바뀐 지점**이 핵심이다.
 예전엔 토큰이 URL을 타고 흘러서, 토큰을 "받는" 코드가 미들웨어의 쿼리 파싱에 박혀 있었다.
 지금은 정산 호스트에 **HttpOnly 쿠키로 안착된 토큰을, 런타임에서 axios interceptor가 매 요청마다 구독해 헤더로 주입**한다.
+
+한 가지 짚어둘 점: 여기서 `getCookie`는 브라우저가 `document.cookie`를 읽는 helper가 아니다. HttpOnly 쿠키는 스크립트에서 직접 읽을 수 없으므로, `getCookie`는 Server Function을 경유해 서버에서 쿠키를 읽어 돌려준다. HttpOnly가 막는 것은 스크립트의 직접 접근이고, 이 우회는 그만큼의 왕복 비용과 "값이 JS로 돌아온 순간 HttpOnly 보호 밖"이라는 트레이드오프를 진다.
 
 ```ts
 // packages/shared/utils/http/axiosInstance.ts
