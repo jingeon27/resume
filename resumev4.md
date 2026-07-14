@@ -8,10 +8,9 @@
 
 ## Summary
 
-급하게 만들어진 MVP를 넘겨받아 운영 가능한 제품으로 다시 세워온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스의 프론트엔드 오너십을 맡고 있고, 받은 명세를 그대로 구현하기보다 제안된 설계의 약점을 먼저 검토합니다. 새 도구는 직접 만들기보다 검증된 도구를 골라 얇게 감싸 쓰고, 추상화는 같은 패턴이 세 번 나온 뒤에 적용합니다.
+급하게 만들어진 MVP를 넘겨받아 운영 가능한 제품으로 다시 세워온 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스의 프론트엔드를 단독 담당하고 있고, 받은 명세를 그대로 구현하기보다 제안된 설계의 약점을 먼저 검토합니다. 새 도구는 직접 만들기보다 검증된 도구를 골라 얇게 감싸 쓰고, 아직 필요하지 않은 구조는 미리 만들지 않습니다.
 
 - 첫 구현이던 URL 토큰 전달의 로그 노출 위험을 확인해 form POST BFF로 다시 설계
-- 1,800줄짜리 대형 검수 PR에서 프레임워크를 두고 직접 구현한 검증 로직을 지적
 - Amplitude로 가설을 검증해 다음 과제를 데이터로 도출 (리뷰 조회 사용자 예약 전환율 +15%p)
 - 프로그램·예약·정산·쿠폰 같은 판매자/운영자 화면을 반복 패턴으로 정리
 
@@ -21,13 +20,12 @@
 
 ### 세이프닥 | Frontend Engineer | 2025.05 – 현재
 
-병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드 오너십을 맡고 있습니다. 예약까지만 있던 MVP를 운영·분석·병원 관리 기능까지 확장했습니다.
+병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드를 단독 담당하고 있습니다. 예약까지만 있던 MVP를 운영·분석·병원 관리 기능까지 확장했습니다.
 
 **직접 판단해서 바꾼 것들**
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props로만 받아 쓰다 보니 무효화해도 화면이 안 바뀌었습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
-- 1,800줄짜리 대형 검수 PR을 리뷰하며, AntD 내장 Form을 두고 검증을 직접 구현한 부분을 짚었습니다. `rules`와 제출 시점 `validateFields`로 대체 가능하다고 봤습니다.
 
 **Program 관리 v2**
 
@@ -62,7 +60,7 @@
 
 ## Skills
 
-검증된 라이브러리 내부를 읽고 그 위에 얇은 어댑터를 두는 방식을 선호합니다(`useZodForm`, BottomSheet compound, `infiniteSetData`). Server·Form·UI·전역 상태의 역할을 섞지 않고, 추상화는 Rule of Three 뒤에 적용합니다.
+검증된 라이브러리 내부를 읽고 그 위에 얇은 어댑터를 두는 방식을 선호합니다(`useZodForm`, BottomSheet compound, `infiniteSetData`). Server·Form·UI·전역 상태의 역할을 섞지 않고, 지금 필요한 범위를 단순하게 유지합니다.
 
 - **TypeScript 5 / React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터, Zod 스키마 추론으로 폼 타입 동기화
 - **Next.js App Router** — Middleware/BFF, 캐싱 모델(request memoization / Data Cache / dynamic 강등) 구분, RSC 경계
