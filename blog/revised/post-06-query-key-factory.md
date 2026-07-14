@@ -31,6 +31,8 @@ export const candidateCollectionKeys = createQueryKeys('CandidateCollection', {
 });
 ```
 
+`candidateApi.getConfig`처럼 메서드 참조를 그대로 넘기려면 전제가 있다. 해당 함수가 `this` 바인딩 없이 동작해야 하고, `queryFn`은 `QueryFunctionContext`를 첫 인자로 받으므로 선택 인자가 있는 함수는 그대로 넘기면 안 된다.
+
 생성되는 키의 의미는 다음과 같다.
 
 ```ts
@@ -118,7 +120,7 @@ const createReview = useMutation({
 });
 ```
 
-단순히 감싼 함수를 없애는 것이 목적은 아니다. API 함수의 파라미터가 바뀌면 mutation 정의도 함께 타입 오류가 나도록, 중복된 함수 시그니처를 없애는 것이 목적이었다.
+단순히 감싼 함수를 없애는 것이 목적은 아니다. API 함수의 파라미터가 바뀌면 mutation 정의도 함께 타입 오류가 나도록, 중복된 함수 시그니처를 없애는 것이 목적이었다. 이때도 `candidateReviewApi.create`가 `this` 바인딩 없이 동작하는 함수여야 한다는 전제는 동일하다.
 
 ## 적용하면서 지킨 기준
 

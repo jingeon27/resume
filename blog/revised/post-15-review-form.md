@@ -12,7 +12,7 @@
 
 - 값과 field lifecycle: React Hook Form
 - 검증 규칙: Zod
-- 단계와 history: `@use-funnel/core`
+- 단계와 history: `@use-funnel/next`
 
 ## 기존 구조의 문제
 
@@ -90,6 +90,8 @@ function validateStep2(data: ReviewStep2, ctx: z.RefinementCtx) {
 }
 
 // 방문 인증 step을 거치는 흐름에서만 영수증을 필수로 검사한다.
+// 수정 모드는 이미 인증을 마친 리뷰라 영수증 step 자체를 건너뛰므로
+// 최종 ReviewSchema에는 min(1)을 두지 않는다.
 export const ReviewStep1Schema = z.object({
   receipts: ReceiptListSchema.min(1),
 });
@@ -109,9 +111,10 @@ export const ReviewSchema = z
 
 ```ts
 function toReviewRequest(form: ReviewForm): ReviewRequest {
+  const { visibility, ...rest } = form;
   return {
-    ...form,
-    hideAffiliation: form.visibility === 'HIDDEN',
+    ...rest,
+    hideAffiliation: visibility === 'HIDDEN',
   };
 }
 ```
@@ -143,6 +146,8 @@ custom input의 value와 error를 RHF에 연결하는 코드는 `Controller` 안
 ## 퍼널은 화면 선택보다 history를 맡긴다
 
 ```tsx
+const [draft, setDraft] = useState<Partial<ReviewForm>>(initialValues ?? {});
+
 const funnel = useFunnel<{
   first: object;
   second: object;
@@ -194,7 +199,7 @@ return (
 );
 ```
 
-핵심은 `switch`를 없앤 사실이 아니라 이전, 다음, replace 같은 이동이 history API로 드러난 점이다. 각 step은 자기 schema만 알며, step을 통과한 값은 상위 draft에 합친다. 최종 제출 직전에는 `ReviewSchema.parse(draft)`로 전체 규칙을 다시 확인한다.
+핵심은 `switch`를 없앤 사실이 아니라 이전, 다음, replace 같은 이동이 history API로 드러난 점이다. 각 step은 자기 schema만 알며, step을 통과한 값은 상위 draft에 합친다. 최종 제출 직전에는 `ReviewSchema.parse({ ...draft, ...values })`로 전체 규칙을 다시 확인한다.
 
 ## 수정 데이터는 폼을 만들기 전에 준비한다
 

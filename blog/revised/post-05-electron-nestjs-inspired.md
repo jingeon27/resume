@@ -1,6 +1,6 @@
 # Electron 크롤링 앱에 NestJS의 책임 분리를 참고한 과정
 
-입사 당시 Electron 앱은 여러 채용 플랫폼에서 지원자를 수집하고 있었다. 플랫폼마다 로그인 방식과 DOM 구조는 달랐지만, 로그인, 중복 확인, 지원자 저장, 이력서 업로드라는 큰 흐름은 같았다. 그런데 각 플랫폼 파일이 이 흐름을 모두 들고 있어 공통 동작을 바꾸려면 여러 파일을 함께 수정해야 했다.
+입사 당시 Electron 앱은 여러 채용 플랫폼에서 지원자 정보를 수집하고 있었다. 수집 대상은 자사가 각 플랫폼의 기업회원으로서 정당한 접근 권한을 가진 지원자 데이터였다. 플랫폼마다 로그인 방식과 DOM 구조는 달랐지만, 로그인, 중복 확인, 지원자 저장, 이력서 업로드라는 큰 흐름은 같았다. 그런데 각 플랫폼 파일이 이 흐름을 모두 들고 있어 공통 동작을 바꾸려면 여러 파일을 함께 수정해야 했다.
 
 백엔드 팀의 NestJS 코드를 보면서 Controller와 Service의 책임 분리, 생성자 주입, Module의 의존성 매핑 방식을 참고했다. 다만 Electron 앱에 NestJS나 DI 컨테이너를 넣은 것은 아니다. 필요한 개념만 TypeScript 클래스와 Factory로 옮겼다.
 
@@ -38,9 +38,9 @@ export function createCrawlingController(puppeteer: PuppeteerService) {
   const createService = createCrawlingService(puppeteer);
 
   const services = {
-    saramin: createService('saramin'),
-    wanted: createService('wanted'),
-    jobkorea: createService('jobkorea'),
+    platformA: createService('platformA'),
+    platformB: createService('platformB'),
+    platformC: createService('platformC'),
   } satisfies Record<Platform, CrawlingService>;
 
   return {
@@ -49,9 +49,12 @@ export function createCrawlingController(puppeteer: PuppeteerService) {
     },
   };
 }
+
+const controller = createCrawlingController(puppeteer);
+ipcMain.handle('crawl', (_event, req) => controller.collect(req));
 ```
 
-Controller는 플랫폼에 맞는 Service를 고르고 결과를 반환한다. 로그인이나 DOM 파싱 규칙은 알지 않는다.
+Controller는 플랫폼에 맞는 Service를 고르고 결과를 반환한다. 로그인이나 DOM 파싱 규칙은 몰라도 된다.
 
 ## 2. Service는 처리 순서만 가진다
 
@@ -89,21 +92,27 @@ abstract class CandidateProcessor {
   abstract uploadResumes(): Promise<void>;
 }
 
+interface CrawlingHandler {
+  pages: { recruit: string };
+  login: (page: Page) => Promise<void>;
+  Processor: new (args: { page: Page }) => CandidateProcessor;
+}
+
 const CRAWLING_HANDLERS = {
-  saramin: {
-    pages: SARAMIN_PAGES,
-    login: loginSaramin,
-    Processor: SaraminProcessor,
+  platformA: {
+    pages: PLATFORM_A_PAGES,
+    login: loginPlatformA,
+    Processor: PlatformAProcessor,
   },
-  wanted: {
-    pages: WANTED_PAGES,
-    login: loginWanted,
-    Processor: WantedProcessor,
+  platformB: {
+    pages: PLATFORM_B_PAGES,
+    login: loginPlatformB,
+    Processor: PlatformBProcessor,
   },
-  jobkorea: {
-    pages: JOBKOREA_PAGES,
-    login: loginJobkorea,
-    Processor: JobkoreaProcessor,
+  platformC: {
+    pages: PLATFORM_C_PAGES,
+    login: loginPlatformC,
+    Processor: PlatformCProcessor,
   },
 } as const satisfies Record<Platform, CrawlingHandler>;
 ```

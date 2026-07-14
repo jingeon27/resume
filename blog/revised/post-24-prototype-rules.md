@@ -27,7 +27,7 @@ component를 생성하는 command 이름보다 중요한 것은 각 단계의 �
 
 form, query, drawer 같은 반복 구현은 별도 skill에 실제 codebase의 pattern과 금지 사례를 함께 적었다. 새로운 화면을 만들 때마다 설명을 다시 쓰지 않고, Jira task의 차이만 plan에 남기는 구조였다.
 
-## 규칙은 blanket rule이 아니라 조건으로 쓴다
+## 규칙은 포괄 규칙이 아니라 조건으로 쓴다
 
 처음에는 AI가 반복해서 만든 문제를 짧게 막으려다 너무 강한 규칙을 만들기도 했다. 예를 들어 "hook으로 얻을 수 있는 값은 prop으로 넘기지 않는다"는 규칙이다.
 
@@ -46,7 +46,7 @@ function Section({ locale }: { locale: Locale }) {
   return <ProductCard locale={locale} />;
 }
 
-// 실제 소비 지점에서 app context를 읽는다.
+// 순수 UI 바로 위, 가장 가까운 소비 지점에서 hook을 읽는다.
 function ProductCard() {
   const locale = useLocale();
   return <ProductName locale={locale} />;

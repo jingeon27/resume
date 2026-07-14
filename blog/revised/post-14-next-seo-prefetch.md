@@ -43,7 +43,7 @@ export default async function ReservationPage({ searchParams }: Props) {
 }
 ```
 
-`await` 뒤에 `dehydrate`하므로 성공한 query가 hydration state에 포함된다. 초기 화면의 핵심 콘텐츠, metadata 생성에 필요한 데이터, 서버에서 오류를 처리해야 하는 조회에는 이 방식이 단순하다.
+`await` 뒤에 `dehydrate`하므로 성공한 query가 hydration state에 포함된다. 초기 화면의 핵심 콘텐츠, metadata 생성에 필요한 데이터, 서버에서 오류를 처리해야 하는 조회에는 이 방식이 단순하다. 다만 `generateMetadata`는 page와 별도로 실행되므로 page에서 prefetch한 데이터가 자동으로 공유되지는 않으며, 같은 요청을 중복 없이 쓰려면 React의 `cache()`나 fetch 캐시로 조회 함수를 묶어야 한다.
 
 ## `void prefetchQuery`가 항상 틀린 것은 아니다
 

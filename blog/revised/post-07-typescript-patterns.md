@@ -1,6 +1,6 @@
 # 실무에서 자주 쓰는 TypeScript 패턴 네 가지
 
-TypeScript 문법을 많이 쓰는 것보다, 데이터가 가질 수 없는 상태를 타입으로 줄이는 데 도움이 되는 패턴을 자주 사용한다. 그중 실무에서 반복해서 쓴 네 가지를 정리했다.
+TypeScript 문법을 많이 쓰는 것 자체가 목표는 아니다. 데이터가 가질 수 없는 상태를 타입으로 줄이는 데 도움이 되는 패턴을 자주 사용하며, 그중 실무에서 반복해서 쓴 네 가지를 정리했다.
 
 ## 1. `satisfies`: 검사는 하되 추론은 유지하기
 
@@ -62,7 +62,7 @@ function Select<T extends string>({ value, onValueChange }: SelectProps<T>) {
 }
 ```
 
-사용하는 쪽에서 value가 구체적인 union이면 callback 인자도 같은 union으로 추론된다.
+타입 인자를 명시하지 않으면 `T`는 전달한 값인 `'coupon'` 리터럴로 좁게 추론된다. value와 callback을 union으로 다루려면 아래처럼 타입 인자를 명시한다.
 
 ```tsx
 type PaymentMethod = 'normal' | 'coupon';
@@ -108,7 +108,7 @@ function Field<T extends string>(props: Props<T>) {
 <Field label="잘못된 조합" value="active" />;      // 컴파일 오류
 ```
 
-함수 overload는 호출 시그니처를 설명할 때 유용하지만, React props의 가능한 상태를 모델링할 때는 discriminated union이나 `never` 기반 XOR가 구현부까지 안전하게 좁혀진다.
+함수 overload는 호출 시그니처를 설명할 때 유용하지만, React props의 가능한 상태를 모델링할 때는 discriminated union이나 `never` 기반 XOR가 구현부까지 안전하게 좁혀진다. 다만 `label?: never` 방식은 `'label' in props` 같은 검사로도 각 분기가 완전히 좁혀지지 않는 한계가 있어, 케이스가 늘어나면 discriminant 프로퍼티를 두는 방식이 낫다.
 
 ## 정리
 

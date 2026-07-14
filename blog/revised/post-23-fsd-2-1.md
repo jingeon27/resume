@@ -4,7 +4,7 @@ FSD를 적용하면서 자주 했던 질문은 "이 코드는 feature인가 enti
 
 > 지금 이 코드를 page 밖으로 꺼내야 할 이유가 증명됐는가?
 
-FSD 2.1은 처음부터 모든 레이어를 채우기보다 App, Pages, Shared로 시작하고 필요가 드러날 때 Widgets, Features, Entities를 추출하는 방향을 강조한다. 한 번만 쓰는 기능을 도메인 이름만 보고 미리 entity나 feature로 만들면, 아직 굳지 않은 경계가 전역 의존성으로 남기 때문이다.
+FSD 2.1은 처음부터 모든 레이어를 채우기보다 App, Pages, Shared로 시작하고 필요가 드러날 때 Widgets, Features, Entities를 추출하는 방향을 강조한다. 이 지연 분해 방향을 이하 pages-first라고 부른다. 한 번만 쓰는 기능을 도메인 이름만 보고 미리 entity나 feature로 만들면, 아직 굳지 않은 경계가 전역 의존성으로 남기 때문이다.
 
 내가 맡은 프로젝트는 CMS와 병원 관리자 두 앱이 같은 도메인을 사용하는 모노레포였다. 그래서 단일 앱의 pages-first를 그대로 복사하지 않고, **두 번째 사용처가 무엇인지**를 기준으로 다시 해석했다.
 
@@ -45,7 +45,9 @@ packages/
 
 apps/
 ├── cms/
+│   └── src/modules/
 └── hospital-admin/
+    └── src/modules/
 ```
 
 여기서 package에 있다는 사실과 FSD 레이어는 같은 개념이 아니다.
@@ -74,6 +76,8 @@ packages/features/program       공통 FormItem, form helper
 apps/cms/.../program            CMS 제출 흐름
 apps/hospital-admin/.../program 병원 검수 흐름
 ```
+
+공통 FormItem과 form helper를 `entities`가 아니라 `packages/features/program`에 둔 것은, 이 재료가 프로그램을 등록하고 수정하는 행위의 입력 UI에 종속돼 있어 domain 표현보다 행위 쪽에 가깝다고 판단했기 때문이다. 그래도 제출 orchestration은 각 app feature에 남아 있으므로 "UI 재료만 공유한다"는 원칙과 어긋나지 않는다.
 
 같은 화면처럼 보여도 생명주기가 다른 동작까지 억지로 공유하지 않았다.
 

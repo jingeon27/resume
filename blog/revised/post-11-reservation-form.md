@@ -63,6 +63,7 @@ function ReservationPage() {
     familySelectionTargetOptions,
   );
 
+  // useZodForm은 zodResolver를 연결한 useForm 래퍼다.
   const methods = useZodForm({
     schema: ReservationFormSchema,
     defaultValues: {
@@ -119,7 +120,7 @@ export const ReservationFormSchema = z
   });
 ```
 
-이제 `isValid`를 별도 상태로 저장하지 않는다. 현재 폼 값으로부터 계산된 `formState.isValid`를 사용한다. 에러 위치와 메시지도 같은 스키마에 남는다.
+이제 `isValid`를 별도 상태로 저장하지 않는다. 현재 폼 값으로부터 계산된 `formState.isValid`를 사용한다. `formState.isValid`는 mode가 `onChange`, `onBlur`, `onTouched`일 때만 실시간으로 갱신되므로, `useZodForm`은 `mode: 'onChange'`를 설정해 값이 바뀔 때마다 다시 계산되게 했다. 에러 위치와 메시지도 같은 스키마에 남는다.
 
 ## 서버 목록과 폼 배열은 ID로 맞춘다
 
@@ -193,11 +194,11 @@ function ReservationDateTimePicker() {
 }
 ```
 
-날짜를 local state와 store에 각각 쓰던 흐름이 폼 업데이트 하나로 합쳐졌다.
+동기화 hook과 달리 picker는 `useFieldArray` 컨텍스트 밖에 있으므로 `replace` 대신 `setValue`로 배열 전체를 갱신한다. 날짜를 local state와 store에 각각 쓰던 흐름이 폼 업데이트 하나로 합쳐졌다.
 
 ## 결과와 트레이드오프
 
-조립 역할을 하던 `ReservationPersonSelector`는 520줄에서 55줄로 줄었다. 다만 복잡도 465줄이 모두 사라진 것은 아니다. 서버 목록 동기화는 전용 hook으로, 가족 선택 UI는 하위 component로 이동했다. 중요한 변화는 각 로직의 입력과 출력이 분명해져 한 파일에서 세 저장소를 동시에 맞추지 않게 된 것이다.
+조립 역할을 하던 `ReservationPersonSelector`는 520줄에서 55줄로 줄었다. 다만 줄어든 465줄만큼의 복잡도가 모두 사라진 것은 아니다. 서버 목록 동기화는 전용 hook으로, 가족 선택 UI는 하위 component로 이동했다. 중요한 변화는 각 로직의 입력과 출력이 분명해져 한 파일에서 세 저장소를 동시에 맞추지 않게 된 것이다.
 
 React Hook Form으로 옮기면서 생긴 비용도 있다.
 

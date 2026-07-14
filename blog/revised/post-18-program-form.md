@@ -50,7 +50,31 @@ export type FieldNamePath<T> =
   | Exclude<ArrayPaths<T>, []>;
 ```
 
-`createTypedForm<T>()`은 Ant Design Form을 감싸고 `Item`, `List`, `useForm`, `useWatch`를 같은 `T`로 좁힌다.
+`createTypedForm<T>()`은 Ant Design Form을 감싸고 `Item`, `List`, `useForm`, `useWatch`, `useFormInstance`를 같은 `T`로 좁힌다. 팩토리 본체는 antd 원본을 그대로 감싸되 `name` 계열 타입만 `FieldNamePath`로 바꾸는 것이 전부다.
+
+```tsx
+export function createTypedForm<Values extends object>() {
+  type Path = FieldNamePath<Values>;
+
+  function Item<P extends Path>(props: Omit<FormItemProps, 'name'> & { name: P }) {
+    // antd FormItemProps['name']은 넓은 NamePath라 단언은 여기 한 번으로 끝낸다.
+    return <Form.Item {...props} name={props.name as FormItemProps['name']} />;
+  }
+
+  function List<P extends Path>(props: Omit<FormListProps, 'name'> & { name: P }) {
+    return <Form.List {...props} name={props.name as FormListProps['name']} />;
+  }
+
+  const useForm = () => Form.useForm<Values>();
+  const useWatch = <P extends Path>(name: P, form?: FormInstance<Values>) =>
+    Form.useWatch(name as NamePath, form);
+  const useFormInstance = () => Form.useFormInstance<Values>();
+
+  return { Item, List, useForm, useWatch, useFormInstance };
+}
+```
+
+사용하는 쪽에서는 폼 타입 하나로 팩토리를 만들고, 반환된 adapter만 쓴다.
 
 ```ts
 interface ProgramFormValues {
@@ -117,6 +141,8 @@ API response
 예를 들어 서버 이미지 객체는 Ant Design `UploadFile[]`로 바뀌고, 상세 template은 `orderNo`로 정렬된 편집 배열이 된다.
 
 ```ts
+// toggle 변환 규칙만 떼어 낸 예시다. 아래 serverToForm 예제에는
+// toggle 필드를 생략했지만, 실제 변환에서는 배열 필드마다 이 함수를 거친다.
 function hasProvidedValue(value: unknown): boolean {
   if (Array.isArray(value)) return value.length > 0;
   return value !== null && value !== undefined;
@@ -206,16 +232,17 @@ Suspense를 사용하지 않는다면 query 완료 시점에 `form.setFieldsValu
 
 ## 5. 하위 시술 변경 side effect를 한곳에 모으기
 
-하위 시술을 사용자가 바꾸면 시술에 저장된 template을 프로그램 폼으로 가져온다. 초기 상세 조회가 채운 ID에는 template을 다시 적용하지 않고, 사용자가 시술을 직접 바꾼 경우에만 적용하도록 `isFieldsTouched`를 확인했다.
+하위 시술을 사용자가 바꾸면 시술에 저장된 template을 프로그램 폼으로 가져온다. 초기 상세 조회가 채운 ID에는 template을 다시 적용하지 않고, 사용자가 시술을 직접 바꾼 경우에만 적용하도록 `isFieldTouched`를 확인했다.
 
 ```tsx
 function SyncTreatmentTemplate() {
   const form = ProgramForm.useFormInstance();
   const treatmentSubId = ProgramForm.useWatch('treatmentSubId', form);
 
-  const { data } = useQuery(
-    treatmentSubDetailOptions(treatmentSubId),
-  );
+  const { data } = useQuery({
+    ...treatmentSubDetailOptions(treatmentSubId),
+    enabled: treatmentSubId !== undefined,
+  });
 
   useEffect(() => {
     if (!form.isFieldTouched('treatmentSubId')) return;
@@ -223,6 +250,8 @@ function SyncTreatmentTemplate() {
 
     form.setFieldValue(
       'recommendedTargets',
+      // 시술 상세 endpoint는 recommendedTargets를 string[]로 내려준다.
+      // 프로그램 상세의 { title, orderNo }[]와 모양이 다르다.
       data.recommendedTargets.map((title) => ({ title })),
     );
   }, [data, form, treatmentSubId]);
@@ -231,7 +260,7 @@ function SyncTreatmentTemplate() {
 }
 ```
 
-이 구현에는 한계가 있다. `isFieldsTouched`는 한 번 수정한 뒤 계속 `true`이므로, 같은 query가 refetch되면 사용자가 직접 고친 template 값을 다시 덮을 수 있다. 다시 구현한다면 query 변경을 감시하는 effect보다 select의 `onChange`에서 template 적용 command를 직접 호출해 **사용자가 분류를 변경한 사건**과 값 덮어쓰기를 연결하는 편이 더 명확하다.
+이 구현에는 한계가 있다. `isFieldTouched`는 한 번 수정한 뒤 계속 `true`이므로, 같은 query가 refetch되면 사용자가 직접 고친 template 값을 다시 덮을 수 있다. 다시 구현한다면 query 변경을 감시하는 effect보다 select의 `onChange`에서 template 적용 command를 직접 호출해 **사용자가 분류를 변경한 사건**과 값 덮어쓰기를 연결하는 편이 더 명확하다.
 
 ## 결과와 한계
 

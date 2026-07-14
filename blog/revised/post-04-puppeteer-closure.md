@@ -7,13 +7,14 @@ Electron과 Puppeteer로 크롤링 기능을 만들면서 한 페이지의 서�
 ```ts
 let result: PreInfo | undefined;
 
+await page.reload();
+
 page.on('request', (request) => {
   result = readRequest(request);
 });
 
-await page.reload();
-
-while (result === undefined) {
+while (true) {
+  if (result) break;
   await delay(1_000);
 }
 ```
@@ -72,9 +73,9 @@ export function waitForPreInfo<T>({
       reject(error);
     };
 
-    const consume = async (result: MaybePromise<T | undefined>) => {
+    const consume = async (produce: () => MaybePromise<T | undefined>) => {
       try {
-        const value = await result;
+        const value = await produce();
         if (value !== undefined) finish(value);
       } catch (error) {
         fail(error);
@@ -82,11 +83,11 @@ export function waitForPreInfo<T>({
     };
 
     const handleRequest = (request: HTTPRequest) => {
-      if (onRequest) void consume(onRequest(request));
+      if (onRequest) void consume(() => onRequest(request));
     };
 
     const handleResponse = (response: HTTPResponse) => {
-      if (onResponse) void consume(onResponse(response));
+      if (onResponse) void consume(() => onResponse(response));
     };
 
     page.on('request', handleRequest);

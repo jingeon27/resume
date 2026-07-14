@@ -7,9 +7,11 @@
 - 서버 저장 여부
 - 쿠폰 선택 여부와 할인 금액
 
+이 서비스는 결제 취소도 별도 거래 건으로 기록한다. 취소가 일어나면 기존 결제를 수정하는 대신 `method: 'CANCEL'`인 결제내역이 새로 추가된다.
+
 쿠폰 결제를 추가하는 일은 label 하나를 늘리는 작업이 아니었다. 결제 예정 금액이 바뀌면 선택한 쿠폰을 초기화해야 했고, 결제가 완료된 뒤에는 현장 결제와 연결된 쿠폰 사용 금액을 함께 보여줘야 했다.
 
-이 글의 초기 버전에서는 이 작업을 discriminated union과 OCP로 설명했다. 하지만 실제 서버 DTO는 enum과 optional field를 가진 단일 구조이고, 렌더 분기에도 fallback이 있다. 따라서 "새 case 누락을 compiler가 모두 잡는다"거나 "기존 코드를 건드리지 않고 추가했다"는 표현은 정확하지 않았다.
+처음에는 이 작업을 discriminated union으로 모델링하고 OCP를 지키는 확장으로 접근하려 했다. 하지만 실제 서버 DTO는 enum과 optional field를 가진 단일 구조였고, 렌더 분기에도 fallback이 필요했다. 이 구조에서는 "새 case 누락을 compiler가 모두 잡는다"거나 "기존 코드를 건드리지 않고 추가한다"는 목표가 성립하지 않았다.
 
 실제로 한 일은 **기존 계약은 유지하면서 판단과 표현의 위치를 좁힌 것**이다.
 
@@ -51,7 +53,7 @@ function toPaymentRequest({
 
 API 모델과 form model의 차이를 optional field 하나로 숨기지 않고 변환 경계에서 드러냈다.
 
-## 먼저 상태표를 적었다
+## 화면 상태를 표로 정리하기
 
 렌더 조건을 component 안에서 바로 늘리기 전에 화면이 구분해야 할 상태를 표로 정리했다.
 
@@ -69,7 +71,12 @@ API 모델과 form model의 차이를 optional field 하나로 숨기지 않고 
 
 ```ts
 const VISIBLE_STATUSES = ['COMPLETED', 'PROCESSING', 'WAITING'] as const;
-const VISIBLE_METHODS = ['NORMAL', 'CANCEL'] as const;
+// as const만 쓰면 includes의 인자가 'NORMAL' | 'CANCEL'로 좁혀져
+// payment.method를 받지 못하므로, 원소 타입을 method 전체 union으로 선언한다.
+const VISIBLE_METHODS: readonly PaymentHistoryResponse['method'][] = [
+  'NORMAL',
+  'CANCEL',
+];
 
 function isVisiblePayment(payment: PaymentHistoryResponse | undefined) {
   if (!payment) return false;
@@ -92,11 +99,17 @@ function isVisiblePayment(payment: PaymentHistoryResponse | undefined) {
 ```tsx
 import { P, match } from 'ts-pattern';
 
-function PaymentHistoryDescriptions({ payment }: Props) {
+const isCanceledPayment = (payment: PaymentHistoryResponse) =>
+  payment.method === 'CANCEL';
+
+const isCompletedNormalPayment = (payment: PaymentHistoryResponse) =>
+  payment.method === 'NORMAL' && payment.status === 'COMPLETED';
+
+function PaymentHistoryDescriptions({ payment, index }: Props) {
   return match(payment)
     .with(
       { id: P.nullish, method: 'COUPON' },
-      () => <CouponDescriptions payment={payment} />,
+      () => <CouponDescriptions index={index} />,
     )
     .with(
       { id: P.nullish },
@@ -151,6 +164,8 @@ function CouponDescriptions({ index }: { index: number }) {
   );
 }
 ```
+
+`usePaymentForm`은 antd `Form` instance를 결제내역 field 타입으로 감싼 wrapper이고, `form.useWatch`와 `form.setFieldValue`는 antd Form API를 그대로 노출한다. 편집 중인 값은 form이 소유하므로 `CouponDescriptions`는 `payment` snapshot 대신 form 경로를 가리키는 `index`를 받는다.
 
 일반 결제 component는 쿠폰 초기화나 할인 계산을 모른다. 반대로 timeline과 header는 쿠폰 선택 modal의 세부 동작을 모른다.
 

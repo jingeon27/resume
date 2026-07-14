@@ -61,7 +61,7 @@ const reviewKeys = {
   all: ['review'] as const,
   infinite: ['review', 'infinite'] as const,
   detail: (reviewId: number) =>
-    ['review', 'fetchReviewsById', reviewId] as const,
+    ['review', 'detail', reviewId] as const,
 };
 ```
 
@@ -159,7 +159,7 @@ export function useReviewLike() {
     ReviewLikeVariables,
     ReviewLikeContext
   >({
-    mutationKey: ['fetchReviewLike'],
+    mutationKey: ['review-like'],
     mutationFn: fetchReviewLike,
 
     onMutate: async (variables) => {
@@ -215,7 +215,7 @@ export function useReviewLike() {
         );
       }
 
-      toast.warning(SafedocError.getMessage(error));
+      toast.warning(getErrorMessage(error));
     },
 
     onSettled: () =>
@@ -223,7 +223,7 @@ export function useReviewLike() {
   });
 
   return {
-    handleLike: mutation.mutateAsync,
+    handleLike: mutation.mutate,
     isLikePending: mutation.isPending,
   };
 }
@@ -290,8 +290,8 @@ const { handleLike, isLikePending } = useReviewLike();
 ```text
 사용자 입력
   -> 관련 refetch 취소
-  -> 목록과 상세 cache snapshot 저장
-  -> 목록과 상세 cache 즉시 변경
+  -> 목록과 상세 캐시 snapshot 저장
+  -> 목록과 상세 캐시 즉시 변경
   -> 요청 실패 시 snapshot 직접 복구
   -> 성공/실패 후 서버 데이터 재검증
 ```

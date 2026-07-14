@@ -1,6 +1,6 @@
 # 동적 sitemap을 만들며 공개 API와 인증 API의 경계를 나눈 과정
 
-복지몰의 sitemap에는 정적 URL만 들어가지 않았다. 병원 상세, 병원별 프로그램, 진료과 검색, 공지와 혜택 상세 URL을 만들기 위해 여러 공개 API를 조회해야 했다.
+복지몰의 sitemap에는 정적 URL만 들어가는 것이 아니었다. 병원 상세, 병원별 프로그램, 진료과 검색, 공지와 혜택 상세 URL을 만들기 위해 여러 공개 API를 조회해야 했다.
 
 선택지는 세 가지였다.
 
@@ -8,7 +8,7 @@
 - build할 때만 생성한다.
 - 결과를 cache하고 일정 시간이 지난 뒤 다시 만든다.
 
-새 프로그램이 다음 배포 전에도 반영돼야 했고, crawler 요청마다 여러 API를 호출할 이유도 없었다. 그래서 Next.js의 Cache Components와 `'use cache'`를 사용했다.
+새 프로그램이 다음 배포 전에도 반영돼야 했고, crawler 요청마다 여러 API를 호출할 이유도 없었다. 그래서 Next.js의 Cache Components와 `'use cache'`를 사용했다. 이 글은 Next.js 16 기준이며, `'use cache'`와 `cacheLife`를 쓰려면 `next.config`에서 `cacheComponents: true`를 켜야 한다.
 
 ## sitemap을 cache 경계로 만들기
 
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 데이터 소스는 서로 의존하지 않으므로 병렬로 조회한다.
 
-`cacheLife('days')`는 매일 정해진 시각에 실행되는 cron이 아니다. cache profile의 stale, revalidate, expire 시간에 따라 동작하고, stale 이후 다음 요청이 갱신을 유발할 수 있다. 따라서 "하루마다 자동 생성"보다 **하루 단위 revalidation 정책을 가진 요청 기반 cache**라고 표현하는 것이 정확하다.
+`cacheLife('days')`는 매일 정해진 시각에 실행되는 cron이 아니다. `'days'` profile은 stale 5분, revalidate 1일, expire 1주로 동작한다. stale은 클라이언트 라우터 캐시가 서버 확인 없이 결과를 재사용하는 시간이고, 서버의 백그라운드 재생성을 유발하는 것은 revalidate(1일)가 지난 뒤 도착한 요청이다. 따라서 "하루마다 자동 생성"보다 **하루 단위 revalidation 정책을 가진 요청 기반 cache**라고 표현하는 것이 정확하다.
 
 `cacheTag('sitemap')`은 실제 `revalidateTag` 호출 지점이 생겼을 때 추가해도 된다. 무효화 기능을 쓰지 않는 동안에는 미래 요구를 위해 미리 달아둘 필요가 없었다.
 
@@ -85,7 +85,7 @@ httpClient.get('/member/coupons', {
 
 두 번째 호출은 `cookies()`에 의존하므로 공개 `'use cache'` 경계 안에서 사용하지 않는다. 인증 응답을 반드시 `no-store`로 제어해야 하는 곳은 별도 `fetch` wrapper에서 `cache: 'no-store'`를 명시한다. 중요한 것은 인증이 필요한 서버 호출에 일부러 마찰을 남겨, 공개 cache에 사용자 응답이 섞이지 않도록 하는 것이다.
 
-클라이언트에서 Server Function을 통해 token을 읽고 `delay(0)`으로 action queue를 피하는 현재 방식은 sitemap cache와 별개의 기술 부채다. 이 글의 핵심 흐름에 섞어 해결된 것처럼 설명하지 않고, BFF나 token 전달 정책을 다시 설계할 후속 과제로 남긴다.
+한편 클라이언트가 Server Function을 경유해 token을 읽는 현재 방식은 요청이 서버 액션 큐에서 직렬화되는 비용이 있다. 이는 sitemap cache와는 별개의 기술 부채로, BFF나 token 전달 정책을 다시 설계할 후속 과제로 남긴다.
 
 ## 정확하지 않은 sitemap 정보는 넣지 않기
 
