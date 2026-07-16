@@ -128,6 +128,26 @@
 - `page:1, size:1`로 `totalCnt`를 먼저 받고 `size=totalCnt`로 전량을 가져왔습니다. Next.js가 `<loc>`를 XML 이스케이프하지 않아서 직접 escape를 적용했습니다.
 - 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 문제를 함께 막았고, `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
 
+**글로벌 서비스 신규 프론트 구축 (safedoc-global)** · 2026.07
+
+- 외국인 의료관광 서비스(`korea-care`, Vite SSG)를 Next.js 16 App Router + TypeScript로 새로 세팅했습니다. 복지몰에서 쌓은 FSD를 `_app/_pages/features/shared` 4레이어 변형으로 줄여 시작했고, 새 코드는 page 슬라이스에 두고 두 번째 사용처가 생길 때 내리는 pages-first 규칙을 기본값으로 잡았습니다.
+- shadcn(base-ui) + Tailwind 4 기반 `shared/ui`를 도입하고 Figma P0 스토리보드 전 화면을 반영했습니다. 로고·파비콘 SVG, 포커스 링 전역 정책(`@layer base`)까지 초기 디자인 시스템을 정리했습니다.
+- i18n은 next-intl을 라우팅(en 무접두어 / ko·ja·ar 접두어)만 맡기고, UI 문자열은 자체 `ui-strings` + `createT`로 en/ko 필수를 컴파일 타임에 강제했습니다. 초기 페이지별 19개 파일로 나눴다가 외부 번역가가 한 파일만 편집하도록 전역 단일 JSON으로 다시 합쳤습니다.
+- 초기 스캐폴드 단계에서 다회차 코드 감사를 돌려 admin 인증 서버 세션화·요청 재시도 무한루프·데이터 유실·a11y 이슈를 정리하고, 범위 밖 화면(admin 등)은 스코프아웃했습니다.
+
+**복지몰 Next 16 / Turbopack 이행 · 타입 안전 정리** · 2026.07
+
+- SafeDoc App을 Next 16.2 + Turbopack 프로덕션 빌드로 이행하고 미사용 webpack 설정 블록을 제거했습니다.
+- 검색 필터 전 구간을 zod 스키마 검증으로 바꿔 `any/unknown`을 제거하고, 탭/모드 유니온을 단일 zod enum으로 모아 분기를 `ts-pattern`으로 통일했습니다. URL 파라미터 zod 프리미티브도 중복 3곳을 공용화했습니다.
+- 로그인·약관 리다이렉트 흐름에서 `redirectUrl` 정규화를 공용 유틸로 뽑아 이중 인코딩 복원·외부 URL·게이트 자기참조를 차단하고, 소셜 콜백 리다이렉트 쿠키 유실을 정리했습니다.
+- 마이페이지 쿠폰 보유 개수 강조(SE-2532), 프로그램 필터 '쿠폰 추가 할인' 칩 강조(SE-2530) 등 쿠폰 사용자 노출을 이어 붙였고, Figma Mode1 디자인 토큰을 tailwind와 동기화했습니다.
+
+**제휴실적관리 대시보드 · 정산 운영 확장** · 2026.07 (병원 CRM/CMS)
+
+- 제휴실적관리를 CRM에서 정산관리로 옮기며 대시보드를 새로 만들고, 검색·날짜 필터를 문의·정산관리와 같은 `scrollSearch`·개별 범위 패턴으로 통일했습니다. 기업/대학 `partnership` 필드를 `partnershipStatus` enum으로 대치하고 인계유무(handover) 필터를 더했습니다(SE-2581·2582·2608).
+- 상시 노출 말풍선을 `ClosableTooltip` 공통 컴포넌트(z-index 관례 + x 버튼 + open 상태 캡슐화)로 묶고(SE-2606), 정산 상세 말풍선 겹침·재확인필요 모달·전체 예약 목록·정산제외·성과금 표시 등 운영 기능을 이어서 확장했습니다.
+- `lodash`를 `es-toolkit`으로 마이그레이션해 번들에서 걷어냈습니다.
+
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
 
 캘린더 기반 일정 조율과 ATS SaaS인 round에서 신규 기능과 유지보수를 담당했습니다.
