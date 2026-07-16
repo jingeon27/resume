@@ -48,7 +48,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후 신규 연동 기간이 기존 약 3일에서 약 1일 수준으로 줄었습니다. 단위 테스트는 후행 과제로 남았습니다.
+- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 모듈 경계·constructor injection을 참고해(프레임워크 자체는 과하다고 판단해 제거, DI 컨테이너 없이 factory로 조립) 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후 신규 연동 기간이 체감상 기존 약 3일에서 약 1일 수준으로 줄었습니다(체감치). 단위 테스트는 후행 과제로 남았습니다.
 - 폼 dirty 추적·복원(`FormDirtyContext` + sessionStorage) 패턴을 네 흐름에 재사용했고, 다단계 입력은 `useFunnel`로 구조화했습니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 적용했습니다.
 
 ---

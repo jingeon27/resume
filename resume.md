@@ -18,7 +18,7 @@
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
 - CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다 (Turborepo + pnpm).
 - 정산 크로스 도메인 인증은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
-- (왓타임) 사이트마다 중복 구현되던 ATS Electron 크롤러를 NestJS의 module/DI/factory 패턴을 적용한 사이트별 어댑터 구조로 설계·공유했고, 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 구현했습니다. 신규 연동 기간은 3개 연동 이후 기존 약 3일에서 약 1일 수준으로 줄었습니다.
+- (왓타임) 사이트마다 중복 구현되던 ATS Electron 크롤러를, NestJS의 모듈 경계·constructor injection을 참고해 사이트별 어댑터 구조로 재설계·공유했고(프레임워크는 과하다고 판단해 제거, factory로 조립), 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 구현했습니다.
 
 검증된 라이브러리 위에 얇은 어댑터를 두는 방식을 선호하고, 추상화는 같은 패턴이 세 번 나온 뒤에 적용합니다.
 
@@ -154,10 +154,10 @@
 
 **기존 ATS Electron 크롤러 구조 재설계와 신규 연동**
 
-- 사이트마다 중복 구현되던 로그인→수집→중복 체크→업로드 흐름을, NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 연결됩니다.
-- 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 구현했습니다.
-- 점핏·잡플래닛·게임잡 3개 연동 이후 신규 플랫폼 연동 기간이 기존 약 3일에서 약 1일 수준으로 줄었습니다.
-- 단위 테스트와 DOM 셀렉터 변경 헬스체크는 후행 과제로 남았습니다.
+- 사이트마다 로그인→수집→중복 체크→업로드가 중복 구현되고 크롤링 로직이 한 파일에 뭉쳐 있었습니다. 백엔드 팀의 NestJS 코드에서 모듈 경계와 constructor injection을 참고해, 입사 2개월차에 이 흐름을 controller/service/repository/helper로 분해하고 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스(Template Method) 구조로 재설계해 팀에 공유했습니다. 이 리팩토링 커밋은 14개 파일에서 순 -140줄이었습니다.
+- NestJS를 실제로 도입해봤지만 Electron main process에 프레임워크까지 얹는 건 과하다고 판단해 5일 만에 걷어냈고, DI 컨테이너 없이 factory와 정적 레지스트리로 의존성을 조립했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 연결됩니다.
+- 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 구현했습니다. 지원자 한 명의 수집 실패가 배치 전체를 멈추지 않도록 루프 안에서 에러를 격리했습니다. 3개 연동 이후 신규 플랫폼 연동 기간은 체감상 약 3일에서 1일 수준으로 줄었습니다(체감치).
+- 제가 뼈대를 깔았고 이후 팀이 함께 확장해, 지금 그 모듈의 코드 다수는 동료가 다시 쓴 것입니다. 레지스트리를 `satisfies`로 검증하는 데까지는 갔지만 키와 클래스 제네릭을 묶는 매핑 타입까지 가지 못해 생성자 타입을 `any`로 열어뒀고, 그 자리는 동료가 매핑 타입으로 채웠습니다. 단위 테스트와 DOM 셀렉터 변경 헬스체크도 후행 과제로 남겼습니다.
 
 **자동화·운영 화면과 인터랙션 기능**
 
@@ -213,7 +213,7 @@
 - FSD 6-layer + sub-domain: 약 1,100파일 정리. sub-domain은 공식이 아닌 자체 패턴이라 파일 수와 변경 빈도로 도입 시점을 정함. 경계는 자체 ESLint 플러그인으로 강제.
 - Monorepo(Turborepo + pnpm): entities/features 신설(13개) 후 shared 5개 단일 통합으로 9개 재편.
 - Library Adapter: core 로직과 React binding 분리, observer + `useSyncExternalStore`로 imperative 자료구조를 hook으로 노출.
-- NestJS의 module/DI/factory 패턴을 Electron에 적용한 사이트별 어댑터 크롤러 구조 설계 (왓타임).
+- Registry + Adapter + Template Method: NestJS의 모듈 경계·constructor injection을 참고한 Electron 사이트별 어댑터 크롤러 구조 설계 (왓타임, DI 컨테이너 없이 factory 조립).
 - Compound/Composition: BottomSheet, Tabs, Form.
 
 ### Form & Validation
