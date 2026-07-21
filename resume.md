@@ -8,7 +8,7 @@
 
 ## Summary
 
-급하게 만들어진 서비스를 넘겨받아 기술 부채 정리와 신규 기능 개발을 병행해 온 프론트엔드 개발자입니다. 2026년 1월부터 세이프닥 복지몰·CMS·병원 CRM 세 서비스의 프론트엔드를 단독 담당하고 있습니다. React·Next.js(App Router)·TypeScript로 복잡한 사용자 흐름을 운영 가능한 구조로 정리하고, 받은 명세를 그대로 구현하기보다 사용자에게 더 나은 방향을 먼저 검토합니다.
+급하게 만들어진 서비스를 넘겨받아 기술 부채 정리와 신규 기능 개발을 병행해 온 프론트엔드 개발자입니다. 2026년 1월부터 세이프닥 복지몰·CMS·병원 CRM 프론트엔드를 단독 담당해 왔고, 2026년 7월부터 외국인 의료관광 Global 사용자 서비스와 운영 CMS 신규 구축을 주도하고 있습니다. React·Next.js(App Router)·TypeScript로 복잡한 사용자 흐름을 운영 가능한 구조로 정리하고 받은 명세를 그대로 구현하기보다 사용자에게 더 나은 방향을 먼저 검토합니다.
 
 - 시술상세 개편을 Amplitude로 검증했고, 리뷰 조회 사용자의 예약 전환율이 미조회 사용자 대비 +15%p 높게 나타난 것을 확인했습니다.
 - 신규 가입 UTM 유실은 코드 문제가 아니라 Amplitude 속성 상태(`unexpected`)가 원인임을 확인해, 코드 변경 없이 해결했습니다.
@@ -17,10 +17,13 @@
 - `@core` 디자인 시스템 primitive 20개를 Radix 위에 정리했습니다.
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
 - CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다 (Turborepo + pnpm).
+- SafeDoc App을 Next.js 15.5→16.2·Node 20→24·ESLint 8→9 flat config·Turbopack으로 이행했습니다. TypeScript 7 네이티브 체커를 TS6 툴체인과 병행해 Next.js·ESLint 호환성을 유지하면서 타입체크를 **12.5초→1.9초**로 단축했고, 638KB base64 PNG가 포함된 SVG를 정적 자산으로 이관해 JS 번들에서 제거했습니다.
+- 복지몰을 제외한 서비스는 디자이너가 만든 상세 UI·상태 명세보다 기능 요구사항과 기존 화면을 기준으로 개발해, 요구한 동작을 매번 수동으로 확인하는 과정이 병목이었습니다. Claude Code Skills로 API·query·form·FSD 패턴과 입출력을 규격화한 뒤 테스트를 도입해, 세이프닥 프론트 전반의 Vitest **461개**와 Playwright E2E **16개**의 기능 검증을 자동화했습니다.
+- Global 사용자 프론트의 실제 API 연동과 함께 운영 CMS를 신규 구축했습니다. 병원·시술·블로그·FAQ의 다국어 CRUD와 이미지·CKEditor·DnD 정렬을 구현하고 MSW 통합 테스트를 포함한 Vitest **109개**로 검증했습니다.
 - 정산 크로스 도메인 인증은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 중복 구현되던 ATS Electron 크롤러를, NestJS의 모듈 경계·constructor injection을 참고해 사이트별 어댑터 구조로 재설계·공유했고(프레임워크는 과하다고 판단해 제거, factory로 조립), 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 구현했습니다.
 
-검증된 라이브러리 위에 얇은 어댑터를 두는 방식을 선호하고, 추상화는 같은 패턴이 세 번 나온 뒤에 적용합니다.
+검증된 라이브러리 위에 얇은 어댑터를 두는 방식을 선호하고 추상화는 같은 패턴이 세 번 나온 뒤에 적용합니다.
 
 ---
 
@@ -28,7 +31,7 @@
 
 ### 세이프닥 | Frontend Engineer | 2025.05 - 현재
 
-병원·의원 복지 할인 플랫폼에서 SafeDoc App(복지몰)·CMS·병원 CRM 프론트엔드를 담당합니다.
+병원·의원 복지 할인 플랫폼에서 SafeDoc App(복지몰)·CMS·병원 CRM을 담당하고 외국인 의료관광 Global 사용자 서비스·운영 CMS 프론트엔드 신규 구축을 주도합니다.
 
 합류했을 때는 병원 탐색과 예약 흐름 중심의 MVP였고, 시술 이후 단계는 앱에서 거의 다뤄지지 않았습니다. 이어서 예약 이후 운영 기능, 분석 환경, 관리자 기능까지 넓히며 운영 가능한 제품으로 만들었습니다.
 
@@ -36,7 +39,7 @@
 
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
-- 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고, 확장 diff가 근거입니다(개방-폐쇄).
+- 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고 확장 diff가 근거입니다(개방-폐쇄).
 - 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드 변경 없이 해결했습니다.
 
 **MVP 이후 제품 확장**
@@ -55,7 +58,7 @@
 
 - props drilling과 `useEffect` 4개로 얽혀 있던 가족 동기화를 `RHF + Zod`로 정리했습니다.
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
-- 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고, if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
+- 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고 if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
 **리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** · 2025.05 ([글](https://jingeon27.tistory.com/15))
 
@@ -70,13 +73,13 @@
 **SafeDoc App 아키텍처 정리**
 
 - 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 통일했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
-- 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고, page마다 달라지는 특이 UI는 page에서 조립했습니다. FSD처럼 도메인이 나오자마자 분리하지 않고 두 번째 사용처(재사용)가 신호일 때 분리하며, page는 로직 없이 연결만 하는 얇은 adapter로 뒀습니다.
+- 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고 page마다 달라지는 특이 UI는 page에서 조립했습니다. FSD처럼 도메인이 나오자마자 분리하지 않고 두 번째 사용처(재사용)가 신호일 때 분리하며 page는 로직 없이 연결만 하는 얇은 adapter로 뒀습니다.
 - `ensureQueryData` + props drilling으로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했습니다.
 - 공통 부모 `layout.tsx`에서 program 상세를 prefetch하게 바꿔, 상세 페이지와 상담 페이지가 따로 부르던 `/program/detail`을 request 캐시 안에서 재사용하게 했습니다.
 
 **모노레포 재설계 (13 → 9개 패키지)**
 
-- 인수 당시 패키지 구조는 기능별 shared 5분할 등으로 나뉘어 있었습니다. 두 앱이 공유할 도메인을 entities/features로 먼저 분리하고, import 경로만 흩뜨리던 shared 5개는 단일 `@safedoc/shared`로 통합했습니다.
+- 인수 당시 패키지 구조는 기능별 shared 5분할 등으로 나뉘어 있었습니다. 두 앱이 공유할 도메인을 entities/features로 먼저 분리하고 import 경로만 흩뜨리던 shared 5개는 단일 `@safedoc/shared`로 통합했습니다.
 - `entities`·`features`·`shared`·`config`·`lib` 경계로 CMS와 병원 CRM의 공통 도메인을 한 번만 만들어 같이 쓰게 했습니다.
 - `@safedoc/ui`는 `prebuilt(tsup)`에서 `no-build bundled`로 바꿔, 패키지를 고치면 앱 HMR에 바로 반영되게 했습니다.
 
@@ -84,7 +87,7 @@
 
 - `.claude` 설정과 skills로 FSD 경계, Public API 기준, 모달 패턴, 정산 리팩토링 방식, 기획 맥락 같은 반복 지식을 문서화했습니다. `jira-branch`로 티켓 맥락을 읽어 plan 초안을 만들고, 커밋/PR 흐름도 명령으로 묶었습니다. worktree로 두세 개 과제를 병렬로 검토합니다.
 - OpenAPI→타입은 제네릭 codegen(kubb)이 `x-enum-varnames` 없을 때 PascalCase enum(`Rejected = 'REJECTED'`)이나 Transfer Layer 컨벤션을 못 맞춰서, AI가 스펙 JSON을 읽어 컨벤션대로 `types/*.type.ts`를 만드는 절차를 스킬로 정해뒀습니다.
-- AI가 생성한 코드는 컨벤션과 빌드 결과를 기준으로 검토합니다. 빌드 오류를 `force-dynamic` 추가로 우회하지 않고 `'use client'` 누락을 수정했으며, 제출 시점 데이터를 `ensureQueryData`로 가져오려던 구현은 eager `useQuery`로 되돌렸습니다. `window.scrollTo` 트릭이나 한 곳에서만 쓰는 공용 컴포넌트 추상화도 호출부 정리로 수정했습니다. create/update 겸용이라 수정 시에도 `router.push`가 실행되던 mutation 훅은 역할별로 분리했고, 부수효과가 함께 묶이는 mutation 훅은 래핑을 허용했습니다.
+- AI가 생성한 코드는 컨벤션과 빌드 결과를 기준으로 검토합니다. 빌드 오류를 `force-dynamic` 추가로 우회하지 않고 `'use client'` 누락을 수정했으며 제출 시점 데이터를 `ensureQueryData`로 가져오려던 구현은 eager `useQuery`로 되돌렸습니다. `window.scrollTo` 트릭이나 한 곳에서만 쓰는 공용 컴포넌트 추상화도 호출부 정리로 수정했습니다. create/update 겸용이라 수정 시에도 `router.push`가 실행되던 mutation 훅은 역할별로 분리했고, 부수효과가 함께 묶이는 mutation 훅은 래핑을 허용했습니다.
 
 **FSD sub-domain 패턴**
 
@@ -108,7 +111,7 @@
 
 - Next.js Middleware + Route Group `(altLayout)/settlement`로 별도 호스트를 분리하면서 코드베이스는 하나로 뒀고, 동시에 legacy `fetch/apis`를 FSD `entities/features`로 옮겼습니다.
 - 도메인이 달라 HttpOnly 쿠키를 공유할 수 없는 문제를, 정산 진입 시 토큰을 전달하는 흐름으로 해결했습니다. URL query에서 form POST BFF로 바꿔 access log·Referer 노출을 제거했습니다.
-- BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, 토큰 수신 POST 라우트의 `303`(POST→GET 강제, 재제출 방지), `next` pathname 정규화 기반 open redirect 방어를 적용하고, 미들웨어는 도메인 라우팅만 담당하도록 핸드오프를 별도 API 라우트로 분리했습니다.
+- BFF에는 `referrer-policy: no-referrer`, CSP `form-action` 고정, `X-Frame-Options: DENY`, 폼 값 HTML escape, `no-store`, 토큰 수신 POST 라우트의 `303`(POST→GET 강제, 재제출 방지), `next` pathname 정규화 기반 open redirect 방어를 적용하고 미들웨어는 도메인 라우팅만 담당하도록 핸드오프를 별도 API 라우트로 분리했습니다.
 - `queryClient.setQueriesData`로 즉시 반영하고 실패하면 catch에서 롤백되게 해서, 정산내역과 숨김처리 비교 두 탭이 같이 갱신되게 했습니다.
 - 정산 `entities`는 `common/omission/disapproval/deposit/contract`로, `features/settlement`는 URL 기준 `dashboard/monthly/program/contract`로 나눴습니다. 대표 페이지는 SearchFilter/Table/hook/modal 단위로 분리해 레거시 page 구조를 제거했습니다.
 - 레거시 `forwardRef` 모달은 `overlay-kit`으로 바꿨습니다. 대표 모달 둘을 먼저 정리한 뒤 같은 체크리스트로 나머지를 옮겼고, PR 전 보조 코드리뷰로 경계 위반과 Public API 문제를 먼저 봤습니다.
@@ -116,7 +119,7 @@
 **백오피스 도메인 정리**
 
 - 예약·프로그램 검수·정산·병원 계약·리뷰·채팅·홈 설정·기업/대학교 관리처럼 운영자가 자주 쓰는 화면을 도메인 단위로 나눴습니다.
-- SearchFilter/Table/Modal/Drawer/Detail Form을 재사용 가능한 패턴으로 정리하고, 그 위에서 신규 쿠폰 템플릿 관리 도메인(목록/등록/복제 prefill/상태 일괄변경)을 약 12개 파일 규모로 구현했습니다.
+- SearchFilter/Table/Modal/Drawer/Detail Form을 재사용 가능한 패턴으로 정리하고 그 위에서 신규 쿠폰 템플릿 관리 도메인(목록/등록/복제 prefill/상태 일괄변경)을 약 12개 파일 규모로 구현했습니다.
 
 **병원 검색**
 
@@ -124,28 +127,41 @@
 
 **동적 sitemap / robots (SEO)**
 
-- 병원·프로그램·공지·혜택 탐색·검색 경로를 5개 API에서 `Promise.all`로 모아 sitemap을 동적으로 만들었고, 페이지 유형별 우선순위를 줬습니다.
+- 병원·프로그램·공지·혜택 탐색·검색 경로를 5개 API에서 `Promise.all`로 모아 sitemap을 동적으로 만들었고 페이지 유형별 우선순위를 줬습니다.
 - `page:1, size:1`로 `totalCnt`를 먼저 받고 `size=totalCnt`로 전량을 가져왔습니다. Next.js가 `<loc>`를 XML 이스케이프하지 않아서 직접 escape를 적용했습니다.
-- 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 문제를 함께 막았고, `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
+- 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 문제를 함께 막았고 `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
 
 **글로벌 서비스 신규 프론트 구축 (safedoc-global)** · 2026.07
 
-- 외국인 의료관광 서비스(`korea-care`, Vite SSG)를 Next.js 16 App Router + TypeScript로 새로 세팅했습니다. 복지몰에서 쌓은 FSD를 `_app/_pages/features/shared` 4레이어 변형으로 줄여 시작했고, 새 코드는 page 슬라이스에 두고 두 번째 사용처가 생길 때 내리는 pages-first 규칙을 기본값으로 잡았습니다.
-- shadcn(base-ui) + Tailwind 4 기반 `shared/ui`를 도입하고 Figma P0 스토리보드 전 화면을 반영했습니다. 로고·파비콘 SVG, 포커스 링 전역 정책(`@layer base`)까지 초기 디자인 시스템을 정리했습니다.
-- i18n은 next-intl을 라우팅(en 무접두어 / ko·ar 접두어)만 맡기고, UI 문자열은 자체 `ui-strings` + `createT`로 en/ko 필수를 컴파일 타임에 강제했습니다. 초기 페이지별 19개 파일로 나눴다가 외부 번역가가 한 파일만 편집하도록 전역 단일 JSON으로 다시 합쳤습니다.
-- 초기 스캐폴드 단계에서 다회차 코드 감사를 돌려 admin 인증 서버 세션화·요청 재시도 무한루프·데이터 유실·a11y 이슈를 정리하고, 범위 밖 화면(admin 등)은 스코프아웃했습니다.
+- PO가 바이브코딩한 Vite SSG 서비스 `korea-care`를 Next.js 16 App Router + TypeScript 기반 `safedoc-global`로 재구축했습니다. VOC 수정사항이 반영된 korea-care 화면을 캡처해 만든 Figma 스토리보드를 시각 기준으로 삼되, 상세 컴포넌트·상태 명세는 기존 동작과 기능 요구사항을 분석해 직접 정의했습니다.
+- 복지몰에서 쌓은 FSD를 `_app/_pages/features/shared` 4레이어로 줄이고 새 코드는 page에 둔 뒤 두 번째 사용처가 생길 때 공용 레이어로 옮기는 pages-first 규칙을 기본값으로 잡았습니다. 프론트·백엔드도 동시에 개발을 시작해 API 완성을 기다릴 수 없었고 기능 동작을 반복해서 수동 확인하는 과정이 개발 속도의 병목이 될 수 있다고 판단했습니다.
+- 합의한 병원·시술·콘텐츠·문의·예약 endpoint와 응답 schema를 기준으로 **MSW mock server**를 만들고, 도메인별 seed DB·handler가 실제 요청과 상태 변경을 처리하게 해 백엔드 완성 전에도 화면과 사용자 흐름을 독립적으로 개발·검증했습니다.
+- 실제 API가 확정된 뒤 reference·program·hospital·content·inquiry·reservation 6개 도메인을 순차 연동했습니다. mock과 실제 응답에 같은 Zod schema를 적용하고 공통 `http()`에서 계약 불일치를 실패시켜, mock 전용 UI 분기 없이 API base URL만 전환해 연동했습니다.
+- 시술 목록의 검색·진료과·금액대·정렬을 서버 `ProgramCriteria`로 일원화하고 RHF 폼과 URL query를 양방향 동기화했습니다. 검색어는 `replace`, 명시적 필터 선택은 `push`로 나눠 공유 URL·새로고침·뒤로가기를 같은 상태 모델로 처리했습니다.
+- route별 React Query prefetch·`HydrationBoundary`와 Cache Components를 적용하고 next-intl 라우팅(en 무접두어 / ko·ar 접두어) 및 ar RTL을 구성했습니다. UI 문자열은 자체 `ui-strings + createT`로 en/ko 필수 번역을 컴파일 단계에서 검증했습니다.
+- Vitest **77개**와 Playwright E2E **16개**로 API 응답·mock DB·예약 제출·본인확인·다국어 라우팅·필터 URL/브라우저 히스토리를 검증했습니다. lint·타입체크·포맷 검사와 Next.js 프로덕션 빌드까지 통과시켰습니다.
+
+**Global 운영 CMS 신규 구축 (safedoc-global-cms)** · 2026.07
+
+- 기존 Turborepo에 Next.js 14 App Router 앱을 추가하고 `entities/features/shared/widgets`로 경계를 나눠 병원·시술·블로그·FAQ의 목록·등록·수정·상세 운영 흐름을 신규 구축했습니다.
+- 한국어·영어·아랍어 입력을 필드별 언어 map과 Segmented UI로 표현하고 한국어·영어 필수 검증과 아랍어 폴백 규칙을 공통화했습니다. 서버의 번역 배열과 AntD Form 값 사이는 도메인별 Transfer Layer로 변환했습니다.
+- 이미지 업로드·CKEditor·운영시간·지역 Cascader·시술 구성별 조건부 필드·FAQ DnD 정렬을 공통 UI와 폼 규칙 위에 구현했습니다.
+- Global API 스펙으로 MSW의 상태 기반 CRUD handler를 만들어 백엔드 연동 전에도 폼 전체 흐름을 검증했고, API·Transfer Layer·공용 UI·폼 통합 테스트 **109개**를 구축했습니다.
 
 **복지몰 Next 16 / Turbopack 이행 · 타입 안전 정리** · 2026.07
 
-- SafeDoc App을 Next 16.2 + Turbopack 프로덕션 빌드로 이행하고 미사용 webpack 설정 블록을 제거했습니다.
-- 검색 필터 전 구간을 zod 스키마 검증으로 바꿔 `any/unknown`을 제거하고, 탭/모드 유니온을 단일 zod enum으로 모아 분기를 `ts-pattern`으로 통일했습니다. URL 파라미터 zod 프리미티브도 중복 3곳을 공용화했습니다.
-- 로그인·약관 리다이렉트 흐름에서 `redirectUrl` 정규화를 공용 유틸로 뽑아 이중 인코딩 복원·외부 URL·게이트 자기참조를 차단하고, 소셜 콜백 리다이렉트 쿠키 유실을 정리했습니다.
+- SafeDoc App을 Next.js 15.5→16.2.10, Node 20.18→24.15, ESLint 8→9 flat config로 이행했습니다. `middleware`→`proxy`, `next lint`→ESLint CLI 등 breaking change를 반영하고 dev·stage·production 빌드를 Turbopack으로 전환했습니다.
+- TypeScript 7의 Go 네이티브 체커는 JS compiler API가 없어 `typescript-eslint`·Next build와 단독 사용이 어려웠습니다. TS6는 툴체인에 남기고 TS7을 `typecheck` 전용으로 병행해 호환성을 유지하면서 타입체크를 **12.5초에서 1.9초**로 단축했습니다.
+- 병원 상세의 Lighthouse 병목을 기준으로 `next/image`·이미지 크기 추적·프리패치·캐시를 정리했습니다. 638KB base64 PNG가 포함된 SVG가 SVGR를 통해 JS에 인라인되던 원인을 찾아 `public` 정적 자산으로 이관하고 번들에서 제거했습니다.
+- 검색 필터 전 구간을 zod 스키마 검증으로 바꿔 `any/unknown`을 제거하고 탭/모드 유니온을 단일 zod enum으로 모아 분기를 `ts-pattern`으로 통일했습니다. URL 파라미터 zod 프리미티브도 중복 3곳을 공용화했습니다.
+- 로그인·약관 리다이렉트 흐름에서 `redirectUrl` 정규화를 공용 유틸로 뽑아 이중 인코딩 복원·외부 URL·게이트 자기참조를 차단하고 소셜 콜백 리다이렉트 쿠키 유실을 정리했습니다.
 - 마이페이지 쿠폰 보유 개수 강조(SE-2532), 프로그램 필터 '쿠폰 추가 할인' 칩 강조(SE-2530) 등 쿠폰 사용자 노출을 이어 붙였고, Figma Mode1 디자인 토큰을 tailwind와 동기화했습니다.
 
 **제휴실적관리 대시보드 · 정산 운영 확장** · 2026.07 (병원 CRM/CMS)
 
 - 제휴실적관리를 CRM에서 정산관리로 옮기며 대시보드를 새로 만들고, 검색·날짜 필터를 문의·정산관리와 같은 `scrollSearch`·개별 범위 패턴으로 통일했습니다. 기업/대학 `partnership` 필드를 `partnershipStatus` enum으로 대치하고 인계유무(handover) 필터를 더했습니다(SE-2581·2582·2608).
 - 상시 노출 말풍선을 `ClosableTooltip` 공통 컴포넌트(z-index 관례 + x 버튼 + open 상태 캡슐화)로 묶고(SE-2606), 정산 상세 말풍선 겹침·재확인필요 모달·전체 예약 목록·정산제외·성과금 표시 등 운영 기능을 이어서 확장했습니다.
+- 한 화면의 두 테이블이 URL page key를 공유하고 월 단위 서버 응답을 입금 행으로 펼친 뒤 AntD Table이 다시 pagination slicing하며 행이 유실되는 원인을 찾았습니다. 테이블별 파라미터를 분리하고 `PaginationTable`이 서버·클라이언트 paging을 구분하게 바꿔 입금 내역 페이지 이동과 행 유실을 해결했습니다(SE-2624).
 - `lodash`를 `es-toolkit`으로 마이그레이션해 번들에서 걷어냈습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 - 2024.11
@@ -157,7 +173,7 @@
 - 사이트마다 로그인→수집→중복 체크→업로드가 중복 구현되고 크롤링 로직이 한 파일에 뭉쳐 있었습니다. 백엔드 팀의 NestJS 코드에서 모듈 경계와 constructor injection을 참고해, 입사 2개월차에 이 흐름을 controller/service/repository/helper로 분해하고 사이트별 어댑터 + `CandidateServiceHelper` 공통 프로세스(Template Method) 구조로 재설계해 팀에 공유했습니다. 이 리팩토링 커밋은 14개 파일에서 순 -140줄이었습니다.
 - NestJS를 실제로 도입해봤지만 Electron main process에 프레임워크까지 얹는 건 과하다고 판단해 5일 만에 걷어냈고, DI 컨테이너 없이 factory와 정적 레지스트리로 의존성을 조립했습니다. 새 사이트는 정해진 인터페이스(service·repository·helper)만 구현하면 연결됩니다.
 - 점핏·잡플래닛·게임잡 연동을 구현했고, 2차 인증 처리·후보자 수집 계측·파일 업로드 흐름을 공통 프로세스 위에 구현했습니다. 지원자 한 명의 수집 실패가 배치 전체를 멈추지 않도록 루프 안에서 에러를 격리했습니다. 3개 연동 이후 신규 플랫폼 연동 기간은 체감상 약 3일에서 1일 수준으로 줄었습니다(체감치).
-- 제가 뼈대를 깔았고 이후 팀이 함께 확장해, 지금 그 모듈의 코드 다수는 동료가 다시 쓴 것입니다. 레지스트리를 `satisfies`로 검증하는 데까지는 갔지만 키와 클래스 제네릭을 묶는 매핑 타입까지 가지 못해 생성자 타입을 `any`로 열어뒀고, 그 자리는 동료가 매핑 타입으로 채웠습니다. 단위 테스트와 DOM 셀렉터 변경 헬스체크도 후행 과제로 남겼습니다.
+- 제가 뼈대를 깔았고 이후 팀이 함께 확장해, 지금 그 모듈의 코드 다수는 동료가 다시 썼습니다. 레지스트리를 `satisfies`로 검증하는 데까지는 갔지만 키와 클래스 제네릭을 묶는 매핑 타입까지 가지 못해 생성자 타입을 `any`로 열어뒀고, 그 자리는 동료가 매핑 타입으로 채웠습니다. 단위 테스트와 DOM 셀렉터 변경 헬스체크도 후행 과제로 남겼습니다.
 
 **자동화·운영 화면과 인터랙션 기능**
 
@@ -183,17 +199,18 @@
 ### AI Workflow
 
 - `jira-branch`로 티켓·브랜치 맥락을 읽어 plan 초안을 만들고, 커밋/PR 흐름을 명령으로 묶었습니다.
-- PR 전에는 AI 코드리뷰를 보조로 돌리고, skills에 코드 패턴과 기획 맥락을 적어 반복 작업의 맥락 비용을 줄였습니다.
+- 상세 UI·상태 명세가 없는 기능 중심 개발에서는 코드 자체가 요구사항을 설명할 수 있어야 했습니다. Claude Code Skills에 API·query options·form·FSD 경계와 파일 배치 기준을 명시해 같은 문제는 비슷한 구조와 입출력으로 구현되게 했고, 이를 기반으로 순수 로직·계약·사용자 흐름의 테스트 경계를 정했습니다.
+- PR 전에는 AI 코드리뷰를 보조로 돌리고 skills에 코드 패턴과 기획 맥락을 적어 반복 작업의 맥락 비용을 줄였습니다.
 - worktree로 두세 개를 동시에 진행합니다.
 
-### React 18
+### React 18/19
 
 - Compound Pattern + Custom Hook으로 디자인 시스템과 폼 도메인을 직접 설계.
 - `useSuspenseQuery` + `getQueryClient` + `HydrationBoundary` SSR 데이터 페칭.
 - 외부 mutable store를 React state로 억지로 감싸지 않고 `useSyncExternalStore` 어댑터로 연결.
 - BottomSheet Compound + `overlay-kit` 라이프사이클 명시로 모바일 엣지 케이스 처리.
 
-### TypeScript 5
+### TypeScript
 
 - 폼 값 타입으로 좁힌 `getFieldValue`/`setFieldValue` 래퍼(`createTypedForm`) — 잘못된 필드 경로는 컴파일 에러. recursive nested key path 추론, mapped type + key remapping 도메인 타입 생성.
 - class instance에서 method key만 추론하는 mapped type으로 자료구조 API를 hook으로 노출.
@@ -227,13 +244,19 @@
 - 캐시 일관성은 `invalidateQueries` → `setQueryData` → 정규화 순으로, 네트워크·즉시성·오프라인 비용에 따라 escalation으로 판단.
 - Zustand: UI 전역 상태(최근 본 프로그램, 검색 필터) 정도만.
 
+### Test & Quality
+
+- 디자인 시안 대조보다 기능 동작 검증의 비중이 큰 CMS·병원 CRM·global에서 반복적인 수동 확인을 병목으로 정의. Claude Code Skills로 규격화한 입출력 경계를 기준으로 Vitest 4 + Testing Library를 도입해 순수 helper·Zod 변환·React Query pagination·공용 UI를 자동 검증.
+- 시간 의존 테스트는 TZ와 system time을 고정해 결정적으로 실행하고 mock server와 실제 API가 같은 계약을 통과하도록 구성해 기능 변경 시 확인 범위를 테스트 결과로 좁힘.
+- MSW의 브라우저·Node handler가 같은 API 계약을 사용하게 구성하고 Playwright로 예약 제출·본인확인·다국어/RTL·URL 필터·뒤로가기까지 실제 브라우저 흐름을 검증.
+
 ### UI & Styling
 
 - tailwind-variants(size/intent/state 토큰), Radix(Compound, asChild + Slot), overlay-kit, Framer Motion.
 
 ### Open Source
 
-검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했으며, 발견한 문제는 upstream에 PR을 보내 기여했습니다.
+검증된 라이브러리 내부를 읽고 사내 어댑터 설계에 반영했으며 발견한 문제는 upstream에 PR을 보내 기여했습니다.
 
 **기여**
 
@@ -253,7 +276,7 @@
 ### data-structure-ts
 
 - core 자료구조 패키지와 React binding 패키지를 나누고, Queue/Heap/PriorityQueue를 observer 기반 외부 store로 만들었습니다.
-- React adapter는 `useSyncExternalStore`로 구독하고, `bindMethods<T>` mapped type으로 class instance의 method key만 추려 hook으로 노출했습니다.
+- React adapter는 `useSyncExternalStore`로 구독하고 `bindMethods<T>` mapped type으로 class instance의 method key만 추려 hook으로 노출했습니다.
 - 자료구조 동작은 core에서, hook 구독은 adapter에서 각각 검증할 수 있게 나눴습니다.
 
 ---
