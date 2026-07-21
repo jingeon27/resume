@@ -36,7 +36,7 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 
 - SafeDoc App을 **Next.js 16.2 + Turbopack** 프로덕션 빌드로 이행하고 미사용 webpack 설정을 제거했습니다. 검색 필터의 `any/unknown`을 Zod schema로 교체하고 탭·모드 분기를 단일 enum과 `ts-pattern`으로 정리했습니다.
 - `queryOptions → Server Component prefetch → HydrationBoundary → useSuspenseQuery` 패턴으로 서버와 클라이언트가 같은 query contract를 사용하게 했습니다. props로만 전달받아 무효화 후 갱신되지 않던 데이터를 query cache 직접 구독 방식으로 전환했습니다.
-- 외국인 의료관광 서비스를 **Next.js 16 App Router**로 신규 구축하고 en·ko·ar 다국어 라우팅, 언어별 필수 문자열의 컴파일 타임 검증, shadcn(base-ui) 기반 초기 UI 시스템을 설계했습니다.
+- 외국인 의료관광 서비스의 **Next.js 16 App Router** 프로젝트를 세팅하고, API 연동 전 단계에서 en·ko·ar 다국어 라우팅, 필수 문자열의 컴파일 타임 검증과 shadcn(base-ui) 기반 초기 UI를 구현하고 있습니다. 프로젝트 전반의 테스트 코드 적용을 위한 범위와 작성 기준도 준비하고 있습니다.
 - 병원·프로그램·공지·혜택 데이터를 5개 API에서 수집하는 동적 sitemap을 구축하고 XML escape, allowlist와 24시간 cache life로 생성 비용을 제어했습니다. ([관련 글](https://jingeon27.tistory.com/21))
 - 로그인·약관 리다이렉트의 이중 인코딩, 외부 URL, 자기참조를 막는 정규화 유틸을 만들고 소셜 로그인 callback의 redirect cookie 유실 문제를 해결했습니다.
 
