@@ -18,8 +18,8 @@
 - SafeDoc App 약 1,100파일을 6-layer FSD로 정리하고 sub-domain 패턴을 따로 뒀습니다 (entities 26 / features 21). 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제했습니다.
 - CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다 (Turborepo + pnpm).
 - SafeDoc App을 Next.js 15.5→16.2·Node 20→24·ESLint 8→9 flat config·Turbopack으로 이행했습니다. TypeScript 7 네이티브 체커를 TS6 툴체인과 병행해 Next.js·ESLint 호환성을 유지하면서 타입체크를 **12.5초→1.9초**로 단축했고, 638KB base64 PNG가 포함된 SVG를 정적 자산으로 이관해 JS 번들에서 제거했습니다.
-- 복지몰을 제외한 서비스는 디자이너가 만든 상세 UI·상태 명세보다 기능 요구사항과 기존 화면을 기준으로 개발해, 요구한 동작을 매번 수동으로 확인하는 과정이 병목이었습니다. Claude Code Skills로 API·query·form·FSD 패턴과 입출력을 규격화한 뒤 테스트를 도입해, 세이프닥 프론트 전반의 Vitest **461개**와 Playwright E2E **16개**의 기능 검증을 자동화했습니다.
-- Global 사용자 프론트의 실제 API 연동과 함께 운영 CMS를 신규 구축했습니다. 병원·시술·블로그·FAQ의 다국어 CRUD와 이미지·CKEditor·DnD 정렬을 구현하고 MSW 통합 테스트를 포함한 Vitest **109개**로 검증했습니다.
+- 복지몰을 제외한 서비스는 디자이너가 만든 상세 UI·상태 명세보다 기능 요구사항과 기존 화면을 기준으로 개발해, 요구한 동작을 매번 수동으로 확인하는 과정이 병목이었습니다. Claude Code Skills로 API·query·form·FSD 패턴과 입출력을 규격화한 뒤 테스트를 도입해, 세이프닥 프론트 전반의 Vitest **1,132개**와 Playwright E2E **41개**의 기능 검증을 자동화했습니다.
+- Global 사용자 프론트의 실제 API 연동과 함께 운영 CMS를 신규 구축했습니다. 병원·시술·블로그·FAQ의 다국어 CRUD와 이미지·CKEditor·DnD 정렬을 구현하고 MSW 통합 테스트를 포함한 Vitest **170개**로 검증했습니다.
 - 정산 크로스 도메인 인증은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
 - (왓타임) 사이트마다 중복 구현되던 ATS Electron 크롤러를, NestJS의 모듈 경계·constructor injection을 참고해 사이트별 어댑터 구조로 재설계·공유했고(프레임워크는 과하다고 판단해 제거, factory로 조립), 점핏·잡플래닛·게임잡 연동과 2차 인증 흐름을 구현했습니다.
 
@@ -72,6 +72,7 @@
 
 **SafeDoc App 아키텍처 정리**
 
+- 전임자들이 4개월간 점진 이관하던 `@legacy` 디렉터리 246파일을 합류 후 한 달 만에 전량 제거해 이관을 완결했습니다.
 - 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD(`app/pages/widgets/features/entities/shared`)로 통일했습니다(entities 26 / features 21). 경계와 Public API 기준을 잡고, widgets→features 이관·순환 의존 해소·파일명 정리를 조금씩 진행했습니다.
 - 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고 page마다 달라지는 특이 UI는 page에서 조립했습니다. FSD처럼 도메인이 나오자마자 분리하지 않고 두 번째 사용처(재사용)가 신호일 때 분리하며 page는 로직 없이 연결만 하는 얇은 adapter로 뒀습니다.
 - `ensureQueryData` + props drilling으로 캐시를 구독하지 않던 구조를 `queryOptions` + Server Component prefetch → `HydrationBoundary` → `useSuspenseQuery`로 바꿔 구독을 호출 지점으로 내렸습니다. infinite query는 `infiniteSetData` 헬퍼로 nested page 안 개별 아이템을 갱신했습니다.
@@ -138,15 +139,17 @@
 - 합의한 병원·시술·콘텐츠·문의·예약 endpoint와 응답 schema를 기준으로 **MSW mock server**를 만들고, 도메인별 seed DB·handler가 실제 요청과 상태 변경을 처리하게 해 백엔드 완성 전에도 화면과 사용자 흐름을 독립적으로 개발·검증했습니다.
 - 실제 API가 확정된 뒤 reference·program·hospital·content·inquiry·reservation 6개 도메인을 순차 연동했습니다. mock과 실제 응답에 같은 Zod schema를 적용하고 공통 `http()`에서 계약 불일치를 실패시켜, mock 전용 UI 분기 없이 API base URL만 전환해 연동했습니다.
 - 시술 목록의 검색·진료과·금액대·정렬을 서버 `ProgramCriteria`로 일원화하고 RHF 폼과 URL query를 양방향 동기화했습니다. 검색어는 `replace`, 명시적 필터 선택은 `push`로 나눠 공유 URL·새로고침·뒤로가기를 같은 상태 모델로 처리했습니다.
+- 목록을 서버에서 200건 통째로 받아 클라이언트가 자르던 구조를 `PAGE_SIZE=20` 무한스크롤로 바꾸고, 카드 그리드를 `useWindowVirtualizer` 행 단위로 가상화했습니다. CSS 반응형 열 수와 가상 행의 묶음 단위를 같은 함수(`columnsFor`)로 맞춰 어긋나지 않게 했고, 폭을 재기 전(서버 렌더·hydration 직후)에는 받은 목록을 그대로 그려 SSR HTML에 목록이 남고 hydration 마크업도 서버와 일치하게 뒀습니다. 다음 페이지 요청은 가상화 컴포넌트가 아니라 목록 아래 `InfiniteSentinel`이 소유하도록 분리했습니다.
 - route별 React Query prefetch·`HydrationBoundary`와 Cache Components를 적용하고 next-intl 라우팅(en 무접두어 / ko·ar 접두어) 및 ar RTL을 구성했습니다. UI 문자열은 자체 `ui-strings + createT`로 en/ko 필수 번역을 컴파일 단계에서 검증했습니다.
-- Vitest **77개**와 Playwright E2E **16개**로 API 응답·mock DB·예약 제출·본인확인·다국어 라우팅·필터 URL/브라우저 히스토리를 검증했습니다. lint·타입체크·포맷 검사와 Next.js 프로덕션 빌드까지 통과시켰습니다.
+- Vitest **181개**와 Playwright E2E **41개**로 API 응답·mock DB·예약 제출·본인확인·다국어 라우팅·필터 URL/브라우저 히스토리를 검증했습니다. lint·타입체크·포맷 검사와 Next.js 프로덕션 빌드까지 통과시켰습니다.
+- 테스트가 쌓인 뒤에는 개수를 늘리는 대신 **위험 기준으로 재분류**했습니다. 브라우저가 아니어도 증명되는 항목(URL↔폼 동기화, 카테고리 필터, 디바운스)은 통합·계약 테스트로 내려 E2E를 42개에서 30개로 줄인 뒤(이후 무한스크롤·가상화 같은 신규 기능에서만 다시 붙여 현재 41개), 그 자리에 아무도 보지 않던 위험(`http()` 실패 경로, 로그인 없는 서비스의 유일한 접근 제어인 본인확인 3분기, 중복 제출)에 테스트를 새로 붙였습니다. 사용자가 보는 것을 단언하는 화면 테스트를 쓰다가 이메일 검증 오류가 계산만 되고 화면에 표시되지 않던 결함을 발견해 함께 고쳤습니다.
 
 **Global 운영 CMS 신규 구축 (safedoc-global-cms)** · 2026.07
 
 - 기존 Turborepo에 Next.js 14 App Router 앱을 추가하고 `entities/features/shared/widgets`로 경계를 나눠 병원·시술·블로그·FAQ의 목록·등록·수정·상세 운영 흐름을 신규 구축했습니다.
 - 한국어·영어·아랍어 입력을 필드별 언어 map과 Segmented UI로 표현하고 한국어·영어 필수 검증과 아랍어 폴백 규칙을 공통화했습니다. 서버의 번역 배열과 AntD Form 값 사이는 도메인별 Transfer Layer로 변환했습니다.
 - 이미지 업로드·CKEditor·운영시간·지역 Cascader·시술 구성별 조건부 필드·FAQ DnD 정렬을 공통 UI와 폼 규칙 위에 구현했습니다.
-- Global API 스펙으로 MSW의 상태 기반 CRUD handler를 만들어 백엔드 연동 전에도 폼 전체 흐름을 검증했고, API·Transfer Layer·공용 UI·폼 통합 테스트 **109개**를 구축했습니다.
+- Global API 스펙으로 MSW의 상태 기반 CRUD handler를 만들어 백엔드 연동 전에도 폼 전체 흐름을 검증했고, API·Transfer Layer·공용 UI·폼 통합 테스트 **170개**를 구축했습니다. 이 중 장애 경로(500·네트워크 단절·지연 응답·부분 응답)는 별도로 보강했는데, 모든 실패가 사용자 문구로 바뀌는 길목인 `getGlobalErrorMessage`가 무테스트였고 저장 실패 시 입력이 보존되는지·재시도가 되는지를 아무도 확인하지 않고 있었기 때문입니다.
 
 **복지몰 Next 16 / Turbopack 이행 · 타입 안전 정리** · 2026.07
 
@@ -201,6 +204,7 @@
 - `jira-branch`로 티켓·브랜치 맥락을 읽어 plan 초안을 만들고, 커밋/PR 흐름을 명령으로 묶었습니다.
 - 상세 UI·상태 명세가 없는 기능 중심 개발에서는 코드 자체가 요구사항을 설명할 수 있어야 했습니다. Claude Code Skills에 API·query options·form·FSD 경계와 파일 배치 기준을 명시해 같은 문제는 비슷한 구조와 입출력으로 구현되게 했고, 이를 기반으로 순수 로직·계약·사용자 흐름의 테스트 경계를 정했습니다.
 - PR 전에는 AI 코드리뷰를 보조로 돌리고 skills에 코드 패턴과 기획 맥락을 적어 반복 작업의 맥락 비용을 줄였습니다.
+- AI 출력은 그대로 받지 않고 스킬(API·form·경계 규격)과 CI 게이트(lint·typecheck·test) 안에서만 나오게 통제했습니다. 그 결과 신규 프로젝트(safedoc-global)에서 `any` 0·평균 파일 49줄·레이어 경계 위반 0을 유지했습니다.
 - worktree로 두세 개를 동시에 진행합니다.
 
 ### React 18/19
@@ -249,6 +253,7 @@
 - 디자인 시안 대조보다 기능 동작 검증의 비중이 큰 CMS·병원 CRM·global에서 반복적인 수동 확인을 병목으로 정의. Claude Code Skills로 규격화한 입출력 경계를 기준으로 Vitest 4 + Testing Library를 도입해 순수 helper·Zod 변환·React Query pagination·공용 UI를 자동 검증.
 - 시간 의존 테스트는 TZ와 system time을 고정해 결정적으로 실행하고 mock server와 실제 API가 같은 계약을 통과하도록 구성해 기능 변경 시 확인 범위를 테스트 결과로 좁힘.
 - MSW의 브라우저·Node handler가 같은 API 계약을 사용하게 구성하고 Playwright로 예약 제출·본인확인·다국어/RTL·URL 필터·뒤로가기까지 실제 브라우저 흐름을 검증.
+- 테스트는 개수가 아니라 위험 기준으로 배치. 같은 사실을 브라우저에서 다시 확인하던 E2E는 증명 비용이 더 싼 통합·계약 테스트로 내리고, 무테스트로 남아 있던 위험(장애 경로·접근 제어·중복 제출)을 우선 채움. 서버가 막지 않는 것을 API 테스트로 못박은 뒤 화면이 막는지를 사용자 행동으로 확인하는 식으로 층을 나눔.
 
 ### UI & Styling
 
