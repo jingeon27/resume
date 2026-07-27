@@ -71,7 +71,7 @@
 캘린더 기반 일정 조율 서비스와 채용 ATS SaaS에서 사용자 기능과 운영 도구를 개발했습니다.
 
 - 사이트마다 중복되던 Electron ATS 크롤러를 NestJS의 모듈 경계와 constructor injection을 참고한 사이트별 adapter 구조로 재설계했습니다. 프레임워크 자체는 Electron에 과하다고 판단해 제거하고 DI container 없이 factory로 조립했습니다.
-- 점핏·잡플래닛·게임잡 연동 이후 신규 플랫폼 연동 기간은 측정치가 아닌 **체감상 약 3일에서 1일** 수준으로 줄었습니다.
+- 점핏·잡플래닛·게임잡 연동 이후로는 새 사이트를 붙일 때 정해진 인터페이스(service·repository·helper) 구현만 남았습니다.
 - `@dnd-kit` 기반 채용 칸반 보드에 optimistic update와 실패 시 rollback을 적용하고, TanStack Table 기반 정렬·필터·다중 선택 인터랙션을 구현했습니다.
 - 후보자 생성과 면접 템플릿을 다단계 funnel로 구조화하고 URL query와 동기화했으며, 폼 dirty 추적·복원 패턴을 네 개 사용자 흐름에 재사용했습니다.
 - Quill 기반 WYSIWYG에 `{{candidateName}}` 형태의 변수를 atomic node로 구현해 편집 중 변수 내부가 깨지지 않도록 했습니다.
