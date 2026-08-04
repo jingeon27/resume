@@ -6,12 +6,11 @@
 
 ## Summary
 
-받은 명세를 그대로 구현하기보다 문제를 직접 찾아 근거를 들어 제안하는 프론트엔드 개발자입니다. 2026년 1월부터 복지몰·CMS·병원 CRM 세 서비스의 프론트엔드를 단독 담당하며 설계부터 출시·운영까지 다뤄왔고, 개발한 기능은 Amplitude 이벤트로 배포 전후 결과를 검증했습니다. AI 도구를 작업 흐름에 깊게 넣되, 생성 결과는 팀 컨벤션과 실제 동작을 기준으로 검토합니다. 목적에 맞지 않는 구현은 빠르게 수정하고, 피드백과 데이터로 다른 방향이 확인되면 방향을 조정합니다.
+커머스 성격의 B2C 웹과 운영 도구를 함께 만들어온 프론트엔드 엔지니어입니다. 쿠폰·결제·정산처럼 매출이 걸린 흐름을 개발하고, 배포 뒤에는 행동 데이터로 결과를 확인합니다. 반복되는 문제는 그때그때 막지 않고 규칙과 자동화가 대신 잡게 만듭니다.
 
-- Claude Code 기반 `.claude` 스킬·커맨드를 직접 작성해 작업~배포 흐름을 자동화하고, AI 생성 코드는 컨벤션으로 검증
-- 첫 구현이던 URL 토큰 전달의 로그 노출 위험을 확인해 form POST BFF로 다시 설계, 대형 PR 리뷰에서 라이브러리 내장 기능으로 검증 로직 단순화를 제안
-- Amplitude로 리뷰 조회 사용자의 예약 전환율이 미조회 사용자 대비 +15%p 높게 나타난 것을 확인
-- 프로그램·예약·정산·쿠폰 같은 플랫폼/거래 화면을 설계·개발·운영하고 반복 패턴으로 정리
+- **커머스 제품과 데이터** — 쿠폰 발급·보유·최대 혜택 선택부터 검색·상세·예약 결제금액 반영까지 구현했습니다. 제품 분석 이벤트 250개 중 140개 이상을 직접 만들고, **리뷰 조회 사용자의 예약 전환율이 미조회 사용자보다 15%p 높다**는 상관관계를 다음 실험의 근거로 남겼습니다.
+- **근본 원인 해결** — 크로스 도메인 인증의 URL 토큰 노출과 예약 화면 재진입 시 개인정보가 남는 문제를 찾아 상태·보안 경계를 다시 설계하고 회귀 테스트를 추가했습니다.
+- **개발 기반과 실행 속도** — 합류 당시 `@legacy` 250개 파일을 한 달 안에 정리하고 자체 ESLint 플러그인으로 레이어 규칙을 강제했습니다. E2E 콜드 실행은 **3.5분에서 20초로**, 로컬 타입 검사는 **12.5초에서 1.9초로** 줄였습니다.
 
 ---
 
@@ -19,55 +18,72 @@
 
 ### 세이프닥 | Frontend Engineer | 2025.05 – 현재
 
-병원 복지 할인 플랫폼의 복지몰(B2C)·CMS·병원 CRM 프론트엔드를 단독 담당하고 있습니다. 설계부터 출시·운영까지 진행하며 동료 개발자·디자이너·마케터·PO와 협업합니다.
+회원 약 15만 명, 제휴 기업·대학 1,800곳, 제휴 병원 400여 곳, 등록 프로그램 5,000개 규모의 병원 복지 할인 플랫폼에서 B2C 복지몰(모바일 브라우저·앱 내 WebView), 운영 백오피스, 병원 어드민을 개발하고 운영합니다. 2025년 12월까지는 프론트엔드 팀의 일원으로, **2026년 1월부터는 사내 유일 프론트엔드 엔지니어**로 세 제품의 아키텍처·공통 기반·코드 리뷰 기준을 맡고 있습니다. Jira와 API 스펙, Figma, 운영 맥락을 먼저 확인하고 PO·디자이너·백엔드·마케팅과 의사결정을 맞춥니다.
 
-**AI 도구 활용과 비판적 감독**
+**고객의 선택과 거래를 제품으로 해결**
 
-- Claude Code 기반 `.claude` 스킬·커맨드를 직접 작성해 작업 시작부터 코드 생성·검증·배포까지 이어지게 했고, FSD 경계나 OpenAPI→타입 생성 같은 반복 지식을 스킬에 정리했습니다. worktree로 작업 두세 개를 병렬로 검토합니다.
-- AI가 생성한 코드는 컨벤션과 빌드 결과를 기준으로 검토합니다. 빌드 오류를 `force-dynamic` 추가로 우회하지 않고 `'use client'` 누락을 수정했으며, create/update 겸용이라 수정 시에도 `router.push`가 실행되던 mutation 훅은 역할별로 분리했습니다. 손쉬운 우회나 과한 추상화는 근거를 들어 수정합니다.
+- 쿠폰 발급·보유·최대 혜택 선택부터 검색·상세·예약 예상 결제금액 반영까지 고객 흐름을 구현했습니다. 운영 백오피스에는 제휴 기업·대학 1,800곳을 대상으로 한 쿠폰팩·소속 매핑·일괄 회수·감사 로그·정산 Excel을 만들었습니다.
+- 쿠폰을 결제수단 타입에 포함하고 노출·완료·취소·금액 집계 판단을 도메인 함수와 `ts-pattern` 분기 한 곳에 모아, 새 결제수단이 추가될 때 확인해야 할 범위를 명확히 했습니다.
+- 운영 백오피스와 병원 어드민에서 예약→시술→결제·취소→검수·정산의 상태 전이와 쿠폰 결제 확정·취소, 월별 입금·불인정 처리를 연결했습니다.
+- 관심 진료과 선택 → 룰렛 당첨 → 선택한 진료과가 반영된 복지몰 탐색으로 이어지는 기간 한정 그로스 랜딩을 기획·디자인과 함께 만들었습니다. 이벤트 7개와 모바일 E2E 15개로 참여·재진입·종료·공유·CTA 흐름을 검증했습니다.
+- 검색·시술상세·예약의 이탈 지점과 쿠폰 적용 전후를 계측했습니다. 리뷰 조회 사용자의 예약 전환율이 미조회 사용자보다 15%p 높게 나온 결과를 **인과가 아닌 상관관계로 해석해** 다음 실험의 근거로 남겼습니다.
+- JavaScript Channel 기반 WebView 브리지에 약관 완료 통지·전화 외부 링크·권한 콜백·로그아웃 연동을 확장하고 흐름을 안정화했습니다.
 
-**직접 찾아서 푼 문제들**
+**문제를 먼저 찾아 원인을 없애기**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer 노출 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
-- 서버에서 `dehydrate`한 캐시를 props로만 받아 쓰다 무효화가 화면에 안 먹던 구조를, `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, **form POST BFF**로 바꾸면서 이동 경로를 `/settlement` 하위로 제한하고 CSP `form-action`·`X-Frame-Options`·open redirect 방어와 회귀 테스트를 적용했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- Next.js soft navigation 때문에 직전 예약자의 이름·연락처·병력이 다음 예약 화면에 남는 것을 발견해, 재진입과 성공 시에는 초기화하되 제출 실패 시에는 입력을 보존하도록 상태 생명주기를 나누고 브라우저 회귀 테스트를 추가했습니다.
+- 성공만 반환하던 Mock이 실서버의 필수값·enum 계약 위반을 가린다는 것을 발견해, Mock을 끄고 실제 인증과 API로 확인하는 계약 테스트 환경을 분리했습니다. 서버의 거절 코드와 필드 단위 위반 목록을 드러내게 했고, 이렇게 찾은 차이는 폼·타입·Mock에 되돌려 반영했습니다.
+- 서버에서 `dehydrate`한 캐시를 클라이언트가 props와 Context로만 받아 쓰다 보니 캐시를 무효화해도 화면이 바뀌지 않았습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 
-**데이터로 검증 (Amplitude)**
+**개발 환경과 팀 생산성**
 
-- 복지몰 전반에 퍼널·행동 이벤트 약 240개를 설계했고, 시술상세 개편의 배포 전후를 이 계측으로 비교했습니다. 리뷰를 조회한 사용자의 예약 전환율이 미조회 사용자보다 15%p 높게 나타났으며, 이를 인과관계가 아닌 행동 간 상관관계로 해석했습니다.
-- 신규 가입 UTM 유실은 Amplitude 속성 상태(`unexpected`)가 원인임을 확인해, 코드 변경 없이 해결했습니다.
+- 합류 시점의 복지몰은 6-layer FSD 골격은 있었지만 `@legacy`에 250개 파일이 남아 있었고(앞선 담당자들이 석 달간 442개에서 줄여온 상태), 남은 250개를 **26일 만에 0개로** 옮겼습니다(2025.05–06). 이후 레이어별 책임을 가이드 문서 6개로 정의하고, 역방향 의존은 외부 의존성 없이 직접 만든 ESLint 플러그인으로 lint 단계에서 막았습니다. 그 규칙 위에서 코드베이스가 세 배 가까이 늘었습니다.
+- 서버 상태는 TanStack Query, 입력 중인 값은 타입이 지정된 Form, DTO 차이는 변환 계층, 목록 필터와 페이지는 URL이 소유하게 했습니다. 여러 앱에서 계약이 안정된 도메인만 공통 패키지로 올리고 독립적인 영역은 앱 안에 남겼습니다.
+- 운영 중인 복지몰을 Next.js 14→16·Node 24·Turbopack으로 옮기며 호환 문제를 해결하고 미사용 webpack 설정을 걷어냈습니다. TypeScript 네이티브 체커를 병행해 로컬 타입 검사를 **12.5초에서 1.9초로** 줄였습니다.
+- 테스트를 순수 함수·스키마 → API 계약·저장 왕복 → UI 통합 → 브라우저 E2E로 나눴습니다. E2E를 처음 붙였을 때 10개 시나리오의 콜드 실행이 3.5분씩 걸리고 간헐 실패해서, 원인을 잘못된 내비게이션 대기 조건(`waitForURL`의 기본 `waitUntil: 'load'`)과 반복 삽입되는 프로모션 오버레이로 분리해 20초·3회 연속 flaky 0으로 안정화한 뒤 CI에 올렸습니다.
+- 중첩 필드 경로·값·구독 타입을 추론하는 `createTypedForm<T>`을 만들어 세 앱의 폼 15개에 적용하고, 잘못된 필드 경로를 컴파일 단계에서 막았습니다.
 
-**개발 환경과 아키텍처**
+**AI 개발 툴을 통제해서 쓰기**
 
-- 정리해 둔 패턴을 기반으로 신규 쿠폰 도메인을 약 12개 파일 규모로 구현했습니다.
-- 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD로 통일했고, CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 단일 `@safedoc/shared`로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인으로 강제해 위반이 lint에서 잡힙니다.
-- 다만 FSD의 도메인 중심 분리를 그대로 따르지는 않습니다. 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고, page마다 달라지는 특이 UI는 page에서 조립합니다. 도메인이 나오자마자 나누지 않고 두 번째 사용처(재사용)가 신호일 때 분리하며, page는 로직 없이 연결만 하는 얇은 adapter로 둡니다.
-- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리해 가족 동기화 컴포넌트를 520줄에서 55줄로 줄였고, 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
-- FE 개발 환경에서는 Claude Code 스킬·명령, OpenAPI 기반 타입 생성, 레이어별 CLAUDE.md로 반복 지식을 문서와 자동화에 남겼습니다.
+- Claude Code 스킬·커맨드로 Jira 조회 → worktree 격리 → baseline·테스트 검증 → PR → 배포 PR 생성까지 표준화했습니다. 작업 복잡도에 따라 에이전트 실행 방식을 나누고 결과는 화면에서 직접 확인합니다.
+- 생성된 코드에서는 금지된 의존성과 상태 소유권, 상수 처리, 순수 함수의 경계를 먼저 보고, 위험한 지점만 깊게 읽습니다. 판단 기준은 저장소에 남기고, **제가 다시 설명할 수 없는 코드는 반영하지 않습니다.**
 
-### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
+**글로벌 서비스 제품화·글로벌 CMS 신규 런칭 (2026.07, 3주)**
 
-- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 모듈 경계·constructor injection을 참고해(프레임워크 자체는 과하다고 판단해 제거, DI 컨테이너 없이 factory로 조립) 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후로는 새 사이트를 붙일 때 정해진 인터페이스 구현만 남았습니다. 단위 테스트는 후행 과제로 남았습니다.
-- 폼 dirty 추적·복원(`FormDirtyContext` + sessionStorage) 패턴을 네 흐름에 재사용했고, 다단계 입력은 `useFunnel`로 구조화했습니다. DnD 정렬은 `@dnd-kit`에 optimistic update와 롤백을 적용했습니다.
+기존 세 제품의 운영과 장애 대응을 병행했습니다. **1주차**에는 전달받은 프로토타입의 구조와 위험 요소를 정리하고, **2주차**에는 확정된 API 스펙과 테스트를 반영했으며, **3주차**에는 QA·추가 요청·실서버 검증을 거쳐 배포했습니다.
+
+- PO가 만든 프로토타입을 이어받아 제품화했습니다. Vite SSG 기반에 라우트 23개와 컴포넌트 58개가 `App.jsx` 한 파일(2,021줄)에 몰려 있었고, 서비스로 남길 12개 화면을 골라 Next.js 16 App Router와 `strict` TypeScript로 옮겼습니다. localStorage와 성공만 반환하는 Mock에 의존하던 데이터 흐름은 실제 API 계약과 TanStack Query 기반 서버 상태로 단계적으로 교체했습니다. 영어·한국어·아랍어 라우팅과 아랍어 RTL을 지원했습니다.
+- 글로벌 CMS는 병원·시술·블로그·FAQ의 등록·수정·발행 흐름을 **신규 구축해 런칭**했습니다. 이미지 업로드를 Presigned URL 발급 → 스토리지 PUT → 저장 시 확정으로 나눠 취소하고 나가도 고아 파일이 남지 않게 했습니다.
+- 200건을 한 번에 내려받던 목록을 20건 단위 무한스크롤과 TanStack Virtual로 바꿨습니다. 화면 폭을 재기 전에는 첫 페이지를 그대로 그려 SSR HTML을 유지하고, 카드가 쌓인 뒤에도 DOM에는 보이는 행만 남는 것을 E2E로 확인했습니다.
+- 검증 오류가 나도 포커스가 옮겨가지 않던 커스텀 Select와 옵션 칩을 RHF `Controller`에 연결하고, 오류 순서에 따른 포커스 이동과 accessible name, `role="alert"`를 회귀 테스트로 고정했습니다.
+
+### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
+
+일정 조율 서비스 '되는시간'과 채용 관리 플랫폼 'RoundHR'의 pnpm 모노레포에서 채용 관리 화면과 후보자 수집 데스크톱 앱을 담당했습니다.
+
+- 사이트마다 중복 구현돼 있던 채용 사이트 크롤러를 공통 `CrawlingService`와 사이트별 어댑터로 재설계했습니다(2024.02). 기존 3개 사이트를 이 구조로 옮기고 점핏·잡플래닛·게임잡을 같은 방식으로 붙여 6개 사이트를 한 파이프라인에 통합했고, 게임잡은 로그인부터 파일 업로드까지 단독으로 구현했습니다. 지원자 한 명의 실패는 전체 배치를 멈추지 않도록 격리하고 레이트리밋과 수집 상한을 적용했습니다.
+- 화면마다 따로 만들던 드래그 앤 드롭 정렬을 dnd-kit 기반 공통 컴포넌트로 추출했습니다. 정렬 컨텍스트와 드래그 가능한 목록을 분리해 화면별 정렬 정책은 주입받게 하고, 후보자 사이드필터의 중첩 정렬 트리와 데이터 테이블의 인라인 행 정렬에 적용했습니다.
+- 면접 템플릿 생성처럼 단계가 많은 입력 흐름을 위해 `useFunnel`을 직접 구현하고, 화면을 벗어났다 돌아와도 작성 중이던 값이 남도록 dirty 상태를 sessionStorage에 저장·복원했습니다. 도구는 쓰기 전에 어떤 문제를 풀려고 만들어졌는지 먼저 읽었고, 그 과정에서 찾은 타입 제약 문제를 [toss/slash에 PR로 제출해 머지](https://github.com/toss/slash/pull/363)했습니다.
 
 ---
 
 ## Skills
 
-검증된 라이브러리 내부를 읽고 그 위에 얇은 어댑터를 두는 방식을 선호합니다. Server·Form·UI 상태의 역할을 섞지 않고, 추상화는 같은 패턴이 세 번 나온 뒤에 적용합니다.
+- **언어·Web** — HTML, CSS, TypeScript/JavaScript, Semantic HTML, 접근성·키보드 UX, 반응형·모바일 WebView, 다국어·RTL
+- **React 18·19** — Compound Component, Custom Hook, `useSyncExternalStore`, Suspense, Zod 기반 타입 추론, discriminated union
+- **Next.js App Router** — RSC·Client 경계, SSR·hydration, caching, Middleware/**BFF**, Turbopack
+- **상태·데이터** — **TanStack Query v5**, **Zustand**, React Hook Form, Ant Design Form, 서버 DTO↔폼 변환 계층, optimistic update
+- **품질·생산성** — Vitest, React Testing Library, MSW, Playwright, **Turborepo·pnpm 모노레포**, FSD, **ESLint 플러그인 제작**, GitHub Actions
+- **AI 개발 툴** — Claude Code, Codex, 저장소 전용 skills·agents·worktree 워크플로
+- **제품 분석** — Amplitude 이벤트 설계, 퍼널 분석, UTM 어트리뷰션
 
-- **TypeScript / JavaScript** — Zod 스키마 추론으로 폼 타입 동기화, mapped type·discriminated union 도메인 모델링
-- **React 18** — Compound + Custom Hook, `useSuspenseQuery` + `HydrationBoundary`, `useSyncExternalStore` 어댑터
-- **Next.js App Router** — Middleware/BFF, 캐싱 모델 구분, RSC 경계
-- **상태/데이터** — TanStack Query v5(`queryOptions`, optimistic + 롤백), Zustand, RHF + Zod
-- **아키텍처/생산성** — FSD 6-layer + sub-domain, Turborepo + pnpm 모노레포, Claude Code 기반 워크플로우 + 비판적 감독
+## Writing
 
-REST/axios·TanStack Query·BFF 기반으로 서버 상태 모델링, 캐시 일관성, optimistic update와 롤백을 다뤄왔습니다. GraphQL/Relay와 React Native 같은 새 스택도 라이브러리의 내부 계약부터 읽고 흡수하는 방식으로 빠르게 학습할 수 있습니다. 실제로 toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 고쳐 머지된 기여가 있고, 실전에서 쓰는 TanStack/ai에도 `useChat` 인스턴스 안정성 리팩토링 PR을 제출해 리뷰를 받고 있습니다. ([toss/slash #363](https://github.com/toss/slash/pull/363) · [TanStack/ai #864](https://github.com/TanStack/ai/pull/864))
-
----
-
-## Side Project — data-structure-ts
-
-- Queue/Heap/PriorityQueue를 observer 기반 외부 store로 만들고 React binding을 분리한 라이브러리입니다. `useSyncExternalStore`로 구독하고, `bindMethods<T>` mapped type으로 class instance의 method key만 추려 hook으로 노출했습니다. 자료구조 동작은 core에서, hook 구독은 adapter에서 각각 Jest로 검증했습니다.
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
 
 ---
 
