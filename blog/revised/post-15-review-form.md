@@ -1,4 +1,6 @@
-# 3단계 리뷰 작성 폼을 RHF, Zod, useFunnel로 다시 나눈 과정
+# 3단계 리뷰 작성 폼의 역할을 RHF·Zod·퍼널로 다시 나눈 과정
+
+> 회사·서비스 이름과 내부 사용자 정의 식별자는 역할 중심의 가명으로 바꿨다. 예제의 제어 흐름과 검증 조건은 실제 구현을 기준으로 한다.
 
 리뷰 작성 화면은 세 단계로 이어진다.
 
@@ -6,134 +8,151 @@
 2. 시술과 결제 정보 입력
 3. 별점, 사진, 리뷰 내용 작성
 
-기존 구현은 Zustand store 하나에 모든 단계의 값을 저장하고, `switch` 문으로 현재 화면을 골랐다. 각 input은 `setReviewForm`을 직접 호출했고 에러 문구도 component 안에서 계산했다. 기능은 동작했지만 필드를 추가할수록 값, 검증, 화면 전환이 서로 다른 파일에서 함께 바뀌었다.
+기존 구현은 값용 스토어와 단계용 스토어라는 두 Zustand 스토어를 사용하고, `switch` 문으로 현재 화면을 골랐다. 각 입력 컴포넌트는 값 변경 액션을 직접 호출했고 에러 문구도 컴포넌트 안에서 계산했다. 기능은 동작했지만 필드를 추가할 때마다 값, 검증, 화면 전환을 여러 파일에서 함께 바꿔야 했다.
 
-이 글에서는 코드를 몇 퍼센트 줄였다는 수치보다, 세 책임을 각각 어디로 옮겼는지 설명한다.
+이 글에서는 코드 감소율 대신 세 책임을 어디로 옮겼는지 설명한다.
 
-- 값과 field lifecycle: React Hook Form
+- 입력값과 필드의 생명주기: React Hook Form
 - 검증 규칙: Zod
-- 단계와 history: `@use-funnel/next`
+- 단계와 이동 이력: `@use-funnel/core`를 감싼 공용 퍼널 훅
+
+아래에서는 실제로 바뀐 부분과 현재 코드에 남은 기술 부채를 함께 다룬다. 전체 스키마는 여전히 Zod 내부의 `_def`에 의존하고, 최종 제출 직전의 전체 검증도 빠져 있다.
 
 ## 기존 구조의 문제
 
 ```ts
-type ReviewStore = {
-  step: 'first' | 'second' | 'third';
-  form: Partial<ReviewForm>;
-  setReviewForm: (values: Partial<ReviewForm>) => void;
-  setStep: (step: ReviewStore['step']) => void;
+type DraftStore = {
+  draft: ReviewDraft;
+  setField: <K extends keyof ReviewDraft>(
+    key: K,
+    value: ReviewDraft[K],
+  ) => void;
+};
+
+type StepStore = {
+  step: number;
+  moveForward: () => void;
+  moveBack: () => void;
 };
 ```
 
 ```tsx
 switch (step) {
-  case 'first':
-    return <ReceiptStep />;
-  case 'second':
-    return <HospitalInfoStep />;
-  case 'third':
-    return <ReviewContentStep />;
+  case 1:
+    return <ProofStep />;
+  case 2:
+    return <DetailsStep />;
+  default:
+    return <FeedbackStep />;
 }
 ```
 
-store가 전역이어야 할 이유는 없었다. 작성 값은 이 화면을 벗어나면 폐기되고, 뒤로 가기에 필요한 것은 전역 접근이 아니라 단계별 값 보존이었다.
+화면 전환과 작성 중인 값이 앱 전역에서 공유돼야 할 이유는 없었다. 임시 저장은 별도 API가 담당하고 있었고, 화면 안에서 이전 단계 값을 보존하는 일은 RHF 폼 인스턴스 사이에서 처리할 수 있었다.
 
-## Step별 schema와 전체 schema를 함께 관리하기
+## 단계별 스키마와 전체 스키마의 현재 경계
 
-각 단계에서는 그 단계의 값만 검증하고, 최종 제출에서는 전체 값을 다시 검증해야 했다. Zod 내부의 `_def`에 접근해 shape를 꺼내면 refinement가 유실되고 Zod 버전에도 결합된다. 대신 field shape와 refinement 함수를 공개 API 위에서 재사용했다.
+각 단계에서는 해당 단계의 값만 검증하고, 최종 제출에서는 전체 값을 다시 검증하는 구조가 이상적이다. 현재 구현은 단계별 스키마를 분리했지만 전체 스키마를 조립하는 부분에는 기술 부채가 남아 있다.
+
+아래 코드는 현재 스키마에서 핵심 필드와 추가 검증만 추린 것이다. 사용자 정의 스키마와 필드 이름은 공개용 가명이다.
 
 ```ts
 import { z } from 'zod';
 
-const ReceiptListSchema = z.array(ReviewImageSchema).max(5);
-
-const step1Shape = {
-  receipts: ReceiptListSchema,
-} satisfies z.ZodRawShape;
-
-const step2Shape = {
-  visibility: z.enum(['PUBLIC', 'HIDDEN']),
-  programs: z.array(ProgramSchema).min(1).max(5),
-  quoteRequired: z.boolean(),
-  quoteAmount: z.number().positive().optional(),
-  paymentAmount: z.number().positive(),
-  discountGuideReceived: z.boolean(),
-  notReceivedReason: z.string().optional(),
-} satisfies z.ZodRawShape;
-
-const step3Shape = {
-  images: z.array(ReviewImageSchema).max(5),
-  ratings: z.array(RatingSchema),
-  content: z.string().min(50).max(500),
-  recommend: z.boolean(),
-} satisfies z.ZodRawShape;
-
-const ReviewStep2Base = z.object(step2Shape);
-type ReviewStep2 = z.infer<typeof ReviewStep2Base>;
-
-function validateStep2(data: ReviewStep2, ctx: z.RefinementCtx) {
-  if (data.quoteRequired && data.quoteAmount === undefined) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['quoteAmount'],
-      message: '견적 금액을 입력해 주세요.',
-    });
-  }
-
-  if (!data.discountGuideReceived && !data.notReceivedReason) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['notReceivedReason'],
-      message: '안내받지 못한 사유를 입력해 주세요.',
-    });
-  }
-}
-
-// 방문 인증 step을 거치는 흐름에서만 영수증을 필수로 검사한다.
-// 수정 모드는 이미 인증을 마친 리뷰라 영수증 step 자체를 건너뛰므로
-// 최종 ReviewSchema에는 min(1)을 두지 않는다.
-export const ReviewStep1Schema = z.object({
-  receipts: ReceiptListSchema.min(1),
+export const ProofStepSchema = z.object({
+  proofFiles: z.array(UploadSchema).min(1).max(5),
 });
-export const ReviewStep2Schema = ReviewStep2Base.superRefine(validateStep2);
-export const ReviewStep3Schema = z.object(step3Shape);
 
-export const ReviewSchema = z
+export const DetailsStepSchema = z
   .object({
-    ...step1Shape,
-    ...step2Shape,
-    ...step3Shape,
+    visibilityFlag: z.boolean(),
+    items: z.array(ItemSchema).min(1).max(5),
+    quoteFieldEnabled: z.boolean().optional(),
+    quotedAmount: z.number().optional(),
+    paidAmount: z.number().min(1),
+    amountFlag: z.boolean().optional(),
+    receivedBenefitInfo: z.boolean(),
+    missingBenefitReason: z
+      .object({
+        value: z.enum(MISSING_INFO_REASONS),
+        description: z.string(),
+      })
+      .optional()
+      .nullable(),
   })
-  .superRefine((data, ctx) => validateStep2(data, ctx));
+  .superRefine((data, ctx) => {
+    if (data.quoteFieldEnabled && (!data.quotedAmount || data.quotedAmount <= 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['quotedAmount'],
+        message: '금액을 입력해 주세요.',
+      });
+    }
+
+    if (!data.receivedBenefitInfo && !data.missingBenefitReason) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['missingBenefitReason'],
+        message: '안내받지 못한 이유를 입력해 주세요.',
+      });
+    }
+  });
+
+export const FeedbackStepSchema = z.object({
+  attachments: z.array(UploadSchema),
+  ratings: z.array(
+    z.object({
+      criterion: z.enum(RATING_CRITERIA),
+      score: z.number().min(0).max(2),
+    }),
+  ),
+  body: z.string().min(50).max(500),
+  wouldRecommend: z.boolean(),
+});
+
+export const SubmissionSchema = z
+  .object({
+    // 방문 인증 단계에서는 min(1)을 쓰지만 전체 스키마에서는 필수가 아니다.
+    proofFiles: z.array(UploadSchema).max(5),
+  })
+  .extend(DetailsStepSchema._def.schema.shape)
+  .extend(FeedbackStepSchema.shape);
 ```
 
-폼 내부에서도 `visibility`처럼 의미가 있는 enum을 유지하면 boolean의 `true`가 공개인지 숨김인지 다시 해석할 필요가 없다. API가 boolean을 요구한다면 제출 직전 Transfer 함수에서 바꾼다.
+두 번째 단계 스키마의 `superRefine`은 해당 단계 폼에서 실행된다. 그러나 전체 스키마는 `DetailsStepSchema._def.schema.shape`에서 내부 필드 정의를 꺼낸다. `_def`는 Zod의 공개 API가 아니며, 이 방식으로는 `superRefine`도 전체 스키마에 전달되지 않는다. 현재 제출 경로에는 `SubmissionSchema.parse`를 다시 호출하는 단계도 없다. 단계별 검증은 동작하지만, 공개 API로 필드와 추가 검증을 재사용하고 최종 제출에서 전체 규칙을 확인하는 구조는 아직 완성되지 않았다.
+
+방문 인증 단계에서는 증빙 파일을 한 개 이상 요구한다. 다만 이 단계를 건너뛰는 흐름도 있어 전체 `SubmissionSchema`에는 `min(1)`을 두지 않았고, 현재 구현도 이 차이를 반영한다.
+
+폼의 공개 여부도 현재는 의미가 드러나는 열거형 대신 불리언 값을 쓴다. 실제 요청을 만들 때는 다른 필드도 함께 가공하지만, 이 값의 변환만 추리면 다음과 같다.
 
 ```ts
-function toReviewRequest(form: ReviewForm): ReviewRequest {
-  const { visibility, ...rest } = form;
+function toSubmissionRequest(form: ReviewDraft): SubmissionRequest {
+  const { visibilityFlag, ...rest } = form;
+
   return {
     ...rest,
-    hideAffiliation: visibility === 'HIDDEN',
+    visibilityFlag: visibilityFlag
+      ? VISIBILITY.Hidden
+      : VISIBILITY.Public,
   };
 }
 ```
 
-## custom input은 Controller 경계에서 연결하기
+현재 변환은 동작하지만 `true`가 숨김인지 공개인지 알려면 필드 이름과 변환 코드를 함께 봐야 한다. 폼 내부에서도 `PUBLIC | HIDDEN` 같은 값을 쓰면 해석하기 쉬워지지만, 현재 구현에는 반영되지 않은 후속 개선안이다.
+
+## 커스텀 입력은 `Controller`에서 연결한다
 
 ```tsx
-function PaymentAmountField() {
-  const { control } = useFormContext<ReviewStep2>();
+function AmountField() {
+  const { control } = useFormContext<DetailsStepValues>();
 
   return (
     <Controller
       control={control}
-      name="paymentAmount"
-      render={({ field, fieldState }) => (
-        <PriceInput
-          value={field.value}
-          onChange={field.onChange}
-          errorMessage={fieldState.error?.message}
+      name="paidAmount"
+      render={({ field: { value, onChange } }) => (
+        <NumericInput
+          value={value}
+          onChange={normalizeNumericInput(onChange)}
         />
       )}
     />
@@ -141,90 +160,137 @@ function PaymentAmountField() {
 }
 ```
 
-custom input의 value와 error를 RHF에 연결하는 코드는 `Controller` 안에서 끝난다. component가 store와 검증 함수를 각각 알 필요가 없다.
+커스텀 입력의 값과 변경 핸들러를 RHF에 연결하는 코드는 `Controller` 안에서 끝난다. 검증 규칙은 단계 스키마가 맡으므로 컴포넌트가 Zustand 액션과 별도 검증 함수를 모두 알 필요가 없다.
 
-## 퍼널은 화면 선택보다 history를 맡긴다
+## 퍼널이 단계 이동과 이력을 관리한다
 
 ```tsx
-const [draft, setDraft] = useState<Partial<ReviewForm>>(initialValues ?? {});
-
-const funnel = useFunnel<{
-  first: object;
-  second: object;
-  third: object;
-}>({
-  id: 'review-write',
-  initial: { step: 'first', context: {} },
+const form = useSchemaForm({
+  schema: SubmissionSchema,
+  defaultValues: savedDraft
+    ? mapResponseToDraft(savedDraft.data)
+    : emptyDraft,
 });
 
+const flow = useStepFunnel<Record<'proof' | 'details' | 'feedback', object>>({
+  initial: {
+    step: needsProof ? 'proof' : 'details',
+    context: {},
+  },
+  id: 'public-example-flow',
+});
+
+const mergeAndReset = useCallback(
+  (callback: (data: ReviewDraft) => void) =>
+    <T extends Partial<ReviewDraft>>(stepValues?: T) => {
+      const mergedDraft = {
+        ...form.formState.defaultValues,
+        ...stepValues,
+      } as ReviewDraft;
+
+      form.reset(mergedDraft);
+      callback(mergedDraft);
+    },
+  [form],
+);
+
+const moveToStep = useCallback(
+  (step: typeof flow.step) =>
+    mergeAndReset(() => flow.history.replace(step)),
+  [mergeAndReset, flow],
+);
+
+const confirmSubmission = mergeAndReset((data) =>
+  openConfirmDialog({
+    primaryAction: {
+      text: '제출',
+      onConfirm: () => submitDraft(data),
+    },
+  }),
+);
+
 return (
-  <funnel.Render
-    first={() => (
-      <ReviewStepForm
-        schema={ReviewStep1Schema}
-        defaultValues={draft}
-        onSubmit={(values) => {
-          setDraft((current) => ({ ...current, ...values }));
-          funnel.history.push('second');
-        }}
+  <flow.Render
+    proof={() => (
+      <StepForm
+        schema={ProofStepSchema}
+        defaultValues={form.formState.defaultValues}
+        onComplete={moveToStep('details')}
       >
-        <ReceiptStep />
-      </ReviewStepForm>
+        <ProofStep />
+      </StepForm>
     )}
-    second={() => (
-      <ReviewStepForm
-        schema={ReviewStep2Schema}
-        defaultValues={draft}
-        onSubmit={(values) => {
-          setDraft((current) => ({ ...current, ...values }));
-          funnel.history.push('third');
-        }}
+    details={() => (
+      <StepForm
+        schema={DetailsStepSchema}
+        defaultValues={form.formState.defaultValues}
+        onBack={needsProof ? moveToStep('proof') : undefined}
+        onComplete={moveToStep('feedback')}
       >
-        <HospitalInfoStep />
-      </ReviewStepForm>
+        <DetailsStep />
+      </StepForm>
     )}
-    third={() => (
-      <ReviewStepForm
-        schema={ReviewStep3Schema}
-        defaultValues={draft}
-        onSubmit={(values) => {
-          const completed = ReviewSchema.parse({ ...draft, ...values });
-          submitReview(completed);
-        }}
+    feedback={() => (
+      <StepForm
+        schema={FeedbackStepSchema}
+        defaultValues={form.formState.defaultValues}
+        onBack={moveToStep('details')}
+        onComplete={confirmSubmission}
       >
-        <ReviewContentStep />
-      </ReviewStepForm>
+        <FeedbackStep needsProof={needsProof} />
+      </StepForm>
     )}
   />
 );
 ```
 
-핵심은 `switch`를 없앤 사실이 아니라 이전, 다음, replace 같은 이동이 history API로 드러난 점이다. 각 step은 자기 schema만 알며, step을 통과한 값은 상위 draft에 합친다. 최종 제출 직전에는 `ReviewSchema.parse({ ...draft, ...values })`로 전체 규칙을 다시 확인한다.
+단계 폼 래퍼(가명 `StepForm`)는 단계마다 `mode: 'all'`인 폼 인스턴스를 만들고 해당 단계 스키마를 검증한다. 통과한 값은 상위 RHF 인스턴스의 `defaultValues`와 합친 뒤 `reset`해 다음 단계의 초기값으로 쓴다. 단계 이동은 퍼널의 `history.replace`로 표현한다. 퍼널 `context`에 폼 값을 넣거나 `history.push`로 단계별 스냅샷을 쌓지는 않는다.
+
+세 번째 단계도 같은 방식으로 값을 합쳐 확인 대화상자와 API 요청에 전달한다. 이 경로에는 명시적인 `SubmissionSchema.parse`가 없다. 앞 단계에서 검증한 값이 그대로 유지된다는 전제에 기대고 있어 최종 전체 검증은 남은 과제다.
 
 ## 수정 데이터는 폼을 만들기 전에 준비한다
 
-React Hook Form의 `defaultValues`는 첫 생성 시점을 기준으로 캐시된다. 수정용 review data가 비동기로 늦게 도착한다면 첫 렌더에 빈 값을 넣고 끝내면 안 된다.
+React Hook Form의 `defaultValues`는 처음 생성될 때 캐시된다. 수정용 리뷰 데이터가 비동기로 늦게 도착하는 경우 첫 렌더링에 빈 값을 넣고 끝내서는 안 된다.
 
-이 화면에서는 query가 준비된 뒤 퍼널을 mount하도록 Suspense 경계를 사용한다.
+현재 화면은 `useQueries`로 예약 정보와 리뷰 정보를 함께 요청하고, 두 로딩이 끝난 뒤 퍼널을 마운트한다.
 
 ```tsx
-function ReviewEditPage() {
-  const { data } = useSuspenseQuery(reviewDetailOptions());
-  return <ReviewWriteFunnel initialValues={toReviewForm(data)} />;
+function ReviewEditorPage() {
+  const { sourceId, draftId } = useParams<EditorRouteParams>();
+  const [
+    { data: sourceInfo, isLoading: isSourceLoading },
+    { data: savedDraft, isLoading: isDraftLoading },
+  ] = useQueries({
+    queries: [
+      sourceByIdQuery(toOptionalNumber(sourceId)),
+      draftByIdQuery(toOptionalNumber(draftId)),
+    ],
+  });
+
+  if (isSourceLoading || isDraftLoading) return null;
+
+  return (
+    <ReviewFlow
+      sourceInfo={sourceInfo}
+      savedDraft={savedDraft}
+    />
+  );
 }
 ```
 
-Suspense를 쓰지 않는 화면이라면 데이터가 도착했을 때 `reset(nextValues)`을 명시적으로 호출해야 한다.
+두 요청이 끝날 때까지 기다리므로 응답을 폼 값으로 바꾸는 변환 함수가 만든 수정값이 첫 `defaultValues`에 들어간다. Suspense는 사용하지 않는다. 대신 마운트 시점을 늦춰 비동기 데이터가 오기 전에 빈 폼이 만들어지는 것을 피한다.
 
 ## 결과와 남은 비용
 
 이 구조로 바꾸면서 확인 가능한 변화는 다음과 같다.
 
-- 리뷰 작성용 Zustand store를 제거했다.
-- component에 흩어져 있던 조건부 검증을 step schema로 옮겼다.
-- 화면 전환과 form validation을 분리했다.
-- step별 schema와 최종 schema가 같은 field 정의와 refinement 함수를 사용한다.
+- 리뷰 작성용 Zustand 스토어를 제거했다.
+- 컴포넌트에 흩어져 있던 조건부 검증을 단계별 스키마로 옮겼다.
+- 화면 전환과 폼 검증을 분리했다.
+- 각 단계가 자신에게 필요한 스키마로 제출 가능 여부를 판단한다.
 
-반면 step마다 form instance를 만들면 이전 단계 값을 합치고 복원하는 코드가 필요하다. 이미지처럼 browser object를 포함한 값은 URL 직렬화만으로 history를 복원하기 어렵다. 3단계라고 해서 항상 funnel library가 필요한 것도 아니다. 단계 이동과 context 복원이 단순하다면 local state가 더 작을 수 있다.
+단계마다 폼 인스턴스를 만들기 때문에 `defaultValues`를 합치고 `reset`하는 코드는 여전히 필요하다. 현재 전체 스키마 조립은 Zod 내부 `_def`에 의존하고 2단계의 추가 검증을 보존하지 않으며, 최종 제출 직전의 전체 `parse`도 없다. 이 경로를 보장하는 스키마·퍼널 자동화 테스트 역시 충분하지 않다.
 
-이번 리팩터링에서 중요한 것은 RHF, Zod, useFunnel을 한꺼번에 도입한 사실이 아니다. 값, 검증, 이동이 서로 다른 이유로 바뀐다는 점을 코드 구조에도 그대로 반영한 것이다.
+이미지처럼 브라우저 객체를 포함한 값은 URL 직렬화만으로 이동 이력을 복원하기 어렵다. 3단계라는 이유만으로 퍼널 라이브러리가 필요한 것은 아니다. 현재 구현처럼 `context`를 비워 두고 `replace`만 사용한다면 로컬 상태나 명시적인 리듀서가 더 단순한지도 비교할 필요가 있다.
+
+이번 리팩터링으로 값, 단계별 검증, 이동의 책임은 이전보다 분명해졌다. 다음 단계는 공개 API로 필드 정의와 추가 검증을 재사용하고, 최종 제출에서 전체 스키마를 다시 검증해 이 경계를 코드와 테스트로 닫는 일이다.

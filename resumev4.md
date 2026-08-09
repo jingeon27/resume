@@ -2,8 +2,6 @@
 
 **Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
 
-산업기능요원 현역 복무 중 (2025.08 – 2028.06)
-
 ---
 
 ## Summary
