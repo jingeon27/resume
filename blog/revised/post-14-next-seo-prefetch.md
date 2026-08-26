@@ -1,6 +1,6 @@
 # Next.js App Router에서 prefetch를 기다려야 하는 경우
 
-예약 상세 페이지의 초기 HTML에 병원 데이터가 포함되지 않는 문제를 확인하면서 `prefetchQuery` 호출을 살펴봤다.
+브라우저에서는 예약 상세가 정상으로 보였는데 HTML 원문에는 병원 정보가 없었다. 클라이언트가 다시 조회해 화면을 채웠기 때문에 개발 중에는 놓치기 쉬웠다. 서버 코드에는 `prefetchQuery`도 있었지만 앞에 `void`가 붙어 있었다.
 
 ```tsx
 void queryClient.prefetchQuery(hospitalOptions(hospitalId));
@@ -61,7 +61,7 @@ const queryClient = new QueryClient({
 });
 ```
 
-이 설정을 사용하고 소비 component가 `useSuspenseQuery`로 같은 query를 구독한다면, prefetch를 기다리지 않는 방식도 의도적인 선택이 될 수 있다.
+이 설정을 사용하고 화면 컴포넌트가 `useSuspenseQuery`로 같은 query를 구독한다면, prefetch를 기다리지 않는 방식도 의도적인 선택이 될 수 있다.
 
 ```tsx
 void queryClient.prefetchQuery(hospitalOptions(hospitalId));
@@ -82,7 +82,7 @@ return (
 | 초기 HTML에 반드시 필요한 핵심 데이터 | `await prefetchQuery` |
 | 서버에서 not-found나 오류를 결정해야 하는 데이터 | `await prefetchQuery` |
 | 화면 일부를 Suspense로 늦게 보여줘도 되는 데이터 | pending dehydration + streaming |
-| interaction 뒤에만 필요한 데이터 | client query |
+| 사용자 조작 뒤에 필요한 데이터 | 클라이언트 query |
 
 ## SEO와 sitemap은 구분한다
 
@@ -90,6 +90,6 @@ sitemap이 페이지 내부 데이터를 읽는 것은 아니다. sitemap은 검
 
 `HydrationBoundary`가 여러 번 보인다고 무조건 중복도 아니다. 서로 다른 Server Component가 각자 prefetch한 cache를 가까운 client subtree에 전달한다면 경계가 여러 개일 수 있다. 같은 query와 같은 state를 반복해서 전달하는 경우에만 상위 경계로 합칠지 검토하면 된다.
 
-결론은 간단하다. SEO가 필요한 query는 서버가 어느 시점까지 책임질지 먼저 정하고, 완료를 기다릴지 pending 상태를 streaming할지 그다음 선택해야 한다.
+그래서 `void prefetchQuery`를 일괄적으로 `await`로 바꾸지는 않았다. 병원 정보처럼 초기 HTML과 서버 분기에 필요한 데이터만 기다렸다. 화면의 나머지 부분은 pending query를 dehydration하고 Suspense로 넘길 수 있다. 기준은 API의 중요도가 아니라 서버가 첫 응답에서 어디까지 보장해야 하는가였다.
 
 참고: [TanStack Query Advanced SSR](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr), [Next.js `searchParams`](https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional)

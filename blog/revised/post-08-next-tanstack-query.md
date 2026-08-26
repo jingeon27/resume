@@ -1,8 +1,8 @@
-# Next.js App Router에서 TanStack Query를 SSR과 함께 쓰는 방법
+# Next.js App Router에서 서버와 브라우저의 QueryClient를 나눈 이유
 
 > Next.js 15 App Router와 TanStack Query v5를 기준으로 한다.
 
-App Router에서 TanStack Query를 사용할 때 가장 먼저 정할 것은 QueryClient의 수명이다.
+App Router에 TanStack Query를 처음 붙였을 때 서버와 브라우저에서 같은 `getQueryClient()`를 호출하면 된다고 생각했다. 문제는 같은 함수라도 두 환경에서 원하는 수명이 정반대라는 점이었다.
 
 - 서버 요청끼리는 캐시를 공유하면 안 된다.
 - 브라우저에서는 렌더마다 QueryClient를 다시 만들면 안 된다.
@@ -137,10 +137,12 @@ export function HomePageView() {
 
 서버가 넘긴 dehydrated cache와 클라이언트의 query key가 같으므로 첫 렌더에서 같은 데이터를 사용한다. 이후 invalidate와 refetch도 TanStack Query의 캐시 흐름 안에서 동작한다.
 
-## 선택 기준
+## 어떤 조회를 서버에서 기다릴지 정하는 기준
 
 - 초기 HTML에 데이터가 꼭 있어야 하거나 오류를 서버에서 처리해야 하면 `await prefetchQuery`를 사용한다.
 - pending query를 streaming하려면 pending dehydration을 켜고 소비 컴포넌트를 Suspense 경계 안에서 `useSuspenseQuery`로 구독한다.
 - 어떤 방식을 쓰든 서버 QueryClient는 요청별로, 브라우저 QueryClient는 한 번만 만든다.
+
+이 구성을 통째로 복사하기보다 먼저 데이터가 초기 HTML에 있어야 하는지 결정해야 한다. 나는 SEO나 서버 분기에 필요한 조회는 기다리고, 일부 UI만 늦게 보여도 되는 조회는 Suspense로 넘긴다. 그 결정을 한 뒤에야 dehydration 설정이 정해진다.
 
 참고: [TanStack Query Advanced SSR](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)

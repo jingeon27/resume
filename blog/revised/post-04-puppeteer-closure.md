@@ -1,6 +1,6 @@
-# Puppeteer의 request와 response를 함께 기다리기: closure보다 중요했던 수명 관리
+# Puppeteer에서 요청과 응답을 함께 기다릴 때 놓쳤던 것
 
-Electron과 Puppeteer로 크롤링 기능을 만들면서 한 페이지의 서로 다른 이벤트에서 정보를 모아야 했다. 요청 이벤트에서는 API 호출에 필요한 header가 나오고, 응답 이벤트에서는 파일을 여는 데 필요한 값이 나왔다. 두 값이 모두 준비된 뒤 다음 단계로 넘어가야 했다.
+Electron 크롤러에서 파일 하나를 받으려면 두 군데를 엿봐야 했다. request에서는 다음 API 호출에 쓸 header가, response에서는 파일 비밀번호가 나왔다. 둘 중 하나라도 없으면 다음 단계로 갈 수 없었다.
 
 처음에는 외부 변수에 값을 넣고 1초마다 확인했다.
 
@@ -19,7 +19,7 @@ while (true) {
 }
 ```
 
-동작은 했지만 문제가 있었다.
+첫 버전은 외부 변수와 polling이었다. 당장은 동작했지만 다시 실행할수록 이상해졌다.
 
 - 함수를 다시 호출할 때마다 listener가 누적됐다.
 - 원하는 이벤트가 오지 않으면 영원히 기다렸다.
@@ -27,9 +27,9 @@ while (true) {
 - request와 response callback이 같은 변수를 덮어쓸 수 있었다.
 - listener를 등록하기 전에 reload하면 빠른 이벤트를 놓칠 수 있었다.
 
-핵심은 closure를 썼다는 사실보다 **이벤트 구독의 시작과 끝을 Promise 수명에 맞추는 것**이었다.
+처음에는 이 문제를 closure 사용 사례라고 생각했다. 실제로 고쳐야 했던 것은 값의 저장 방식보다 listener의 수명이었다.
 
-## 이벤트를 기다리는 공통 함수
+## 두 이벤트를 같은 방식으로 기다리기
 
 ```ts
 import type { HTTPRequest, HTTPResponse, Page } from 'puppeteer';
@@ -104,7 +104,7 @@ export function waitForPreInfo<T>({
 
 이 함수는 처음으로 유효한 결과를 반환한 callback에서 완료된다. 완료, 실패, timeout 어느 경로에서도 listener를 제거한다.
 
-## closure로 두 이벤트의 값을 합치기
+## 클로저 안에서 두 결과 합치기
 
 request와 response가 각각 절반의 정보만 주는 경우에는 작은 collector를 만든다.
 
@@ -149,6 +149,4 @@ const preInfo = await waitForPreInfo({
 
 closure는 `headers`와 `filePassword`를 외부에서 직접 수정하지 못하게 가두고, 두 값이 모두 모였을 때만 완성된 객체를 내보낸다.
 
-## 정리
-
-이 작업에서 closure는 여러 비동기 callback이 한 번의 수집 상태를 공유하게 해줬다. 하지만 운영 코드에서 더 중요했던 것은 listener cleanup, timeout, 명시적인 완료 조건이었다. 이벤트 기반 코드는 값을 어떻게 저장할지만큼 **언제 구독을 끝낼지**를 함께 설계해야 했다.
+클로저는 `headers`와 `filePassword`를 한 번의 수집 작업 안에 가두는 데 유용했다. 그래도 이 코드를 다시 설명한다면 클로저보다 이벤트 수명부터 이야기할 것 같다. 리스너를 새로고침 전에 등록하고, 성공·실패·시간 초과 중 어느 경로로 끝나도 같은 정리 함수를 거치게 해야 했다. 실제로 더 위험했던 것은 값의 저장 위치보다 작업이 끝난 뒤에도 리스너가 남는 경우였다.

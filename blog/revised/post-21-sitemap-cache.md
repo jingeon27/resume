@@ -1,68 +1,18 @@
-# 동적 사이트맵을 만들며 공개 API와 인증 API의 경계를 나눈 과정
+# 동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정
 
-> 회사·서비스 이름과 내부 사용자 정의 식별자는 역할 중심의 가명으로 바꿨다. 예제의 호출 구조·캐시 시간값·관찰 결과는 실제 변경을 기준으로 한다.
+사이트맵에 병원·프로그램·공지·콘텐츠 URL을 넣으면서 다섯 개 API를 호출하게 됐다. 배포할 때만 생성하면 새 콘텐츠가 다음 배포까지 반영되지 않고, 요청마다 전부 조회하면 같은 데이터를 계속 가져온다. 하루 단위로 재검증하는 캐시를 적용하기로 했다.
 
-고객용 서비스의 사이트맵에는 정적 URL만 들어가지 않았다. 지점 상세, 지점별 상품, 분류 검색, 공지와 콘텐츠 상세 URL을 만들려면 여러 공개 API를 조회해야 했다.
+그런데 사이트맵 함수에 `'use cache'`를 붙이자 공개 API 호출이 캐시 경계 안에서 동작하지 않았다. 원인은 사이트맵이 아니라 공용 Axios interceptor였다. 인증이 필요 없는 요청도 서버에서 무조건 `cookies()`를 읽고 있었다.
 
-선택지는 세 가지였다.
+## 캐시보다 먼저 인증 경계를 나눴다
 
-- 요청마다 전체 URL을 만든다.
-- 빌드할 때만 만든다.
-- 결과를 캐시하고 일정 시간이 지나면 다시 만든다.
+기존 interceptor는 서버와 브라우저를 구분해 토큰을 찾았지만, 요청이 공개 데이터인지 회원별 데이터인지는 구분하지 않았다. 공개 사이트맵도 요청별 쿠키에 의존하는 셈이었다.
 
-새 상품은 다음 배포 전에도 반영돼야 했다. 같은 캐시 항목을 재사용할 수 있다면 크롤러가 올 때마다 여러 API를 호출할 이유도 없었다. 그래서 Next.js의 Cache Components와 `'use cache'`를 사용했다. 이 글은 Next.js 16 기준이며, `'use cache'`와 `cacheLife`를 쓰려면 `next.config`에서 `cacheComponents: true`를 켜야 한다.
-
-캐시 가능한 호출 경계는 만들었지만 사이트맵 생성 로직 전체를 정리하지는 못했다. 아래에서는 끝낸 변경과 현재 코드에 남은 메타데이터·전체 조회·실패 처리 문제를 나눠 적는다.
-
-## 사이트맵에 캐시 경계 두기
-
-```ts
-import type { MetadataRoute } from 'next';
-import { cacheLife, cacheTag } from 'next/cache';
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  'use cache';
-  cacheLife('days');
-  cacheTag('public-index');
-
-  const [locationIds, items, announcementIds, categoryPaths, filterPaths] = await Promise.all([
-    getAllLocationIds(),
-    getAllItems(),
-    getAllAnnouncementIds(),
-    getAllCategoryPaths(),
-    loadFilterPaths(),
-  ]);
-
-  // 항목 변환 코드는 생략
-  return [
-    ...toLocationEntries(locationIds),
-    ...toItemEntries(items),
-    ...toAnnouncementEntries(announcementIds),
-    ...toCategoryEntries(categoryPaths),
-    ...toFilterEntries(filterPaths),
-  ];
-}
-```
-
-데이터 소스끼리 의존하지 않으므로 동시에 조회한다.
-
-`cacheLife('days')`는 매일 정해진 시각에 실행되는 크론 작업이 아니다. `'days'` 프로필은 `stale` 5분, `revalidate` 1일, `expire` 1주로 동작한다. `stale`은 클라이언트 라우터 캐시가 서버 확인 없이 결과를 재사용하는 시간이다. `revalidate` 기간인 1일이 지난 뒤 요청이 들어오면 서버가 백그라운드에서 새 결과를 만든다. 정확히는 하루 단위 재검증 정책을 둔 요청 기반 캐시다.
-
-`sitemap.ts`는 요청 시점 API나 동적 설정을 쓰지 않으면 원래 캐시되는 특수 라우트 핸들러(Route Handler)다. 여기서 `'use cache'`를 쓴 목적은 캐시를 처음 켜는 데 있지 않다. Cache Components 안에서 함수 경계를 명시하고 `days` 프로필을 선택하려는 것이다.
-
-이 시간값만으로 운영 환경의 캐시 적중을 보장할 수는 없다. 기본 런타임 캐시는 자체 호스팅 환경에서 프로세스별 메모리에 남고, 서버리스에서는 요청 사이에 유지되지 않을 수 있다. 여러 인스턴스가 같은 결과를 쓰려면 배포 플랫폼의 영속 캐시나 공유 `cacheHandler`를 확인해야 한다. 같은 캐시 저장소를 재사용할 때만 크롤러별 API 호출이 줄어든다.
-
-현재 코드에는 사이트맵용 캐시 태그도 붙어 있다. 예제에서는 그 값을 `public-index`라는 가명으로 바꿨지만, 실제 태그를 사용하는 `revalidateTag`·`updateTag` 호출은 없다. 따라서 지금 태그는 무효화 경로를 만들지 않는다. 콘텐츠 변경과 연결하지 않을 거라면 제거하고, 연결한다면 어떤 변경이 사이트맵을 무효화하는지 호출 지점까지 남겨야 한다.
-
-## 캐시를 막던 암묵적인 쿠키 읽기
-
-기존 Axios 인터셉터는 서버와 클라이언트를 구분하지 않고 액세스 토큰을 찾았다. 사이트맵이 호출하는 API는 인증이 필요 없지만, 인터셉터가 `cookies()`를 읽으면 요청별 동적 API에 의존하므로 캐시 경계 안에서 쓸 수 없다. 쿠키를 읽지 않는 것만으로 캐시가 안전해지지는 않는다. 응답이 테넌트·`Host`·로케일·미리보기 헤더에 따라 달라진다면 그 값을 인자로 받아 캐시 키에 넣어야 한다. 공개 API에 비공개 데이터가 섞이지 않는지도 확인해야 한다.
-
-처음에는 "서버에서는 토큰을 읽지 않는다"를 규칙으로 잡았지만, 이후 회원별 혜택 적용가처럼 인증이 필요한 서버 렌더링(SSR) 조회가 생겼다. 현재 규칙은 다음처럼 바뀌었다.
+호출 규칙을 다음처럼 바꿨다.
 
 - 서버의 공개 조회는 기본적으로 쿠키를 읽지 않는다.
-- 회원별 SSR 조회만 호출부에서 인증 필요 여부를 명시한다.
-- `includeServerAuth: true`인 호출은 `cookies()`에 의존하므로 공개 캐시 경계 안에 두지 않는다.
+- 회원별 가격이나 혜택처럼 인증이 필요한 SSR 요청만 인증 사용을 명시한다.
+- 인증 요청은 공개 캐시 경계 안에서 호출하지 않는다.
 
 ```ts
 declare module 'axios' {
@@ -83,84 +33,55 @@ async function readAuthToken(includeServerAuth: boolean) {
 }
 ```
 
-호출부의 기본값은 `false`다.
+기본값은 `false`로 두었다. 사이트맵은 공개 클라이언트를 쓰고, 회원별 SSR 조회만 `includeServerAuth: true`를 지정한다. 불리언을 잘못 지정할 가능성은 남아 있어 장기적으로는 공개·인증 클라이언트를 모듈 수준에서 나누는 편이 낫다.
+
+쿠키만 읽지 않는다고 모든 응답을 함께 캐시해도 되는 것은 아니다. `Host`, 테넌트, 로케일에 따라 응답이 달라진다면 그 값도 캐시 키에 포함해야 한다. 이번 사이트맵 API는 사용자별 데이터가 없는 공개 응답임을 확인한 뒤 경계에 넣었다.
+
+## 다섯 API의 결과를 하루 단위로 재검증한다
+
+각 데이터 소스는 서로 의존하지 않아 동시에 조회했다.
 
 ```ts
-// 사이트맵: 공개 응답이므로 서버 쿠키를 읽지 않는다.
-fetchPublicSummary();
+import type { MetadataRoute } from 'next';
+import { cacheLife } from 'next/cache';
 
-// SSR 프리페치: 혜택 상태·적용가가 회원별 응답이므로 쿠키 사용을 명시한다.
-fetchPublicSummary({
-  includeServerAuth: true,
-});
-```
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  'use cache';
+  cacheLife('days');
 
-두 번째 호출은 `cookies()`에 의존하므로 공개 `'use cache'` 경계 안에서 쓰지 않는다. 별도 `fetch` 래퍼의 `cache: 'no-store'`는 Axios가 아니라 Next가 확장한 `fetch`에만 적용된다. 현재 불리언 플래그는 호출자가 잘못 지정할 수 있는 과도기적 장치다. 장기적으로는 서버 전용 공개·인증 클라이언트와 브라우저 클라이언트를 모듈 수준에서 나누는 편이 안전하다.
+  const [locationIds, items, announcementIds, categoryPaths, filterPaths] =
+    await Promise.all([
+      getAllLocationIds(),
+      getAllItems(),
+      getAllAnnouncementIds(),
+      getAllCategoryPaths(),
+      loadFilterPaths(),
+    ]);
 
-클라이언트 분기는 쿠키를 읽는 서버 함수(Server Function)를 호출하기 전에 0ms 비동기 지연을 둔다. 렌더링 중 발생한 디스패치를 다음 매크로태스크로 미루는 우회로지만, 액션 큐 우회나 병렬 실행을 보장하는 문서화된 계약은 아니다. 사이트맵 캐시와는 별개의 기술 부채이며 BFF나 토큰 전달 정책과 함께 다시 검증해야 한다.
-
-## 정확하지 않은 사이트맵 메타데이터
-
-현재 코드는 생성 시각 하나를 모든 항목의 `lastModified`로 쓰고, 페이지 종류에 따라 `priority`도 부여한다.
-
-```ts
-const lastModified = new Date();
-
-const itemEntries = items.map(({ locationId, itemId }) => ({
-  url: `${PUBLIC_ORIGIN}/locations/${locationId}/items/${itemId}`,
-  lastModified,
-  priority: ENTRY_PRIORITY.Detail,
-}));
-```
-
-사이트맵을 만든 시각은 콘텐츠가 실제로 바뀐 시각이 아니다. 상품 목록 DTO에는 수정 시각이 없다. 지점·공지·추천 콘텐츠 응답에는 서로 다른 이름과 의미의 수정 시각 필드가 있지만 현재 사이트맵 헬퍼는 이를 버리고 ID와 경로만 남긴다. 데이터 소스별 타임스탬프의 의미를 확인해 근거가 있는 항목에만 넣고, 나머지는 `lastModified`를 생략해야 한다. Google은 `priority`와 `changefreq`도 사용하지 않으므로 현재 우선순위 등급은 검색엔진에 도움이 되지 않는다.
-
-이 부분은 현재 코드에 남은 정리 대상이다. API에서 실제 수정 시각을 받을 수 있는 항목에만 날짜를 넣고, 나머지는 URL만 제공해야 한다.
-
-## 전체 조회와 부분 실패 처리도 아직 과도기다
-
-현재 지점과 상품 조회는 먼저 페이지 크기 1로 전체 개수를 얻은 뒤, 그 값을 페이지 크기로 보내 전체 목록을 한 번에 받는다. 각 헬퍼는 오류가 나면 `[]`를 반환한다.
-
-```ts
-async function getAllLocationIds() {
-  try {
-    const { data: countSummary } = await fetchLocationList({
-      pageNumber: 1,
-      pageSize: 1,
-    });
-    if (!countSummary.totalCount) return [];
-
-    const { data: pageResult } = await fetchLocationList({
-      pageNumber: 1,
-      pageSize: countSummary.totalCount,
-    });
-    return pageResult.items.map(({ id }) => id);
-  } catch {
-    return [];
-  }
+  return [
+    ...toLocationEntries(locationIds),
+    ...toItemEntries(items),
+    ...toAnnouncementEntries(announcementIds),
+    ...toCategoryEntries(categoryPaths),
+    ...toFilterEntries(filterPaths),
+  ];
 }
 ```
 
-이 구현은 API의 최대 페이지 크기를 넘길 수 있고 응답도 계속 커진다. 더 위험한 점은 데이터 소스 하나가 실패해도 `Promise.all`은 성공한다는 것이다. 일부 URL이 빠진 사이트맵이 정상 결과로 캐시될 수 있다. 따라서 “페이지 단위 조회”와 “핵심 소스 실패 시 생성 실패”는 아직 후속 작업으로 남아 있다.
+`cacheLife('days')`는 매일 정해진 시각에 다시 만드는 크론이 아니다. 하루가 지난 뒤 들어온 요청을 계기로 서버가 값을 재검증하는 정책이다. 자체 호스팅이나 여러 인스턴스 환경에서는 캐시 저장소가 실제로 공유되는지도 별도로 확인해야 한다.
 
-페이지 단위로 바꿔도 오프셋 조회 중 데이터가 변하면 중복·누락이 생긴다. 커서나 스냅샷 API가 없다면 안정 정렬과 ID 중복 제거, 반복 횟수와 최대 페이지 수를 제한하는 방어 로직이 필요하다. URL이 50,000개 또는 비압축 50MB에 가까워지면 사이트맵 인덱스와 여러 사이트맵으로 나눠야 한다.
+처음에는 `cacheTag`도 붙였지만 호출하는 `revalidateTag`가 없었다. 무효화 경로가 없는 태그는 의도를 흐리기만 해서 제거했다. 콘텐츠 변경 이벤트와 연결하게 되면 그때 태그와 무효화 지점을 함께 추가하는 편이 낫다.
 
-실패 시 오류를 던지도록 바꿔도 기존 결과가 항상 유지되지는 않는다. `stale` 상태의 항목을 백그라운드에서 재검증할 때는 이전 값을 제공할 수 있지만, 콜드 스타트·캐시 미스·만료 뒤에는 사이트맵 응답 자체가 실패할 수 있다.
+## 캐시 적용과 사이트맵 정확성은 별개의 문제였다
 
-현재 쿼리 문자열은 별도 헬퍼로 미리 XML 이스케이프한다. Next.js가 최종 사이트맵을 직렬화하는 방식을 통합 테스트로 확인하지 않은 채 “프레임워크가 이스케이프하지 않는다”고 단정하면 이중 이스케이프를 놓칠 수 있다. 생성된 XML을 직접 파싱해 URL이 정확히 한 번만 이스케이프되는지 보장해야 한다.
+캐시는 적용했지만 생성 로직에는 두 가지 한계가 남았다.
 
-아직 남기지 못한 관측값도 있다.
+첫째, 현재 일부 조회는 전체 개수를 먼저 받은 뒤 그 수를 `pageSize`로 보내 한 번에 가져온다. 데이터가 커지면 API 최대 크기를 넘을 수 있으므로 페이지 단위 조회와 안정 정렬이 필요하다.
 
-- 전체 항목 수와 유형별 항목 수
-- 직전 생성 대비 증감률
-- 데이터 소스별 요청 시간과 실패
-- 캐시 적중률과 원본 API 호출 수
-- 생성 시간, 50,000 URL 제한까지의 여유
+둘째, 개별 API 오류를 빈 배열로 바꾸면 일부 URL이 빠진 결과도 정상 사이트맵처럼 캐시된다. 어떤 데이터 소스의 실패까지 허용할지 정하고, 핵심 소스가 실패하면 이전 결과를 유지하거나 생성 자체를 실패시키는 정책이 필요하다.
 
-아직 이 값과 크롤링 변화를 측정하지 않았다. 확인된 성과는 공개 호출이 캐시 경계에 들어가도록 인증 기본값과 재검증 정책을 바꾼 데까지다.
+모든 항목에 생성 시각을 `lastModified`로 넣는 방식도 제거 대상이다. 사이트맵을 만든 시각은 콘텐츠 수정 시각이 아니다. API가 신뢰할 수 있는 수정 시각을 주는 항목에만 값을 넣고 나머지는 생략해야 한다.
 
-## 정리
-
-사이트맵에서 끝낸 변화는 공개 조회가 기본적으로 쿠키를 읽지 않게 만든 것과 `days` 재검증 정책을 명시한 것이다. 생성 시각 `lastModified`, `priority`, 전체 개수를 그대로 페이지 크기로 보내는 조회, 오류를 `[]`로 바꾸는 처리와 수동 XML 이스케이프는 여전히 남아 있다. 이 글은 캐시 가능한 경계를 만든 뒤 정확성과 관측성 부채를 확인한 기록이다.
+이번 작업에서 해결한 것은 공개 API가 암묵적으로 사용자 쿠키를 읽던 구조와 매 요청마다 같은 데이터를 수집하던 문제다. 사이트맵의 정확성까지 해결했다고 넓혀 말하지 않는다. 캐시 경계를 만든 뒤에야 대량 조회와 부분 실패가 별도의 문제로 선명하게 보였다.
 
 참고: [Next.js `use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache), [Next.js `cacheLife`](https://nextjs.org/docs/app/api-reference/functions/cacheLife), [Google 사이트맵 가이드](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
