@@ -104,7 +104,7 @@ window.opener.postMessage({ type: 'SOCIAL_CONNECT_CODE', code: '${code}', ... },
 
 수신처인 `src/app/api/logging/error/route.ts:91`은 인증·레이트리밋·크기 제한이 없는 공개 엔드포인트다. 액세스 토큰과 개인정보가 CloudWatch에 평문 적재된다.
 
-### 5. `'use server'` 쿠키 액션이 httpOnly를 무력화
+### 5. `'use server'` 쿠키 액션 — httpOnly가 이름뿐이다
 
 - `safedoc-react/packages/shared/utils/http/serverCookie.ts:7`
 - `safedoc-usermall/src/modules/shared/server-utils/cookies/cookie.ts:8`
@@ -113,9 +113,21 @@ window.opener.postMessage({ type: 'SOCIAL_CONNECT_CODE', code: '${code}', ... },
 
 **검증한 도달 경로**: `apps/safedoc-cms/src/modules/features/login/model/login.hook.tsx:52`가 클라이언트 모듈인데 `@safedoc/utils`에서 `setCookie`를 import한다. `cookie/cookie.ts`에는 `setCookie`가 없으므로 이는 `serverCookie.ts`로 해석된다 → 액션이 클라이언트 그래프에 포함되고 공개 액션 엔드포인트가 생성된다.
 
-결과적으로 accessToken을 httpOnly로 저장한 의미가 사라지고, **XSS 한 번이 곧바로 세션 토큰 탈취**로 이어진다. 위 3번 XSS와 결합하면 완전한 계정 탈취 체인이다.
+더 중요한 건 이게 우발적 유입이 아니라 **설계상 상시 호출**이라는 점이다. `packages/shared/utils/http/axiosInstance.ts:57`이 **매 요청 인터셉터에서** `getCookie('accessToken')`으로 토큰을 꺼내 Authorization 헤더를 만들고, 같은 파일 `:104`는 재발급을 위해 `refreshToken`까지 읽어 요청 바디에 담는다.
 
-**수정**: 임의 키를 받는 시그니처를 폐기하고, 허용된 쿠키 키만 다루는 목적별 액션으로 교체.
+즉 두 토큰 모두 브라우저 JS를 통과한다. 쿠키에 걸어둔 `httpOnly: true`(`packages/shared/utils/cookie/cookie.ts:19`)는 **표시만 남고 방어 효과가 없다.** 오히려 코드를 읽는 사람에게 "토큰은 JS에서 못 읽는다"는 잘못된 확신을 주고, 그 대가로 임의 키 쿠키 RPC라는 공개 엔드포인트가 하나 늘었다.
+
+위 3번 XSS와 결합하면 accessToken뿐 아니라 **refreshToken까지 반출**되어, 피해자가 탭을 닫은 뒤에도 재발급으로 세션이 유지되는 완전한 계정 탈취 체인이 된다. 3번을 먼저 막아야 하는 이유다.
+
+**수정 (범위를 좁힌 안)** — 토큰 저장 구조를 전면 개편하지 않고 refreshToken만 클라이언트에서 걷어낸다:
+
+1. `POST /api/auth/refresh` route handler 신설 — 쿠키에서 refreshToken을 읽어 백엔드를 호출하고, 새 토큰 두 개를 **서버에서** `Set-Cookie`로 심는다
+2. `axiosInstance.ts:104-115`의 재발급 블록을 `fetch('/api/auth/refresh', { method: 'POST' })`로 교체 — 바디 없음, 응답에서 accessToken만 받아 대기 큐에 넘긴다. `refreshSubscribers` 큐잉 로직은 그대로 둔다
+3. 로그인도 route handler로 옮기고, `serverCookie.ts`의 임의 키 시그니처를 무인자 `getAccessToken()` 하나로 교체
+
+이러면 refreshToken은 브라우저 JS에 노출되지 않는다. accessToken은 여전히 JS를 통과하지만 수명이 짧고, 애초에 XSS 상황에서 이만큼은 httpOnly로도 막지 못한다 — 공격자가 피해자 브라우저에서 그대로 인증된 요청을 보내면 되므로, httpOnly가 막는 것은 세션 *오남용*이 아니라 *반출*뿐이다. 변경 범위가 인터셉터 한 블록과 로그인 훅으로 국한되는 것이 이 안의 요점이다.
+
+accessToken까지 JS에서 걷어내려면 동일 오리진 프록시(BFF)로 가야 하는데, `createInstance`를 공유하는 네 앱의 인증 경계를 한꺼번에 건드리게 되므로 중기 과제로 분리한다.
 
 ### 6. MSW mock 백엔드가 프로덕션 번들에 포함
 
@@ -277,7 +289,7 @@ FSD의 Public API 규칙이 배럴을 요구하는데, 순환과 번들 비용�
 | 항목 | 효과 | 난이도 |
 |---|---|:--:|
 | CI에 typecheck + test 잡 추가 (3개 저장소) | 높음 | 중 |
-| `'use server'` 쿠키 액션 폐기 → 키 화이트리스트 전용 액션으로 교체 | 높음 | 중 |
+| refreshToken 재발급을 `/api/auth/refresh` route handler로 이관 + 임의 키 쿠키 액션 폐기 | 높음 | 중 |
 | 콜백 스크립트 생성기 단일화 (3중 복제 제거) | 높음 | 중 |
 | `NEXT_PUBLIC_` 시크릿 접두사 제거 | 중 | 하 |
 | Turnstile 서버 siteverify + 공개 엔드포인트 레이트리밋 | 중 | 중 |
@@ -288,7 +300,8 @@ FSD의 Public API 규칙이 배럴을 요구하는데, 순환과 번들 비용�
 - safedoc-cms의 `any` 135개 단계적 제거 (앱 단위 목표치 설정)
 - 인증·결제·예약 경로 유닛 테스트 도입 — global-cms의 21%를 벤치마크로
 - 에러 처리 정책 단일화 (`useHttpError` 재설계)
-- axios Server Action 왕복 제거, 예약 화면 워터폴 해소
+- 동일 오리진 프록시(BFF) 전환 — accessToken까지 JS에서 제거하고 axios의 Server Action 왕복 해소 (네 앱 인증 경계 동시 변경이라 단독 과제로 분리)
+- 예약 화면 워터폴 해소
 - 배럴 전략 재정립: 순환 차단 린트 + `sideEffects` 선언 + deep import 허용 여부 결정
 - 패키지 매니저 3종 · React 18/19 · Next 14/16 파편화 정리 로드맵
 
