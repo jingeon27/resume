@@ -1,5 +1,15 @@
 # Nextjs를 사용하면서 겪었던 이슈들
 
+<figure class="figure-wide">
+  <img src="../assets/covers/next-router-cache.jpg" alt="잘못된 캐시 슬롯으로 되돌아가는 경로와 서버 내비게이션, 클라이언트 Query, 브라우저 History를 분리한 URL 상태 구조" />
+  <figcaption>프로덕션 전용 캐시 회귀를 계기로 URL 상태의 소유권을 다시 나눴습니다</figcaption>
+</figure>
+
+<div class="note note-summary">
+  <strong>이 글에서 다루는 것</strong>
+  <p>개발 서버에서는 보이지 않던 Router Cache 회귀를 프로덕션 빌드에서 재현하고, 서버가 읽지 않는 조회 조건을 Query와 History API가 소유하도록 내비게이션을 다시 설계한 과정을 다룹니다.</p>
+</div>
+
 Nextjs를 사용하며, 관련된 문제를 세 번 만났습니다. 라우터 캐시, 프록시, 서버 액션에서 각각 문제가 생겼는데요. 원인은 달랐지만 대응 과정에서 서버나 프레임워크에 맡기던 일부 동작을 클라이언트로 옮겼습니다.
 
 각 수정은 당장 필요한 문제를 해결했지만, 비용은 나중에 다른 화면에서 드러났습니다.

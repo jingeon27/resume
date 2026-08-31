@@ -14,7 +14,7 @@
 
 - 제품 분석 이벤트 250개 중 **140개 이상** 직접 구현, 리뷰 조회 사용자의 예약 전환율이 **15%p** 높다는 상관관계를 찾아 실험 근거로 전달
 - 컨벤션 이탈을 계측해 타입 선언 **1,254건 중 379건(30%)** 이탈을 확인, 일괄 정리 후 ESLint로 고정해 이탈률 **1% 이하**로 유지
-- self-hosted Sentry 도입, 토큰·개인정보가 이벤트에 실리는 경로 3종을 SDK 내부 구현까지 추적해 차단
+- Sentry 도입, 토큰·개인정보가 이벤트에 실리는 경로 3종을 SDK 내부 구현까지 추적해 차단
 - B2B2C 앱 빌드 **4분 → 1분(75%)**, 타입 검사 **12.5초 → 1.9초(85%)**, E2E 콜드 실행 **3.5분 → 20초** 단축
 - 글로벌 사용자 서비스와 운영 CMS를 **3주 만에 출시**
 - Jira 티켓부터 stage 배포까지 잇는 AI-native 개발 워크플로 설계, 두 저장소에 동일 기준 적용
@@ -25,7 +25,7 @@
 - **Product** — B2B2C WebView, 글로벌 서비스, 운영 백오피스, 병원 어드민
 - **Frontend** — TypeScript, React 18·19, Next.js App Router, TanStack Query, Zustand, Zod
 - **Analytics** — Amplitude 이벤트 설계, 퍼널 분석, UTM 어트리뷰션
-- **Reliability** — Sentry(self-hosted, 수집 정책 설계), Web Vitals, CloudWatch, Error Boundary
+- **Reliability** — Sentry(도입, 레벨·PII 수집 정책 설계), Web Vitals, CloudWatch, Error Boundary
 - **Architecture** — FSD, ESLint 플러그인 개발, 타입 안전 폼, BFF(Route Handler), pnpm·Turborepo
 - **Quality** — Vitest, React Testing Library, MSW, Playwright, GitHub Actions
 - **Automation** — Claude Code(스킬·커맨드·서브에이전트), Codex, Jira·worktree·검증·PR 자동화
@@ -58,17 +58,17 @@
 
 **기간** · 2025.09 – 현재　 **역할** · 계측 설계·구현 담당 **주요성과** · 행동 이벤트 250개 중 140개 이상 구현, 리뷰 조회와 예약 전환율의 15%p 상관관계를 찾아 실험 근거로 전달 **스택** · Amplitude, Playwright
 
-- 마케팅팀이 쓰던 Amplitude 위에 복지몰 전반의 퍼널·행동 이벤트를 설계했습니다. 250개 규모 중 140개 이상을 직접 구현하고 검색·시술상세·예약의 이탈 지점과 쿠폰 적용 전후를 계측했습니다.
+- 복지몰 전반의 퍼널·행동 이벤트 250개 규모 중 140개 이상을 직접 구현했습니다. 검색·시술상세·예약의 이탈 지점과 쿠폰 적용 전후를 계측했습니다.
 - 시술상세 개편의 배포 전후를 이 계측으로 비교했습니다. 리뷰를 본 사용자의 예약 전환율이 15%p 높게 나왔고, 인과가 아닌 상관관계로 해석해 다음 실험의 근거로 남겼습니다.
 - 관심 진료과 선택, 룰렛 당첨, 선택 진료과가 반영된 탐색으로 이어지는 기간 한정 그로스 랜딩을 만들었습니다. 이벤트 7개와 모바일 E2E 15개로 참여·재진입·공유·CTA 흐름을 검증했습니다.
 - 신규 가입 UTM 유실을 가설을 하나씩 검증하며 추적해 Amplitude 속성 상태가 원인임을 찾았고, 코드 변경 없이 해결했습니다.
 
 #### 에러 처리·모니터링
 
-**기간** · 2026.08　 **역할** · 설계·구현·테스트 주도 **주요성과** · self-hosted Sentry 도입과 PII 수집 정책 설계, 전체 화면 장애를 구획 단위 폴백으로 전환하며 라우트 30개 화면 구성 통일로 1,000줄 이상 감소 **스택** · Sentry, React Error Boundary, TanStack Query, Zod, CloudWatch
+**기간** · 2026.08　 **역할** · 설계·구현·테스트 주도 **주요성과** · Sentry 도입과 PII 수집 정책 설계, 전체 화면 장애를 구획 단위 폴백으로 전환하며 라우트 30개 화면 구성 통일로 1,000줄 이상 감소 **스택** · Sentry, React Error Boundary, TanStack Query, Zod, CloudWatch
 
 - **문제** — 목록이나 상세의 일부 조회만 실패해도 앱 루트의 Error Boundary가 처리해 정상 구획까지 화면에서 사라졌고, 에러를 눈으로 확인할 관측 수단이 없었습니다.
-- **Sentry 도입** — self-hosted Sentry를 client·server·edge 세 런타임에 도입했습니다. sendDefaultPii: false가 요청 쿠키·헤더를 실제로는 빼주지 않는 것을 SDK 내부 구현에서 확인하고 dataCollection·breadcrumb·사용자 정의 context 각각의 노출 경로를 막았습니다. 의료 서비스라 이슈에 싣는 사용자 정보는 회원 id 하나로 제한했습니다.
+- **Sentry 도입** — Sentry를 client·server·edge 세 런타임에 도입했습니다. sendDefaultPii: false가 요청 쿠키·헤더를 실제로는 빼주지 않는 것을 SDK 내부 구현에서 확인하고 dataCollection·breadcrumb·사용자 정의 context 각각의 노출 경로를 막았습니다. 의료 서비스라 이슈에 싣는 사용자 정보는 회원 id 하나로 제한했습니다.
 - **수집 정책** — 에러 레벨을 화면 영향 기준으로 정했습니다(화면이 못 뜨면 fatal, 나머지는 요청 종류와 상태 코드 조합). 위치 조회 실패처럼 고칠 수 없는 잡음은 표본만 남기되, ignoreErrors가 Error가 아닌 모든 예외를 함께 지우는 문제를 피해 beforeSend에서 걸렀습니다.
 - **Web Vitals** — Web Vitals에서 메인 화면 JS 로드 구간이 길게 나와 pageload 워터폴을 확인했고, 뷰포트에 들어오기만 해도 발동하던 배너 링크 프리페치를 찾아 제거했습니다.
 - **부분 장애 허용** — Error Boundary 기준을 독립적으로 복구 가능한 사용자 기능으로 정하고, 12개 화면의 조회를 라우트에서 View 컴포넌트로 내려(68개 파일) 목록·상세·오버레이를 각각 감쌌습니다. 라우트 30개의 화면 구성을 통일해 1,000줄 이상 줄였습니다.

@@ -39,8 +39,9 @@
 | 27 | `post-27-error-boundary.md` | 전체 화면 장애에서 시작해 Zod 관측, 로그, 복구 단위와 철회한 componentStack 시도까지 시간순으로 재작성 |
 | 28 | `post-28-next-server-to-client.md` | Next.js 우회 세 가지를 해결 결과뿐 아니라 새로 생긴 비용과 철회 조건까지 포함해 정리 |
 | 29 | `post-29-eslint-rule-fixture.md` | 리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정 |
-| 30 | `post-30-sentry-pii-hardening.md` | Sentry 도입 후 닷새간 수집 정책을 좁힌 과정. `sendDefaultPii`와 `dataCollection`의 기준값, breadcrumb·사용자 정의 context의 노출 경로, 잡음 표본화와 로컬 전송 차단, pageload 트랜잭션으로 발견한 메인 배너 프리페치 제거 |
+| 30 | `post-30-sentry-pii-hardening.md` | Next.js Sentry를 client·server·edge에 도입하고, 사용자 영향 기반 에러 레벨·breadcrumb/URL/span PII 정화·Web Vitals envelope E2E·self-hosted MCP·릴리스와 소스맵 artifact까지 운영 가능한 흐름으로 연결한 과정 |
 | 32 | `post-32-convention-to-lint.md` | 컨벤션 문서와 lint의 이탈률 계측(문서만 20~38% vs lint 0건)에서 시작해 규칙을 lint로 옮긴 과정. 심각도 기준과 재선언·tsconfigRootDir 함정, post-29와 짝을 이루는 도입 편 |
+| 34 | `post-34-plan-gated-ai-workflow.md` | 작업에서 얻은 판단을 skill·테스트·lint에 환류한 Compound Engineering 과정. 사람이 Jira·Figma·UX 방향을 먼저 정리하고 plan을 승인한 뒤 구현·시각 비교·Critical 수정·검증·push를 자동화하며 코드 검토 범위를 점진적으로 줄인 흐름 |
 
 ## 발행 순서
 
