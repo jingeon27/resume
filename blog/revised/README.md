@@ -4,6 +4,51 @@
 
 이번에 추가로 손본 11·15·19·21·25번 글에서는 회사·제품·저장소·계정·실제 도메인을 생략하거나 역할 중심의 가명으로 바꿨다. 내부 경로·API·환경 변수·사용자 정의 식별자도 공개에 필요한 범위만 남겼으며, Next.js·React Hook Form 같은 공개 기술명은 그대로 썼다.
 
+## 시리즈 통일 기준 (2026-09-07 확정)
+
+8월 19일 리뷰가 지적한 문체·가명·호칭 편차를 여기서 정본으로 고정한다. 새 글과 개정본은 모두 이 표를 따른다.
+
+### 문체
+
+`article-template.md`대로 `~했어요`·`~였어요`·`~인데요`를 기본으로 쓴다. 모든 문장을 같은 어미로 맞추지 않고 짧은 단정과 질문을 섞는다. 코드 블록·인용문·표 셀은 예외다. 23·34·35·36번을 이 기준으로 맞췄고, 아직 평서체(`~했다`)나 합쇼체(`~습니다`)로 남은 글은 순차 전환한다.
+
+### 서비스·앱 호칭
+
+| 실제 대상 | 공개용 호칭 |
+| --- | --- |
+| 회원 대상 소비자 웹 | 소비자용 앱 |
+| 운영 도구 pnpm·Turborepo 저장소 | 운영 도구 모노레포(줄여서 운영 도구) |
+| 파트너사가 쓰는 관리 화면 | 파트너용 관리자 |
+| 사내 운영 백오피스 | 내부 CMS |
+| 해외 사용자용 서비스와 그 관리 화면 | 글로벌 서비스 |
+
+'병원', '복지몰', '쇼핑몰', '사용자 웹', '관리자 모노레포', '병원 CRM' 같은 기존 호칭은 쓰지 않는다. 도메인 식별자도 같은 원칙으로 중립화한다(`hospitalId` → `partnerId`, `hospital_filter` → `partner_filter`).
+
+### 가명
+
+| 대상 | 가명 |
+| --- | --- |
+| 공용 폼 훅(zodResolver 연결 + 화면 숨김 시 reset) | `useSchemaForm` |
+| 인증 토큰 쿠키 | `sessionToken` / `renewalToken` |
+
+`useZodForm`은 쓰지 않는다. reset 메커니즘의 상세 설명은 28번에만 두고 11번은 요약과 링크로 대체한다.
+
+### 글 한 편의 필수 요소
+
+1. 제목 바로 아래 `note-summary`
+2. 핵심 결정 지점에 `note-decision`
+3. 말미에 `note-limit`(측정하지 않은 것, 미머지 상태, 재현하지 못한 것)
+4. `## 참고` 섹션 — 공식 문서, 업스트림 이슈·PR, 관련 글
+
+`note` 클래스는 이 셋만 쓴다(`note-caution` 등 금지). 관련 글 링크는 `https://jingeon27.tistory.com/<번호>` 형식이고 번호는 파일명 숫자와 같다.
+
+### 사실 표기
+
+- 수치에는 산출 기준과 시점을 붙인다. 예: "핵심 이동 커밋 한 건 기준 853개 파일", "2026-09-07 develop 기준".
+- 브랜치에만 있는 작업은 완료형으로 쓰지 않고 진행 상태를 적는다.
+- 확인하지 못한 것은 "재현하지 못했어요"로 낮추고, 추정은 추정으로 쓴다.
+- 저장소마다 구현이 다르면 어느 저장소 사례인지 밝힌다.
+
 ## 이번 판단에서 바로잡은 부분
 
 - 11번 글은 서비스명과 내부 코드 식별자를 역할 중심의 가명으로 바꿨다. 예약 대상 선택 컴포넌트가 리팩터링 당시 519줄에서 55줄로 줄었다는 범위로 수치를 바로잡고, 가족 선택 기능 전체가 줄어든 것처럼 표현하지 않았다. 현재 구현에 없는 `mode: 'onChange'`와 `setValue`의 `shouldDirty`·`shouldValidate`가 적용된 것처럼 쓴 설명은 제거하고, 이를 남은 부채로 명시했다.
@@ -32,7 +77,7 @@
 | 20 | `post-20-chatbot-message-layer.md` | 두 SSE를 합친 사건을 중심으로 축약하고 과도한 단계 구분과 연출형 표현을 제거 |
 | 21 | `post-21-sitemap-cache.md` | 현재 인증·캐시 경계와 사이트맵에 남은 정확성 부채를 구분 |
 | 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤 |
-| 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 5레이어로 재정의하고, custom lint·page 간 참조 제거·shared 패키지 통합·서비스 횡단 E2E까지 연결한 FSD 마이그레이션 |
+| 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 다섯 레이어로 다시 정의하고, 옮긴 날 오후 드러난 page 간 참조 62건과 shared 패키지 통합, 정적 검사가 놓친 서버·클라이언트 경계 오류까지 시간순으로 정리. 두 저장소 모두 브랜치 진행 중임을 명시 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
 | 26 | `post-26-declarative-code.md` | Filter Chip 조합부터 compound·factory·skipToken·테스트 반복까지 실제 코드 선택 기준으로 전면 재작성 |
@@ -41,9 +86,9 @@
 | 29 | `post-29-eslint-rule-fixture.md` | 리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정 |
 | 30 | `post-30-sentry-pii-hardening.md` | Next.js Sentry를 client·server·edge에 도입하고, 사용자 영향 기반 에러 레벨·breadcrumb/URL/span PII 정화·Web Vitals envelope E2E·self-hosted MCP·릴리스와 소스맵 artifact까지 운영 가능한 흐름으로 연결한 과정 |
 | 32 | `post-32-convention-to-lint.md` | 컨벤션 문서와 lint의 이탈률 계측(문서만 20~38% vs lint 0건)에서 시작해 규칙을 lint로 옮긴 과정. 심각도 기준과 재선언·tsconfigRootDir 함정, post-29와 짝을 이루는 도입 편 |
-| 34 | `post-34-plan-gated-ai-workflow.md` | 4월부터 실제 작업에 맞춰 보강한 AI 개발 흐름. 요구사항 정리와 plan 승인, 실제 dev 환경·서비스 횡단 E2E를 종료 조건으로 삼고 반복 판단을 skill·lint·테스트에 남긴 과정 |
-| 35 | `post-35-zod-assertion-boundaries.md` | 모든 타입 단언을 Zod로 바꾸지 않고 값의 출처에 따라 타입 흐름 수정과 런타임 검증을 구분한 기준. API의 관측형 검증, URL의 필드별 복구, 폼 차단, 외부 값 좁히기와 로그→OpenAPI 대조→계약 테스트→PR 흐름을 포함 |
-| 36 | `post-36-sentry-bottom-sheet-crash.md` | Sentry의 관련 오류 그룹 두 개에서 23건·17명의 사용자 영향을 확인한 Bottom Sheet 드래그 크래시를 라이브러리 생명주기까지 추적하고, 제품 코드 26개 사용처의 API를 유지한 채 원인 경로를 제거한 과정 |
+| 34 | `post-34-plan-gated-ai-workflow.md` | 4월부터 실제 작업에 맞춰 보강한 AI 개발 흐름. plan 승인, 실제 화면·서비스 횡단 E2E를 종료 조건으로 삼고 반복 판단을 skill·lint·테스트에 남긴 과정. 리뷰어는 전부 보고하되 Critical이면 push를 멈추고 확인받는다는 실제 절차로 정정 |
+| 35 | `post-35-zod-assertion-boundaries.md` | 타입 단언을 걷어내다 폴백을 지워 정산 월별표를 깨뜨린 회귀에서 시작해, 값의 출처에 따라 관측·복구·차단·좁히기로 검증 정책을 나눈 기준. `.parse` 도입과 `consistent-type-assertions`를 같은 날 철회한 이력, 저장소별로 다른 구현을 구분해 서술 |
+| 36 | `post-36-sentry-bottom-sheet-crash.md` | Sentry에서 확인한 Bottom Sheet 드래그 크래시를 라이브러리 생명주기까지 추적하고, 공통 Root의 26개 사용처 API를 유지한 채 원인 경로가 사라진 버전으로 올린 과정. 크래시 트리거는 재현하지 못했음과 업스트림 이슈를 함께 표기 |
 
 ## 발행 순서
 

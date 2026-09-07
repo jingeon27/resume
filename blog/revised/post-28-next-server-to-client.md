@@ -180,7 +180,7 @@ Next는 이동할 때 이전 페이지를 언마운트하지 않고 React의 `<A
 폼마다 고치는 대신 공용 폼 훅 한 군데서 처리했습니다. 이 앱의 폼은 전부 이 훅을 지나거든요.
 
 ```ts
-export function useZodForm({ schema, ...props }) {
+export function useSchemaForm({ schema, ...props }) {
   const form = useForm({ ...props, resolver: zodResolver(schema) });
   const { reset } = form;
 
