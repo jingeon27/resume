@@ -1,141 +1,115 @@
-# FSD 2.1의 pages-first를 멀티앱 모노레포에 적용한 기준
+# FSD 폴더는 다 있었는데 새 파일을 어디에 둘지 설명하기 어려웠어요
 
-250개가 넘는 레거시 파일을 FSD 구조로 옮길 때 가장 오래 붙잡았던 질문은 “이게 feature인가 entity인가”였다. 폴더 이름을 먼저 정하려다 보니 한 화면에서만 쓰는 코드까지 공용 레이어로 올라갔다. FSD 2.1 문서를 다시 읽은 뒤 질문을 바꿨다.
+지난 8월 말에 소비자용 앱과 운영 도구 모노레포의 폴더 구조를 크게 바꿨어요. 두 프로젝트 모두 이미 FSD 형태를 갖추고 있었어요. `entities`, `features`, `widgets`, `pages`도 있었고 레이어 설명도 문서에 적혀 있었어요. 그런데 새 파일 하나를 추가하려고 하면 항상 같은 질문에서 막혔어요.
 
-> 지금 이 코드를 page 밖으로 꺼내야 할 이유가 생겼는가?
+> 이건 entity인가, feature인가?
 
-FSD 2.1은 처음부터 모든 레이어를 채우기보다 App, Pages, Shared로 시작하고 필요가 드러날 때 Widgets, Features, Entities를 추출하는 방향을 강조한다. 이 지연 분해 방향을 이하 pages-first라고 부른다. 한 번만 쓰는 기능을 도메인 이름만 보고 미리 entity나 feature로 만들면, 아직 굳지 않은 경계가 전역 의존성으로 남기 때문이다.
+초기에 제가 사용한 기준은 “여러 feature에서 재사용될 것 같은 도메인 코드”였어요. 이런 코드를 `entities`에 뒀는데요. 지금 돌아보면 재사용 가능성을 느낌으로 판단한 셈이에요. 같은 도메인의 API 타입은 `entities`에 있고 조회 훅은 `features`에 있거나, 표시용 UI가 `entities`와 `widgets`에 나뉘는 일이 생겼어요.
 
-내가 맡은 프로젝트는 CMS와 병원 관리자 두 앱이 같은 도메인을 사용하는 모노레포였다. 그래서 단일 앱의 pages-first를 그대로 복사하지 않고, **두 번째 사용처가 무엇인지**를 기준으로 다시 해석했다.
+운영 도구에서는 더 애매했어요. 조회와 변경, 폼, 화면 조합이 한 업무 안에서 같이 움직였어요. “도메인은 entity, 사용자 행동은 feature”라고 외워도 다음 파일을 어디에 둘지는 여전히 사람마다 달랐어요. 폴더는 많았지만 찾고 싶은 코드는 한 번에 나오지 않았어요.
 
-## 처음에는 page에 둔다
+## 그래서 entities를 빼보기로 했어요
 
-한 화면에서만 쓰고 요구사항도 계속 바뀌는 코드는 해당 앱의 page 가까이에 둔다.
+FSD 문서의 정의 자체가 문제라고 생각하지는 않아요. `entities`는 제품이 다루는 현실의 개념이고 `features`는 사용자가 수행하는 주요 상호작용이라는 설명은 이해하기 쉬워요. 다만 두 프로젝트는 서버가 정한 도메인을 프론트엔드에서 조회하고 보여주는 비중이 컸어요. 그 구조에서 API, 스키마, Query Options와 UI를 두 레이어로 나누자 얻는 것보다 찾는 비용이 더 컸어요.
+
+공식 문서에도 모든 레이어를 쓸 필요는 없고, 클라이언트 쪽 비즈니스 로직이 얇으면 `entities` 없이 구성할 수 있다는 내용이 있어요. 그래서 레이어를 다음과 같이 줄였어요.
 
 ```text
-apps/cms/src/app/coupon/template/
-├── page.tsx
+app → pages → widgets → features → shared
+```
+
+서버 도메인에 속한 API, 검증 스키마, Query Options, 상태와 UI는 `features`에 모았어요. `pages`는 한 화면의 인터랙션과 조합을 담당해요. 화면 구성이 JSX에서 바로 읽혀야 한다는 기준도 함께 세웠어요. 호출 순서나 상태 전이처럼 절차로 쓰는 것이 자연스러운 도메인 로직은 `features`에 남겼어요.
+
+`widgets`에는 여러 화면에서 독립적으로 성립하는 UI 블록만 두고, 도메인을 모르는 코드는 `shared`로 보냈어요. 라우팅과 Provider, SDK 초기화는 `app`의 몫으로 정리했어요.
+
+실제 이동은 기존 `features`를 `pages`로 먼저 비우는 것부터 시작했어요. 그다음 `entities`를 `features`로 옮겼어요. 순서를 반대로 하면 같은 이름의 슬라이스가 충돌했기 때문이에요. 이름이 겹친 배럴은 기존 export를 직접 합쳤어요.
+
+```text
+before
+entities  도메인이라고 판단한 일부 API·모델·UI
+features  사용자 행동이라고 판단한 일부 훅·폼·UI
+
+after
+features  서버 도메인 단위의 API·모델·스키마·도메인 UI
+pages     화면 단위의 인터랙션과 조합
+```
+
+소비자용 앱에서는 853개 파일, 운영 도구 모노레포에서는 1,659개 파일이 이 이동에 걸렸어요. 모노레포에서 바꾼 모듈 경로는 1,489건, 패키지 참조는 437건이었어요. 별칭 import만 찾아 바꿨다가 상대 경로 하나를 놓쳤고, 마지막 typecheck에서야 발견했어요. 경로를 많이 바꾼다고 검색 결과만 믿고 끝내면 안 되는 이유가 바로 나왔어요.
+
+## pages는 두 프로젝트에서 다르게 생겼어요
+
+소비자용 앱의 `pages`는 한 폴더를 한 화면으로 봤어요. URL을 그대로 복사하지 않고 화면의 역할을 보고 이름을 붙였어요. 라우트 그룹이나 버전 문자열처럼 실제 화면을 뜻하지 않는 경로는 모듈 폴더에 옮기지 않았어요. 하나의 화면을 여러 라우트에서 쓰는 것도 허용했어요.
+
+그 기준으로 파일을 옮겨 보니 화면과 부속 코드, 하위 화면이 폴더만 보고 구분되지 않았어요. 각 경로가 그리는 화면은 `@page` 안에서 slice를 구성하고, 그 아래 화면들이 함께 쓰는 코드만 `@common`에 두었어요.
+
+```text
+pages/catalog/search/
+├── @page/
+│   ├── SearchPage.tsx
+│   ├── ui/
+│   └── model/
+├── @common/
+│   ├── ui/
+│   └── model/
+├── keyword/
+│   └── @page/
+│       ├── KeywordPage.tsx
+│       └── ui/
+└── category/
+    └── @page/
+        ├── CategoryPage.tsx
+        └── ui/
+```
+
+`@page`와 `@common`은 이 프로젝트에서만 쓰는 이름이에요. 화면 전용 코드는 `@page` 안에 있고, 둘 이상의 화면이 실제로 공유하는 코드만 `@common`에 있다는 것을 폴더만 보고 알 수 있게 하려는 선택이었어요.
+
+운영 도구는 사정이 달랐어요. 메뉴와 URL을 기준으로 화면을 찾는 일이 많아 `pages` 경로도 URL과 맞추는 편이 편했어요. 처음에는 이를 강한 규칙처럼 적용했는데, URL 모양을 지키기 위한 얇은 폴더가 계속 생겼어요. 이후 URL 일치는 기본값으로 낮췄어요. 같은 완성 화면을 다른 URL에서 열 수도 있어 lint로 강제하지 않았어요.
+
+이 과정에서 `widgets`도 다시 봤어요. 한 화면에서만 쓰는 조각은 해당 page로, 여러 화면이 쓰는 도메인 UI는 feature로 옮겼어요. SDK 초기화처럼 UI 블록이 아닌 코드는 app으로 갔어요. 소비자용 앱에는 전역 내비게이션처럼 화면 밖에 계속 붙어 있는 블록만 widget으로 남았어요.
+
+## 구조를 옮기자 page 간 import 62건이 드러났어요
+
+레이어를 옮기고 나니 그동안 숨어 있던 page 간 직접 import가 62건 드러났어요. 같은 도메인 컴포넌트를 두 화면이 함께 쓰면서 한 page가 다른 page의 파일을 가져오는 경우가 대부분이었어요.
+
+지도, 배너, 약관처럼 도메인을 알고 있는 공용 UI는 각 도메인의 `features/{domain}/ui`로 내렸어요. 한 화면에서만 쓰는 코드는 page 안에 남겼어요. 처음부터 62건을 모두 error로 만들지는 않았어요. `fsd/no-cross-page`를 warning으로 켜고 위치를 하나씩 정리한 뒤, 남은 참조가 0건이 됐을 때 error로 올렸어요.
+
+레이어 import 방향과 다른 슬라이스 내부를 직접 가져오는 deep import도 custom ESLint 규칙으로 막았어요. 반면 컴포넌트가 화면 조각인지 도메인 UI인지까지 lint가 추측하게 하지는 않았어요. URL과 page 폴더를 맞추는 문제도 마찬가지였어요. 코드를 읽어야 판단할 수 있는 영역까지 자동화하면 오탐을 피하려고 더 이상한 폴더를 만들게 돼요. 합의가 끝난 의존 방향만 lint가 지키도록 했어요.
+
+## shared를 나눈 패키지가 오히려 서로를 참조하고 있었어요
+
+운영 도구 모노레포의 `ui`, `hooks`, `utils`, `types`는 각각 별도 workspace 패키지였어요. 모두 shared 레이어인데 `ui → hooks → utils → types` 순서로 패키지끼리 의존했고, 사용하는 파일에는 import 네 줄이 반복됐어요.
+
+이들을 shared 패키지 하나로 합치고 내부 세그먼트로 바꿨어요. 다만 cookie와 환경 변수, 서버 전용 코드는 별도 entrypoint로 남겼어요. 공용 배럴을 그대로 쓰면 브라우저나 서버 의존성이 Edge 번들까지 들어올 수 있었기 때문이에요.
+
+```text
+packages/shared/src/
 ├── ui/
-└── model/
+├── hooks/
+├── utils/
+└── types/
+
+@app/shared
+@app/shared/cookie
+@app/shared/env
+@app/shared/server
 ```
 
-page에서 시작하면 화면을 만드는 동안 바뀌는 모델과 UI를 한곳에서 고칠 수 있다. 이름이 `coupon`이라는 이유만으로 바로 `packages/entities/coupon`을 만들지 않는다.
+패키지를 합치다가 테스트 환경 문제도 찾았어요. DOM을 쓰지 않는 Node 테스트 11개가 전부 jsdom에서 실행되고 있었어요. Node와 DOM 프로젝트를 나누자 이 테스트들이 633초에서 8초로 줄었고, 환경 때문에 깨지던 테스트 3개도 정상화됐어요. 아키텍처 변경이 곧바로 테스트 성능을 올린 것은 아니에요. 패키지를 합치면서 이전 경계 뒤에 가려져 있던 실행 환경 차이가 드러난 결과였어요.
 
-다음과 같은 신호가 생겼을 때만 아래 레이어나 공유 package를 검토했다.
+## 정적 검사가 전부 성공한 뒤에도 네 건이 더 나왔어요
 
-- 같은 app의 다른 page에서 같은 사용자 행위를 다시 사용한다.
-- 두 app이 같은 API model이나 읽기 UI를 사용한다.
-- page 안에서 서로 다른 이유로 바뀌는 코드가 충돌하기 시작한다.
+레이어 이동을 마쳤을 때 typecheck와 ESLint, Vitest는 모두 성공했어요. 그래도 소비자용 앱의 주요 라우트 28개를 실제 개발 서버에서 열어봤어요. 여기서 서버·클라이언트 경계 오류 4건이 나왔어요.
 
-## 모노레포에서는 다른 앱도 재사용 근거가 된다
+클라이언트 훅이 슬라이스 배럴과 최상위 pages 배럴을 거쳐 서버 컴포넌트 그래프에 들어간 것이 원인이었어요. 필요한 모듈에 `'use client'`를 붙이고 내부에서만 쓰는 훅은 Public API에서 뺐어요. 세 정적 검사가 전부 지나친 문제였어요.
 
-CMS와 병원 관리자가 같은 예약·프로그램·쿠폰 API 모델을 실제로 사용한다면 공유할 근거가 생긴다. 한 앱의 page를 다른 앱이 직접 import하지 않고, 어느 앱에도 속하지 않는 패키지로 옮겼다.
+한 앱에서 끝나지 않는 업무 흐름은 별도 E2E로 확인했어요. 파트너용 관리자에서 프로그램을 등록해 검수 요청을 만들고, 그 요청이 내부 CMS 목록에 나타난 뒤 반려 사유가 저장될 때까지 실제 dev API로 한 사이클을 돌았어요.
 
-```text
-packages/
-├── entities/
-│   ├── reservation/
-│   ├── program/
-│   └── coupon/
-├── features/
-│   └── treatment-history/
-└── shared/
-    ├── ui/
-    └── utils/
+Playwright 설정에서 두 dev 서버를 함께 띄웠고 로그인 쿠키가 섞이지 않도록 브라우저 context를 나눴어요. 마지막 검증도 화면에 원래 있던 “반려” 글자를 찾는 것으로 끝내지 않았어요. 이번 테스트에서 입력한 고유한 반려 사유가 상세 화면에 다시 나타나야 성공하도록 했어요. 그래야 클릭과 화면 이동이 아니라 두 서비스 사이의 상태 변경이 끝났다고 볼 수 있었어요.
 
-apps/
-├── cms/
-│   └── src/modules/
-└── hospital-admin/
-    └── src/modules/
-```
+이 E2E가 FSD 폴더를 검사하는 것은 아니에요. 공용 feature와 각 앱의 page를 크게 옮긴 뒤에도 실제 업무가 끊기지 않는지를 확인하는 종료 조건이었어요.
 
-여기서 package에 있다는 사실과 FSD 레이어는 같은 개념이 아니다.
+처음 세운 구조가 그대로 남은 것도 아니에요. 운영 도구에서는 URL을 너무 충실히 따라 생긴 폴더 깊이를 다시 줄였고, 소비자용 앱에서는 화면과 부속 코드가 헷갈려 `@page`와 `@common`을 추가했어요. 전체 파일을 실제로 옮겨 보고 나서야 문서만 읽을 때 보이지 않던 반례를 찾을 수 있었어요.
 
-- `packages/entities`: 두 앱이 공유하는 도메인 모델, API, 표현 UI
-- `packages/features`: 두 app이 공유하는 사용자 행위
-- 각 app의 `modules`: 한 app에서만 쓰는 entity, feature, widget
-- `packages/shared`: domain을 모르는 UI와 utility
+지금은 서버 도메인의 API와 모델, UI를 feature에서 찾고 한 화면을 조합하는 코드를 page에서 찾아요. 두 page가 같은 도메인 UI를 쓰기 시작하면 page끼리 연결하지 않고 feature로 내려요. 표준 레이어를 모두 유지하는 것보다 다음 파일을 어디서 찾아야 하는지 설명할 수 있는 구조가 이 코드베이스에는 더 필요했어요.
 
-나중에 공유할 가능성이 아니라 **현재 두 앱에서 함께 사용하는가**를 패키지로 올리는 기준으로 삼았다.
-
-## 폼이라고 모두 feature로 옮기지는 않는다
-
-초기에는 form을 "사용자 행위"라고 보고 모두 feature에 두려 했다. 하지만 FSD 2.1의 지연 분해 기준으로 보면 form이라는 기술 형태만으로 위치가 정해지지 않는다.
-
-- 한 page에서만 쓰는 등록 form은 page에 남을 수 있다.
-- 같은 사용자 행위를 여러 page가 재사용하면 feature로 추출한다.
-- 서버 DTO와 검증 스키마처럼 도메인 모델에 가까운 부분은 entity에 둘 수 있다.
-- 여러 app이 공유하는 FormItem이라도 제출 흐름이 다르면 UI 재료만 공유하고 orchestration은 app에 남긴다.
-
-예를 들어 프로그램 폼은 공통 필드와 타입이 지정된 FormItem을 패키지에서 공유한다. CMS의 직접 수정과 병원 관리자의 검수 요청은 각 앱의 feature에 남겼다.
-
-```text
-packages/entities/program       API type, query option
-packages/features/program       공통 FormItem, form helper
-apps/cms/.../program            CMS 제출 흐름
-apps/hospital-admin/.../program 병원 검수 흐름
-```
-
-공통 FormItem과 폼 함수를 `entities`가 아니라 `packages/features/program`에 둔 이유는 프로그램을 등록하고 수정하는 입력 UI에 가깝다고 봤기 때문이다. 제출 순서는 각 앱의 feature에 남겨 UI 재료만 공유했다.
-
-같은 화면처럼 보여도 생명주기가 다른 동작까지 억지로 공유하지 않았다.
-
-## entity 안에서도 필요한 파일부터 둔다
-
-공유가 증명돼 `entities`로 옮겼다고 바로 하위 domain을 여러 개 만들지는 않았다.
-
-```text
-entities/settlement/
-├── api/
-├── model/
-├── ui/
-└── index.ts
-```
-
-파일이 늘고 서로 다른 업무 흐름이 충돌하기 시작한 뒤에만 group을 도입했다.
-
-```text
-entities/settlement/
-├── common/
-├── contract/
-├── deposit/
-└── omission/
-```
-
-FSD 2.1의 slice groups는 관련 slice를 가까이 두는 탐색 장치다. 같은 group 안의 slice가 서로 자유롭게 import해도 된다는 뜻은 아니다. 그래서 group은 폴더가 많다는 이유보다 독립된 업무 흐름이 반복해서 드러났을 때 사용했다.
-
-## Shared에는 도메인 규칙을 넣지 않는다
-
-`shared`는 모든 레이어에서 접근할 수 있어 위치가 애매한 코드를 넣기 쉽다. TypeScript import가 없더라도 도메인 이벤트 이름과 파라미터를 알고 있다면 의미상의 의존성은 이미 생긴다.
-
-```ts
-// shared가 맡을 수 있는 것
-interface AnalyticsAdapter {
-  track(name: string, properties: Record<string, unknown>): void;
-  identify(userId: string): void;
-  reset(): void;
-}
-```
-
-외부 SDK 래퍼와 전송 규약은 Shared에 둘 수 있다. 반면 `reservation_created`, `coupon_applied` 같은 이벤트 목록과 로그인 전후의 사용자 식별 정책, queue의 소유권은 앱이나 해당 도메인에서 결정한다. 어디서든 호출한다는 이유만으로 Shared가 모든 이벤트를 알게 하지는 않는다.
-
-FSD가 분석 도구의 초기화 순서나 queue 정책까지 정해주지는 않는다. FSD는 import 경계를 다루고, 여러 영역에 걸친 런타임 동작은 별도로 설계해야 한다.
-
-## 내가 정한 판단 순서
-
-새 코드를 배치할 때 다음 순서로 판단한다.
-
-1. 지금 한 page에서만 쓰는가? 그렇다면 page에서 시작한다.
-2. 같은 app의 여러 page가 같은 행위를 쓰는가? feature 또는 widget 추출을 검토한다.
-3. 두 앱이 같은 도메인 모델을 실제로 쓰는가? 공유 패키지의 entity로 올린다.
-4. 두 app의 동작과 생명주기까지 같은가? 같을 때만 feature를 공유한다.
-5. domain을 전혀 모르는가? 그때만 Shared 후보가 된다.
-
-이 순서는 "entity를 만들지 말라"도 아니고 "모노레포니까 미리 package로 빼라"도 아니다. 추상화의 비용을 지불할 사용처가 이미 있는지를 확인하는 절차다.
-
-FSD 2.1에서 가져온 것은 새로운 폴더 이름이 아니라 분리를 늦추는 기본값이었다. 한 앱에서는 두 번째 페이지가, 모노레포에서는 두 번째 앱이 공유의 근거가 된다. 공통 도메인 모델은 package로 올리되 제출 흐름처럼 앱마다 다른 동작은 가까운 곳에 남겼다.
-
-그 뒤로 코드 위치를 논의할 때 “feature인가 entity인가”부터 묻지 않는다. 지금 실제로 누가 재사용하는지, 함께 바뀌는지부터 확인한다. 이 두 질문에 답하지 못하면 우선 페이지에 둔다.
-
-참고: [FSD Layers](https://feature-sliced.design/docs/reference/layers), [Excessive entities](https://feature-sliced.design/docs/guides/issues/excessive-entities), [Slice groups](https://feature-sliced.design/docs/reference/slice-groups)
+참고: [FSD Layers](https://feature-sliced.design/docs/reference/layers), [Excessive Entities](https://feature-sliced.design/docs/guides/issues/excessive-entities), [Public API](https://feature-sliced.design/docs/reference/public-api)

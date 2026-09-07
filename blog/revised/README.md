@@ -32,7 +32,7 @@
 | 20 | `post-20-chatbot-message-layer.md` | 두 SSE를 합친 사건을 중심으로 축약하고 과도한 단계 구분과 연출형 표현을 제거 |
 | 21 | `post-21-sitemap-cache.md` | 현재 인증·캐시 경계와 사이트맵에 남은 정확성 부채를 구분 |
 | 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤 |
-| 23 | `post-23-fsd-2-1.md` | 공식 원칙과 개인 적용 기준을 분리하고 축약 |
+| 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 5레이어로 재정의하고, custom lint·page 간 참조 제거·shared 패키지 통합·서비스 횡단 E2E까지 연결한 FSD 마이그레이션 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
 | 26 | `post-26-declarative-code.md` | Filter Chip 조합부터 compound·factory·skipToken·테스트 반복까지 실제 코드 선택 기준으로 전면 재작성 |
@@ -41,7 +41,9 @@
 | 29 | `post-29-eslint-rule-fixture.md` | 리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정 |
 | 30 | `post-30-sentry-pii-hardening.md` | Next.js Sentry를 client·server·edge에 도입하고, 사용자 영향 기반 에러 레벨·breadcrumb/URL/span PII 정화·Web Vitals envelope E2E·self-hosted MCP·릴리스와 소스맵 artifact까지 운영 가능한 흐름으로 연결한 과정 |
 | 32 | `post-32-convention-to-lint.md` | 컨벤션 문서와 lint의 이탈률 계측(문서만 20~38% vs lint 0건)에서 시작해 규칙을 lint로 옮긴 과정. 심각도 기준과 재선언·tsconfigRootDir 함정, post-29와 짝을 이루는 도입 편 |
-| 34 | `post-34-plan-gated-ai-workflow.md` | 작업에서 얻은 판단을 skill·테스트·lint에 환류한 Compound Engineering 과정. 사람이 Jira·Figma·UX 방향을 먼저 정리하고 plan을 승인한 뒤 구현·시각 비교·Critical 수정·검증·push를 자동화하며 코드 검토 범위를 점진적으로 줄인 흐름 |
+| 34 | `post-34-plan-gated-ai-workflow.md` | 4월부터 실제 작업에 맞춰 보강한 AI 개발 흐름. 요구사항 정리와 plan 승인, 실제 dev 환경·서비스 횡단 E2E를 종료 조건으로 삼고 반복 판단을 skill·lint·테스트에 남긴 과정 |
+| 35 | `post-35-zod-assertion-boundaries.md` | 모든 타입 단언을 Zod로 바꾸지 않고 값의 출처에 따라 타입 흐름 수정과 런타임 검증을 구분한 기준. API의 관측형 검증, URL의 필드별 복구, 폼 차단, 외부 값 좁히기와 로그→OpenAPI 대조→계약 테스트→PR 흐름을 포함 |
+| 36 | `post-36-sentry-bottom-sheet-crash.md` | Sentry의 관련 오류 그룹 두 개에서 23건·17명의 사용자 영향을 확인한 Bottom Sheet 드래그 크래시를 라이브러리 생명주기까지 추적하고, 제품 코드 26개 사용처의 API를 유지한 채 원인 경로를 제거한 과정 |
 
 ## 발행 순서
 
