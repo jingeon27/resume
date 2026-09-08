@@ -6,7 +6,7 @@
 
 ---
 
-## 0. 배경 — 왜 정산만 다른 호스트인가
+## 배경: 왜 정산만 다른 호스트인가
 
 세이프닥 병원 어드민(`safedoc-hospital-admin`)은 병원정보·프로그램·예약·정산을 한 앱에서 다룬다.
 이 중 **정산 도메인**은 권한 체계와 감사(audit) 요구가 나머지 기능과 달라서, 운영상 **별도 호스트**로 떼어내야 했다.
@@ -54,7 +54,7 @@ export function middleware(request: NextRequest) {
 
 ---
 
-## 1. 진짜 문제 — 두 호스트는 쿠키를 공유하지 못한다
+## 진짜 문제: 두 호스트는 쿠키를 공유하지 못한다
 
 세이프닥은 토큰을 **HttpOnly 쿠키**로 들고 있다. `accessToken` / `refreshToken`을 서버 쿠키로 심고, axios interceptor가 매 요청에 `Authorization` 헤더로 실어 보낸다.
 
@@ -76,7 +76,7 @@ export const DEFAULT_COOKIE_OPTIONS: CookieOptions = {
 
 ---
 
-## 2. 1단계 — URL 쿼리스트링 토큰 전달 (처음 제안받은 방식)
+## 1단계: URL 쿼리스트링 토큰 전달 (처음 제안받은 방식)
 
 처음 **제안받은 방식**은 토큰을 **URL `searchParams`에 주입**해 넘기는 것이었다.
 구조는 **미들웨어 2-hop redirect + URL 쿼리스트링**이다.
@@ -130,7 +130,7 @@ if (request.nextUrl.pathname.startsWith('/settlement')) {
 
 ---
 
-## 3. 2단계 — form POST BFF로 전환 (토큰을 body로)
+## 2단계: form POST BFF로 전환 (토큰을 body로)
 
 핵심 아이디어는 **토큰을 URL 쿼리가 아니라 POST body로 옮기는 것**이다.
 GET redirect로는 body를 못 실으니, **auto-submit HTML form**을 끼워 넣는다.
@@ -168,7 +168,7 @@ export async function POST(req: NextRequest) {
 
 ---
 
-## 4. 3단계 — BFF 보안 가드 (login-CSRF 방어)
+## 3단계: BFF 보안 가드 (login-CSRF 방어)
 
 남의 사이트에 토큰을 받는 POST 엔드포인트를 열어두는 건 그 자체로 위험하다.
 공격자가 임의의 토큰을 우리 BFF에 POST 하면, 사용자를 **공격자 계정으로 로그인시키는 login-CSRF**가 가능하다.
@@ -183,7 +183,7 @@ export async function POST(req: NextRequest) {
 
 ---
 
-## 5. 4단계 — handoff 라우트로 책임 분리
+## 4단계: handoff 라우트로 책임 분리
 
 2~3단계에서 미들웨어는 **도메인 라우팅 + form HTML 생성 + 토큰 읽기**를 다 떠안고 있었다.
 미들웨어는 모든 요청을 거치는 edge 레이어라, 여기에 토큰 핸들링·HTML 생성 로직이 섞이는 건 책임 과부하다.
@@ -206,7 +206,7 @@ const openSettlement = (args: { key: string }) => {
 
 ---
 
-## 6. 5단계 — handoff 보안 강화 (open redirect + clickjacking 방어)
+## 5단계: handoff 보안 강화 (open redirect + clickjacking 방어)
 
 마지막으로 handoff 라우트 자체를 조였다.
 
@@ -258,7 +258,7 @@ return new NextResponse(html, {
 
 ---
 
-## 7. 현재 아키텍처 — 전체 흐름과 토큰 "구독" 방식
+## 현재 아키텍처: 전체 흐름과 토큰 "구독" 방식
 
 지금의 핸드오프 전체 흐름은 이렇다.
 
@@ -331,7 +331,7 @@ if (isRefreshing) {
 
 ---
 
-## 8. 제약 조건 — 왜 "정석"으로 안 갔나
+## 제약 조건: 왜 "정석"으로 안 갔나
 
 크로스 도메인 토큰 위임의 교과서적 정답은 **OAuth-style 인가 코드 교환**이다.
 일회용 `code`만 프론트로 넘기고, 정산 호스트가 그 `code`를 **백채널(서버-서버)로 토큰과 교환**한다. 토큰 자체는 절대 브라우저를 타지 않는다.

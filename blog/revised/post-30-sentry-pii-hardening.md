@@ -1,4 +1,4 @@
-# Sentry 도입기 — 에러 수집과 Web Vitals·MCP·릴리스까지
+# Sentry로 에러 수집부터 Web Vitals·MCP·릴리스까지 연결한 과정
 
 <figure class="figure-wide">
   <img src="../assets/covers/sentry-observability.jpg" alt="클라이언트, 서버, Edge의 trace에서 반복 호출을 발견하고 개인정보를 거른 뒤 이슈로 정리하는 관측 구조" />

@@ -39,7 +39,7 @@ FSD(Feature-Sliced Design)를 실무에 적용해본 사람이라면 한 번쯤 
 
 이름표를 FSD 기준으로 정리하면, 내가 "서버 모델"이라 부르던 레이어는 결국 **FSD의 `entities`**에 해당한다. 그리고 큰 도메인의 응집도를 유지하려고 도입했던 **서브도메인** 개념 — 비슷한 레벨의 코드를 한곳에 뭉쳐두는 그 패턴이, 알고 보니 2.1에 [**slice groups**](https://feature-sliced.design/docs/reference/slice-groups)라는 이름으로 이미 있었다. *"A slice group places related slices close together within the same layer, making the structure easier to navigate."* 다만 slice groups는 **근접성만** 풀어준다. *"Each slice remains independent even when it belongs to a slice group"* — 같은 그룹이어도 결합도는 그대로다.
 
-## 실전 배치 ① — API endpoint는 shared냐 entities냐
+## 실전 배치 ①: API endpoint는 shared냐 entities냐
 
 여기서 문서가 두 군데서 다른 말을 하는 것처럼 보인다. 인용 둘을 나란히 놓으면 정리된다.
 
@@ -61,7 +61,7 @@ FSD(Feature-Sliced Design)를 실무에 적용해본 사람이라면 한 번쯤 
 
 > **정직하게:** endpoint+zod가 entities라는 건 layers 문서 근거가 있다. query·mutation의 *배치*도 공식 가이드가 있다 — [Usage with React Query](https://feature-sliced.design/docs/guides/tech/with-react-query)가 `shared/api/queries`(소규모) / controller별 분리(대규모) / `entities/[entity]/api`(엔티티 기반) 세 갈래를 제시한다. 다만 **"어떤 mutation이 어떤 query를 invalidate하는가"라는 관계를 어디 두느냐**는 이 가이드도 다루지 않는다. 그 부분부터는 문서가 아니라 **내 해석**이다.
 
-## 실전 배치 ② — queryOptions·mutation과 `@x`의 무게
+## 실전 배치 ②: queryOptions·mutation과 `@x`의 무게
 
 `queryOptions`와 mutation hook은 **"어떤 mutation이 어떤 query를 invalidate하는가"**라는 도메인 관계를 품는다. 그건 boilerplate가 아니라 도메인 지식이므로 `entities/[도메인]/model`에 둔다. 그리고 이 배치가 FSD의 아픈 지점 하나를 풀어준다.
 
@@ -69,7 +69,7 @@ FSD(Feature-Sliced Design)를 실무에 적용해본 사람이라면 한 번쯤 
 
 **해법은 colocation이다.** query와 mutation을 **같은 entity 슬라이스 안에** 두면, mutation이 같은 슬라이스의 query를 invalidate하니 크로스임포트 자체가 안 생긴다. `@x`는 `entities/reservation`의 mutation이 `entities/family`의 query를 건드릴 때 — **도메인을 넘을 때만** 쓰면 되고, 그게 정확히 `@x`의 설계 용도다. 배치를 제대로 하면 "일상 결합에 @x가 무겁다"는 문제가 대부분 사라진다. 마침 [React Query 가이드](https://feature-sliced.design/docs/guides/tech/with-react-query)도 *"If the project already has a division into entities... the cleanest approach is to split by entity"* — 엔티티별로 묶는 게 가장 깔끔하다며 같은 방향을 가리킨다.
 
-## 실전 배치 ③ — form은 클라이언트 모델, features의 몫
+## 실전 배치 ③: form은 클라이언트 모델, features의 몫
 
 폼을 어디 둘지 고민하다 보면 "서버 모델과 클라이언트 모델이 한 파일에 섞이는" 어색함을 만난다. 그 어색함이 정답 신호다 — **둘을 레이어로 가르면 된다.**
 
@@ -78,11 +78,11 @@ FSD(Feature-Sliced Design)를 실무에 적용해본 사람이라면 한 번쯤 
 
 form은 "사용자가 하는 행위"라 features의 영역이다. 폼 스키마·RHF·제출 핸들러가 features에 살고, **제출 시 entities의 mutation hook을 호출**한다(features → entities, 하향 참조라 합법). UI도 갈린다: 서버모델을 **읽어서 보여주기만** 하는 표현형은 `entities/[x]/ui`, **인터랙션**이 있으면 `features`. 전부 features에 몰면 features가 서버모델 정의까지 떠안아 다시 섞인다.
 
-## 그리고 진짜 어려운 것 — 횡단 관심사
+## 그리고 진짜 어려운 것: 횡단 관심사
 
 여기까지는 "어디 두나"가 다 풀린다. 끝까지 남는 건 **레이어를 가로지르는 횡단 관심사(cross-cutting concern)**다. logging, analytics, 인증, 에러 트래킹처럼 어느 한 레이어에 "속한다"고 말하기 어려운 것들.
 
-### auth를 예로 — 문서 예제가 함정이다
+### auth 문서 예제에서 주의할 점
 
 문서는 간단히 말한다. [excessive-entities](https://feature-sliced.design/docs/guides/issues/excessive-entities)는 *"Prefer `shared` layer to creating a `user` entity for authentication data, such as tokens or user DTOs returned from the backend"* — 토큰이든 백엔드가 준 user DTO든, `user` 엔티티를 만들지 말고 `shared`에 두라고 권한다. `shared`는 모든 레이어가 import할 수 있으니 자연스러워 보인다.
 
@@ -106,7 +106,7 @@ form은 "사용자가 하는 행위"라 features의 영역이다. 폼 스키마�
 - **주입점이 하나로 모이면** — 예: analytics의 `identify`. app에서 한 번 꿰면 끝. **깔끔하게 풀린다.**
 - **주입점이 흩어지면** — 예: "어떤 도메인 에러든 → 도메인별 토스트 메시지". 에러 종류마다 매핑이 달라 app 한 곳에 못 모으고 feature마다 번진다. **FSD가 1급으로 안 풀어주는 진짜 구멍.**
 
-## 케이스 스터디 — analytics를 아키텍처로 관리하기
+## 케이스 스터디: analytics를 아키텍처로 관리하기
 
 analytics는 "주입점이 init 한 곳으로 모이는" 경우라 풀리는 쪽에 속한다. 다만 init 순서·큐잉·이벤트 카탈로그 같은 **본연의 복잡도**가 있어서, 그걸 어떻게 *가둬* 관리하느냐가 관건이다.
 
@@ -160,7 +160,7 @@ analytics.track("reservation_created", { reservationId });  // 타입드, 로컬
 - **도메인 주입** → `app`에서 `setUserProperties` 한 번. shared는 `Props`를 opaque하게 받아 도메인 지식이 새지 않는다.
 - **원칙 준수** → 이벤트는 전부 하향 import(어느 레이어 → shared), 파라미터는 primitive(id·count)라 shared가 entities의 타입을 import하지 않는다. 남는 건 이벤트 *이름*이 도메인 어휘라는 것 정도 — 그마저 싫다면 declaration merging으로 `EventMap`을 각 도메인 쪽에서 augment해 분산 정의할 수도 있지만, 중앙 카탈로그가 주는 한눈 파악이 더 커서 그대로 뒀다.
 
-## 그래서 — 좋은 아키텍처는 복잡도를 없애지 않는다, 가둔다
+## 좋은 아키텍처는 복잡도를 없애지 않고 가둔다
 
 여기서 마지막 질문이 남는다. *"이런 복잡도마저 아키텍처가 관리해줘야 좋은 아키텍처 아닌가? 고려할 게 이렇게 많은 게 별로 아닌가?"* 절반은 맞고 절반은 아니다.
 

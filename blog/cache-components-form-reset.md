@@ -1,4 +1,4 @@
-# 폼 초기화를 고쳤더니 빈 폼이 됐다 — Cache Components 가 드러낸 상태 소유권
+# 폼 초기화를 고쳤더니 빈 폼이 됐다: Cache Components 가 드러낸 상태 소유권
 
 복지몰 서비스의 예약 신청 화면에서 "재진입하면 폼이 초기화되지 않는다"는 버그를 맡았다. Next 16 위에서 돌고 `cacheComponents` 가 켜져 있다.
 
@@ -90,7 +90,7 @@ const activeStateKey = createRouterCacheKey(activeSegment, true); // no search p
 
 같은 pathname 에 다른 쿼리로 들어가면 같은 Activity 경계다. 예약 신청 화면은 대상 프로그램을 쿼리로 받으므로, **다른 시술을 골라 들어가도 앞서 쓰던 입력이 그대로 보인다.** 뒤에 나오는 데이터 게이트가 이 축까지 같이 막는다.
 
-## 첫 수정 — 방향은 맞고 시점이 틀렸다
+## 첫 수정: 방향은 맞고 시점이 틀렸다
 
 기존 코드는 폼 훅에 이렇게 들어가 있었다.
 

@@ -1,4 +1,4 @@
-# 못 건드리는 두 외부 백엔드 위에 챗봇 얹기 — 메시지 레이어를 다섯 번 갈아엎은 기록
+# 못 건드리는 두 외부 백엔드 위에 챗봇 얹기: 메시지 레이어를 다섯 번 갈아엎은 기록
 
 우리 서비스(쇼핑몰)에 AI 상담 챗봇을 붙이는 일을 했다. 그런데 챗봇이 쓰는 백엔드는 우리(프론트) 팀이 만들지도, 고치지도 못하는 영역이었다. 우리는 그 위에 화면만 얹는 역할이었다.
 
@@ -15,7 +15,7 @@
 
 ---
 
-## 0. 시작은 평범한 AI 챗봇이었다
+## 시작은 평범한 AI 챗봇이었다
 
 ```text
 src/modules/entities/chat/chatbot/
@@ -61,7 +61,7 @@ onData: (data) =>
 
 ---
 
-## 1. 두 번째 채널의 등장 — 상담사는 '버튼'으로 연결됐다
+## 두 번째 채널의 등장: 상담사는 '버튼'으로 연결됐다
 
 AI가 못 풀면 사람 상담사에게 넘겨야 했다. 그런데 상담사 응답은 AI 챗 서비스가 아니라 **전혀 다른 백엔드(세션 백엔드)**의 세션 SSE에서 왔다. `start` / `subscribe` / `message` / `end`로 세션을 열고 상담사 메시지·상태 변화를 구독한다.
 
@@ -89,7 +89,7 @@ const subscribeSse = useCallback((sid: string) => {
 
 ---
 
-## 2. 버튼을 지우고 키워드로 — 그리고 단일 패널로 통합
+## 버튼을 지우고 키워드로: 그리고 단일 패널로 통합
 
 두 가지를 동시에 정리했다.
 
@@ -127,7 +127,7 @@ try {
 
 ---
 
-## 3. EventSource를 버린 이유: 인증 헤더
+## EventSource를 버린 이유: 인증 헤더
 
 표시를 세션 SSE로 모으자 인증 문제가 터졌다. 세션 SSE 엔드포인트는 `Authorization: Bearer`를 요구하는데, 브라우저 표준 `EventSource`는 커스텀 헤더를 못 보낸다. 그래서 `@microsoft/fetch-event-source`로 갈아탔다 — fetch 기반이라 Bearer를 붙일 수 있고, 재연결 정책과 백그라운드 탭 유지(`openWhenHidden`)도 제공한다.
 
@@ -148,7 +148,7 @@ export async function openSessionStream(sessionId, init) {
 
 ---
 
-## 4. 상태가 흩어진다 — useReducer 상태머신
+## 상태가 흩어진다: useReducer 상태머신
 
 통합 패널의 status는 단순 플래그가 아니었다. 세션 백엔드의 흐름이 그대로 상태 전이로 박혀 있었다:
 
@@ -167,7 +167,7 @@ ai ──"상담원 연결"→ connecting ──(SSE: live)→ live ──(SSE: 
 
 ---
 
-## 5. SSE 연결을 '상태'가 아니라 '파생값'으로 — useSyncExternalStore
+## SSE 연결을 '상태'가 아니라 '파생값'으로: useSyncExternalStore
 
 핵심 깨달음:
 
@@ -200,7 +200,7 @@ export class ChatStore {
 
 ---
 
-## 6. 멀쩡한 자체 store를 버리고 @tanstack/ai로 — 미래를 위한 베팅
+## 멀쩡한 자체 store를 버리고 @tanstack/ai로: 미래를 위한 베팅
 
 ChatStore가 하는 일을 가만히 보면 — 메시지 누적, ID 기반 중복 제거(seen), 구독 생명주기, 스냅샷 불변 갱신. 전부 "구독되는 메시지 리스트 스토어"의 일반적인 일이고, AI 메시지 프레임워크가 이미 푸는 문제다.
 
@@ -257,7 +257,7 @@ export function makeSessionConnection({ sessionId, onStatus }): SubscribeConnect
 - `live: true`를 안 넘기면 구독 자체가 안 일어난다. 이걸 빠뜨려서 한동안 실시간 메시지가 안 들어왔다. `useChat({ connection, initialMessages, live: true })`로 해결.
 - 패널을 닫으면 컴포넌트가 unmount → 구독 해제 → 어댑터의 `finally`에서 `controller.abort()`로 SSE가 닫힌다.
 
-### "한 변수 혼재"의 결말 — 별도 상태가 아니라 타입으로
+### "한 변수 혼재"의 결말: 별도 상태가 아니라 타입으로
 
 4장의 골칫거리(클라 connecting + 서버 상태가 한 변수에)는 여기서 끝났다. 처음엔 `serverStatus` + `isConnecting` 두 상태로 쪼갰다가, 과설계라 다시 걷어냈다. 최종은 단일 state + 타입 분리다:
 
@@ -278,7 +278,7 @@ ChatStore의 `seen`(메시지 id 중복 제거)은 어댑터로 포팅하지 않
 
 ---
 
-## 7. 마감 — 정직한 에러, 그리고 남은 빚
+## 마감: 정직한 에러, 그리고 남은 빚
 
 리뷰를 거치며 마무리를 다듬었다.
 
@@ -295,7 +295,7 @@ ChatStore의 `seen`(메시지 id 중복 제거)은 어댑터로 포팅하지 않
 
 ---
 
-## 8. 회고 — 무엇이 '판단'이고 무엇이 '제약'이었나
+## 회고: 무엇이 '판단'이고 무엇이 '제약'이었나
 
 ### 내가 한 판단
 
@@ -305,7 +305,7 @@ ChatStore의 `seen`(메시지 id 중복 제거)은 어댑터로 포팅하지 않
 - 클라/서버 상태 혼재를 별도 상태가 아니라 타입(ServerStatus/ChatStatus)으로 분리
 - 멀쩡한 자체 store를 미래(스트리밍/tool/parts)를 위해 마이그레이션 타이밍에 맞춰 표준 프레임워크로 — 추상화 비용의 선불 지불
 
-### 제약이 강제한 것 — "두 개의 못 건드리는 외부 백엔드"
+### 제약이 강제한 것: "두 개의 못 건드리는 외부 백엔드"
 
 - AI와 상담이 서로 다른 외부 서비스 → 병합을 맡길 주체가 없어 모든 봉합이 클라이언트로
 - 표시 채널을 세션 SSE로 일원화 → 송신/수신 분리, `send: asyncNoop`
