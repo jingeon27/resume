@@ -19,7 +19,12 @@
 
 ```tsx
 // 느슨한 셀 값을 다시 단언하는 대신, 행 전체가 이미 들고 있는 타입을 읽어요.
-render: (_, record) => STATUS_LABEL[record.status] ?? '-'
+// 다만 폴백은 남겨 둬요. 타입이 좁다고 런타임 값까지 좁은 건 아니거든요.
+render: (_, row) => {
+  const status = row.depositStatus;
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.INACTIVE;
+  return <Select options={config.next} value={status} />;
+}
 ```
 
 문제는 여기서 `record.status`의 타입이 좁아 보이는 근거였어요. 운영 도구의 응답 파서는 스키마가 어긋나도 로그만 남기고 원본을 그대로 통과시켜요. 그러니 화면까지 도달하는 값은 스키마가 말하는 enum 바깥일 수 있어요. 타입 흐름을 고치는 작업과 방어 폴백을 지우는 작업은 별개였는데 한 커밋에서 같이 해버린 셈이에요.
@@ -33,7 +38,7 @@ render: (_, record) => STATUS_LABEL[record.status] ?? '-'
 
 ## 단언 216건 중 138건을 걷어내다 버그 4건이 나왔어요
 
-9월 3일 운영 도구의 단언 정리 커밋 한 건 기준으로 프로덕션 non-null 단언 27건을 전부, 타입 단언 216건 중 138건을 없앴어요. 바꾼 방식은 네 갈래였어요. 라이브러리 제네릭을 제대로 쓰기(`UploadFile<T>`, `axios.get<Blob>`, `querySelector<HTMLElement>`), 느슨한 문자열을 enum 목록으로 좁히기, 폼에서 서버 payload로 가는 변환에 제출 스키마 두기, 배열은 `flatMap`과 조건부 spread로 추론시키기예요. 명시적 `any`도 0이 됐는데, 에디터 래퍼 8건은 라이브러리가 이미 내보내던 타입으로 대체했어요.
+9월 3일 운영 도구의 단언 정리 커밋 한 건에서 프로덕션 non-null 단언 35건 중 27건, 타입 단언 216건 중 138건을 없앴어요. 남은 8건은 정산 요약표의 같은 패턴이라 같은 날 리뷰 반영 커밋에서 마저 지워 0건이 됐고요. 바꾼 방식은 네 갈래였어요. 라이브러리 제네릭을 제대로 쓰기(`UploadFile<T>`, `axios.get<Blob>`, `querySelector<HTMLElement>`), 느슨한 문자열을 enum 목록으로 좁히기, 폼에서 서버 payload로 가는 변환에 제출 스키마 두기, 배열은 `flatMap`과 조건부 spread로 추론시키기예요. 명시적 `any`도 0이 됐는데, 에디터 래퍼 8건은 라이브러리가 이미 내보내던 타입으로 대체했어요.
 
 단언을 걷는 동안 그 단언이 가리고 있던 버그 4건도 같이 나왔어요.
 
@@ -42,7 +47,7 @@ render: (_, record) => STATUS_LABEL[record.status] ?? '-'
 - 썸네일을 지울 때 보내는 `null`이 타입에서 보이지 않았어요. 업로드 타입의 `any` 때문이었어요.
 - 이미지 업로드 API 라우트가 `type`과 `file`을 검증 없이 받고 있었어요. enum과 `instanceof File`로 걸러 400을 주도록 바꿨어요.
 
-같은 날 뒤이은 커밋에서 35건을 더 걷어 107건에서 72건이 됐는데요. 이 수치는 앞의 216건과 집계 범위가 달라요(뒤쪽은 그 시점에 남아 있던 `as` 단언만 센 값이에요). 두 숫자를 이어 붙이면 안 되는 이유를 커밋에도 적어 뒀어요.
+같은 날 뒤이은 커밋에서 `as` 단언을 더 걷어 107건에서 72건이 됐는데요. 이 수치는 앞의 216건과 집계 범위가 달라요(뒤쪽은 그 시점에 남아 있던 `as` 단언만 센 값이에요). 두 숫자를 이어 붙이면 안 되는데, 정작 커밋 메시지에는 그 이유를 적어 두지 않았어요.
 
 ## `.parse`를 넣었다가 같은 날 되돌렸어요
 
@@ -63,11 +68,11 @@ render: (_, record) => STATUS_LABEL[record.status] ?? '-'
 운영 도구에서는 `parse`를 `try/catch`로 감쌌어요. 실패하면 권한 없음으로 떨어뜨리면 되는, 실패 경로가 이미 있는 자리였거든요.
 
 ```ts
-const claimsSchema = z.object({ role: z.enum(ROLES) });
+const adminClaimsSchema = z.object({ auth: z.enum(AUTHORIZATION) });
 
 try {
-  const { role } = claimsSchema.parse(jwtDecode(token));
-  return ALLOWED_ROLES.includes(role);
+  const { auth } = adminClaimsSchema.parse(jwtDecode(accessToken));
+  return allowedAuths.includes(auth);
 } catch {
   return false;
 }
@@ -91,7 +96,7 @@ try {
 
 API 응답에 스키마를 씌우는 작업은 이 정리보다 3주쯤 앞선 8월에 했고, 화면 장애 범위를 줄이는 이야기와 함께 [별도 글](https://jingeon27.tistory.com/27)에 적었어요. 여기서는 그 경계가 이번 판단에 어떤 제약을 걸었는지만 짚을게요. 이미 돌아가는 화면에 뒤늦게 스키마를 씌우는 마이그레이션이라, 파싱 결과로 갈아끼우면 스키마에 아직 적지 않은 필드가 조용히 사라져요(zod는 3·4 모두 객체의 미선언 키를 기본으로 버려요). 그래서 검증만 하고 원본을 돌려줘요.
 
-2026-09-07 develop 기준으로 운영 도구는 `*.api.ts` 75개 파일에서 `parseApiResponse(`를 264곳, 소비자용 앱은 32개 파일에서 86곳 호출해요(테스트·목·정의 파일은 뺀 수치예요).
+2026-09-07 develop 기준으로 운영 도구는 `*.api.ts` 75개 파일에서 `parseApiResponse(`를 264곳, 소비자용 앱은 28개 파일에서 86곳 호출해요(테스트·목·정의 파일은 뺀 수치예요).
 
 ```ts
 /** schema 는 TData 와 정확히 일치할 필요가 없어요 — 선택 필드를 열어 둔 "검증용 근사치"예요. */
@@ -137,7 +142,7 @@ SCHEMA_MISMATCH 로그
 - 취소 응답이 배열이 아니라 한 건. 목록으로 알고 있던 자리였어요.
 - 검색 제안 항목이 두 형태. dev 표본 2,292건을 대조해 `discriminatedUnion`으로 모델링했어요.
 
-응답 수준에서 `anyOf`로 갈리는 사례는 아직 만나지 못했어요. 그런 응답을 만나면 한쪽만 알고 있는 상태로 두지 않고 유니언으로 모델링한 뒤 양쪽 계약 테스트를 붙인다는 규칙만 절차에 적어 뒀어요.
+불일치 로그로 들어온 건 중에는 응답 수준에서 `anyOf`로 갈리는 사례가 없었어요. 다만 파트너용 관리자의 정산 검수 신청 응답은 적용 결과 한 행과 위반 목록으로 갈려서, 8월 기능 작업에서 이미 유니언으로 모델링해 뒀어요. 그 경로를 절차의 예시로 삼았는데, 아직 양쪽 변형을 단언하는 계약 테스트는 없어요.
 
 ## URL은 필드마다 따로 복구해요
 
@@ -162,7 +167,7 @@ const params = useTypedQueryParams({ schema: searchParamsSchema });
 
 ## 폼은 제출을 막고, 검색 폼은 필드명을 막아요
 
-폼은 사용자가 값을 직접 고칠 수 있는 자리예요. 그러니 원본을 통과시키거나 기본값으로 바꾸지 않고, 해당 필드에 이유를 보여주며 제출을 막아요. 소비자용 앱의 입력 폼은 React Hook Form과 `zodResolver`를 공용 훅으로 묶었어요.
+폼은 사용자가 값을 직접 고칠 수 있는 자리예요. 그러니 원본을 통과시키거나 기본값으로 바꾸지 않고, 해당 필드에 이유를 보여주며 제출을 막아요. 소비자용 앱의 입력 폼은 React Hook Form과 `zodResolver`를 공용 훅으로 묶었어요(훅 이름은 공개용 가명이고, 실제 시그니처는 객체 스키마만 받아요).
 
 ```ts
 function useSchemaForm<T extends ZodRawShape>({ schema, ...options }: Options<T>) {
@@ -201,14 +206,12 @@ const isCompletedPayment = (value: unknown): boolean => completedPaymentSchema.s
 좁히기가 실제로 필요했던 자리는 술어를 다시 선언하는 대신 검증 결과를 그대로 썼어요. 상담과 예약을 함께 그리는 Select가 그랬어요.
 
 ```tsx
+// 변경 핸들러에서 두 스키마를 각각 safeParse 해 흐름을 가릅니다.
 const consultation = consultationOnlyStatusSchema.safeParse(status);
+if (consultation.success) return handleConsultationStatus(consultation.data, row.id);
 
-// safeParse 는 성공 브랜치만 좁혀요. 예약 쪽은 갈라진 뒤라 parse 로 받아요.
-return consultation.success ? (
-  <ConsultationStatusSelect status={consultation.data} />
-) : (
-  <ReservationStatusSelect status={reservationStatusSchema.parse(status)} />
-);
+const reservation = reservationStatusSchema.safeParse(status);
+if (reservation.success) return handleReservationStatus(reservation.data, row.id);
 ```
 
 유니언 판별 두 곳은 오히려 네이티브 `in`으로 되돌렸어요. TS 5.5부터는 술어를 추론해 줘서 캐스트 없이도 `filter` 결과 타입이 갈리거든요. UI 라이브러리가 문자열로 돌려주는 탭·정렬 키처럼 모르는 값은 무시해도 되는 자리에는 `z.enum(...).optional().catch(undefined)`를 썼고요.
@@ -243,7 +246,7 @@ return consultation.success ? (
 
 ## 다음 작업에 남긴 기준
 
-lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요(테스트 파일은 off). 반면 `consistent-type-assertions`는 앞서 적은 이유로 뺐고, `as` 재유입을 실제로 잡는 `no-unnecessary-type-assertion` 계열은 아직 켜지 않았어요. 타입 정보를 읽는 lint를 켜 보니 게이트 시간이 3.3배, 피크 메모리가 1.4GB까지 올라가서, 이 비용을 감당할 방법을 정하기 전에는 규칙을 켜지 않기로 했어요.
+lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요(테스트·목·e2e에서 끈 건 `no-non-null-assertion` 하나고, `no-explicit-any`는 테스트에서도 error예요). 반면 `consistent-type-assertions`는 앞서 적은 이유로 뺐고, `as` 재유입을 실제로 잡는 `no-unnecessary-type-assertion` 계열은 아직 켜지 않았어요. 소비자용 앱에서 타입 정보를 읽는 lint를 켜 보니 push 게이트 시간이 3.3배, 피크 메모리가 1.4GB까지 올라갔어요. 운영 도구는 애초에 그 파서 옵션을 쓰지 않고요. 이 비용을 감당할 방법을 정하기 전에는 규칙을 켜지 않기로 했어요.
 
 절차에는 세 가지를 남겼어요. 첫째, 단언을 걷는 커밋에서는 diff의 삭제된 줄 중 폴백을 담은 것을 따로 훑어요. 이번 회귀가 거기서 나왔거든요. 둘째, `.parse`를 넣기 전에 그 예외를 받는 자리가 어디인지 먼저 확인해요. 셋째, 스키마를 바꾸는 PR은 계약 테스트를 먼저 고정하고 구현을 바꿔요.
 

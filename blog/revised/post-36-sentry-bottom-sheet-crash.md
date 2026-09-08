@@ -66,7 +66,7 @@ function onDragEnd(_event, { velocity }) {
 
 <div class="note note-decision">
   <strong>최종 결정</strong>
-  <p>5.6.0으로 올렸어요. 사용자 영향은 화면이 죽는 것이라 회피보다 경로 제거가 필요했고, 실패해도 피해는 시트 높이나 초기 위치가 어긋나는 정도라 배포 후에 눈으로 확인할 수 있어요. 되돌리는 건 의존성과 공통 Root 한 곳을 원래대로 돌리면 되고, 사설 패치와 달리 다음 사람이 유지할 것도 없어요. 대신 메이저 변경을 흡수할 자리가 공통 Root 하나뿐이라는 점이 전제였어요.</p>
+  <p>5.6.0으로 올렸어요. 사용자 영향은 화면이 죽는 것이라 회피보다 경로 제거가 필요했고, 실패해도 피해는 시트 높이나 초기 위치가 어긋나는 정도라 배포 후에 눈으로 확인할 수 있어요. 되돌리는 건 라이브러리 버전과 공통 Root를 원래대로 돌리면 되고(애니메이션 패키지는 그대로 남아 옮긴 30파일은 손대지 않아도 돼요), 뒤에 지운 `detent` 세 곳만 함께 되살리면 돼요. 사설 패치와 달리 다음 사람이 유지할 것도 없고요. 대신 메이저 변경을 흡수할 자리가 공통 Root 하나뿐이라는 점이 전제였어요.</p>
 </div>
 
 ## 공통 Root에서 좌표계를 변환했어요
@@ -114,7 +114,7 @@ function toSheetSnapConfig(points: number[], initialSnap: number) {
 - v4.0.0(2024-12-27): peer dependency가 `framer-motion`에서 `motion`으로 바뀜
 - v5.0.0(2025-09-06): `Sheet.Scroller` 제거(`Sheet.Content`가 스크롤 영역까지 맡음), `snapPoints` 좌표계와 `detent` 값 변경
 
-peer가 `motion`이라 그 패키지(`^11.18.2`)를 설치했어요. 그런데 `motion@11`은 framer-motion 11을 자체 번들한 사본을 들고 있어서, 앱이 `framer-motion`을 직접 import하면 같은 라이브러리가 두 벌 실릴 수 있었는데요. 직접 import하던 30파일을 `motion/react`로 옮겨 실행 경로를 한 벌로 맞췄어요. `framer-motion ^11.18.2`을 의존성에 남긴 건 `motion`의 타입 진입점이 `export * from 'framer-motion'`이기 때문이에요. 어차피 `motion`이 `framer-motion`을 dependency로 갖고 있어서 설치는 되고, 런타임에 그 경로를 import하는 코드만 없앤 셈이에요.
+peer가 `motion`이라 그 패키지(`^11.18.2`)를 설치했어요. 그런데 `motion@11`은 framer-motion 11을 자체 번들한 사본을 들고 있어서, 앱이 `framer-motion`을 직접 import하면 같은 라이브러리가 두 벌 실릴 수 있었는데요. 직접 import하던 30파일을 `motion/react`로 옮겨 실행 경로를 한 벌로 맞췄어요. `framer-motion`(선언은 `^11.0.24` 그대로, lock이 해석한 설치 버전은 11.18.2)을 의존성에 남긴 건 `motion`의 타입 진입점이 `export * from 'framer-motion'`이기 때문이에요. 어차피 `motion`이 `framer-motion`을 dependency로 갖고 있어서 설치는 되고, 런타임에 그 경로를 import하는 코드만 없앤 셈이에요.
 
 후속 diff를 다시 읽으면서 세 가지를 더 정리했어요. 먼저 `detent` prop을 3곳에서 지웠어요. 처음엔 "원래부터 영향이 없던 prop"이라고 적었는데 그것도 틀렸어요. 2.2.1의 `SheetContainer.tsx:30-44`는 `snapPoints`가 있어도 `full-height`면 `height`로, `content-height`면 `maxHeight`로 다르게 적용했거든요. 이 prop이 죽은 값이 된 건 새 Root가 `snapPoints`가 있으면 `detent`를 `content`로 고정한 뒤부터예요. 읽는 사람에게 반영되는 것처럼 보이니 지우고 prop 설명에 그 사실을 적었어요. 다음으로 비율을 그대로 곱하면 `55.00000000000001dvh` 같은 CSS가 나와서 소수 둘째 자리에서 정리했고, 마지막으로 같은 판단이 다음 시트 작업에서도 유지되도록 사용 규칙 문서를 현재 API에 맞췄어요.
 
@@ -136,7 +136,7 @@ it('두 번째로 높은 스냅에서 시작하면 그 자리를 가리켜야 �
 });
 ```
 
-나머지 케이스는 배열 뒤집기, 가장 높은 스냅이 `1`인지, 닫힌 위치 자동 삽입, 시작 인덱스 보정, 콘텐츠 높이를 각각 봐요. 테스트를 쓴 뒤 인덱스 계산을 일부러 틀리게 바꿔 빨간불이 켜지는지도 확인했어요.
+나머지 케이스는 배열 뒤집기, 가장 높은 스냅이 `1`인지, 닫힌 위치 자동 삽입, 가장 높은 스냅에서 시작할 때의 마지막 인덱스, 시작 인덱스 보정, 콘텐츠 높이를 각각 봐요. 테스트를 쓴 뒤 인덱스 계산을 일부러 틀리게 바꿔 빨간불이 켜지는지도 확인했어요.
 
 ## 다음 작업에 남긴 기준
 
