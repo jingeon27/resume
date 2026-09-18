@@ -8,7 +8,7 @@
 
 기능 개발과 함께 프론트엔드 코드베이스의 빌드·테스트·아키텍처를 개선해 온 엔지니어입니다. B2B2C WebView 서비스와 두 운영 앱을 단독으로 운영하며, 문제가 생기면 임시 우회에 그치지 않고 원인을 추적해 테스트·lint·자동화로 재발을 막습니다.
 
-- B2B2C 앱 빌드 시간 **4분 → 1분**, 타입 검사 **12.5초 → 1.9초** 단축
+- B2B2C 앱 타입 검사 **12.5초 → 1.9초** 단축
 - production 번들에 유입된 Mock DB를 제거해 글로벌 앱 번들 **2,564KB → 1,880KB** 축소
 - Next.js 14→16, Node 20→24, ESLint 8→9, Webpack→Turbopack 마이그레이션 주도
 - Unit·Integration·E2E·실서버 계약 테스트의 역할을 나누고 CI에서 자동 검증
@@ -24,7 +24,7 @@
 
 #### 빌드·번들·프레임워크
 
-- Next.js 14→16, Node 20→24, ESLint 8→9 flat config, Webpack→Turbopack 전환을 단계적으로 진행했습니다. breaking change와 미사용 설정을 정리해 B2C 앱 빌드를 **약 4분에서 1분으로 75% 단축**했습니다.
+- Next.js 14→16, Node 20→24, ESLint 8→9 flat config, Webpack→Turbopack 전환을 단계적으로 진행했습니다. breaking change와 미사용 설정을 정리했습니다.
 - JavaScript compiler API가 없는 TypeScript 네이티브 체커를 typecheck 전용으로 병행하고, 기존 TypeScript는 ESLint·Next.js 도구에 유지해 호환성을 지키면서 로컬 타입 검사를 **12.5초에서 1.9초**로 줄였습니다.
 - 테스트용 Mock DB가 Public API를 거쳐 production 번들에 포함된 문제를 bundle analyzer로 확인했습니다. 런타임 코드와 테스트 지원 코드의 import 경계를 분리하고 Public API export를 제거해 글로벌 앱 번들을 **2,564KB에서 1,880KB로 축소**했습니다. 이후 FSD ESLint 규칙과 production bundle 검사로 같은 유입을 차단했습니다.
 
