@@ -36,7 +36,7 @@
 - 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고 확장 diff가 근거입니다(개방-폐쇄).
-- 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인한 뒤, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 코드 변경 없이 해결했습니다.
+- 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인하며 `utm_source` 저장 코드를 먼저 넣었다가, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 열흘 만에 되돌리고 설정으로 해결했습니다.
 
 **MVP 이후 제품 확장**
 

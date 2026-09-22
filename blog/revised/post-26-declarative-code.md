@@ -106,8 +106,8 @@ const ProgramForm = createTypedForm<ProgramFormValues>();
 
 const [form] = ProgramForm.useForm();
 
-form.getFieldValue('programName'); // string
-form.getFieldValue('progamName');  // compile error
+// getFieldValue의 반환값까지 필드별 타입으로 좁히지는 않았다.
+// 이 팩토리가 검사하는 범위는 Item 등의 name 경로다.
 
 <ProgramForm.Item name={['templates', 0, 'title']}>
   <Input />
@@ -115,6 +115,8 @@ form.getFieldValue('progamName');  // compile error
 ```
 
 unsafe assertion은 팩토리 안 한 곳에 가두고 `Form`, `Item`, `List`, `useForm`, `useWatch`를 같은 `T`로 묶었다. 호출부가 같은 제네릭과 field type을 반복하지 않기 때문에 팩토리를 둘 이유가 있었다.
+
+다만 이것으로 모든 폼 API가 타입 안전해진 것은 아니다. `getFieldValue`에는 Ant Design의 넓은 반환 타입이 남아 있다. 필드 경로 검사와 반환값의 타입 추론은 다른 작업이고, 후자는 아직 보완할 부분이다. 구현 범위는 [프로그램 폼을 정리한 글](https://jingeon27.tistory.com/18)에 따로 적었다.
 
 반대로 한 화면에서 한 번 쓰는 컴포넌트에 팩토리를 만들지는 않는다. 추상화 이름이 사용처보다 더 어려우면 그냥 가까이에 둔다.
 
