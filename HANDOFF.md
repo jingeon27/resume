@@ -21,7 +21,7 @@
 | 경로                                   | 내용                                                 | 본인 author            |
 | -------------------------------------- | ---------------------------------------------------- | ---------------------- |
 | `projects/safedoc-usermall`            | B2C 웹 (Next 16.2.10, React 18)                      | `jingeonkim`, `김진건` |
-| `projects/safedoc-react`               | CMS·병원CRM·글로벌CMS 모노레포 (앱 3개, 패키지 8개) | 〃                     |
+| `projects/safedoc-react`               | CMS·병원CRM·글로벌CMS 모노레포 (앱 3개, 패키지 9개) | 〃                     |
 | `projects/safedoc-global`              | 글로벌 서비스 (2026-07 신규, Next 16.2.10, React 19) | 〃                     |
 | `projects/when-front`                  | 왓타임/RoundHR 모노레포                              | `gun kim`              |
 | `projects/korea-care2-source-20260708` | 글로벌 서비스의 원본 프로토타입                      | (전달받은 것)          |
