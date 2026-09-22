@@ -12,7 +12,7 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 - 결제수단별 union과 `ts-pattern` exhaustive 분기로 기존 렌더링을 거의 수정하지 않고 **쿠폰결제** 확장
 - SafeDoc App을 **Next.js 16.2 + Turbopack** 프로덕션 빌드로 이행하고 RSC prefetch·hydration·캐시 구독 패턴 표준화
 - 예약 폼의 가족 데이터 동기화 컴포넌트를 **520줄에서 55줄**로 축소하고 리뷰·상담·회원정보 흐름에 재사용
-- Amplitude 이벤트 약 240개를 설계하고, 리뷰 조회 사용자의 예약 전환율이 미조회 사용자 대비 **15%p 높음**을 확인
+- 코드에 정의된 Amplitude 이벤트 219개 중 **140개 이상**을 직접 구현하고, PO의 제품 판단에 쓰이는 퍼널 이벤트 정합성을 관리
 - B2C 모바일 웹의 BottomSheet에서 뒤로가기, backdrop, snap point와 route change를 공통 라이프사이클로 처리
 
 ---
@@ -40,12 +40,12 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 - 병원·프로그램·공지·혜택 데이터를 5개 API에서 수집하는 동적 sitemap을 구축하고 XML escape, allowlist와 24시간 cache life로 생성 비용을 제어했습니다. ([관련 글](https://jingeon27.tistory.com/21))
 - 로그인·약관 리다이렉트의 이중 인코딩, 외부 URL, 자기참조를 막는 정규화 유틸을 만들고 소셜 로그인 callback의 redirect cookie 유실 문제를 해결했습니다.
 
-**사용자 경험과 데이터 기반 개선**
+**사용자 경험과 제품 계측**
 
 - Radix UI와 `tailwind-variants`를 기반으로 Button, Input, BottomSheet, Dialog, Toast, Tooltip, Checkbox, Radio, Toggle, Tabs, Chip, Menu 등 **primitive 20개**를 설계하고 예약·검색·리뷰·마이페이지에 적용했습니다.
 - BottomSheet를 Compound API로 구성해 브라우저 뒤로가기(`popstate`), route change, backdrop tap, snap point와 mount 해제를 공통 라이프사이클에서 처리했습니다.
 - props drilling과 `useEffect` 4개로 얽혀 있던 예약 폼을 React Hook Form·Zod 중심으로 바꾸고, 가족 데이터 동기화 컴포넌트를 **520줄에서 55줄**로 줄였습니다. 같은 기준을 리뷰·상담·회원정보 폼에 적용했습니다. ([관련 글](https://jingeon27.tistory.com/11))
-- 복지몰 전반에 예약·상담·검색 행동을 추적하는 Amplitude 이벤트 약 240개를 설계했습니다. 시술상세 개편 전후를 분석해 리뷰 조회 사용자의 예약 전환율이 미조회 사용자보다 **15%p 높음**을 확인했습니다.
+- 복지몰 전반에 예약·상담·검색 행동을 추적하는 Amplitude 이벤트를 설계해 코드에 정의된 219개 중 140개 이상을 직접 구현했습니다. PO가 결정한 병원 상세 카드의 예약·상담 버튼 복원을 구현하면서, 그 과정에서 제가 만든, 카드 버튼 클릭이 버블링돼 시술상세 이벤트로도 기록되는 회귀를 잡아 퍼널 이벤트 정합성을 지켰습니다.
 
 **개발 생산성과 협업**
 
@@ -74,7 +74,7 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 - **Rendering** — SSR, RSC, streaming, prefetch / hydration, cache lifecycle, dynamic sitemap
 - **UI & Styling** — Tailwind CSS, `tailwind-variants`, Radix UI, Emotion(CSS-in-JS), Ant Design
 - **Architecture & Delivery** — Turborepo, pnpm, FSD, BFF, GitHub Actions, Git, Jira
-- **Product Analytics** — Amplitude event design, funnel analysis, UTM attribution
+- **Product Analytics** — Amplitude event design, funnel instrumentation, UTM attribution
 
 React Native와 Panda CSS의 실무 경험은 아직 없습니다. 모바일 웹과 인앱 웹뷰에서 history·viewport·overlay 생명주기를 다뤄왔고, React 기반 상태·컴포넌트 설계 경험을 바탕으로 플랫폼 차이를 학습할 수 있습니다.
 
