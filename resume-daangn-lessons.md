@@ -128,10 +128,6 @@ React Query key는 4월에 `query-key-factory`로 옮겨 조회와 캐시 무효
 
 관련 글: [Electron 수집 앱 구조](https://jingeon27.tistory.com/5) · [query-key-factory 적용](https://jingeon27.tistory.com/6)
 
-## 오픈소스 기여
-
-왓타임 업무와 별도로 `useFunnel` 타입 오류를 수정한 [toss/slash PR #363](https://github.com/toss/slash/pull/363)이 머지됐어요(2024.05).
-
 ## 레슨/과외팀에 지원하는 이유
 
 [레슨/과외 빌딩 로그](https://medium.com/daangn/%ED%98%BC%EC%9E%90-%EC%8B%9C%EC%9E%91%ED%95%B4-%EC%A0%84%EA%B5%AD-%EC%98%A4%ED%94%88%EA%B9%8C%EC%A7%80-%EB%8B%B9%EA%B7%BC-%EB%A0%88%EC%8A%A8-%EA%B3%BC%EC%99%B8-%EB%B9%8C%EB%94%A9-%EB%A1%9C%EA%B7%B8-d4e61f6ba32f)를 읽으면서, 알바 안에 이미 있던 레슨 수요를 별도의 경험으로 연결한 과정이 인상 깊었어요. 진입점을 늘려 유입이 커진 뒤 글쓰기 이탈이 늘자 다음 단계를 고쳤다는 부분도요. 제가 개발한 복지몰도 병원이 등록한 프로그램을 운영팀이 검수하고 사용자가 상세를 보고 예약하는 구조예요. 공급자와 사용자의 화면을 따로 만들기보다, 한쪽에서 올린 정보가 다른 쪽의 선택으로 이어지는 과정을 개발해 왔어요.
