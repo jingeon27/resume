@@ -283,17 +283,22 @@
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
-일정 조율 서비스 ‘되는시간’과 ATS ‘RoundHR’의 pnpm·Turborepo 모노레포에서 채용 관리 웹과 후보자 수집용 Electron 앱을 개발했습니다.
+왓타임은 일정 조율 서비스 ‘되는시간’을 운영하면서 ATS ‘RoundHR’을 개발했습니다. RoundHR은 2023년 후반부터 개발됐고, 제가 합류한 2024년에는 시장성을 확인하며 기능을 늘리던 단계였습니다. pnpm·Turborepo 모노레포에서 채용 관리 웹, 평가자용 웹, 랜딩, 후보자 수집용 Electron 앱에 팀원으로 참여했습니다.
 
-**역할** · 웹 프론트엔드·Electron 앱 개발  
-**주요성과** · ATS 제품 기능 개발, 6개 채용 사이트 수집 구조 통합, 오픈소스 기여 1건 머지  
-**스택** · React, TypeScript, Next.js, TanStack Query, React Hook Form, Electron, Sentry, pnpm, Turborepo
+**역할** · ATS의 채용·평가 화면, 랜딩 및 Electron 수집 앱 개발
 
-- **ATS 제품 기능 개발** — 채용 자동화·온보딩·지원서·메일 템플릿 관리 화면을 개발하고, React Hook Form으로 단계가 많은 입력 흐름을 구성했습니다.
-- **서버 상태와 공통 인터랙션 정리** — 여러 앱과 도메인의 React Query key를 `query-key-factory` 기반으로 이전해 조회와 캐시 무효화 기준을 통일했습니다. dnd-kit 기반 정렬 구조는 후보자 필터의 중첩 트리와 데이터 테이블의 인라인 정렬에 공통으로 적용했습니다.
-- **크롤러 확장 구조 설계** — 사이트별로 중복되던 구현을 공통 서비스와 Adapter 구조로 재설계해 기존 3개 사이트와 신규 3개 사이트를 하나의 파이프라인으로 통합했습니다. 개별 지원자의 오류가 전체 수집을 중단하지 않도록 실패 범위를 격리했습니다.
-- **Electron 오류 분류 개선** — 기존 Sentry 수집 흐름에서 서버 오류는 `error`, 인증·조회 실패는 `info`, 그 밖의 API 오류는 `warning`으로 나눠 운영 이슈의 우선순위를 구분했습니다.
-- **오픈소스 기여** — `useFunnel`의 타입 오류를 발견해 [toss/slash에 수정 사항을 기여했고 해당 PR이 머지되었습니다](https://github.com/toss/slash/pull/363).
+**주요 작업** · 채용 단계별 입력·자동화 기능, 앱 간 서버 상태 관리, 수집 앱의 공통 처리 구조
+
+**스택** · React, TypeScript, Next.js, TanStack Query, React Hook Form, Yup, dnd-kit, Electron, Sentry, pnpm, Turborepo
+
+- **채용 관리 화면** — 채용 페이지·지원서 설정, 메일·면접 알림 템플릿의 작성과 미리보기를 개발했습니다. React Hook Form·`useFieldArray`·Yup으로 반복 입력과 단계별 검증을 처리했고, 지원·서류·면접 단계의 자동화 규칙과 탈락 메일, 평가 템플릿·척도 설정도 맡았습니다.
+- **면접 템플릿 입력 흐름** — 시간 유형, 장소, 참여자 확인 방식, 메일 본문을 네 단계로 나눴습니다. 제품용 `useFunnel` 훅과 단계별 검증을 만들고, 작성 중 이탈한 내용은 `sessionStorage`에서 복원하도록 했습니다.
+- **평가자 웹과 랜딩** — 평가자용 웹의 서류·면접 평가 화면, 온보딩 체크리스트와 화면별 안내 투어를 개발했습니다. RoundHR 랜딩에서는 가이드·라운지 섹션과 모바일 화면을 맡고, 콘텐츠를 수정할 수 있도록 Notion·Strapi를 연결했습니다.
+- **여러 앱에서 쓰는 데이터·인터랙션 정리** — 채용 관리 웹과 평가자용 웹을 포함한 React Query key를 공용 패키지의 `query-key-factory`로 옮겨 조회와 캐시 무효화 기준을 맞췄습니다. dnd-kit을 사용해 후보자 필터의 중첩 트리와 테이블의 인라인 정렬에도 공통으로 쓸 수 있는 컴포넌트를 만들었습니다.
+- **Electron 후보자 수집 앱** — 사이트마다 반복되던 로그인 → 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 초기 구조를 만들었습니다. NestJS를 적용했다가 Electron main 프로세스에는 무겁다고 판단해 닷새 만에 제거하고 factory가 직접 조립하도록 바꿨습니다. 잡플래닛의 암호화 ZIP, 게임잡의 2차 인증·지원자 정보 추출 등을 연동했고, 지원자 한 명의 오류가 전체 수집을 멈추지 않게 했습니다. 이 초기 구조는 이후 동료가 상당 부분 다시 작성했습니다.
+- **수집 앱 오류 관측** — 기존 Electron Sentry 수집 흐름에서 서버 오류는 `error`, 인증·조회 실패는 `info`, 그 밖의 API 오류는 `warning`으로 나눠 운영 중 확인할 오류의 우선순위를 구분했습니다.
+
+관련 글: [Electron 수집 앱의 구조 변경](https://jingeon27.tistory.com/5) · [query-key-factory 적용](https://jingeon27.tistory.com/6) · [toss/slash `useFunnel` 타입 수정 PR](https://github.com/toss/slash/pull/363)
 
 ---
 
