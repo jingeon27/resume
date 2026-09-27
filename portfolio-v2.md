@@ -261,7 +261,7 @@ safedoc-global/frontend/src             글로벌 사용자 서비스 (Next.js 1
 - **TypeScript 7 네이티브 체커는 typecheck에만 (2026.07)** — JS compiler API가 없어서 `typescript-eslint`와 Next 빌드는 TS6에 두고, 네이티브 체커는 typecheck 전용으로 병행했어요. Next.js 16·Turbopack 전환은 Turbopack 회귀가 해소된 안정 버전과 두 도메인의 프로덕션 smoke test를 별도 조건으로 걸었어요.
 - **Headless UI에서 Radix로 전환** — 복지몰 공통 UI를 Slot·`asChild`로 조합하고 접근성 primitive를 활용하려고 Radix로 옮겼어요. 대신 기존 props·이벤트·열림 상태를 새 API에 맞게 바꿔야 했고, `asChild`에서 ref나 props를 잘못 넘기면 포커스가 깨질 수 있어요. 지금 Dialog·Tabs·Accordion·Switch와 Button 조합에 쓰고 있어요. Bottom Sheet의 기반인 react-modal-sheet는 유지하고 API만 Compound 구조로 바꿨어요.
 - **Next.js 14에서 16으로 올리며 얻은 선택지와 감수한 비용** — production 빌드까지 Turbopack, Cache Components(`use cache`·PPR)를 켰어요. 대신 `params`·`cookies()` 같은 비동기 API 전환, 화면 보존에 맞춘 폼 초기화 시점 명시(공용 폼 훅이 화면이 숨겨질 때 reset), 직접 진입·뒤로가기·refresh·Server Action 이후 이동을 나눠 보는 라우팅 회귀 검증이 따라왔어요. 개선율은 따로 재지 않았어요.
-- **mock과 실제 서버의 계약 차이 (2026.07–09)** — 글로벌 CMS를 mock으로 개발했을 때는 통과하던 등록이 실제 서버에서는 `orderNo` 누락과 운영시간 7일 제약으로 거절됐어요. 서버 규칙을 mock에 반영하고 실서버 계약 테스트 20개를 별도 러너로 붙였어요. 이 러너는 9월에 제거했어요. 지금은 mock이 같은 입력을 거절하는지 확인하지만, 서버 계약이 바뀌면 mock도 함께 고쳐야 해요.
+- **mock과 dev API 서버의 계약 차이 (2026.07–09)** — 글로벌 CMS를 mock으로 개발했을 때는 통과하던 등록이 dev API 서버에서는 `orderNo` 누락과 운영시간 7일 제약으로 거절됐어요. 서버 제약을 mock에 반영하고 dev API 계약 테스트 20개를 별도 러너로 붙였어요. 이 러너는 9월에 제거했어요. 지금은 mock이 같은 입력을 거절하는지 확인하지만, 서버 계약이 바뀌면 mock도 함께 고쳐야 해요.
 - **에이전트 실행 환경을 작업 성격으로 나눴어요 (2026)** — 독립 티켓은 Orca의 격리 worktree에서 병렬로, import 경계나 상태 소유권을 바꾸는 리팩터링은 VS Code에서 직접 편집하며 단일 세션과 맥락을 공유해요. 기준은 속도가 아니라 변경 과정에서 공유해야 하는 맥락의 크기예요. → [글 34](https://jingeon27.tistory.com/34)
 
 ## 6. 링크 모음
