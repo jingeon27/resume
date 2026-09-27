@@ -21,7 +21,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 시기별로 맡은 범위는 이래요.
 
 - **2025.05 – 12, 팀원** — 예약·리뷰 개선, 검색 페이지 공동 개발, 프로그램 상세·쿠폰, `@legacy` 250개 파일 정리(합류일 2025-05-14 기준 정확히 250개 → 06-09 0개), 예약 폼 리팩터링, `@core` primitive 20개, Amplitude 이벤트 140개 이상.
-- **2026.01 – 03, 사내 유일 프론트엔드** — 세 제품을 책임졌어요(외부 개발 인력의 참여는 4월에 끝났어요). 정산 도메인 분리(form POST BFF), 검색·폼 구조 개편 시작.
+- **2026.01 – 03, 사내 유일 프론트엔드** — 세 제품을 책임졌어요(외부 개발 인력의 참여는 4월에 끝났어요). 검색·폼 구조 개편을 시작했어요.
 - **2026.04 – 현재, 단독** — AI 워크플로(4월~), 테스트 체계(7월~), 7월 31일 글로벌 서비스·CMS PoC 배포, Sentry(8월), FSD 재정의(8~9월), 응답 타입 정본 통합(9월), 검진 예약·결제(9월).
 - **2026.08 –** — PM·PO 없이 백엔드 개발팀장·부팀장과 티켓에서 빠진 동작·예외를 확인하고 운영 요청도 처리해요. 복지몰은 브랜드 디자이너 시안을 받아 개발하고, 운영 도구는 와이어프레임에서 빠진 동작까지 확인해요. 글로벌 서비스는 PO가 전달한 프로토타입을 바탕으로 만들었어요.
 
@@ -276,7 +276,7 @@ safedoc-global/frontend/src             글로벌 사용자 서비스 (Next.js 1
 - [32 · 컨벤션을 lint로 옮긴 과정](https://jingeon27.tistory.com/32) · [29 · ESLint 규칙과 fixture 테스트](https://jingeon27.tistory.com/29)
 - [30 · Sentry 도입과 민감 정보 정화](https://jingeon27.tistory.com/30) · [36 · Bottom Sheet 크래시 추적](https://jingeon27.tistory.com/36)
 - [28 · 에러 처리 개편](https://jingeon27.tistory.com/28) · [27 · Next.js 회귀 대응](https://jingeon27.tistory.com/27)
-- [19 · 정산 도메인 간 토큰 전달](https://jingeon27.tistory.com/19) · [18 · 프로그램 폼](https://jingeon27.tistory.com/18) · [11 · 예약 폼](https://jingeon27.tistory.com/11)
+- [18 · 프로그램 폼](https://jingeon27.tistory.com/18) · [11 · 예약 폼](https://jingeon27.tistory.com/11)
 - [24 · 프로토타입을 서비스로 옮기며 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
 - [5 · Electron 수집 앱 구조](https://jingeon27.tistory.com/5) · [6 · query-key-factory](https://jingeon27.tistory.com/6)
 
