@@ -68,7 +68,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-캘린더 기반 일정 조율 서비스와 채용 ATS SaaS에서 사용자 기능과 운영 도구를 개발했습니다.
+캘린더 기반 일정 조율 서비스와 채용 ATS SaaS에서 사용자 기능과 관리자 서비스를 개발했습니다.
 
 - 사이트마다 중복되던 Electron ATS 크롤러를 NestJS의 모듈 경계와 constructor injection을 참고한 사이트별 adapter 구조로 재설계했습니다. 프레임워크 자체는 Electron에 과하다고 판단해 제거하고 DI container 없이 factory로 조립했습니다.
 - 점핏·잡플래닛·게임잡 연동 이후로는 새 사이트를 붙일 때 정해진 인터페이스(service·repository·helper) 구현만 남았습니다.

@@ -2,7 +2,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>컨벤션 문서가 잘 갖춰진 운영 도구 모노레포에서 같은 리뷰 코멘트가 반복되던 이유를 저장소 계측으로 확인한 과정이에요. lint로 옮긴 규칙은 위반 0건, 문서에만 있던 타입 접두사 규칙은 31%가 어긋나 있었어요. 어떤 규칙부터 lint로 옮겼는지, 심각도를 어떻게 정했는지, 밟은 함정과 2026-09-18 기준 현재 설정까지 적어요. 타입 접두사 수치는 이 글을 고치며 같은 스크립트로 다시 잰 값이에요.</p>
+  <p>컨벤션 문서가 잘 갖춰진 관리자 서비스 모노레포에서 같은 리뷰 코멘트가 반복되던 이유를 저장소 계측으로 확인한 과정이에요. lint로 옮긴 규칙은 위반 0건, 문서에만 있던 타입 접두사 규칙은 31%가 어긋나 있었어요. 어떤 규칙부터 lint로 옮겼는지, 심각도를 어떻게 정했는지, 밟은 함정과 2026-09-18 기준 현재 설정까지 적어요. 타입 접두사 수치는 이 글을 고치며 같은 스크립트로 다시 잰 값이에요.</p>
 </div>
 
 프로젝트에는 컨벤션 문서가 잘 갖춰져 있었어요. 아키텍처 경계, queryKey 관리, 배럴 작성, 파일 네이밍까지 영역별로 정리돼 있었고, 저도 그걸 쓰면서 지키고 있다고 생각했는데요.
@@ -90,7 +90,7 @@ options의 키가 바뀌는 순간 이 무효화는 아무 일도 하지 않으�
 
 warning에서 error로 올릴 때는 저장소 위반이 0건인지 먼저 확인하는데요. 남아 있는 채로 올리면 그 순간부터 lint가 깨지고, 급한 PR을 막는 규칙은 결국 꺼져요. 규칙이 죽는 경로는 대개 이쪽이에요.
 
-그 뒤로 error가 늘었어요. 2026-09-18 설정 기준으로 운영 도구에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사·`let`·queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 복지몰은 반대로 레이어·Public API·page 간 참조·raw key·`any`·non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
+그 뒤로 error가 늘었어요. 2026-09-18 설정 기준으로 관리자 서비스에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사·`let`·queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 복지몰은 반대로 레이어·Public API·page 간 참조·raw key·`any`·non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
 
 ## 밟은 함정들
 
@@ -137,7 +137,7 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 
 <div class="note note-limit">
   <strong>아직 확인하지 못한 것</strong>
-  <p>"같은 리뷰 코멘트가 다시 나오지 않는가"는 리뷰어가 저 혼자인 환경이라 제대로 잴 수 없었어요. 컴포넌트 named export 340건과 `let` 16건은 8월 계측 값이고 이번에 다시 재지 않았어요. 타입 접두사 규칙은 운영 도구에서 아직 warning이라 새 위반이 PR 게이트에서 막히는 게 아니라 경고로만 보여요. 규칙을 켠 뒤 리뷰 코멘트나 warning 수를 시계열로 기록하지는 않았어요.</p>
+  <p>"같은 리뷰 코멘트가 다시 나오지 않는가"는 리뷰어가 저 혼자인 환경이라 제대로 잴 수 없었어요. 컴포넌트 named export 340건과 `let` 16건은 8월 계측 값이고 이번에 다시 재지 않았어요. 타입 접두사 규칙은 관리자 서비스에서 아직 warning이라 새 위반이 PR 게이트에서 막히는 게 아니라 경고로만 보여요. 규칙을 켠 뒤 리뷰 코멘트나 warning 수를 시계열로 기록하지는 않았어요.</p>
 </div>
 
 ## 참고
