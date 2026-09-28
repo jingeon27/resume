@@ -268,4 +268,4 @@ lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요
 - [Zod — `passthrough` / v4의 `z.looseObject`](https://zod.dev/api?id=looseobject)
 - [jwt-decode README — "it does not validate the signature or the shape"](https://github.com/auth0/jwt-decode#jwt-decode)
 - [@hookform/resolvers — zodResolver](https://github.com/react-hook-form/resolvers#zod)
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/27)
+- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
