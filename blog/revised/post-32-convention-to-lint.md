@@ -90,7 +90,7 @@ options의 키가 바뀌는 순간 이 무효화는 아무 일도 하지 않으�
 
 warning에서 error로 올릴 때는 저장소 위반이 0건인지 먼저 확인하는데요. 남아 있는 채로 올리면 그 순간부터 lint가 깨지고, 급한 PR을 막는 규칙은 결국 꺼져요. 규칙이 죽는 경로는 대개 이쪽이에요.
 
-그 뒤로 error가 늘었어요. 2026-09-18 설정 기준으로 운영 도구에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사·`let`·queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 소비자용 앱은 반대로 레이어·Public API·page 간 참조·raw key·`any`·non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
+그 뒤로 error가 늘었어요. 2026-09-18 설정 기준으로 운영 도구에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사·`let`·queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 복지몰은 반대로 레이어·Public API·page 간 참조·raw key·`any`·non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
 
 ## 밟은 함정들
 

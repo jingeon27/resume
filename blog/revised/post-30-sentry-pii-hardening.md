@@ -7,10 +7,10 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>소비자용 앱에 Sentry를 client·server·edge 세 런타임별로 붙이고, 옵션 이름만 믿었다가 새던 민감 정보 경로를 SDK 소스로 따라가 닫은 과정을 다뤄요. 사용자 영향에 따른 에러 레벨, 이슈에 회원 id만 남긴 이유, Web Vitals envelope E2E, MCP 연결, 릴리스·소스맵 업로드까지 2026년 8월 도입부터 9월까지의 기록이에요.</p>
+  <p>복지몰에 Sentry를 client·server·edge 세 런타임별로 붙이고, 옵션 이름만 믿었다가 새던 민감 정보 경로를 SDK 소스로 따라가 닫은 과정을 다뤄요. 사용자 영향에 따른 에러 레벨, 이슈에 회원 id만 남긴 이유, Web Vitals envelope E2E, MCP 연결, 릴리스·소스맵 업로드까지 2026년 8월 도입부터 9월까지의 기록이에요.</p>
 </div>
 
-2026년 8월, 소비자용 앱의 프론트엔드 에러와 Web Vitals를 보려고 Sentry를 도입했어요. `@sentry/nextjs`를 설치하고 이벤트를 올리는 것 자체는 하루면 됐는데요. 운영할 수 있는 상태가 되기까지는 훨씬 많은 일이 필요했어요.
+2026년 8월, 복지몰의 프론트엔드 에러와 Web Vitals를 보려고 Sentry를 도입했어요. `@sentry/nextjs`를 설치하고 이벤트를 올리는 것 자체는 하루면 됐는데요. 운영할 수 있는 상태가 되기까지는 훨씬 많은 일이 필요했어요.
 
 - client·server·edge 세 런타임 초기화
 - 사용자 영향에 따른 에러 레벨과 그룹핑 정책
