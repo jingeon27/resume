@@ -1,12 +1,17 @@
-# NestJS의 책임 분리를 참고해 Electron 크롤링 앱을 재구성한 과정
+# NestJS의 책임 분리를 참고해 Electron 수집 앱을 나눈 기준
 
-입사 당시 Electron 앱은 여러 채용 플랫폼에서 지원자 정보를 수집하고 있었다. 수집 대상은 자사가 각 플랫폼의 기업회원으로서 정당한 접근 권한을 가진 지원자 데이터였다. 플랫폼마다 로그인 방식과 DOM 구조는 달랐지만, 로그인, 중복 확인, 지원자 저장, 이력서 업로드라는 큰 흐름은 같았다. 그런데 각 플랫폼 파일이 이 흐름을 모두 들고 있어 공통 동작을 바꾸려면 여러 파일을 함께 수정해야 했다.
+<div class="note note-summary">
+  <strong>이 글에서 다루는 것</strong>
+  <p>플랫폼마다 로그인부터 이력서 업로드까지 같은 흐름이 복제돼 있어서, 새 플랫폼을 붙이면 공통 흐름도 한 벌 더 늘어나는 상태였어요. 이 흐름을 IPC 진입점, 공통 처리 순서, 플랫폼별 구현으로 나눴고, 함께 넣으려던 NestJS는 CTO 반려로 걷어내 Factory가 직접 조립하게 했어요. 이후 두 플랫폼 연동을 기존 파일 복사 없이 이 구조에 더했고, 지원자 한 명의 실패가 전체 수집을 멈추지 않게 했어요. 자동화 테스트와 측정이 없었다는 한계도 함께 적어요.</p>
+</div>
 
-처음에는 플랫폼 파일을 하나 더 복사하려 했다. 그런데 네 번째 플랫폼을 그렇게 추가하면 로그인 이후의 공통 흐름도 네 벌이 된다. 마침 백엔드 팀의 NestJS 코드를 보며 Controller와 Service가 나뉜 이유를 이해하던 때였다. Electron에 NestJS를 설치하지는 않고, TypeScript 클래스와 Factory만으로 비슷한 책임 경계를 만들었다.
+입사 당시 Electron 수집 앱은 여러 채용 플랫폼에서 지원자 정보를 수집하고 있었어요. 수집 대상은 자사가 각 플랫폼의 기업회원으로서 정당한 접근 권한을 가진 지원자 데이터였어요. 플랫폼마다 로그인 방식과 DOM 구조는 달랐지만, 로그인, 중복 확인, 지원자 저장, 이력서 업로드라는 큰 흐름은 같았어요. 그런데 각 플랫폼 파일이 이 흐름을 모두 들고 있어서, 공통 동작 하나를 바꾸려면 여러 파일을 함께 고쳐야 했어요.
+
+2024년 2월, 입사 한 달째였어요. 처음에는 플랫폼 파일을 하나 더 복사하려 했어요. 그런데 네 번째 플랫폼을 그렇게 추가하면 로그인 이후의 공통 흐름도 네 벌이 돼요.
 
 ## 먼저 바꾸고 싶었던 것
 
-기존 구조에서는 플랫폼별 함수 하나가 다음 작업을 모두 수행했다.
+기존 구조에서는 플랫폼별 함수 하나가 다음 작업을 모두 수행했어요.
 
 ```text
 로그인
@@ -16,17 +21,26 @@
   -> 파일 다운로드 및 업로드
 ```
 
-플랫폼이 추가될 때 기존 파일을 복사한 뒤 selector와 예외 처리를 바꾸는 방식이어서, 공통 로직과 플랫폼별 로직의 경계가 계속 흐려졌다.
+플랫폼이 추가될 때 기존 파일을 복사한 뒤 selector와 예외 처리를 바꾸는 방식이어서, 공통 로직과 플랫폼별 로직의 경계가 계속 흐려졌어요.
 
-파일을 나누는 기준은 세 가지 변경이었다.
+## 무엇이 바뀌면 어디를 고칠지부터 정했어요
 
-- IPC 요청이 바뀌면 Controller만 수정한다.
-- 전체 처리 순서가 바뀌면 CrawlingService만 수정한다.
-- 특정 사이트의 DOM이나 로그인 방식이 바뀌면 해당 플랫폼 구현만 수정한다.
+마침 백엔드 팀의 NestJS 코드를 보며 Controller와 Service가 나뉜 이유를 이해하던 때였어요. 그 구분을 빌려 파일을 나누는 기준을 세웠어요. 목표는 계층을 늘리는 게 아니라 변경 이유를 세 가지로 나누는 것이었어요. 아래에서 각 역할을 하나씩 볼게요.
 
-## IPC 요청은 Controller에서 받는다
+- IPC 요청이 바뀌면 Controller만 고쳐요.
+- 전체 처리 순서가 바뀌면 CrawlingService만 고쳐요.
+- 특정 사이트의 DOM이나 로그인 방식이 바뀌면 해당 플랫폼 구현(adapter)만 고쳐요.
 
-Electron의 `ipcMain` handler를 HTTP Controller와 비슷한 진입점으로 봤다.
+이 경계 위에 NestJS를 그대로 올려 보려 했지만, CTO가 Electron main 프로세스에 프레임워크까지 얹기에는 무겁다고 반려했어요. 그래서 NestJS를 넣은 지 5일 만에 의존성을 걷어내고 경계만 남겼어요.
+
+<div class="note note-decision">
+  <strong>핵심 결정</strong>
+  <p>파일은 "무엇이 바뀌면 어디만 고치는가"로 나눴어요. 프레임워크가 빠져도 이 경계는 그대로 두고, 모듈 경계와 생성자 주입이라는 생각만 남겨 Factory가 의존성을 직접 조립하게 했어요.</p>
+</div>
+
+## IPC 요청은 Controller에서 받아요
+
+Electron의 `ipcMain` handler를 HTTP Controller와 비슷한 진입점으로 봤어요. 예시 코드의 플랫폼 이름과 일부 식별자는 바꿨어요.
 
 ```ts
 const createCrawlingService =
@@ -37,15 +51,9 @@ const createCrawlingService =
 export function createCrawlingController(puppeteer: PuppeteerService) {
   const createService = createCrawlingService(puppeteer);
 
-  const services = {
-    platformA: createService('platformA'),
-    platformB: createService('platformB'),
-    platformC: createService('platformC'),
-  } satisfies Record<Platform, CrawlingService>;
-
   return {
-    async collect({ platform }: { platform: Platform }) {
-      return services[platform].collect();
+    collect({ platform }: { platform: Platform }) {
+      return createService(platform).collect();
     },
   };
 }
@@ -54,9 +62,9 @@ const controller = createCrawlingController(puppeteer);
 ipcMain.handle('crawl', (_event, req) => controller.collect(req));
 ```
 
-Controller는 플랫폼에 맞는 Service를 고르고 결과를 반환한다. 로그인이나 DOM 파싱 규칙은 몰라도 된다.
+Controller는 요청받은 플랫폼의 Service를 만들어 실행을 넘겨요. 로그인이나 DOM 파싱 규칙은 몰라도 되고, 플랫폼 목록도 들고 있지 않아서 플랫폼이 늘어도 Controller는 바뀌지 않아요.
 
-## Service에는 처리 순서만 남긴다
+## Service에는 처리 순서만 남겼어요
 
 ```ts
 export class CrawlingService {
@@ -66,6 +74,7 @@ export class CrawlingService {
   ) {}
 
   async collect() {
+    // 예외 처리와 page 정리는 생략
     const config = CRAWLING_HANDLERS[this.platform];
     const page = await this.puppeteer.open(config.pages.recruit);
 
@@ -80,9 +89,9 @@ export class CrawlingService {
 }
 ```
 
-`PuppeteerService`를 생성자에서 받도록 한 부분은 NestJS의 constructor injection에서 참고했다. 여기서는 컨테이너가 자동으로 주입하지 않고 Factory가 직접 인스턴스를 만든다.
+`PuppeteerService`를 생성자에서 받도록 한 부분은 NestJS의 constructor injection에서 참고했어요. 다만 컨테이너가 자동으로 주입하지 않고, 앞에서 본 Factory가 직접 인스턴스를 만들어요. `CRAWLING_HANDLERS`는 다음 절에서 정의해요.
 
-## 플랫폼마다 다른 부분은 추상 클래스와 설정으로 분리한다
+## 플랫폼마다 다른 부분은 추상 클래스와 설정으로 나눴어요
 
 ```ts
 abstract class CandidateProcessor {
@@ -117,15 +126,30 @@ const CRAWLING_HANDLERS = {
 } as const satisfies Record<Platform, CrawlingHandler>;
 ```
 
-추상 클래스는 플랫폼 구현이 지켜야 할 처리 단계를 컴파일 단계에서 확인한다. 설정 객체는 NestJS Module처럼 구현 클래스와 보조 함수를 한곳에서 연결하지만, 런타임 DI나 데코레이터를 사용하지 않는다.
+추상 클래스는 플랫폼 구현이 갖춰야 할 메서드 집합을 컴파일 단계에서 강제해요. 그 메서드를 어떤 순서로 부를지는 `CrawlingService`가 정해요. 설정 객체는 NestJS Module처럼 구현 클래스와 보조 함수를 한곳에서 연결하지만, 런타임 DI나 데코레이터는 쓰지 않아요.
 
-## 실제로 얻은 것
+예시의 `Processor` 생성자 타입은 지금 다시 쓴 형태예요. 당시 제 구현에서는 이 자리가 `any`였어요.
 
-- 공통 처리 순서가 `CrawlingService` 한곳에 모였다.
-- 플랫폼별 selector와 예외 처리는 각 구현 안으로 좁혀졌다.
-- 새 플랫폼은 Processor와 로그인 함수를 구현하고 설정 객체에 등록하는 흐름으로 추가할 수 있게 됐다.
-- Puppeteer 의존성을 생성자 경계로 옮겨 대체 객체를 주입할 수 있는 구조가 됐다.
+## 이 구조 위에 두 플랫폼을 더 붙였어요
 
-여기서 구분할 점도 있다. **테스트 가능한 구조와 테스트가 있는 구조는 다르다.** 당시에는 의존성을 교체할 수 있는 경계까지 만들었지만 자동화 테스트를 충분히 붙이지 못했다. 따라서 회귀 방지율이나 버그 감소율을 수치로 말하기보다, 변경 범위가 플랫폼 구현 또는 공통 Service 중 한쪽으로 좁아졌다는 사실을 성과로 보는 편이 정확하다.
+나눈 뒤에는 공통 처리 순서가 `CrawlingService` 한곳에 모였고, 플랫폼별 selector와 예외 처리는 각 구현 안으로 좁혀졌어요. 구조를 나눈 리팩터링 커밋은 한 건 기준으로 14개 파일, 순 -140줄이었어요. 이 구조를 실제로 써 본 건 이후 플랫폼을 붙일 때였어요.
 
-결과적으로 NestJS를 Electron에 이식한 것은 아무것도 없다. decorator도 DI container도 없다. 남은 것은 IPC 변경, 공통 수집 순서 변경, 사이트 DOM 변경이 서로 다른 파일에서 끝나는 구조다. 당시 자동화 테스트를 충분히 붙이지 못한 점은 아쉽지만, 새 플랫폼을 추가할 때 기존 플랫폼 코드를 복사하지 않게 된 것만으로도 방향은 맞았다.
+- 한 곳은 이력서를 암호화된 ZIP으로 내려줬어요. 다른 한 곳은 2차 인증과 페이지네이션이 있었고, 학력·경력 추출과 중복 지원자 처리도 따로 필요했어요. 두 곳 모두 기존 플랫폼 파일을 복사하지 않고, 플랫폼별 구현을 새로 만들어 설정 객체에 등록하는 방식으로 붙였어요.
+- 지원자 한 명의 수집이 실패해도 나머지 수집은 이어지도록 지원자 단위로 에러를 잡았어요.
+
+여기서 구분할 점도 있어요. **테스트 가능한 구조와 테스트가 있는 구조는 달라요.** Puppeteer 의존성은 생성자 경계로 옮겨 대체 객체를 넣을 수 있게 됐지만, `CrawlingService`가 `CRAWLING_HANDLERS`를 모듈에서 직접 읽기 때문에 플랫폼별 로그인 함수와 Processor는 여전히 정적으로 묶여 있어요. 당시에는 이 경계까지만 만들고 자동화 테스트는 붙이지 못했어요.
+
+최종 구조에는 NestJS가 남지 않았어요. decorator도 DI container도 없어요. 남은 것은 IPC 변경, 공통 수집 순서 변경, 사이트 DOM 변경이 서로 다른 파일에서 끝나는 구조예요. 앞의 두 플랫폼을 기존 파일 복사 없이 붙일 수 있었다는 점에서 방향은 맞았다고 봐요.
+
+<div class="note note-limit">
+  <strong>아직 확인하지 못한 것</strong>
+  <p>변경 범위가 좁아졌다는 것은 구조로 설명한 것이지 측정한 값은 아니에요. 기존 플랫폼을 어떤 순서로 새 구조에 옮겼고, 옮긴 뒤 수집 결과가 그대로인지 무엇으로 확인했는지는 기록이 남아 있지 않아 적지 못했어요. 지금은 당시 저장소를 볼 수 없어 예시 코드를 원래 코드와 다시 대조하지 못했어요. 처리 순서를 `CrawlingService`에 뒀는지 별도 helper에 뒀는지, 지원자 단위 에러 처리를 공통 쪽과 플랫폼 구현 중 어디에 뒀는지, 암호화 ZIP과 2차 인증을 붙일 때 공통 코드도 손봤는지는 대조하지 못해 예시에서는 단순화했어요. 지원자 단위 에러 처리도 대부분 실패를 기록하고 넘어가는 수준이라 재시도 같은 복구는 없었어요. 당시 제 구현은 레지스트리(`CRAWLING_HANDLERS` 같은 등록 객체)의 키와 생성자 타입을 연결하지 못해 생성자 타입에 `any`가 남았고, 그 부분을 포함해 이후 코드의 다수는 동료가 다시 작성했어요. 이 글이 다루는 것은 제가 처음 잡은 구조예요.</p>
+</div>
+
+## 참고
+
+- [NestJS: Providers](https://docs.nestjs.com/providers) — 생성자 주입과 컨테이너의 역할
+- [NestJS: Modules](https://docs.nestjs.com/modules)
+- [Electron: Inter-Process Communication](https://www.electronjs.org/docs/latest/tutorial/ipc) — `ipcMain.handle`로 요청을 받는 패턴
+- [TypeScript Handbook: abstract Classes and Members](https://www.typescriptlang.org/docs/handbook/2/classes.html#abstract-classes-and-members)
+- 관련 글: [Puppeteer에서 요청과 응답을 함께 기다릴 때 놓쳤던 것](https://jingeon27.tistory.com/4) — 같은 수집 앱에서 비밀번호가 걸린 파일을 받을 때 겪은 문제
