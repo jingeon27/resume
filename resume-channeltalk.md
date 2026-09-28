@@ -48,7 +48,7 @@
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 
-- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 모듈 경계·constructor injection을 참고해(프레임워크 자체는 과하다고 판단해 제거, DI 컨테이너 없이 factory로 조립) 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후로는 새 사이트를 붙일 때 정해진 인터페이스 구현만 남았습니다.
+- ATS 크롤러가 사이트마다 중복 구현되던 구조를, NestJS의 모듈 경계·constructor injection을 참고해(NestJS 도입은 CTO가 Electron main 프로세스에 무겁다고 반려해 걷어내고, DI 컨테이너 없이 factory로 조립) 사이트별 어댑터 구조로 재설계하고 팀에 공유했습니다. 새 사이트는 service·repository·helper 구현만으로 연동할 수 있게 했고, 점핏·잡플래닛·게임잡 3개 연동 이후로는 새 사이트를 붙일 때 정해진 인터페이스 구현만 남았습니다.
 - 폼 dirty 추적·복원 패턴을 네 흐름에 재사용했고, 다단계 입력은 funnel로 구조화했습니다. 폼 dirty 상태, 복원, DnD optimistic update처럼 UI 상태와 저장소 상태가 엇갈리는 케이스를 주로 다뤘습니다.
 - `@whattime/quill` 기반 WYSIWYG에 템플릿 변수 치환을 구현했습니다. quill blot으로 변수를 atomic node로 처리해 사용자가 편집 중 변수 내부를 깨뜨리지 않게 했습니다.
 
