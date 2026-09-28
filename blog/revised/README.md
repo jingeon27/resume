@@ -53,7 +53,7 @@
 3. 말미에 `note-limit`(측정하지 않은 것, 미머지 상태, 재현하지 못한 것)
 4. `## 참고` 섹션 — 공식 문서, 업스트림 이슈·PR, 관련 글
 
-`note` 클래스는 이 셋만 쓴다(`note-caution` 등 금지). 관련 글 링크는 `https://jingeon27.tistory.com/<번호>` 형식이고 번호는 파일명 숫자와 같다.
+`note` 클래스는 이 셋만 쓴다(`note-caution` 등 금지). 관련 글 링크는 `https://jingeon27.tistory.com/<번호>` 형식이고 번호는 파일명 숫자와 같다. 2026-09-28에 27·28번 파일명이 공개 글 번호와 뒤바뀐 것을 확인해 바로잡았다(27 = Next.js, 28 = 에러 처리). REVIEW.md(08-19)의 post-27·28 표기는 옛 파일명 기준이다.
 
 ### 사실 표기
 
@@ -98,8 +98,8 @@
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
 | 26 | `post-26-declarative-code.md` | Filter Chip 조합부터 compound·factory·skipToken·테스트 반복까지 실제 코드 선택 기준으로 전면 재작성 |
-| 27 | `post-27-error-boundary.md` | 전체 화면 장애에서 시작해 Zod 관측, 로그, 복구 단위와 철회한 componentStack 시도까지 시간순으로 재작성 |
-| 28 | `post-28-next-server-to-client.md` | Next.js 우회 세 가지를 해결 결과뿐 아니라 새로 생긴 비용과 철회 조건까지 포함해 정리 |
+| 27 | `post-27-next-server-to-client.md` | Next.js 우회 세 가지를 해결 결과뿐 아니라 새로 생긴 비용과 철회 조건까지 포함해 정리 |
+| 28 | `post-28-error-boundary.md` | 전체 화면 장애에서 시작해 Zod 관측, 로그, 복구 단위와 철회한 componentStack 시도까지 시간순으로 재작성 |
 | 29 | `post-29-eslint-rule-fixture.md` | 리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정 |
 | 30 | `post-30-sentry-pii-hardening.md` | Next.js Sentry를 client·server·edge에 도입하고, 사용자 영향 기반 에러 레벨·breadcrumb/URL/span PII 정화·Web Vitals envelope E2E·MCP 연결·릴리스와 소스맵 artifact까지 운영 가능한 흐름으로 연결한 과정 |
 | 32 | `post-32-convention-to-lint.md` | 컨벤션 문서와 lint의 이탈률 계측(문서만 23~40% vs lint 0건)에서 시작해 규칙을 lint로 옮긴 과정. 심각도 기준과 재선언·tsconfigRootDir 함정, post-29와 짝을 이루는 도입 편. 2026-09-23 개정: 타입 접두사 수치를 규칙 도입 커밋(`675eb2ce0`) 직전 트리에서 같은 스크립트로 다시 재고 산출 기준을 명시, 8월의 "error 하나뿐"을 2026-09-18 설정 기준(운영 도구 error 5종·warning 잔존, 소비자용 앱 전부 error)으로 갱신, 해요체 전환과 필수 요소 추가 |
