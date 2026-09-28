@@ -13,7 +13,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 ## 기술
 
 - **제품 개발:** React, TypeScript, Next.js App Router, 모바일 웹·인앱 WebView, TanStack Query, React Hook Form, Zod
-- **UI·구조:** Radix UI, Ant Design, shadcn/ui·Base UI, FSD, pnpm·Turborepo
+- **UI·구조:** Radix UI, Ant Design, shadcn/ui·Base UI, dnd-kit, FSD, pnpm·Turborepo
 - **운영·검증:** Sentry, CloudWatch, Vitest, React Testing Library, MSW, Playwright, ESLint 규칙 개발
 - **AI·계측:** Claude Code·Codex, `AGENTS.md`·스킬 설계, git worktree 병렬 작업, Amplitude 행동 이벤트 구현
 
@@ -88,6 +88,8 @@ Next.js 16 전환 뒤에는 URL에 검색 조건이 붙은 관리자 목록에�
 **역할** React·TypeScript로 ATS 'RoundHR'의 채용 관리 웹·채용 담당자용 웹·랜딩·후보자 수집 Electron 앱 개발 (팀원) · **협업** 프론트엔드·백엔드 팀, 디자이너 · **관련 글** [Electron 수집 앱 구조](https://jingeon27.tistory.com/5) · [query-key-factory 적용](https://jingeon27.tistory.com/6)
 
 제가 합류한 2024년에는 ATS 'RoundHR'의 시장성을 확인하며 기능을 늘리고 있었어요. pnpm·Turborepo 모노레포에서 채용 관리 웹의 설정 폼·자동화 규칙, 채용 담당자용 웹의 서류·면접 평가 화면과 온보딩 안내, 랜딩의 모바일 화면을 개발했어요. 면접 템플릿은 네 단계의 입력과 검증을 `useFunnel`로 나눠 중간에 나가도 이어 쓸 수 있게 했고, React Query key는 `query-key-factory`로 정리했어요.
+
+채용 공고 순서부터 후보자 필터의 중첩 트리, 설정 테이블의 행 정렬까지 DnD를 여러 화면에 적용했어요. 화면마다 따로 다루던 드래그 컨텍스트·핸들·정렬 대상을 dnd-kit 기반 공통 컴포넌트로 나눴고, 폴더를 클릭했을 때 선택이 풀리는 문제처럼 정렬과 다른 조작이 맞물리는 부분도 계속 고쳤어요.
 
 후보자 수집 Electron 앱에서는 사이트마다 복제돼 있던 로그인 → 수집 → 중복 확인 → 업로드를 공통 순서와 사이트별 adapter로 나눴어요. 잡플래닛·게임잡을 이 구조에 연결하고, 지원자 한 명의 실패가 전체 수집을 멈추지 않도록 격리했어요. Sentry 오류는 서버 오류·인증 및 조회 실패·그 밖의 API 오류로 구분했어요. 초기 구조는 제가 잡았고 현재 코드는 이후 동료가 다시 작성한 부분이 많아요.
 
