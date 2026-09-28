@@ -113,7 +113,7 @@
 
 ## Technical Writing
 
-- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/27)
+- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
 - [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25)
 - [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
 - [서로 다른 두 SSE를 하나의 상담 화면에 연결한 과정](https://jingeon27.tistory.com/20)
