@@ -90,7 +90,7 @@ React·TypeScript로 2년 이상 제품을 개발했고, 현재 사내 유일 �
 **재직 기간** · 2024.01 – 2024.11  
 **제품** · 일정 조율 서비스, 채용 관리 서비스, 후보자 수집 Electron 앱
 
-- **Electron 수집기 아키텍처 개선** · 사이트마다 중복 구현되던 로그인→수집→중복 체크→업로드 흐름을 Registry·Adapter·Template Method 구조로 재설계했습니다. NestJS의 모듈 경계와 constructor injection을 참고했고, Electron main process에 프레임워크까지 얹는 건 과하다고 판단해 도입 5일 만에 걷어낸 뒤 factory로 조립했습니다.
+- **Electron 수집기 아키텍처 개선** · 사이트마다 중복 구현되던 로그인→수집→중복 체크→업로드 흐름을 Registry·Adapter·Template Method 구조로 재설계했습니다. NestJS의 모듈 경계와 constructor injection을 참고했고, 프레임워크 도입은 CTO가 Electron main process에 과하다고 반려해 5일 만에 걷어낸 뒤 factory로 조립했습니다.
 - **예약 폼 구조 재설계** · React Query·Zustand·로컬 상태에 흩어진 소유권을 정리해 핵심 컴포넌트를 **520줄에서 55줄**로 줄였습니다.
 - **데이터 운영 UI 개발** · TanStack Table 기반 정렬·필터·다중 선택과 `@dnd-kit` 칸반의 낙관적 업데이트 및 실패 시 롤백을 구현했습니다.
 
