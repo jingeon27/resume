@@ -44,7 +44,7 @@
 | 공용 폼 훅(zodResolver 연결 + 화면 숨김 시 reset) | `useSchemaForm` |
 | 인증 토큰 쿠키 | `sessionToken` / `renewalToken` |
 
-`useZodForm`은 쓰지 않는다. reset 메커니즘의 상세 설명은 28번에만 두고 11번은 요약과 링크로 대체한다.
+`useZodForm`은 쓰지 않는다. reset 메커니즘의 상세 설명은 27번(Next.js 글)에만 두고 11번은 요약과 링크로 대체한다.
 
 ### 글 한 편의 필수 요소
 
@@ -81,7 +81,7 @@
 | 공개 글 | 수정본 | 방향 |
 | --- | --- | --- |
 | 4 | `post-04-puppeteer-closure.md` | 이벤트 리스너 정리와 타임아웃, 거짓으로 평가되는 값의 처리까지 포함해 재작성 |
-| 5 | `post-05-electron-nestjs-inspired.md` | NestJS 사용이 아니라 아키텍처 참고로 명확화 |
+| 5 | `post-05-electron-nestjs-inspired.md` | 공통 순서·플랫폼 구현을 나눈 초기 구조는 본인 설계, 그 위에 NestJS 도입을 시도했다가 CTO 반려로 걷어낸 경위, 이후 두 플랫폼 연동과 한계(측정·테스트 없음, 이후 코드 다수는 동료 재작성)로 정리 |
 | 6 | `post-06-query-key-factory.md` | 버전과 API를 정확히 명시하고 예제 수정 |
 | 7 | `post-07-typescript-patterns.md` | 오타와 개념 오류를 고치고 XOR 프로퍼티로 교체 |
 | 8 | `post-08-next-tanstack-query.md` | `QueryClient` 생성 조건과 병렬 프리페치 수정 |
@@ -107,6 +107,12 @@
 | 34 | `post-34-plan-gated-ai-workflow.md` | 4월부터 실제 작업에 맞춰 보강한 AI 개발 흐름. plan 승인, 실제 화면·서비스 횡단 E2E를 종료 조건으로 삼고 반복 판단을 skill·lint·테스트에 남긴 과정. 리뷰어의 Critical 확인 절차와 검증 실패 시 중단을 구분하고, 저장소별 CI 범위와 배포 전 직접 검토를 설명 |
 | 35 | `post-35-zod-assertion-boundaries.md` | 타입 단언을 걷어내다 폴백을 지워 정산 월별표를 깨뜨린 회귀에서 시작해, 값의 출처에 따라 관측·복구·차단·좁히기로 검증 정책을 나눈 기준. `.parse` 도입과 `consistent-type-assertions`를 같은 날 철회한 이력, 저장소별로 다른 구현을 구분해 서술 |
 | 36 | `post-36-sentry-bottom-sheet-crash.md` | Sentry에서 확인한 Bottom Sheet 드래그 크래시를 라이브러리 생명주기까지 추적하고, 공통 Root의 26개 사용처 API를 유지한 채 원인 경로가 사라진 버전으로 올린 과정. 크래시 트리거는 재현하지 못했음과 업스트림 이슈를 함께 표기 |
+| 미정 | `post-new-analytics-integrity.md` | (새 글, 공개 전) 소비자용 앱 행동 이벤트의 정합성: UTM 유실을 분석 도구 설정으로 해결, 카드·버튼 중복 기록 수정, 소셜 로그인 완료 이벤트를 SDK 준비 뒤 한 번만 보내게 한 과정. 실험 판단은 디자인팀·PM·PO 몫으로 구분 |
+| 미정 | `post-new-temporary-open-day.md` | (새 글, 공개 전) 임시 진료일 설정이 파트너용 관리자·내부 CMS에서 소비자용 앱 예약 판정까지 같은 계약으로 닿게 한 과정. 판정 순서, `type` 없는 옛 데이터 호환, dev API 서버 테스트 |
+
+## 2026-09-28 개정
+
+당근 레슨/과외 이력서가 링크한 5·6·11·25·26·27·28·30번을 시리즈 기준(해요체, note 블록 3종, 참고 절, 호칭·가명 표)과 `AGENTS.md` 사실 규칙에 맞춰 다시 다듬었다. 글마다 반박 검증을 거쳤다. 이력서 사례 중 글이 없던 계측과 임시 진료일은 새 글 두 편으로 썼다. 공개할 때 파일명을 공개 번호로 바꾼다.
 
 ## 발행 순서
 
