@@ -58,7 +58,7 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 
 캘린더 기반 일정 조율과 채용 ATS SaaS에서 사용자 기능과 운영 화면을 개발했습니다.
 
-- 사이트마다 중복되던 Electron 크롤러를 controller·service·repository·helper로 분해하고 Registry + Adapter + Template Method 구조로 재설계했습니다. NestJS 도입은 Electron main process에 과하다고 판단해 5일 만에 제거하고 DI container 없이 factory로 조립했습니다.
+- 사이트마다 중복되던 Electron 크롤러를 controller·service·repository·helper로 분해하고 Registry + Adapter + Template Method 구조로 재설계했습니다. NestJS 도입은 CTO가 Electron main process에 과하다고 반려해 5일 만에 제거하고, DI container 없이 factory로 조립했습니다.
 - 점핏·잡플래닛·게임잡 연동, 2차 인증, 파일 업로드를 공통 프로세스 위에 구현했습니다. 리팩토링 커밋은 **14개 파일에서 순 -140줄**이었고, 이후로는 새 사이트를 붙일 때 정해진 인터페이스 구현만 남았습니다.
 - 지원자 한 명의 수집 실패가 전체 배치를 중단하지 않도록 오류를 격리하고 레이트리밋과 수집 상한을 적용했습니다.
 - `@dnd-kit` 기반 채용 공고 정렬에 optimistic update와 rollback을 적용하고, React Hook Form·`useFieldArray` 기반 지원서 폼과 Quill 기반 메일 템플릿 편집기를 구현했습니다.
