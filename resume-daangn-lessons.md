@@ -89,7 +89,7 @@ PM이 제안한 전화상담 실험에서는 플로팅 버튼을 하단 내비 �
 
 #### 운영에서 드러난 문제를 끝까지 확인한 일
 
-복지몰에 Sentry를 client·server·edge별로 붙이고 release·소스맵을 연결했어요. 의료 서비스라 SDK 소스를 따라가 URL·헤더·본문과 breadcrumb에 민감 정보가 실리는 경로를 찾아 막았어요. 이슈에는 회원 ID만 남겨 영향 사용자 수를 볼 수 있게 했어요. Sentry에서 발견한 Bottom Sheet 드래그 크래시는 수정 배포 전까지 운영에서 75건·57명 이상에게 발생했어요. 라이브러리 소스에서 null ref를 읽는 경로를 찾아 그 경로가 없는 버전으로 올렸고, 9월 10일 배포 뒤 9월 28일 확인까지 같은 오류 그룹은 0건이었어요. [Sentry 도입](https://jingeon27.tistory.com/30) · [크래시 분석](https://jingeon27.tistory.com/36)
+복지몰에 Sentry를 client·server·edge별로 붙이고 release·소스맵을 연결했어요. 의료 서비스라 SDK 소스를 따라가 URL·헤더·본문과 breadcrumb에 민감 정보가 실리는 경로를 찾아 막았어요. 이슈에는 회원 ID만 남겨 영향 사용자 수를 볼 수 있게 했어요. Sentry에서 발견한 Bottom Sheet 드래그 크래시는 수정 배포 전까지 운영에서 75건·57명 이상에게 발생했어요. 라이브러리 소스에서 null ref를 읽는 경로를 찾아 그 경로가 없는 버전으로 올렸고, 9월 10일 배포 뒤 9월 28일 확인까지 같은 오류 그룹은 0건이었어요. [Sentry 도입](https://jingeon27.tistory.com/30) · [크래시 분석](https://jingeon27.tistory.com/33)
 
 Next.js 16 전환 뒤에는 URL에 검색 조건이 붙은 관리자 목록에서 검색이 멈췄어요. 개발 서버와 jsdom 테스트는 통과했지만 프로덕션 빌드에서는 확인한 목록 7개 중 6개가 재현됐어요. 업스트림 라우터 캐시 이슈를 확인하고, 서버가 조회 조건을 읽지 않는 화면의 같은 경로 쿼리 변경은 History API가 맡도록 바꿨어요. 이후 같은 증상의 재보고는 없어요. [원인과 수정 과정](https://jingeon27.tistory.com/27)
 
