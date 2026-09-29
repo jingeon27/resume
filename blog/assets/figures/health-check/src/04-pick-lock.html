@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .st { border: 1px solid var(--line); border-radius: 14px; padding: 10px 11px 12px; background: #fff; display: flex; flex-direction: column; }
+  .st .no { font-size: 12px; font-weight: 700; color: var(--blue); }
+  .st h4 { font-size: 13.5px; margin: 2px 0 8px; }
+  .grp { font-size: 12px; padding: 5px 0; border-bottom: 1px solid #eef0f3; display: flex; justify-content: space-between; }
+  .grp.open { font-weight: 700; border-bottom: none; }
+  .grp .ok { color: var(--sage); font-weight: 700; }
+  .grp .left { color: var(--coral); font-weight: 600; }
+  .chips { padding: 2px 0 6px; border-bottom: 1px solid #eef0f3; }
+  .st .btn { text-align: center; padding: 6px 0; margin: 10px 0 0; }
+  .st .why { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .cmp { border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: var(--sub); }
+  .cmp b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 3px; }
+  .cmp.old { background: var(--coral-soft); }
+  .cmp.new { background: var(--sage-soft); }
+</style></head>
+<body>
+
+<div class="states">
+  <div class="st">
+    <span class="no">① 채우는 중</span>
+    <h4>B 그룹 택 3 중 2개</h4>
+    <div class="grp"><span>A 위내시경 <span class="pick">택 1</span></span><span class="ok">1/1</span></div>
+    <div class="grp open"><span>B 영상검사 <span class="pick">택 3</span></span><span class="left">2/3</span></div>
+    <div class="chips"><span class="chip on">상복부초음파</span><span class="chip on">갑상선초음파</span><span class="chip">경동맥초음파</span><span class="chip">유방초음파</span></div>
+    <div class="grp"><span>C 영상검사 <span class="pick">택 1</span></span><span class="left">0/1</span></div>
+    <span class="btn locked">선택 완료</span>
+    <p class="why">남은 칩은 모두 고를 수 있어요.</p>
+  </div>
+
+  <div class="st">
+    <span class="no">② 그룹을 채움</span>
+    <h4>B 그룹 3개를 다 고름</h4>
+    <div class="grp"><span>A 위내시경 <span class="pick">택 1</span></span><span class="ok">1/1</span></div>
+    <div class="grp open"><span>B 영상검사 <span class="pick">택 3</span></span><span class="ok">3/3</span></div>
+    <div class="chips"><span class="chip on">상복부초음파</span><span class="chip on">갑상선초음파</span><span class="chip on">경동맥초음파</span><span class="chip dis">유방초음파</span></div>
+    <div class="grp"><span>C 영상검사 <span class="pick">택 1</span></span><span class="left">0/1</span></div>
+    <span class="btn locked">선택 완료</span>
+    <p class="why">고르지 않은 칩은 잠기고, 바꾸려면 고른 칩을 먼저 해제해요. 시트는 스스로 다음 그룹을 열지 않아요.</p>
+  </div>
+
+  <div class="st">
+    <span class="no">③ 모든 그룹을 채움</span>
+    <h4>A·B·C 모두 택 N 충족</h4>
+    <div class="grp"><span>A 위내시경 <span class="pick">택 1</span></span><span class="ok">1/1</span></div>
+    <div class="grp"><span>B 영상검사 <span class="pick">택 3</span></span><span class="ok">3/3</span></div>
+    <div class="grp open"><span>C 영상검사 <span class="pick">택 1</span></span><span class="ok">1/1</span></div>
+    <div class="chips"><span class="chip on">뇌(머리)CT</span><span class="chip dis">폐CT</span></div>
+    <span class="btn primary">선택 완료</span>
+    <p class="why">모든 그룹이 채워져야 신청 폼으로 값을 넘겨요.</p>
+  </div>
+</div>
+
+<div class="compare">
+  <div class="cmp old"><b>처음 요청: 채우면 다음 그룹 자동 열기</b>이미 고른 그룹의 선택을 고치려고 칩을 누를 때도 다음 그룹으로 강제로 넘어가요. 예전 구현은 택 N을 넘기면 먼저 고른 칩을 밀어냈고요.</div>
+  <div class="cmp new"><b>논의 뒤: 채운 그룹의 남은 칩 잠금</b>넘치는 선택은 화면이 막고, 선택 로직은 넣고 빼기만 해요. 디자인에 없던 비활성 칩 모양은 요청해서 받았어요.</div>
+</div>
+
+<p class="foot">stage의 복지몰 선택 검사 시트(390×844)에서 확인한 상태를 옮겨 그렸어요. 검사 항목은 예시예요.</p>
+</body></html>

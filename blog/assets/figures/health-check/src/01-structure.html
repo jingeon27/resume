@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .lane-head { font-size: 15px; font-weight: 700; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; }
+  .lane-head small { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 2px; }
+  .lane-a .lane-head { background: var(--soft); }
+  .lane-b .lane-head { background: var(--blue-soft); }
+  .branch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .branch .card { padding: 9px 11px; }
+  .branch h4 { font-size: 13.5px; }
+  .legend { display: flex; gap: 14px; margin-top: 16px; font-size: 12px; color: var(--sub); align-items: center; flex-wrap: wrap; }
+  .card.readonly { background: var(--soft); border-style: dashed; }
+  .card.hl { border-color: var(--blue-line); }
+</style></head>
+<body>
+<div class="lanes">
+
+  <section class="lane-a">
+    <div class="lane-head">비급여 프로그램<small>파트너가 올리고 운영팀이 검수해요</small></div>
+
+    <div class="card">
+      <span class="app pa">병원 관리자</span>
+      <h4>프로그램 등록</h4>
+      <ul><li>미리보기를 보며 기본 정보·가격·상세 이미지 입력</li></ul>
+      <span class="btn">임시저장</span><span class="btn primary">검수요청</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card">
+      <span class="app pa">병원 관리자</span>
+      <h4>검수 요청</h4>
+      <ul><li>유형: 신규등록 · 수정 · 삭제</li><li>요청사항 메모와 함께 전송</li></ul>
+      <span class="state req">검수중</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card">
+      <span class="app bo">Back-Office</span>
+      <h4>검수</h4>
+      <ul><li>검수중 스위치를 켜고 내용 확인</li><li>반려하려면 사유를 남겨요</li></ul>
+      <span class="btn">반려</span><span class="btn primary">승인</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="branch">
+      <div class="card">
+        <span class="state no">반려</span>
+        <h4>사유가 파트너에게</h4>
+        <p>병원 관리자 검수 내역 상세에 반려 사유가 보여요</p>
+      </div>
+      <div class="card">
+        <span class="state ok">승인</span>
+        <h4>프로그램 생성</h4>
+        <p>노출 일시가 정해지고 병원 관리자 목록에 올라와요</p>
+      </div>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card">
+      <span class="app mall">복지몰</span>
+      <h4>비급여 상세</h4>
+      <ul><li>가격 아래 쿠폰 적용가</li></ul>
+      <span class="btn">전화상담</span><span class="btn primary">방문예약</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card">
+      <span class="app mall">복지몰</span>
+      <h4>예약 신청</h4>
+      <ul><li>진료 대상 · 희망 일시 · 전달사항 · 약관</li><li>확인 시트 → 접수 → 예약 상세</li></ul>
+    </div>
+  </section>
+
+  <section class="lane-b">
+    <div class="lane-head">건강검진 프로그램<small>운영팀이 검진 구성까지 등록해요</small></div>
+
+    <div class="card hl">
+      <span class="app bo">Back-Office</span>
+      <h4>검진 프로그램 등록</h4>
+      <ul><li>기본 정보 · 가격 · 예약금</li><li>검진 구성: 필수 항목 + 선택 그룹 <span class="pick">택 N</span></li></ul>
+      <span class="btn primary">등록</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card readonly">
+      <span class="app pa">병원 관리자</span>
+      <h4>조회 전용 상세</h4>
+      <ul><li>검진 구성까지 모든 입력이 잠겨 있어요</li><li>이 프로그램에는 검수 요청을 보낼 수 없어요</li></ul>
+      <span class="btn off">검수요청</span><span class="btn off">삭제요청</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card hl">
+      <span class="app mall">복지몰</span>
+      <h4>검진 상세</h4>
+      <ul><li>검사 구성: 기본 항목 N개 · 선택 그룹별 <span class="pick">택 N</span></li><li>쿠폰 적용가와 전화상담이 없어요</li></ul>
+      <span class="btn primary">방문예약</span>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card hl">
+      <span class="app mall">복지몰</span>
+      <h4>검진 신청</h4>
+      <ul><li>선택 검사 시트에서 그룹마다 택 N</li><li>진료 대상 · 희망 일시 · 공단 여부 · 주소 · 기업 검진 코드</li><li>확인 시트에서 예약금·현장 결제 예상 금액 확인</li></ul>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="branch">
+      <div class="card hl">
+        <span class="app server">checkout</span>
+        <h4>예약금이 있으면</h4>
+        <p>토스 결제창을 거쳐 승인되면 접수</p>
+      </div>
+      <div class="card hl">
+        <span class="app server">checkout</span>
+        <h4>기업 지원 · 0원</h4>
+        <p>결제창 없이 바로 접수</p>
+      </div>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="card hl">
+      <span class="app mall">복지몰</span>
+      <h4>예약 상세</h4>
+      <ul><li>접수한 예약의 상세로 바로 이동해요</li></ul>
+    </div>
+  </section>
+</div>
+
+<div class="legend">
+  <span><span class="app pa">병원 관리자</span> 파트너가 쓰는 관리 화면</span>
+  <span><span class="app bo">Back-Office</span> 운영팀 관리 화면</span>
+  <span><span class="app mall">복지몰</span> 사용자 화면</span>
+</div>
+<p class="foot">2026-09-28 stage 테스트 데이터로 두 흐름을 끝까지 진행한 화면을 바탕으로 다시 그렸어요. 건강검진 흐름은 9월 30일 오픈 전이에요.</p>
+</body></html>

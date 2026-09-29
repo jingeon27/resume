@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  .model { border: 1.5px solid var(--ink); border-radius: 10px; padding: 12px 16px; background: #fff; }
+  .model-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .model-head b { font-size: 15px; }
+  .model-head span { font-size: 12px; color: var(--sub); }
+  .model pre { margin-top: 8px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: var(--ink); background: var(--soft); border-radius: 8px; padding: 10px 12px; }
+  .model pre .c { color: var(--faint); }
+  .rule { margin-top: 8px; font-size: 12.5px; color: var(--sub); }
+  .rule b { color: var(--ink); }
+  .fan { height: 30px; position: relative; }
+  .fan::before { content: ''; position: absolute; left: 12%; right: 12%; top: 14px; border-top: 1.5px solid var(--line-strong); }
+  .fan::after { content: ''; position: absolute; left: 50%; top: 0; height: 14px; border-left: 1.5px solid var(--line-strong); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pane { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 12px; background: #fff; }
+  .pane .label { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .pane .label b { font-size: 13.5px; }
+  .pane .desc { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .row { display: grid; grid-template-columns: 58px 1fr; gap: 6px; align-items: start; margin-top: 6px; font-size: 11.5px; color: var(--sub); }
+  .box { border: 1px solid var(--line); border-radius: 6px; padding: 3px 5px; min-height: 22px; background: #fff; }
+  .radio { font-size: 11.5px; color: var(--sub); }
+  .radio i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--line-strong); margin: 0 3px -1px 0; }
+  .radio i.on { border: 3.5px solid var(--blue); }
+  .group-card { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin-top: 6px; }
+  .locked .box, .locked .group-card { background: #f2f4f7; }
+  .locked .tag { color: var(--faint); }
+  .locked .radio i.on { border-color: var(--disabled); }
+  .add { font-size: 11.5px; color: var(--blue); margin-top: 6px; }
+  .locked .add { color: var(--disabled); }
+  .mall-sec { font-size: 12.5px; font-weight: 700; margin-top: 4px; }
+  .mall-sec small { font-weight: 400; color: var(--faint); margin-left: 4px; }
+  .basic { display: flex; justify-content: space-between; background: var(--soft); border-radius: 8px; padding: 7px 10px; font-size: 12.5px; margin-top: 5px; }
+  .basic span { color: var(--faint); }
+  .acc { border: 1px solid var(--blue-line); border-radius: 8px; margin-top: 6px; overflow: hidden; }
+  .acc-h { background: var(--blue-soft); padding: 5px 9px; font-size: 12.5px; font-weight: 700; display: flex; justify-content: space-between; }
+  .acc-b { padding: 4px 9px 7px; }
+  .cat { font-size: 11px; color: var(--sub); margin-top: 3px; }
+  .sheet-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #eef0f3; }
+  .sheet-row.open { font-weight: 700; }
+  .sheet-btns { display: flex; gap: 6px; margin-top: 8px; }
+  .sheet-btns .btn { flex: 1; text-align: center; padding: 5px 0; }
+</style></head>
+<body>
+
+<div class="model">
+  <div class="model-head"><b>검진 구성 한 벌</b><span>Back-Office가 저장하고 네 화면이 읽어요</span></div>
+<pre>{
+  includedItemIds: [<span class="c">신체계측, 시력, 체성분, 심전도, 혈당, 문진, X-선</span>],   <span class="c">// 필수 항목</span>
+  selectableGroups: [
+    { name: '위내시경',     pickCount: 1, itemIds: [<span class="c">비수면, 수면</span>] },
+    { name: '정밀 영상검사', pickCount: 2, itemIds: [<span class="c">초음파 3종, 뇌CT, 폐CT</span>] },
+  ],
+}</pre>
+  <p class="rule"><b>규칙</b> · 한 검사 항목은 한 곳에만 들어가요. 다른 그룹이 가져간 항목은 선택지에서 잠겨요. · 선택 그룹은 <b>택 N</b>을 채워야 신청할 수 있어요.</p>
+</div>
+
+<div class="fan"></div>
+
+<div class="grid">
+  <div class="pane">
+    <div class="label"><span class="app bo">Back-Office</span><b>등록 · 수정 폼</b></div>
+    <div class="row"><span>구분</span><span class="radio"><i class="on"></i>필수 <i></i>선택</span></div>
+    <div class="row"><span>필수 항목</span><div class="box"><span class="tag">신체계측 ×</span><span class="tag">시력 ×</span><span class="tag">심전도 ×</span><span class="tag">…</span></div></div>
+    <div class="group-card">
+      <div class="row" style="margin-top:0"><span>선택 그룹</span><div style="display:flex;gap:5px"><div class="box" style="flex:1">위내시경</div><div class="box" style="width:52px">1 개</div></div></div>
+      <div class="row"><span>검사항목</span><div class="box"><span class="tag">비수면 ×</span><span class="tag">수면 ×</span></div></div>
+    </div>
+    <div class="add">+ 선택 그룹 추가</div>
+    <p class="desc">그룹을 더하고 택 N과 항목을 편집해요. 왼쪽 미리보기는 복지몰과 같은 검사 구성 UI로 그려요.</p>
+  </div>
+
+  <div class="pane locked">
+    <div class="label"><span class="app pa">병원 관리자</span><b>같은 폼, 조회 전용</b></div>
+    <div class="row"><span>구분</span><span class="radio"><i class="on"></i>필수 <i></i>선택</span></div>
+    <div class="row"><span>필수 항목</span><div class="box"><span class="tag gray">신체계측</span><span class="tag gray">시력</span><span class="tag gray">심전도</span><span class="tag gray">…</span></div></div>
+    <div class="group-card">
+      <div class="row" style="margin-top:0"><span>선택 그룹</span><div style="display:flex;gap:5px"><div class="box" style="flex:1;color:var(--faint)">위내시경</div><div class="box" style="width:52px;color:var(--faint)">1 개</div></div></div>
+      <div class="row"><span>검사항목</span><div class="box"><span class="tag gray">비수면</span><span class="tag gray">수면</span></div></div>
+    </div>
+    <div class="add">+ 선택 그룹 추가</div>
+    <p class="desc">태그의 ×, 삭제, 그룹 추가가 모두 잠기고 검수·삭제 요청 버튼이 없어요.</p>
+  </div>
+
+  <div class="pane">
+    <div class="label"><span class="app mall">복지몰</span><b>검진 상세의 검사 구성</b></div>
+    <div class="mall-sec">기본 검사<small>기본으로 포함된 검사</small></div>
+    <div class="basic"><b>기본 항목 7개</b><span>항목 보기 ›</span></div>
+    <div class="mall-sec" style="margin-top:8px">선택 검사<small>항목별로 선택할 수 있는 검사</small></div>
+    <div class="acc"><div class="acc-h"><span>위내시경 <span class="pick">택 1</span></span><span>⌃</span></div>
+      <div class="acc-b"><div class="cat">기본검사</div><span class="chip">위내시경(비수면)</span><span class="chip">위내시경(수면)</span></div></div>
+    <div class="acc"><div class="acc-h"><span>정밀 영상검사 <span class="pick">택 2</span></span><span>⌃</span></div></div>
+    <p class="desc">필수 항목은 개수로 접고, 선택 그룹은 항목을 카테고리로 묶어 보여줘요.</p>
+  </div>
+
+  <div class="pane">
+    <div class="label"><span class="app mall">복지몰</span><b>선택 검사 시트</b></div>
+    <div class="sheet-row"><span>위내시경 / 위내시경(수면)</span><span>⌄</span></div>
+    <div class="sheet-row open"><span>정밀 영상검사 <span class="pick">택 2</span></span><span>⌃</span></div>
+    <div class="cat">영상검사</div>
+    <span class="chip on">상복부초음파</span><span class="chip on">갑상선초음파</span><span class="chip dis">경동맥초음파</span><span class="chip dis">뇌(머리)CT</span>
+    <div class="sheet-btns"><span class="btn">초기화</span><span class="btn primary">선택 완료</span></div>
+    <p class="desc">그룹마다 택 N을 채워야 신청 폼으로 돌아가요. 채운 그룹은 고르지 않은 칩이 잠겨요.</p>
+  </div>
+</div>
+
+<p class="foot">stage 화면(Back-Office 프로그램 등록·상세, 병원 관리자 프로그램 상세, 복지몰 검진 상세·선택 검사 시트)의 필드와 상태를 옮겨 그렸어요. 검사 항목은 예시예요.</p>
+</body></html>
