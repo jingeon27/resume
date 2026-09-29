@@ -109,6 +109,7 @@
 | 36 | `post-36-sentry-bottom-sheet-crash.md` | Sentry에서 확인한 Bottom Sheet 드래그 크래시를 라이브러리 생명주기까지 추적하고, 공통 Root의 26개 사용처 API를 유지한 채 원인 경로가 사라진 버전으로 올린 과정. 원샷 변경과 AI 리뷰에서 놓친 헤더 스크롤 문제 및 후속 Browser Mode 테스트도 구분해 기록 |
 | 미정 | `post-new-analytics-integrity.md` | (새 글, 공개 전) 복지몰 행동 이벤트의 정합성: UTM 유실을 분석 도구 설정으로 해결, 카드·버튼 중복 기록 수정, 소셜 로그인 완료 이벤트를 SDK 준비 뒤 한 번만 보내게 한 과정. 실험 판단은 디자인팀·PM·PO 몫으로 구분 |
 | 미정 | `post-new-temporary-open-day.md` | (새 글, 공개 전) 임시 진료일 설정이 병원 관리자·Back-Office에서 복지몰 예약 판정까지 같은 계약으로 닿게 한 과정. 판정 순서, `type` 없는 옛 데이터 호환, dev API 서버 테스트 |
+| 미정 | `post-new-health-check-program.md` | (새 글, 공개 전) 외부 사이트와 전화로 돌던 건강검진을 파트너 등록·검수·예약 구조에 들인 과정. 병원 관리자 입구 판정을 파트너에서 프로그램 진료과로 옮긴 이유, 검진 구성 한 벌을 네 화면이 읽는 구조, 상세·신청 폼을 조건 대신 화면째 나눈 기준, 선택 검사 칩 잠금, 결제 결과별 복귀 경로. 그림 다섯 장은 `../assets/figures/health-check/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링). 9월 30일 오픈 전이라 결과 지표 없음 |
 
 ## 2026-09-28 개정
 
