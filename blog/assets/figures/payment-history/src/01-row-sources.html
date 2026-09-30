@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 7px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .box { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 11px 13px 12px; min-width: 0; }
+  .box.coupon { border: 1.5px solid var(--blue-line); background: #fbfcff; }
+  .box.core { border: 1.5px solid var(--ink); }
+  .head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .head b { font-size: 14px; letter-spacing: -0.2px; }
+  .head .id { margin-left: auto; font-size: 11.5px; color: var(--faint); }
+  .chip-src { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
+  .chip-src.server { background: var(--soft); color: var(--sub); border: 1px solid var(--line); }
+  .chip-src.client { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-line); }
+  .chip-src.form { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
+
+  .type { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--ink); margin-top: 6px; }
+  .small { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 3px; }
+  .small b { color: var(--ink); font-weight: 600; }
+  .f { display: inline-block; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.35; padding: 1px 6px; border-radius: 4px; margin: 3px 3px 0 0; background: var(--soft); color: #4a5361; border: 1px solid var(--line); white-space: nowrap; }
+  .f.blue { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-line); }
+  .f.form { background: #fff; color: var(--blue); border: 1px dashed var(--blue); font-weight: 600; }
+  .f.drop { background: #fff; color: var(--faint); border: 1px dashed var(--line-strong); text-decoration: line-through; }
+  .f small { font-family: 'Pretendard', sans-serif; font-size: 10.5px; color: var(--faint); margin-left: 2px; }
+  .fields { margin-top: 5px; }
+  .note { margin-top: 8px; padding-top: 7px; border-top: 1px solid #eef0f3; font-size: 11.5px; color: var(--sub); line-height: 1.5; }
+
+  .made { border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px 8px; margin-top: 7px; }
+  .made.coupon { border-color: var(--blue-line); background: #fff; }
+  .made-h { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; font-weight: 700; }
+  .made-h .where { font-size: 11px; font-weight: 500; color: var(--faint); }
+  .made .small { margin-top: 2px; }
+  .num { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; font-size: 10.5px; font-weight: 700; color: #fff; background: var(--sub); flex-shrink: 0; }
+  .num.blue { background: var(--blue); }
+
+  pre { margin-top: 7px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; line-height: 1.6; color: var(--ink); background: var(--soft); border-radius: 8px; padding: 7px 11px; white-space: pre-wrap; }
+  pre .c { color: var(--faint); }
+  pre .k { color: var(--blue); font-weight: 600; }
+  pre .add { color: var(--blue); font-weight: 600; }
+
+  .fan { height: 30px; position: relative; }
+  .fan::before { content: ''; position: absolute; left: 25%; right: 25%; top: 14px; border-top: 1.5px solid var(--line-strong); }
+  .fan::after { content: ''; position: absolute; left: 50%; top: 0; height: 14px; border-left: 1.5px solid var(--line-strong); }
+  .fan i { position: absolute; top: 14px; height: 13px; border-left: 1.5px solid var(--line-strong); }
+  .fan i::after { content: ''; position: absolute; left: -5.5px; bottom: -4px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid var(--line-strong); }
+  .fan i.l { left: 25%; } .fan i.r { left: 75%; }
+  .join { height: 30px; position: relative; }
+  .join::before { content: ''; position: absolute; left: 25%; right: 25%; top: 0; height: 13px; border: 1.5px solid var(--line-strong); border-top: 0; }
+  .join::after { content: ''; position: absolute; left: calc(50% - 5px); bottom: 3px; border-left: 5.5px solid transparent; border-right: 5.5px solid transparent; border-top: 7px solid var(--line-strong); }
+  .join span { position: absolute; left: 50%; top: 13px; bottom: 9px; border-left: 1.5px solid var(--line-strong); }
+
+  .map { display: grid; grid-template-columns: auto 16px 1fr; gap: 3px 6px; align-items: baseline; margin-top: 7px; font-size: 11.5px; color: var(--sub); }
+  .map code { font-size: 11px; color: var(--ink); }
+  .map .arr { color: var(--faint); text-align: center; }
+  .dropline { margin-top: 7px; font-size: 11.5px; color: var(--sub); }
+  .list { list-style: none; margin-top: 5px; }
+  .list li { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 2px; padding-left: 10px; position: relative; }
+  .list li::before { content: '·'; position: absolute; left: 1px; color: var(--faint); }
+  .list li b { color: var(--ink); font-weight: 600; }
+  .date { display: inline-block; font-size: 10.5px; font-weight: 600; color: var(--sub); background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 3px; vertical-align: 1px; white-space: nowrap; }
+
+  .after { margin-top: 0; border: 1px solid var(--blue-line); background: var(--blue-soft); border-radius: 10px; padding: 9px 13px 10px; font-size: 12px; color: var(--ink); line-height: 1.55; }
+  .after b { color: var(--blue); }
+  .after code { font-size: 11px; }
+  .after .rows { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+  .after .r { background: #fff; border: 1px solid var(--blue-line); border-radius: 6px; padding: 2px 8px; font-size: 11.5px; }
+  .after .r.hide { color: var(--sub); border-style: dashed; }
+  .down-right { height: 26px; position: relative; }
+  .down-right::before { content: ''; position: absolute; left: 75%; top: 2px; bottom: 7px; border-left: 1.5px solid var(--blue-line); }
+  .down-right::after { content: ''; position: absolute; left: calc(75% - 5px); bottom: 2px; border-left: 5.5px solid transparent; border-right: 5.5px solid transparent; border-top: 7px solid var(--blue-line); }
+  .down-right span { position: absolute; left: calc(75% + 10px); top: 3px; font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+</style></head>
+<body>
+
+<div class="zone">폼의 결제 내역 배열에 들어오는 행</div>
+<div class="two">
+  <div class="box">
+    <div class="head"><span class="chip-src server">서버 응답</span><b>저장된 행</b><span class="id">id 있음</span></div>
+    <div class="type">TTreatmentPaymentHistoryResDTO</div>
+    <p class="small">응답을 검증하는 zod 스키마에서 타입을 뽑는다.</p>
+    <div class="fields">
+      <span class="f">treatmentPaymentHistoryId</span><span class="f">paymentMethod<small>15종</small></span><span class="f">paymentStatus<small>6종</small></span><span class="f">transactionId</span><span class="f">memberCouponId</span><span class="f">couponName</span><span class="f">paymentAmt</span><span class="f">remainAmt</span><span class="f">paymentDtm</span>
+    </div>
+    <p class="note">결제를 취소해도 원래 행은 그대로 두고 <b style="color:var(--ink)">현장취소</b> 행이 새로 쌓인다. 쿠폰을 빼면 같은 거래를 가리키는 <b style="color:var(--ink)">쿠폰취소</b> 행이 붙는다.</p>
+  </div>
+
+  <div class="box">
+    <div class="head"><span class="chip-src client">화면</span><b>클라이언트가 붙이는 행</b><span class="id">id 없음</span></div>
+    <div class="made">
+      <div class="made-h"><span class="num">1</span>대기 행<span class="where">정산 상세</span></div>
+      <p class="small">대기 중인 현장결제·현장취소 행이 없으면 하나 붙인다. <code style="font-size:10.5px">withPendingPayment</code><br>현장결제 · 처리 중 · 0원 · 미수잔금은 시술 내역의 총 미수잔금</p>
+    </div>
+    <div class="made coupon">
+      <div class="made-h"><span class="num blue">2</span>쿠폰 행<span class="where">예약 상세 · 쿠폰 예약 · 확정 전</span></div>
+      <p class="small">쿠폰결제 · 처리 중 · 금액은 쿠폰 할인 전 총 결제 예정 금액<br>쿠폰 값은 예약 응답에서 옮겨 담는다</p>
+      <span class="f blue">memberCouponId</span><span class="f blue">couponName</span><span class="f form">couponDiscountAmount</span>
+    </div>
+  </div>
+</div>
+
+<div class="join"><span></span></div>
+
+<div class="box core">
+  <div class="head"><span class="chip-src form">폼 값</span><b>treatmentPaymentHistory: ITreatmentPaymentHistoryClient[]</b></div>
+<pre><span class="k">interface</span> ITreatmentPaymentHistoryClient <span class="k">extends</span> TTreatmentPaymentHistoryResDTO {
+  <span class="add">couponDiscountAmount</span>?: number | null; <span class="c">// 폼 전용. 쿠폰 행의 최종 결제금액 미리보기에만 쓴다</span>
+}</pre>
+  <p class="small">타임라인·헤더·상세는 모두 이 배열을 읽는다(그림 2). 서버에 없는 값은 이 필드 하나다.</p>
+</div>
+
+<div class="fan"><i class="l"></i><i class="r"></i></div>
+
+<div class="zone">요청으로 나가는 값</div>
+<div class="two">
+  <div class="box">
+    <div class="head"><b>정산 상세 '저장'</b><span class="id">두 앱</span></div>
+    <p class="small" style="margin-top:6px">시술 내역 수정 요청에 폼 행을 거의 그대로 싣는다.</p>
+    <div class="type" style="font-size:11px">paymentHistories:<br>&nbsp;&nbsp;행.filter(isSavablePaymentHistory)</div>
+    <ul class="list">
+      <li><b>뺀다</b> 대기·처리 중인 현장결제·현장취소 행. 결제일을 고르면 완료가 되어 실린다</li>
+      <li><b>그대로</b> 쿠폰결제·예약금 같은 나머지 행</li>
+    </ul>
+  </div>
+
+  <div class="box coupon">
+    <div class="head"><b>예약 상세 '결제 내역 확정'</b><span class="id">두 앱</span></div>
+    <p class="small" style="margin-top:6px">미저장 쿠폰 행 하나를 찾아, 확정 요청의 필드를 이름으로 채운다.</p>
+    <div class="map">
+      <code>paymentAmount</code><span class="arr">←</span><span>쿠폰 행 <code>paymentAmt</code> (총 결제 예정 금액)</span>
+      <code>memberCouponId</code><span class="arr">←</span><span>쿠폰 행 <code>memberCouponId</code></span>
+      <code>paymentDtm</code><span class="arr">←</span><span>쿠폰 행 <code>paymentDtm</code></span>
+    </div>
+    <p class="small" style="margin-top:4px">견적금액(<code style="font-size:10.5px">quoteAmount</code>)·내원일·메모는 폼의 다른 칸에서 채운다.</p>
+    <div class="dropline"><span class="f drop">couponName</span><span class="f drop">couponDiscountAmount</span> 두 값은 집지 않으니 요청에 실리지 않는다</div>
+    <p class="note">저장된 쿠폰 행은 집지 않는다.<span class="date">08-26 추가</span> 확정을 취소해도 서버가 지난 확정의 쿠폰 행을 지우지 않아서다.</p>
+  </div>
+</div>
+
+<div class="down-right"><span>확정 뒤 다시 받은 응답</span></div>
+<div class="after">
+  <b>저장된 두 행이 화면에서는 한 줄이 된다.</b> 현장결제 행의 <code>transactionId</code>와 쿠폰결제 행의 id가 같으면 연결된 쿠폰으로 읽는다.
+  <div class="rows"><span class="r">현장결제 · 완료 → 타임라인 한 줄</span><span class="r hide">쿠폰결제 → 그 줄의 '쿠폰 사용 금액'으로만</span></div>
+</div>
+
+<p class="foot">2026-09-29 develop 코드(공유 패키지의 결제 내역 타입·helper, 두 앱의 예약 상세·정산 상세 제출 코드)와 2026-08-26 커밋을 바탕으로 그렸다. 코드는 줄였다.</p>
+</body></html>
