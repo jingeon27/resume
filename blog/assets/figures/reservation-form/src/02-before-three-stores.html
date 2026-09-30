@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--sub); margin-bottom: 12px; }
+
+  /* 값 종류 칩 */
+  .v { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 0 6px; border-radius: 4px; line-height: 17px; white-space: nowrap; border: 1px solid; margin: 2px 2px 0 0; }
+  .v.who { color: #4a5361; background: var(--soft); border-color: var(--line-strong); }
+  .v.sel { color: var(--blue); background: var(--blue-soft); border-color: var(--blue-line); }
+  .v.date { color: var(--coral); background: var(--coral-soft); border-color: #e2c3b9; }
+  .v.ok { color: var(--sage); background: var(--sage-soft); border-color: #bcd0ba; }
+  .v code { font-size: 10px; font-weight: 600; }
+
+  .g { display: grid; grid-template-columns: 84px repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .head { border-radius: 10px; padding: 8px 10px 9px; background: var(--ink); color: #fff; }
+  .head b { display: block; font-size: 13.5px; letter-spacing: -0.2px; }
+  .head span { font-size: 11px; color: #c9d0da; }
+  .lab { font-size: 12px; font-weight: 700; color: var(--ink); padding: 7px 2px 0 2px; line-height: 1.35; }
+  .lab small { display: block; font-size: 10.5px; font-weight: 500; color: var(--faint); margin-top: 2px; }
+  .c { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px 7px; font-size: 11.5px; color: var(--sub); line-height: 1.45; background: #fff; min-width: 0; }
+  .c b { color: var(--ink); font-weight: 600; }
+  .c code { font-size: 10.5px; color: var(--ink); overflow-wrap: anywhere; }
+  .c.none { color: var(--faint); text-align: center; background: #fafbfc; border-style: dashed; display: flex; align-items: center; justify-content: center; }
+  .c.life { background: var(--soft); border-color: var(--soft); }
+  .item + .item { margin-top: 6px; padding-top: 6px; border-top: 1px solid #eef0f3; }
+  .item .t { font-size: 11.5px; font-weight: 700; color: var(--ink); }
+  .item .t em { font-style: normal; font-weight: 500; color: var(--faint); margin-left: 3px; font-size: 10.5px; }
+  .item p { margin-top: 2px; }
+  .step { display: inline-block; width: 15px; height: 15px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 9.5px; font-weight: 700; text-align: center; line-height: 15px; margin-right: 3px; vertical-align: 1px; }
+  .arrow { color: var(--faint); margin: 0 2px; }
+  .sec { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--ink); margin: 8px 0 0; }
+  .sec::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .sec small { font-size: 11.5px; font-weight: 500; color: var(--sub); }
+  .sum { margin-top: 12px; border-radius: 10px; background: var(--coral-soft); border: 1px solid #e8cdc4; padding: 9px 13px; font-size: 12.5px; color: var(--ink); line-height: 1.5; }
+  .sum b { color: var(--coral); }
+</style></head>
+<body>
+
+<div class="legend">
+  <span>같은 색 칩 = 같은 값</span>
+  <span><span class="v who">구성원</span> 목록에 누가 있는지</span>
+  <span><span class="v sel">선택 여부</span></span>
+  <span><span class="v date">희망 일시</span></span>
+  <span><span class="v ok">제출 가능 여부</span></span>
+</div>
+
+<div class="g">
+  <div></div>
+  <div class="head"><b>React Query 캐시</b><span>대상 목록 쿼리 · setQueryData</span></div>
+  <div class="head"><b>Zustand 스토어</b><span>BookingDraftStore · 140줄</span></div>
+  <div class="head"><b>로컬 상태</b><span>useState · 네 컴포넌트</span></div>
+
+  <div class="lab">수명</div>
+  <div class="c life">대상 목록은 조회 뒤 10분 동안 다시 조회하지 않고, 화면을 떠나도 10분 동안 선택·일시가 남아요</div>
+  <div class="c life">전역이라 화면이 끝나도 남아요. 예약 페이지와 대상 컴포넌트가 언마운트될 때 각각 비워요</div>
+  <div class="c life">컴포넌트가 사라지면 함께 사라져요</div>
+
+  <div class="lab">들고 있던 값</div>
+  <div class="c">
+    <div class="item">
+      <div class="t">대상 목록 쿼리</div>
+      <p>본인·가족 조회 결과에 사람마다 작성 칸을 붙였어요</p>
+      <span class="v who">구성원</span><span class="v sel">선택 여부</span><span class="v date">희망 일시</span>
+    </div>
+    <div class="item">
+      <div class="t">수동 변경 ID · 기존 ID 백업</div>
+      <p>조회 결과가 아닌 ID 목록 두 개도 캐시 키에 넣어 썼어요</p>
+    </div>
+  </div>
+  <div class="c">
+    <div class="item">
+      <div class="t"><code>form.participants[]</code></div>
+      <p>체크한 가족만 넣고 뺐어요. 본인은 늘 들어가요</p>
+      <span class="v who">구성원</span><span class="v sel">선택 여부</span><span class="v date">희망 일시</span>
+    </div>
+    <div class="item">
+      <div class="t"><code>form.requestNote</code> 등 제출값</div>
+    </div>
+    <div class="item">
+      <div class="t"><code>isValid</code></div>
+      <p>값을 바꾸는 액션 다섯 개가 끝에서 <code>validateDraft</code>를 다시 돌려 저장했어요</p>
+      <span class="v ok">제출 가능 여부</span>
+    </div>
+  </div>
+  <div class="c">
+    <div class="item">
+      <div class="t">날짜 선택기<em>고른 날짜·시간</em></div>
+      <p>둘 다 고르면 effect로 페이지에 알려요</p>
+      <span class="v date">희망 일시</span>
+    </div>
+    <div class="item">
+      <div class="t">예약 페이지<em>선택 일시</em></div>
+      <p>이 값이 생겨야 진료 대상 구역을 그려요</p>
+      <span class="v date">희망 일시</span>
+    </div>
+    <div class="item">
+      <div class="t">대상 선택 컴포넌트<em>519줄</em></div>
+      <p>마지막 선택 일시, 첫 로드 여부, 바텀시트 대상·열림</p>
+      <span class="v date">희망 일시</span>
+    </div>
+    <div class="item">
+      <div class="t">사람별 일시 바텀시트<em>고른 일시</em></div>
+      <span class="v date">희망 일시</span>
+    </div>
+  </div>
+
+  <div class="sec">동작 하나가 쓰는 곳<small>세 곳에 따로 써서 맞췄어요</small></div>
+
+  <div class="lab">날짜·시간<br>고르기</div>
+  <div class="c">모든 사람의 일시를 새 일시로 바꿔요. 사람별로 바꾼 일시도 덮어써요</div>
+  <div class="c"><code>applyScheduleToAll</code> — 스토어에 들어 있는 사람의 일시만 바꿔요</div>
+  <div class="c">선택기 <span class="arrow">→</span> 페이지 선택 일시 <span class="arrow">→</span> 대상 컴포넌트가 마지막 선택 일시와 비교해 두 곳의 일괄 적용을 시작해요</div>
+
+  <div class="lab">사람별 일시<br>'변경'</div>
+  <div class="c">그 사람의 일시를 바꾸고 수동 변경 ID에 더해요</div>
+  <div class="c"><code>updateParticipant</code> — 그 사람이 스토어에 있을 때만 바뀌어요</div>
+  <div class="c">바텀시트 대상·열림, 시트 안에서 고른 일시</div>
+
+  <div class="lab">체크 · 해제</div>
+  <div class="c">그 사람의 <code>selected</code>를 바꿔요</div>
+  <div class="c">가족은 체크하면 캐시의 일시를 복사해 넣고, 해제하면 빼요. 본인은 <code>selected</code>만 바꿔요</div>
+  <div class="c none">—</div>
+
+  <div class="lab">가족 추가</div>
+  <div class="c"><span class="step">1</span>지금 목록의 ID를 기존 ID 백업에 적어요<br><span class="step">3</span>목록을 다시 조회하고, 조회 전 목록에서 기존 사람의 선택·일시를 되살려요<br><span class="step">4</span>백업에 없는 새 가족에게만 페이지 선택 일시를 넣어요</div>
+  <div class="c">새 가족은 체크하지 않은 상태라 아직 없어요. 체크할 때 캐시의 일시로 들어가요</div>
+  <div class="c"><span class="step">2</span>가족 인증 바텀시트가 끝날 때까지 기다려요</div>
+
+  <div class="lab">가족 삭제</div>
+  <div class="c">수동 변경 ID에서 빼고, 서버 삭제가 끝나면 목록에서 빼요</div>
+  <div class="c">서버에 요청하기 전에 먼저 빼요</div>
+  <div class="c">삭제 확인 모달</div>
+</div>
+
+<div class="sum"><b>한 값에 주인이 여럿</b> · 선택 여부와 희망 일시는 캐시와 스토어에 사람마다 한 벌씩 있었고, 희망 일시는 로컬 상태에도 컴포넌트마다 따로 있었어요. 동작마다 이 복사본들을 손으로 맞췄고, 제출 가능 여부는 스토어의 액션이 끝날 때마다 다시 계산해 저장했어요.</div>
+
+<p class="foot">2025-06-12 코드(리팩터링 PR 직전의 예약 페이지, 대상 선택 컴포넌트 519줄, BookingDraftStore 140줄, 대상 목록 훅, 날짜 선택기, 사람별 일시 바텀시트)를 바탕으로 그렸어요. 코드는 줄였고, 코드 이름은 글과 같은 가명이에요.</p>
+</body></html>
