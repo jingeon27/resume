@@ -77,7 +77,7 @@ confirmReservation({
 | 저장 | 취소 | 완료 | 취소 정보 |
 | 저장 | 그 외 | 대기/처리 중 | 일반 대기 정보 |
 
-노출 여부와 색상은 쿠폰 전부터 helper 함수로 나와 있었다. 색상 함수는 2026년 3월에, 노출 조건 함수는 4월에 두 앱의 결제 내역 UI를 공통 패키지로 옮기며 만들었다. 쿠폰 조건은 그 함수에 더했고, 상세 컴포넌트 선택은 이 표의 순서대로 다시 짰다.
+노출 여부와 색상은 쿠폰 전부터 helper 함수로 나와 있었다. 색상 함수는 2026년 3월에 만들었고, 노출 조건 함수는 4월에 두 앱의 결제 내역 UI를 공통 패키지로 옮기며 만들었다. 쿠폰 조건은 그 함수에 더했고, 상세 컴포넌트 선택은 이 표의 순서대로 다시 짰다.
 
 <figure class="figure-wide">
   <img src="../assets/figures/payment-history/02-row-states.png" alt="위쪽 왼쪽은 결제 내역 타임라인을 단순화해 다시 그린 화면이다. 펼쳐진 미저장 행(3)과 결제취소 행(2), 결제완료 행(1)이 있고 1~5 번호가 붙어 있다. 오른쪽은 그 번호의 다섯 자리로, 타임라인에 올릴지(isVisiblePaymentHistory), 점 색(getPaymentHistoryColor), 헤더 태그·날짜·금액(PaymentHistoryHeader), 처음부터 펼칠지(PaymentHistory), 펼쳤을 때의 칸(PaymentHistoryDescriptions)이다. 아래 표는 미저장 행, 저장된 행, 타임라인에 올리지 않는 행으로 묶은 행 종류마다 노출·점 색·헤더 태그·상세 컴포넌트가 무엇이 되는지 보여 준다. 저장된 행에는 08-14에 분리된 CouponCompleteDescriptions와 09-11에 추가된 PaymentRecordDescriptions가 표시돼 있고, 저장된 쿠폰결제와 쿠폰취소 행은 숨김이다" />
