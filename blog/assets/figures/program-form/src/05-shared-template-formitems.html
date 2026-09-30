@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--sub); margin-bottom: 12px; align-items: center; }
+  .legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
+  .sw.shared { background: var(--sage-soft); border: 1px solid #bcd0ba; }
+  .sw.prog { background: var(--soft); border: 1px solid var(--line-strong); }
+  .sw.own { background: var(--blue-soft); border: 1px solid var(--blue-line); }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 6px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .layer { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 11px 12px; }
+  .layer.core { border: 1.5px solid var(--ink); padding: 12px 14px; }
+  .head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .head b { font-size: 14px; letter-spacing: -0.2px; }
+  .head .file { margin-left: auto; font-size: 11px; color: var(--faint); font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }
+  .when { font-size: 11.5px; color: var(--faint); margin-top: 3px; }
+  .apps { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 14px; align-items: stretch; }
+  .comp p code { font-size: 11px; }
+  .nw { white-space: nowrap; }
+  .stack { display: flex; flex-direction: column; gap: 5px; margin-top: 9px; }
+  .blk { border-radius: 7px; padding: 5px 9px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; color: var(--ink); overflow-wrap: anywhere; }
+  .blk.shared { background: var(--sage-soft); border: 1px solid #bcd0ba; }
+  .blk.prog { background: var(--soft); border: 1px solid var(--line-strong); }
+  .blk.own { background: var(--blue-soft); border: 1px solid var(--blue-line); }
+  .blk .s { display: block; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; font-size: 11px; color: var(--sub); margin-top: 1px; }
+  .blk .parts { margin-top: 4px; padding: 4px 7px; border-radius: 5px; background: #fff; border: 1px dashed #bcd0ba; font-size: 11px; }
+  .blk .parts b { color: var(--sage); }
+  .blk .parts .off { color: var(--disabled); text-decoration: line-through; }
+  .fan { height: 40px; position: relative; }
+  .fan::before { content: ''; position: absolute; left: 25%; right: 25%; top: 14px; border-top: 1.5px solid var(--line-strong); }
+  .fan i { position: absolute; top: 0; height: 14px; border-left: 1.5px solid var(--line-strong); }
+  .fan i.l { left: 25%; } .fan i.r { left: 75%; }
+  .fan b { position: absolute; left: 50%; top: 14px; height: 22px; border-left: 1.5px solid var(--line-strong); }
+  .fan b::after { content: ''; position: absolute; left: -5.5px; bottom: -4px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid var(--line-strong); }
+  .fan-label { position: absolute; left: calc(50% + 10px); top: 18px; font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+  .trio { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 9px; }
+  .mini { border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; font-size: 11.5px; color: var(--sub); }
+  .mini b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 3px; }
+  .mini code { font-size: 10.5px; color: var(--ink); overflow-wrap: anywhere; }
+  .comp { margin-top: 9px; border: 1px solid #bcd0ba; background: var(--sage-soft); border-radius: 9px; padding: 9px 11px; }
+  .comp-h { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .comp-h code { font-size: 11.5px; }
+  .comp p { font-size: 11.5px; color: var(--sub); margin-top: 3px; }
+  pre { margin-top: 6px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.55; color: var(--ink); background: #fff; border-radius: 7px; padding: 7px 10px; white-space: pre-wrap; border: 1px solid #d6e2d4; }
+  pre .c { color: var(--faint); }
+  pre .k { color: var(--sage); font-weight: 700; }
+  .whole { margin-top: 8px; font-size: 11.5px; color: var(--sub); }
+  .whole code { font-size: 11px; color: var(--ink); background: var(--sage-soft); border: 1px solid #bcd0ba; border-radius: 4px; padding: 0 5px; }
+  .flow { margin-top: 12px; border: 1px solid var(--blue-line); background: var(--blue-soft); border-radius: 10px; padding: 9px 12px; }
+  .flow-h { font-size: 12.5px; font-weight: 700; color: var(--blue); }
+  .chain { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-top: 6px; font-size: 11.5px; }
+  .chain span.n { background: #fff; border: 1px solid var(--blue-line); border-radius: 6px; padding: 2px 7px; color: var(--ink); }
+  .chain span.n code { font-size: 11px; }
+  .chain i { color: var(--blue); font-style: normal; }
+  .flow p { font-size: 11.5px; color: var(--sub); margin-top: 5px; }
+  .flow p code { font-size: 11px; color: var(--ink); }
+  .hist { margin-top: 8px; border: 1px dashed var(--line-strong); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--sub); }
+  .hist b { color: var(--ink); }
+</style></head>
+<body>
+
+<div class="legend">
+  <span><i class="sw shared"></i>두 폼이 함께 쓰는 템플릿 입력(treatment)</span>
+  <span><i class="sw prog"></i>프로그램 폼 전용(program)</span>
+  <span><i class="sw own"></i>Back-Office 전용</span>
+</div>
+
+<div class="zone">두 폼이 같은 입력을 각자 조립한다</div>
+<div class="apps">
+  <div class="layer">
+    <div class="head"><span class="app bo">Back-Office</span><b>하위 시술 템플릿 편집</b><span class="file">TreatmentSubForm</span></div>
+    <p class="when">하위 시술마다 템플릿 값을 등록한다</p>
+    <div class="stack">
+      <div class="blk own">TreatmentSubNameFormItem<span class="s">하위 시술 이름</span></div>
+      <div class="blk shared">RecommendedTargetFormItem</div>
+      <div class="blk own">TreatmentSub.ProcedureHighlightsFormItems
+        <div class="parts">ProcedureHighlight.FormList → <b>Image</b> + <b>Input</b></div>
+        <span class="s">행마다 아이콘과 문구를 함께 받는다</span></div>
+      <div class="blk shared">ProcedureEquipment<span class="s">기본 조립 그대로</span></div>
+      <div class="blk shared">ProcedureProcessFormItem</div>
+      <div class="blk shared">Precautions</div>
+    </div>
+  </div>
+
+  <div class="layer">
+    <div class="head"><span class="app server">두 앱</span><b>프로그램 폼 · 상세 이미지</b><span class="file">ProgramDetailImageFormSection</span></div>
+    <p class="when">상세 이미지 유형이 제공 템플릿일 때</p>
+    <div class="stack">
+      <div class="blk prog">DetailTemplateColorFormItem<span class="s">템플릿 색상</span></div>
+      <div class="blk prog">SyncTreatmentSub<span class="s">하위 시술을 바꾸면 값을 가져온다(마지막 절)</span></div>
+      <div class="blk shared">RecommendedTargetFormItem</div>
+      <div class="blk prog">BenefitFormItem<span class="s">직접입력 / 해당없음</span></div>
+      <div class="blk prog">ProcedureHighlightsFormItem
+        <div class="parts">ProcedureHighlight.FormList → <span class="off">Image</span> <b>Input</b></div>
+        <span class="s">문구만 고친다. 아이콘은 하위 시술 템플릿에서 받아 온 값을 그대로 둔다</span></div>
+      <div class="blk shared">ProcedureEquipment<span class="s">기본 조립 그대로</span></div>
+      <div class="blk shared">ProcedureProcessFormItem</div>
+      <div class="blk prog">BeforeAfterImagesFormList<span class="s">직접입력 / 해당없음</span></div>
+      <div class="blk shared">Precautions</div>
+    </div>
+  </div>
+</div>
+
+<div class="fan"><i class="l"></i><i class="r"></i><b></b><span class="fan-label">같은 FormItem, 같은 필드 이름</span></div>
+
+<div class="zone">공유 패키지 · 하위 시술 템플릿 입력</div>
+<div class="layer core">
+  <div class="head"><span class="app server">treatment</span><b>템플릿 입력 한 벌</b><span class="file" style="font-family:'Pretendard',sans-serif">treatment 슬라이스</span></div>
+  <div class="trio">
+    <div class="mini"><b>이름 계약</b><code>SAFEDOC_TEMPLATE_NAME_TYPE</code><br><code>isRecommended · recommendedTarget · isProcedureHighlights · … · precautions</code><br>두 폼의 초기값과 타입이 이 열 개 이름을 그대로 쓴다</div>
+    <div class="mini"><b>토글 + 목록</b><code>ProgramConditionedRender.<wbr>SafedocProvider(<wbr>{ name, renderItem })</code><br><code>Form.Item shouldUpdate</code> 안에서 <span class="nw">'제공 / 해당없음'</span> 라디오를 그리고, '제공'일 때만 목록을 그린다. <code>.Direct</code>는 <span class="nw">'직접입력 / 해당없음'</span></div>
+    <div class="mini"><b>바깥 틀</b><code>TemplateForm</code><br>antd Form 에 공통 스타일을 입힌 틀. 하위 시술 템플릿 편집 폼과 두 앱의 프로그램 폼 래퍼가 모두 이 틀로 그린다</div>
+  </div>
+
+  <div class="comp">
+    <div class="comp-h">compound <code>ProcedureHighlight = { FormList, Input, Image }</code></div>
+    <p>목록 틀(라벨·토글·Form.List)과 행 안의 입력을 나눠 두고, 행을 어떻게 채울지는 쓰는 쪽이 정한다.</p>
+<pre>&lt;ProcedureHighlight.FormList&gt;
+  {({ field, index }) =&gt; (
+    &lt;&gt;
+      &lt;ProcedureHighlight.<span class="k">Image</span> field={field} /&gt;  <span class="c">// 하위 시술 편집만</span>
+      &lt;ProcedureHighlight.<span class="k">Input</span> field={field} index={index} /&gt;
+    &lt;/&gt;
+  )}
+&lt;/ProcedureHighlight.FormList&gt;</pre>
+  </div>
+  <div class="comp">
+    <div class="comp-h">compound <code>ProcedureEquipment</code> = 기본 조립 + <code>{ FormList, FormItem, ImageWrapper, Image, Title, Content }</code></div>
+    <div class="comp-h" style="margin-top:4px">compound <code>Precautions</code> = 기본 조립 + <code>{ Form, FormItem }</code></div>
+    <p>두 폼 모두 기본 조립(<code>&lt;ProcedureEquipment /&gt;</code>·<code>&lt;Precautions /&gt;</code>)을 쓴다. 조각은 다른 조립이 필요해질 때를 위해 열어 두었다.</p>
+  </div>
+  <p class="whole">통째로 함께 쓰는 입력 <code>RecommendedTargetFormItem</code> <code>ProcedureProcessFormItem</code></p>
+</div>
+
+<div class="flow">
+  <div class="flow-h">섹션 구조가 같아서 값을 옮길 때는 모양만 맞춘다</div>
+  <div class="chain">
+    <span class="n">Back-Office 하위 시술 템플릿 저장</span><i>→</i>
+    <span class="n">하위 시술 상세 API</span><i>→</i>
+    <span class="n"><code>SyncTreatmentSub</code></span><i>→</i>
+    <span class="n">프로그램 폼의 같은 섹션 필드 다섯 개</span>
+  </div>
+  <p>응답의 <code>recommendedTargets</code>·<code>procedureProcess</code>·<code>precautions</code>는 <code>string[]</code>이라 <code>{ title }[]</code>로, 이미지는 업로드 파일 형태로 바꿔 넣는다.</p>
+</div>
+
+<div class="hist"><b>2026-01-26 전까지는</b> 두 앱의 프로그램 폼과 하위 시술 템플릿 편집 폼(01-14 생성)이 추천 대상·특장점·장비·과정·주의사항 입력을 한 벌씩, 모두 세 벌 들고 있었다. 01-26 에 프로그램 폼 두 벌을 공유 패키지로 모았고, 01-27 에 두 커밋으로 남은 두 벌을 한 벌로 합치면서 특장점·시술 장비·주의사항을 조각을 나눈 compound 로 만들었다. 두 폼의 조립이 실제로 다른 것은 특장점뿐이다.</div>
+
+<p class="foot">2026-09-29 develop 코드(treatment 템플릿 입력, TreatmentSubForm, ProgramDetailImageFormSection, SyncTreatmentSub)와 git 이력을 바탕으로 그렸다. 코드는 줄였다.</p>
+</body></html>
