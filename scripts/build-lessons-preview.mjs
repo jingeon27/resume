@@ -50,8 +50,11 @@ const plans = [
   { label: '왓타임 · 지원동기', short: '경력과 지원동기', start: '왓타임 | Frontend Engineer | 2024.01 – 2024.11' },
 ];
 
+// 사례 제목(####)은 `제목 | 작업 기간`으로 쓰므로 페이지 시작은 제목 부분으로 찾는다.
+const titleOf = (block) => (block.level === 4 ? block.text.split(' | ')[0] : block.text);
+
 const starts = plans.map(({ start }) => {
-  const matches = blocks.filter((block) => block.kind === 'heading' && block.text === start);
+  const matches = blocks.filter((block) => block.kind === 'heading' && titleOf(block) === start);
   if (matches.length !== 1) throw new Error(`페이지 시작 제목을 확인하세요: ${start}`);
   return matches[0].id;
 });
@@ -65,6 +68,10 @@ function renderBlock(block, section) {
     if (block.level === 3 && block.text.includes(' | ')) {
       const [company, role, dates] = block.text.split(' | ');
       return `<h3 class="company" ${attr}><span>${inline(company)}</span><span class="company-meta">${inline(role)} <span aria-hidden="true">·</span> ${inline(dates)}</span></h3>`;
+    }
+    if (block.level === 4 && block.text.includes(' | ')) {
+      const [title, period] = block.text.split(' | ');
+      return `<h4 class="project" ${attr}><span>${inline(title)}</span><span class="project-period">${inline(period)}</span></h4>`;
     }
     return `<h${block.level} ${attr}>${inline(block.text)}</h${block.level}>`;
   }

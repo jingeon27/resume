@@ -127,6 +127,8 @@ h4 { margin: 22px 0 9px; font-size: 15px; line-height: 1.45; font-weight: 700; l
 .page-content > h2:first-child, .page-content > h3:first-child, .page-content > h4:first-child { margin-top: 0; }
 .company { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .company-meta { color: var(--muted); font-size: 11px; font-weight: 400; white-space: nowrap; }
+.project { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.project-period { flex-shrink: 0; color: var(--muted); font-size: 11px; font-weight: 400; letter-spacing: 0; white-space: nowrap; font-variant-numeric: tabular-nums; }
 p { margin: 0 0 10px; orphans: 3; widows: 3; }
 p:last-child { margin-bottom: 0; }
 strong { font-weight: 650; color: var(--heading); }
@@ -153,8 +155,8 @@ code { padding: 1px 3px; background: #f1f4f5; color: #344f5d; border-radius: 3px
   .sheet { width: 100%; min-height: auto; padding: 28px 24px 20px; margin-bottom: 16px; }
   .running-header { margin-bottom: 24px; }
   .page-footer { margin-top: 28px; }
-  .company { flex-wrap: wrap; gap: 3px; }
-  .company-meta { display: block; }
+  .company, .project { flex-wrap: wrap; gap: 3px; }
+  .company-meta, .project-period { display: block; }
   h2 { margin-top: 26px; }
   h4 { margin-top: 25px; }
   .contact { line-height: 1.9; }
