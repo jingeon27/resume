@@ -88,7 +88,7 @@
 | 11 | `post-11-reservation-form.md` | 519→55의 정확한 범위와 책임 이동을 구분 |
 | 12 | `post-12-review-like-optimistic-update.md` | 캐시 스냅샷과 직접 롤백하는 과정, 동시성 한계를 반영 |
 | 14 | `post-14-next-seo-prefetch.md` | `await`한 결과와 대기 중인 쿼리의 직렬화를 구분해 재작성 |
-| 15 | `post-15-review-form.md` | 실제 단계별 폼 구조와 남은 `_def`·최종 검증 부채를 구분 |
+| 15 | `post-15-review-form.md` | 실제 단계별 폼 구조와 남은 추가 검증 소실·최종 검증 부채를 구분. 시술 선택이 드롭다운에서 Bottom Sheet로 바뀌며 고르는 도중의 값을 시트가 갖게 된 과정. 그림 두 장은 `../assets/figures/review-form/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
 | 18 | `post-18-program-form.md` | 타입 폼과 변환 계층, 동기화 경계를 보강 |
 | 19 | `post-19-cross-domain-token.md` | 회사·도메인·내부 식별자 익명화, 현재 구현과 미구현 보강안 분리, 토큰 전달 방식의 한계 반영 |
 | 20 | `post-20-chatbot-message-layer.md` | 두 SSE를 합친 사건을 중심으로 축약하고 과도한 단계 구분과 연출형 표현을 제거 |
