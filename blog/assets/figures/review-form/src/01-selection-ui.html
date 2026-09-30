@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .col-head { margin-bottom: 8px; min-height: 50px; }
+  .era { display: inline-block; font-size: 11.5px; font-weight: 600; color: var(--sub); background: var(--soft); border: 1px solid var(--line); border-radius: 5px; padding: 1px 7px; }
+  .col-head h4 { font-size: 14.5px; font-weight: 700; margin-top: 5px; letter-spacing: -0.2px; }
+
+  /* 휴대폰 틀: 390×844 화면을 줄여 단순화했다 */
+  .phone { position: relative; height: 470px; border: 1.5px solid var(--line-strong); border-radius: 22px; overflow: hidden; background: #fff; }
+  .sbar { height: 16px; }
+  .appbar { height: 30px; display: flex; align-items: center; gap: 7px; padding: 0 12px; font-size: 11.5px; font-weight: 700; border-bottom: 1px solid #eef0f3; background: #fff; }
+  .appbar i { font-style: normal; font-weight: 400; color: var(--sub); font-size: 14px; line-height: 1; }
+  .scr { padding: 10px 11px 0; }
+  .lbl { font-size: 10.5px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+  .lbl .req { color: var(--blue); margin-left: 2px; }
+  .fld { height: 28px; border: 1px solid var(--line); border-radius: 6px; padding: 0 7px; display: flex; align-items: center; gap: 4px; font-size: 10.5px; color: var(--ink); white-space: nowrap; overflow: hidden; background: #fff; }
+  .fld.ph { color: var(--faint); font-size: 9.5px; }
+  .fld.focus { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+  .gap10 { height: 10px; }
+  .skel { height: 7px; border-radius: 4px; background: #eef0f3; margin-top: 8px; }
+  .skel-box { height: 28px; border-radius: 6px; background: #f3f5f8; margin-top: 5px; }
+  .w35 { width: 35%; } .w55 { width: 55%; } .w70 { width: 70%; }
+
+  /* A: 입력칸 아래로 펼치는 메뉴 */
+  .menu { position: absolute; left: 11px; right: 11px; border: 1px solid var(--line-strong); border-radius: 7px; background: #fff; overflow: hidden; }
+  .menu .row { height: 28px; padding: 0 9px; display: flex; align-items: center; font-size: 10.5px; border-bottom: 1px solid #f1f3f6; }
+
+  /* 키패드 */
+  .kbd { position: absolute; left: 0; right: 0; bottom: 0; height: 180px; background: #d6dae0; padding: 12px 5px 0; }
+  .kbd .keys { display: flex; justify-content: center; gap: 3px; margin-bottom: 8px; }
+  .kbd .keys span { width: 17px; height: 27px; background: #fff; border-radius: 4px; box-shadow: 0 1px 0 #a7aeb8; }
+  .kbd .keys span.sp { width: 88px; }
+  .kbd .keys span.fn { width: 30px; background: #bcc2cb; }
+  .kbd-label { position: absolute; left: 0; right: 0; bottom: 9px; text-align: center; font-size: 10px; color: #6f7784; }
+
+  /* B: 트리거를 덮고 아래로 펼치는 드롭다운 */
+  .pop { position: absolute; left: 11px; right: 11px; }
+  .pbox { margin-top: 3px; border: 1px solid var(--line-strong); border-radius: 8px; background: #fff; overflow: hidden; box-shadow: 0 3px 10px rgba(36, 42, 50, 0.08); }
+  .pchips { display: flex; gap: 4px; padding: 6px 7px; border-bottom: 1px solid #e7ebf1; white-space: nowrap; overflow: hidden; }
+  .tchip { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; padding: 2px 7px; border-radius: 999px; background: var(--soft); border: 1px solid var(--line); color: var(--ink); }
+  .tchip b { font-weight: 400; color: var(--faint); }
+  .prow { height: 24px; padding: 0 9px; display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 600; color: var(--ink); }
+  .ck { color: var(--blue); font-weight: 700; font-size: 11px; }
+
+  /* C: 딤과 시트 */
+  .gtag { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; padding: 2px 7px; border-radius: 999px; background: #eef0f3; color: var(--ink); white-space: nowrap; }
+  .gtag b { font-weight: 400; color: var(--faint); }
+  .dim { position: absolute; inset: 0; background: rgba(28, 33, 40, 0.46); }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 15px 15px 0 0; padding-bottom: 10px; }
+  .handle { width: 26px; height: 3px; border-radius: 2px; background: #cdd2d9; margin: 8px auto 9px; }
+  .search { margin: 0 11px; height: 28px; border: 1px solid var(--line); border-radius: 6px; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; font-size: 9.5px; color: var(--faint); }
+  .search svg { flex: none; }
+  .olist { height: 150px; overflow: hidden; margin: 8px 11px 0; }
+  .opt { height: 25px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--faint); }
+  .opt.on { color: var(--ink); font-weight: 600; }
+  .summary { margin-top: 5px; background: var(--blue-soft); padding: 7px 11px; display: flex; align-items: center; gap: 6px; }
+  .summary .txt { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; font-size: 9.5px; color: var(--sub); -webkit-mask-image: linear-gradient(to right, #000 80%, transparent); mask-image: linear-gradient(to right, #000 80%, transparent); }
+  .summary .reset { flex: none; font-size: 9.5px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .confirm { margin: 8px 11px 0; height: 30px; border-radius: 7px; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 700; }
+
+  /* 번호 표시 */
+  .mk { position: absolute; width: 17px; height: 17px; border-radius: 50%; color: #fff; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #fff; z-index: 5; }
+  .mk.c { background: var(--coral); }
+  .mk.b { background: var(--blue); }
+  .edge { position: absolute; left: 0; right: 0; border-top: 2px dashed var(--coral); z-index: 4; }
+
+  /* 아래 설명 */
+  .info { margin-top: 10px; }
+  .legend { list-style: none; }
+  .legend li { position: relative; padding-left: 22px; font-size: 12px; color: var(--ink); line-height: 1.45; margin-top: 4px; }
+  .legend li .n { position: absolute; left: 0; top: 1px; width: 16px; height: 16px; border-radius: 50%; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .legend.c li .n { background: var(--coral); }
+  .legend.b li .n { background: var(--blue); }
+  .legend-title { font-size: 11.5px; font-weight: 700; color: var(--coral); }
+  .kv { margin-top: 9px; border-top: 1px solid #eef0f3; padding-top: 8px; }
+  .kv p { font-size: 12px; color: var(--sub); line-height: 1.5; margin-top: 4px; }
+  .kv p b { color: var(--ink); font-weight: 700; margin-right: 4px; }
+  .kv code { font-size: 11px; background: var(--soft); border-radius: 4px; padding: 0 3px; color: var(--ink); }
+</style></head>
+<body>
+
+<p class="caption-top">리뷰 작성 2단계의 시술 선택 필드. 폼 값의 모양과 단계 스키마 규칙(1~5개, 중복 없음)은 세 시기 내내 같았고, 고르는 도중의 값이 어디에 있는지가 바뀌었다.</p>
+
+<div class="cols">
+
+  <!-- A. 키워드 자동완성 드롭다운 -->
+  <div>
+    <div class="col-head"><span class="era">2024-12부터</span><h4>키워드 자동완성 드롭다운</h4></div>
+    <div class="phone">
+      <div class="sbar"></div>
+      <div class="appbar"><i>‹</i>리뷰 작성</div>
+      <div class="scr">
+        <div class="lbl">방문하신 병원을 입력해 주세요.</div>
+        <div class="fld">예시치과의원</div>
+        <div class="gap10"></div>
+        <div class="lbl">받으신 시술을 모두 입력해 주세요.<br>(복수 선택 가능)</div>
+        <div class="fld ph focus">프로그램명(시술/진료)을 입력해 주세요</div>
+      </div>
+      <div class="menu" style="top: 170px;">
+        <div class="row">스케일링</div>
+        <div class="row">치아 미백</div>
+        <div class="row">레진 치료</div>
+        <div class="row">잇몸 치료</div>
+        <div class="row">불소 도포</div>
+        <div class="row">실란트</div>
+      </div>
+      <div class="kbd">
+        <div class="keys"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="keys"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="keys"><span class="fn"></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="fn"></span></div>
+        <div class="keys"><span class="fn"></span><span class="sp"></span><span class="fn"></span></div>
+        <div class="kbd-label">키패드</div>
+      </div>
+      <div class="edge" style="bottom: 180px;"></div>
+      <span class="mk c" style="left: 186px; top: 279px;">1</span>
+      <span class="mk c" style="left: 186px; top: 203px;">2</span>
+      <span class="mk c" style="left: 186px; top: 175px;">3</span>
+    </div>
+    <div class="info">
+      <div class="legend-title">2025-06에 직접 써 보고 적은 문제</div>
+      <ul class="legend c">
+        <li><span class="n">1</span>키패드가 올라오면 아래로 펼친 목록이 가려진다</li>
+        <li><span class="n">2</span>여러 개를 고를 수 있는데 하나 고르면 목록이 바로 닫힌다</li>
+        <li><span class="n">3</span>이미 고른 항목(여기서는 스케일링)이 목록에서 구분되지 않는다</li>
+      </ul>
+      <div class="kv">
+        <p><b>폼 값</b>고르는 즉시 <code>Controller</code>의 <code>onChange</code>로 배열에 넣고 입력칸을 비운다. 고른 시술은 입력칸 아래 칩으로 쌓이고, 목록이 열리면 그 위를 덮는다.</p>
+        <p><b>누가</b>동료가 만들었다. 2025-05 1차 리팩터링에서는 <code>Controller</code>로 감싸 폼에 연결만 했다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- B. 드롭다운 안 복수 선택 -->
+  <div>
+    <div class="col-head"><span class="era">리팩터링 2차 · 운영 2025-07-10</span><h4>드롭다운 안 복수 선택</h4></div>
+    <div class="phone">
+      <div class="sbar"></div>
+      <div class="appbar"><i>‹</i>리뷰 작성</div>
+      <div class="scr">
+        <div class="lbl">받으신 시술을 입력해 주세요.<span class="req">*</span></div>
+      </div>
+      <div class="pop" style="top: 76px;">
+        <div class="fld ph focus">프로그램명(시술/진료)을 입력해 주세요</div>
+        <div class="pbox">
+          <div class="pchips"><span class="tchip">스케일링 <b>×</b></span><span class="tchip">치아 미백 <b>×</b></span></div>
+          <div class="prow">스케일링<span class="ck">✓</span></div>
+          <div class="prow">치아 미백<span class="ck">✓</span></div>
+          <div class="prow">레진 치료</div>
+          <div class="prow">잇몸 치료</div>
+          <div class="prow">불소 도포</div>
+        </div>
+      </div>
+      <div class="scr" style="position: absolute; left: 0; right: 0; top: 290px;">
+        <div class="skel w35"></div>
+        <div class="skel-box"></div>
+        <div class="skel w55" style="margin-top: 16px;"></div>
+        <div class="skel-box"></div>
+        <div class="skel w70" style="margin-top: 16px;"></div>
+        <div class="skel w35"></div>
+      </div>
+      <span class="mk b" style="left: 186px; top: 53px;">1</span>
+      <span class="mk b" style="left: 150px; top: 172px;">2</span>
+      <span class="mk b" style="left: 150px; top: 115px;">3</span>
+    </div>
+    <div class="info">
+      <ul class="legend b">
+        <li><span class="n">1</span>입력창을 누르면 헤더 바로 아래로 스크롤해 목록을 화면 위쪽에 펼친다</li>
+        <li><span class="n">2</span>골라도 목록이 열려 있고, 다시 누르면 해제된다</li>
+        <li><span class="n">3</span>고른 항목에 체크를 붙이고 목록 위에 칩으로도 보인다</li>
+      </ul>
+      <div class="kv">
+        <p><b>폼 값</b>고르는 즉시 <code>useFieldArray</code>의 <code>append</code>·<code>remove</code>로 바뀐다.</p>
+        <p><b>누가</b>앞의 세 문제를 받아 기획·디자인 담당자가 방향을 정했고, 리팩터링 2차에서 직접 구현했다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- C. Bottom Sheet -->
+  <div>
+    <div class="col-head"><span class="era">디자인 시스템 적용 · 운영 2025-08-07</span><h4>Bottom Sheet</h4></div>
+    <div class="phone">
+      <div class="sbar"></div>
+      <div class="appbar"><i>‹</i>리뷰 작성</div>
+      <div class="scr">
+        <div class="lbl">방문 병원</div>
+        <div class="fld">예시치과의원</div>
+        <div class="gap10"></div>
+        <div class="lbl">시술명<span class="req">*</span></div>
+        <div class="fld"><span class="gtag">스케일링 <b>×</b></span><span class="gtag">치아 미백 <b>×</b></span></div>
+        <div class="gap10"></div>
+        <div class="lbl">실제 총 결제 금액</div>
+        <div class="skel-box"></div>
+      </div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="handle"></div>
+        <div class="search">시술명을 입력해 주세요
+          <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="6" stroke="#242a32" stroke-width="2"/><path d="M13 13l4.5 4.5" stroke="#242a32" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="olist">
+          <div class="opt on">스케일링<span class="ck">✓</span></div>
+          <div class="opt on">치아 미백<span class="ck">✓</span></div>
+          <div class="opt on">레진 치료<span class="ck">✓</span></div>
+          <div class="opt">잇몸 치료</div>
+          <div class="opt">불소 도포</div>
+          <div class="opt">실란트</div>
+        </div>
+        <div class="summary"><span class="txt">스케일링, 치아 미백, 레진 치료</span><span class="reset">↻ 초기화</span></div>
+        <div class="confirm">확인</div>
+      </div>
+      <span class="mk b" style="left: 190px; top: 125px;">1</span>
+      <span class="mk b" style="left: 150px; top: 262px;">2</span>
+      <span class="mk b" style="left: 150px; top: 431px;">3</span>
+      <span class="mk b" style="left: 134px; top: 182px;">4</span>
+    </div>
+    <div class="info">
+      <ul class="legend b">
+        <li><span class="n">1</span>필드의 폼 값은 아직 두 개다</li>
+        <li><span class="n">2</span>시트 안에서는 임시 선택만 바뀐다. 다섯 개가 차면 토스트로 막는다</li>
+        <li><span class="n">3</span>확인을 눌러야 임시 선택이 필드에 들어간다</li>
+        <li><span class="n">4</span>딤을 누르거나 끌어내리거나 뒤로 가기로 닫으면 임시 선택은 버려진다</li>
+      </ul>
+      <div class="kv">
+        <p><b>폼 값</b>확인할 때 <code>useFieldArray</code>의 <code>replace</code>로 한 번 바뀐다.</p>
+        <p><b>누가</b>디자인 시스템 시안에서 선택 UI가 시트로 바뀌었다. 공용 시트는 동료가 만들었고, 리뷰 화면 적용은 직접 했다.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="foot">2025-06-17·2025-07-10 운영 코드와 2026-09-30 develop 코드를 바탕으로 다시 그렸다. 휴대폰 화면은 390px 폭 화면을 줄여 단순화했고, 병원명과 시술명은 예시다.</p>
+</body></html>
