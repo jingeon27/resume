@@ -132,7 +132,7 @@ Form · Form.Item · Form.List · Form.useForm · Form.useFormInstance · Form.u
 <div class="limit"><b>좁혀지지 않는 곳</b>
   <ul>
     <li>중첩 경로의 값 타입. 경로 중간의 배열이 optional 이거나 <code>null</code> 을 허용하면 <code>TPathValue</code> 가 <code>never</code> 가 되는데, 이 폼의 배열 필드는 모두 그렇다. 목록 항목 값은 antd <code>useWatch</code>·<code>getFieldValue</code> 로 읽는다.</li>
-    <li><code>Form.List</code> 안의 상대 경로(<code>name={[field.name, 'title']}</code>)는 루트 타입으로 표현되지 않아 antd <code>Form.Item</code> 을 그대로 쓴다. 하위 시술 편집 화면과 같이 쓰는 템플릿 입력(추천 대상 등)도 antd Form 과 이름 상수로 남아 있다.</li>
+    <li><code>Form.List</code> 안의 상대 경로(<code>name={[field.name, 'title']}</code>)는 루트 타입으로 표현되지 않아 antd <code>Form.Item</code> 을 그대로 쓴다. 하위 시술 템플릿 편집 폼과 같이 쓰는 템플릿 입력(추천 대상 등)도 antd Form 과 이름 상수로 남아 있다.</li>
     <li>빈 경로(<code>[]</code>, <code>''</code>)는 표현하지 않아, 폼 전체를 읽는 미리보기와 정가·우대가 교차 검증은 antd 를 그대로 쓴다.</li>
     <li>antd 와 잇는 단언 <code>as unknown as</code> 는 createTypedForm 안에만 있고, 프로그램 폼 래퍼에 앱마다 <code>props as FormProps</code> 가 하나씩 남았다.</li>
   </ul>
