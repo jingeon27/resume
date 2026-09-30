@@ -1,0 +1,311 @@
+<!doctype html>
+<!-- resume-daangn-lessons-draft.md에서 생성. 수정 후 node scripts/build-lessons-preview.mjs로 갱신. -->
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="김진건 프론트엔드 엔지니어 이력서. 제품 개발, 사용자 경험 개선, AI 개발 워크플로와 운영 문제 해결 경험.">
+  <title>김진건 | Frontend Engineer 이력서</title>
+  <style>
+:root {
+  color-scheme: light;
+  --ink: #27333b;
+  --heading: #142c39;
+  --accent: #355f73;
+  --muted: #64727b;
+  --rule: #d8e0e4;
+  --paper: #fff;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 126px; }
+body {
+  margin: 0;
+  background: #edf0f2;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-size: 13px;
+  line-height: 1.58;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration-color: #b8c7cf; text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+button, summary { cursor: pointer; }
+.skip-link { position: absolute; top: -60px; left: 16px; padding: 8px 12px; background: white; z-index: 5; }
+.skip-link:focus { top: 10px; }
+
+.preview-controls {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #fff;
+  border-bottom: 1px solid var(--rule);
+}
+.toolbar, .navigation-row {
+  width: min(210mm, calc(100% - 36px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.toolbar { min-height: 68px; }
+.preview-title strong { display: block; font-size: 14px; color: var(--heading); }
+.preview-title strong span { margin-left: 8px; font-weight: 400; color: var(--muted); }
+.preview-title small { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
+#print-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--heading);
+  border-radius: 5px;
+  background: var(--heading);
+  color: white;
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+}
+#print-button:hover { background: var(--accent); }
+.navigation-row { min-height: 38px; border-top: 1px solid #edf0f2; }
+nav { display: flex; gap: 24px; }
+nav a { color: var(--muted); text-decoration: none; font-size: 11px; white-space: nowrap; }
+nav a:hover { color: var(--heading); }
+.print-help { position: relative; flex-shrink: 0; font-size: 11px; color: var(--muted); }
+.print-help p { position: absolute; right: 0; top: 20px; width: 230px; padding: 16px; background: white; border: 1px solid var(--rule); border-radius: 5px; line-height: 1.9; box-shadow: 0 6px 22px #142c3910; }
+
+main { padding: 28px 0 44px; }
+.sheet {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 26px;
+  padding: 13mm 17mm 12mm;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  box-shadow: 0 2px 5px #142c3908, 0 10px 35px #142c3908;
+}
+.running-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 9px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .015em;
+}
+.running-role { margin-left: 9px; font-size: 9px; }
+.sheet-cover .running-header { border-bottom-color: var(--accent); }
+.sheet-cover .running-header > span:first-child { font-size: 0; }
+.sheet-cover .running-role { margin: 0; font-size: 10px; color: var(--accent); font-weight: 600; }
+.page-content { flex: 1; }
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  padding-top: 9px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+.page-footer > span:last-child { color: var(--heading); font-size: 11px; font-weight: 600; }
+.page-total { color: #86939b; font-weight: 400; }
+
+h1, h2, h3, h4 { color: var(--heading); break-after: avoid; break-inside: avoid; }
+h1 { margin: 0 0 5px; font-size: 36px; line-height: 1.25; letter-spacing: -.045em; font-weight: 750; }
+h2 {
+  margin: 23px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -.015em;
+}
+h3 { margin: 16px 0 12px; font-size: 18px; line-height: 1.4; }
+h4 { margin: 22px 0 9px; font-size: 15px; line-height: 1.45; font-weight: 700; letter-spacing: -.012em; }
+.page-content > h2:first-child, .page-content > h3:first-child, .page-content > h4:first-child { margin-top: 0; }
+.company { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.company-meta { color: var(--muted); font-size: 11px; font-weight: 400; white-space: nowrap; }
+p { margin: 0 0 10px; orphans: 3; widows: 3; }
+p:last-child { margin-bottom: 0; }
+strong { font-weight: 650; color: var(--heading); }
+.contact { margin-bottom: 8px; font-size: 11px; color: var(--muted); }
+.contact a { color: var(--muted); }
+.service-note { margin: 0; color: var(--muted); font-size: 10px; }
+.role-note { padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid #edf0f2; font-size: 11px; color: var(--muted); line-height: 1.7; }
+ul { margin: 0; padding: 0; list-style: none; }
+li { orphans: 3; widows: 3; }
+.highlights li { position: relative; padding-left: 11px; margin-bottom: 10px; }
+.highlights li::before { content: ""; position: absolute; top: .67em; left: 0; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
+.highlights li:last-child { margin-bottom: 0; }
+.skills { font-size: 11.5px; }
+.skills li { display: grid; grid-template-columns: 79px 1fr; gap: 8px; margin-bottom: 6px; }
+.skills li:last-child { margin-bottom: 0; }
+.skills strong { font-size: 11px; }
+.simple-list li { margin-bottom: 5px; }
+code { padding: 1px 3px; background: #f1f4f5; color: #344f5d; border-radius: 3px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: .87em; }
+
+@media screen and (max-width: 840px) {
+  html { scroll-padding-top: 126px; }
+  body { font-size: 14px; line-height: 1.7; }
+  main { padding: 16px 12px 24px; }
+  .sheet { width: 100%; min-height: auto; padding: 28px 24px 20px; margin-bottom: 16px; }
+  .running-header { margin-bottom: 24px; }
+  .page-footer { margin-top: 28px; }
+  .company { flex-wrap: wrap; gap: 3px; }
+  .company-meta { display: block; }
+  h2 { margin-top: 26px; }
+  h4 { margin-top: 25px; }
+  .contact { line-height: 1.9; }
+  .navigation-row { gap: 12px; }
+  nav { gap: 16px; overflow-x: auto; padding: 10px 0; }
+  .print-help { display: none; }
+  .running-role { display: none; }
+  .sheet-cover .running-role { display: inline; }
+  .skills { font-size: 12px; }
+  .skills li { grid-template-columns: 72px 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+@page { size: A4; margin: 0; }
+@media print {
+  html { scroll-behavior: auto; scroll-padding-top: 0; }
+  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .preview-controls, .skip-link { display: none !important; }
+  main { margin: 0; padding: 0; }
+  .sheet { margin: 0; box-shadow: none; break-after: page; }
+  .sheet:last-child { break-after: auto; }
+  a { color: var(--accent); }
+  .page-footer { break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#resume">이력서 본문으로 이동</a>
+  <div class="preview-controls">
+    <div class="toolbar">
+      <div class="preview-title"><strong>김진건 <span>이력서 미리보기</span></strong><small>A4 · 5쪽 · 원문 전체</small></div>
+      <button type="button" id="print-button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7z"/><path d="M16 11h1"/></svg>PDF로 저장</button>
+    </div>
+    <div class="navigation-row">
+      <nav aria-label="이력서 페이지"><a href="#page-1">소개</a><a href="#page-2">제품 개발</a><a href="#page-3">제품 개선</a><a href="#page-4">계측과 운영</a><a href="#page-5">경력과 지원동기</a></nav>
+      <details class="print-help"><summary>인쇄 설정</summary><p>대상: PDF로 저장<br>용지: A4 · 배율: 100%<br>여백: 없음<br>브라우저 머리글·바닥글: 끄기</p></details>
+    </div>
+  </div>
+  <main id="resume">
+<article class="sheet sheet-cover" id="page-1" aria-label="1쪽 · 소개와 주요 경험">
+  <header class="running-header"><span>김진건 <span class="running-role">Frontend Engineer</span></span><span>소개와 주요 경험</span></header>
+  <div class="page-content">
+<h1 data-source-block="0">김진건</h1>
+<p class="contact" data-source-block="1">Frontend Engineer · <a href="mailto:jingeon27@gmail.com">jingeon27@gmail.com</a> · <a href="https://github.com/jingeon27">GitHub</a> · <a href="https://jingeon27.tistory.com/">기술 블로그</a></p>
+<p class="service-note" data-source-block="2">병역 · 산업기능요원 현역 복무 중(2025.08 –), 복무 1년 경과로 현역 전직 요건 충족</p>
+<h2 data-source-block="3">소개</h2>
+<p data-source-block="4">병원이 올린 프로그램이 운영팀 검수를 거쳐 사용자 예약으로 이어지는 흐름을 병원 관리자·Back-Office·복지몰에 걸쳐 만들어 온 프론트엔드 엔지니어예요. 지금은 사내에 하나뿐인 프론트엔드로, 가입 회원 약 15만 명의 복지몰을 포함한 다섯 제품을 개발·운영해요.</p>
+<p data-source-block="5">사용자가 흐름 중간에 다른 곳을 다녀오거나 이미 한 선택을 바꿀 때 화면이 어떻게 움직여야 하는지까지 따져 보고, 기획에 빠진 부분이 보이면 짚어서 함께 정해요. 테스트가 통과해도 diff와 실제 화면을 확인해요.</p>
+<h2 data-source-block="6">주요 경험</h2>
+<ul class="highlights" data-source-block="7">
+<li><strong>병원·운영팀·사용자 흐름:</strong> 병원 관리자의 프로그램 등록·검수 요청 화면과 Back-Office 프로그램 검수 화면을 처음 만들었고, 복지몰 예약까지 같이 맡았어요. 임시 진료일이 새로 생겼을 때는 새로 연 날이 예약 불가로 보이지 않도록 세 제품을 함께 맞췄어요.</li>
+<li><strong>결제:</strong> 건강검진 예약금 결제에 토스페이먼츠 결제창을 붙이면서, 결제창을 오가도 신청 내용이 유지되게 하고 결제 실패·승인 실패와 연속 클릭으로 생기는 중복 주문까지 처리했어요.</li>
+<li><strong>인앱 WebView:</strong> 앱에서 열리지 않던 <code>tel:</code> 전화상담 버튼을 기존 브릿지로 연결해 앱 재배포 없이 고쳤고, 외부 예약 사이트 이동은 네이티브 뒤로 가기 대신 웹 라우터로 돌아오게 해 WebView째 닫히지 않게 했어요.</li>
+<li><strong>코딩 에이전트 워크플로:</strong> 에이전트가 만든 코드는 전부 읽어요. 같은 지적이 반복되면 스킬이나 lint 규칙으로 옮겼고, 복지몰에서는 슬라이스 내부를 직접 import하던 경고 271건을 정리한 뒤 error로 막았어요.</li>
+<li><strong>신규 서비스 PoC:</strong> PO가 전달한 프로토타입을 바탕으로, 기존 세 제품을 운영하면서 글로벌 사용자 서비스와 CMS를 3주 만에 배포했어요.</li>
+<li><strong>계측:</strong> 검색·상세·예약·쿠폰 화면에서 Amplitude 이벤트 140개 이상을 새로 붙이거나 고치며, 상세 진입 뒤 예약·상담 버튼을 눌렀는지와 예약 중 어디서 나갔는지 볼 수 있게 발생 위치와 속성을 화면 동작에 맞췄어요.</li>
+<li><strong>운영 오류:</strong> 직접 붙인 Sentry에서 운영 사용자 57명 이상에게 75건 난 Bottom Sheet 크래시를 찾아 라이브러리 소스로 원인을 좁혔어요. 9월 10일 수정 배포 뒤 9월 28일까지 같은 오류 그룹은 0건이었어요.</li>
+</ul>
+<h2 data-source-block="8">기술</h2>
+<ul class="skills" data-source-block="9">
+<li><strong>제품 개발:</strong><span>React, TypeScript, Next.js App Router, 모바일 웹·인앱 WebView, TanStack Query(React Query), React Hook Form, Zod</span></li>
+<li><strong>UI·구조:</strong><span>Radix UI, Ant Design, shadcn/ui·Base UI, dnd-kit, FSD, pnpm·Turborepo</span></li>
+<li><strong>운영·검증:</strong><span>Sentry, CloudWatch, Vitest, React Testing Library, MSW, Playwright, ESLint 규칙 개발</span></li>
+<li><strong>AI·계측:</strong><span>Claude Code·Codex, <code>AGENTS.md</code>·스킬 설계, git worktree 병렬 작업, Amplitude 행동 이벤트 구현</span></li>
+</ul>
+</div>
+  <footer class="page-footer"><span>김진건 · Frontend Engineer</span><span>01 <span class="page-total">/ 05</span></span></footer>
+</article>
+<article class="sheet" id="page-2" aria-label="2쪽 · 세이프닥 · 제품 개발">
+  <header class="running-header"><span>김진건 <span class="running-role">Frontend Engineer</span></span><span>세이프닥 · 제품 개발</span></header>
+  <div class="page-content">
+<h2 data-source-block="10">경력</h2>
+<h3 class="company" data-source-block="11"><span>세이프닥</span><span class="company-meta">Frontend Engineer <span aria-hidden="true">·</span> 2025.05 – 현재</span></h3>
+<p data-source-block="12">개발팀이 생긴 지 1년쯤 된 2025년 5월, 예약·리뷰·검색 중심의 <a href="https://safedoc.io/">복지몰</a> MVP에 합류했어요. 2026년 1월부터는 사내 프론트엔드가 저 한 명이에요. 4월부터는 프론트엔드 개발과 운영을 모두 혼자 하고 있어요. 7월부터는 복지몰·병원 관리자·Back-Office에 글로벌 사용자 서비스와 CMS가 더해져 다섯 제품의 프론트엔드를 개발·운영하고 있어요. 요구사항의 빈틈과 운영 요청은 7월까지 PM·PO와, 이후에는 개발팀장·부팀장과 확인해 왔어요.</p>
+<h4 data-source-block="13">건강검진을 기존 서비스 안으로 옮기며</h4>
+<p data-source-block="14">건강검진은 아임웹에서 정보를 본 뒤 전화로 문의하던 별도 흐름이었어요. 다른 진료과와 달리 기업 계약에 따른 검진 코드를 쓰거나 예약금을 먼저 결제하는 경우가 있고 프로그램 구성도 달라, 기존 비급여 프로그램에 그대로 넣기 어려웠어요. 한 제휴 병원이 검진 예약을 세이프닥 안에서 받길 원했지만, 기존 복지몰과 병원 관리자에는 이 흐름을 다룰 화면이 없었어요.</p>
+<p data-source-block="15">개발팀장·부팀장과 전달받은 스펙의 예외를 확인하며 Back-Office에는 검사항목·검진 구성 등록 화면을, 병원 관리자에는 검진 병원용 화면과 결제취소 접수를, 복지몰에는 검진 상세와 예약금 결제를 만들었어요. 병원 쪽에서는 예약금 결제를 직접 취소할 수 없어서, 결제된 검진 예약을 취소하면 &#39;결제취소 요청 접수&#39;로 안내하게 했어요.</p>
+<p data-source-block="16">토스페이먼츠 결제창은 모바일에서 결과를 리다이렉트로만 돌려줘서, 결제창을 다녀오면 페이지가 새로 열리고 메모리 상태가 남지 않아요. 그래서 검사 선택·주소·희망 일시가 결제창을 오가도 유지되도록, 폼 값을 결제 시도의 <code>orderId</code>와 함께 <code>sessionStorage</code>에 저장하고 같은 시도이면서 현재 스키마를 통과한 값만 한 번 되살리게 했어요.</p>
+<p data-source-block="17">결제창에서 실패로 돌아오거나 서버가 결제를 실패·환불로 처리하면 신청 화면으로 되돌려 입력을 되살리고 사유를 안내해요. 승인 요청 자체가 실패하면 사유를 알린 뒤 예약 목록으로 보내요. 주문 생성부터 결제창이 열리기까지는 한 mutation으로 묶고, 그동안 신청 버튼을 잠가 연속 클릭으로 주문이 두 번 생기지 않게 했어요. dev API 서버를 쓰는 E2E로 토스페이먼츠 테스트 결제창 이동과, 결제창에서 실패로 돌아올 때의 입력 복원, 승인 요청이 실패할 때 예약 목록으로 가는 경로를 확인했어요.</p>
+<h4 data-source-block="18">글로벌 사용자 서비스와 CMS PoC</h4>
+<p data-source-block="19">2026년 7월에는 PO가 전달한 시연용 프로토타입의 화면을 모두 반영해 <a href="https://global.safedoc.io/">글로벌 사용자 서비스</a>와 별도 CMS를 만들었어요. 프로토타입은 예약을 <code>localStorage</code>에 담고 관리 화면도 같은 앱에 두고 있었어요. 저는 프론트엔드 셋업부터 구현·검증·배포까지 맡아 화면에 빠져 있던 상세 상태와 인터랙션을 보완했고, 영어·한국어·아랍어(RTL) URL 체계는 그대로 유지했어요.</p>
+<p data-source-block="20">백엔드와 병행 개발하기 위해 먼저 MSW 목을 만들었지만, 초기 목은 등록 요청을 모두 성공시켰어요. 로컬에서 빌드한 백엔드에 연결하자 필수값과 운영시간·가격 규칙 때문에 거절되는 입력이 드러났고, 서버 DTO의 검증 규칙을 목에도 반영했어요. CMS의 병원·시술·FAQ·블로그 등록은 이 백엔드와 연결해 확인했어요. 기존 세 제품 운영을 병행하면서 7월 31일 사용자 서비스와 CMS를 3주 만에 PoC로 배포했어요.</p>
+</div>
+  <footer class="page-footer"><span>김진건 · Frontend Engineer</span><span>02 <span class="page-total">/ 05</span></span></footer>
+</article>
+<article class="sheet" id="page-3" aria-label="3쪽 · 세이프닥 · 제품 개선">
+  <header class="running-header"><span>김진건 <span class="running-role">Frontend Engineer</span></span><span>세이프닥 · 제품 개선</span></header>
+  <div class="page-content">
+<h4 data-source-block="21">병원 등록부터 예약·정산까지</h4>
+<p data-source-block="22">병원 관리자의 프로그램 등록·검수 요청과 Back-Office의 검수·반려·승인 화면은 제가 처음 만들었어요. 운영팀에서 반려 버튼을 눌러도 아무 반응이 없다는 제보가 왔어요. 살펴보니 사유 입력 모달이 제출보다 먼저 닫혔고, 반려에도 폼 전체 검증이 걸려 있었어요. 오래전에 등록된 프로그램은 새 할인율·카테고리 규칙을 통과하지 못해 반려조차 막혔어요. 반려와 검수 중 전환은 현재 값으로 보내고, 내용을 확정하는 승인에만 검증을 남겨 당일 수정했어요. 테스트 체계를 도입한 뒤에는 병원 관리자 등록부터 Back-Office의 반려·승인까지 dev API 서버를 쓰는 E2E로 묶었어요.</p>
+<p data-source-block="23">임시 진료일도 세 제품이 함께 바뀌어야 했어요. 기존에는 임시 휴무만 있었는데, 병원이 쉬는 요일의 특정 날짜를 진료일로 여는 임시 진료일이 새로 생겼어요. 서버가 두 항목을 같은 배열에 <code>type</code>으로 구분해 보내게 됐지만 기존 예약 판정은 이 배열을 모두 휴무로 읽는 구조라, 그대로 두면 새로 연 날이 예약 불가로 보일 수 있었어요. 두 관리 화면에 임시 진료일 입력을 따로 두고, 복지몰의 예약 가능일 판정은 <code>type</code>으로 두 항목을 나누되 <code>type</code>이 없는 옛 데이터는 그대로 휴무로 읽게 맞췄어요. 9월 10일 배포 이후에는 세 제품이 임시 진료일을 똑같이 예약 가능일로 다뤄요.</p>
+<p data-source-block="24">예약 폼에서는 React Query 캐시·Zustand·로컬 상태에 나뉘어 있던 가족·날짜 선택 상태를 React Hook Form·Zod로 모았어요. 가족을 추가한 뒤 날짜가 어긋나던 동작을 고쳤고, 예약 대상 선택 컴포넌트는 리팩터링 당시 519줄에서 55줄이 됐어요. <a href="https://jingeon27.tistory.com/11">예약 폼 리팩터링</a>에 변경 과정을 적었어요.</p>
+<p data-source-block="25">수기로 관리하던 정산을 내부 예약 데이터와 연결하는 화면은 초기 구현을 인수해 다듬고 배포 전 운영 요구를 반영했어요. 가격 이력을 추가하자는 요청이 왔을 때는 정산 기준이 프로그램 가격인지 견적 금액인지 개발팀장과 먼저 확인했고, 기준이 견적 금액이라 필요하지 않은 이력 구조는 만들지 않았어요.</p>
+<h4 data-source-block="26">모바일에서 막히던 순간들</h4>
+<p data-source-block="27">리뷰 작성 화면에서 시술을 고르는 드롭다운이 모바일에서는 키패드에 가려지고 하나 고를 때마다 닫혀 불편하다는 의견을 PO에게 냈어요. 이를 반영해 기획·디자인이 정한 드롭다운 안 복수 선택과, 한 달 뒤 디자인 시스템에서 바뀐 Bottom Sheet를 모두 제가 리뷰 화면에 적용했어요. 검진 선택 화면에서는 정해진 수만큼 고르면 다음 그룹을 자동으로 열자는 요청이 있었어요. 그대로 만들면 이미 고른 항목을 바꿀 때도 다음 그룹으로 넘어가서, 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화하고 빠져 있던 비활성 상태 디자인도 요청해 반영했어요.</p>
+<p data-source-block="28">앱 WebView에서는 <code>tel:</code> 링크가 동작하지 않던 전화상담 버튼을 기존 브릿지의 외부 링크 열기로 연결했어요. 병원·시술 상세에서 외부 예약 사이트로 내보내는 기능을 붙일 때는 첫 구현이 네이티브 뒤로 가기를 불러 이전 화면 대신 WebView째 닫혔어요. 배포 전에 외부 사이트만 브릿지로 열고 돌아오는 건 웹 라우터로 처리하도록 바꿨어요. 둘 다 앱은 바꾸지 않고 웹 배포만으로 해결했어요.</p>
+</div>
+  <footer class="page-footer"><span>김진건 · Frontend Engineer</span><span>03 <span class="page-total">/ 05</span></span></footer>
+</article>
+<article class="sheet" id="page-4" aria-label="4쪽 · 세이프닥 · 계측과 운영">
+  <header class="running-header"><span>김진건 <span class="running-role">Frontend Engineer</span></span><span>세이프닥 · 계측과 운영</span></header>
+  <div class="page-content">
+<h4 data-source-block="29">실험에 참여하며 행동을 기록한 일</h4>
+<p data-source-block="30">검색·프로그램 상세·예약·쿠폰 화면에서 Amplitude 행동 이벤트 140개 이상을 새로 붙이거나 고쳤어요. 상세 진입 뒤 예약·상담 버튼을 눌렀는지, 예약 화면에서는 날짜·시간을 고르다 나갔는지 볼 수 있게 발생 위치와 속성을 화면 동작에 맞췄고, SDK 초기화 전에 발송되는 구조였던 로그인 완료 이벤트도 바로잡았어요. 비즈니스 맥락을 파악하려고 상세 개편 구간의 퍼널도 열어 봤지만 메인 화면 개편이 같은 배포에 섞여 효과를 분리해 읽기는 어려웠어요.</p>
+<p data-source-block="31">PM이 제안한 전화상담 실험에서는 플로팅 버튼을 하단 내비 버튼으로 옮기고 &#39;빠른 예약 문의&#39; 말풍선과 클릭 계측을 붙였어요. 고객센터 번호를 병원 번호로 오해하는 상황이 생겨 안내를 더했고, 실험 중단 결정 뒤에는 채팅상담으로 되돌렸어요.</p>
+<p data-source-block="32">신규 가입자의 UTM이 빠질 때는 처음에 프론트엔드에서 이를 저장하는 코드를 stage까지 올렸어요. 기획자와 다시 확인해 보니 원인은 Amplitude 사용자 속성 설정이어서, 코드는 운영 배포 전에 되돌리고 설정으로 해결했어요.</p>
+<h4 data-source-block="33">AI가 구현한 코드를 제품에 넣기까지</h4>
+<p data-source-block="34">2026년 4월부터 코딩 에이전트를 본격적으로 쓰고 있고, 생성된 코드는 지금도 모두 읽어요. 반복된 지적과 반례는 저장소별 스킬에 남기고, 코드로 판단할 수 있는 기준은 ESLint 규칙으로 옮겼어요. 관리자 서비스 모노레포의 규칙에는 테스트를 붙였고, 복지몰에서는 그 규칙을 옮겨 와 슬라이스 내부 파일 직접 import 경고 271건을 정리한 뒤 error로 잠갔어요.</p>
+<p data-source-block="35">plan과 테스트를 먼저 검토하고, 에이전트 구현·리뷰 뒤 변경분 테스트·lint·typecheck를 돌려요. 제가 diff와 로컬 화면을 확인한 뒤 전체 CI를 거쳐 QA에 더블 체크를 요청하고, 문제가 나오면 앞 단계로 돌아가요.</p>
+<p data-source-block="36">9월에는 검증 규칙이 실제로 오류를 잡는지도 점검했어요. 복지몰의 자체 lint 규칙이 동적 import 등을 놓치는 것을 고치고 테스트를 붙여, 수정 전 규칙에서 8건이 실패하는 것을 확인했어요. 글로벌 서비스는 응답 스키마 위반이 경고로만 남던 것을 테스트에서만 실패하게 바꾸고, 목 데이터를 일부러 틀리게 해 실패를 확인했어요.</p>
+<p data-source-block="37">제가 diff를 읽고도 놓친 Bottom Sheet의 헤더 스크롤 문제는 본문만 스크롤되도록 고치고 브라우저 레이아웃 회귀 테스트를 추가했어요. <a href="https://jingeon27.tistory.com/25">테스트 체계를 다시 만든 과정</a> · <a href="https://jingeon27.tistory.com/26">선언적 코드에 관한 글</a></p>
+<h4 data-source-block="38">운영에서 드러난 문제를 끝까지 확인한 일</h4>
+<p data-source-block="39">의료 서비스라 복지몰에 Sentry를 붙일 때 SDK 소스를 따라가 민감 정보가 실리는 경로를 찾아 막고, 이슈에는 회원 ID만 남겨 영향 사용자 수를 볼 수 있게 했어요. Sentry에서 발견한 Bottom Sheet 드래그 크래시는 수정 배포 전까지 운영에서 57명 이상에게 75건 발생했어요. 라이브러리 소스에서 null ref를 읽는 경로를 찾아 그 경로가 없는 버전으로 올렸고, 9월 10일 배포 뒤 9월 28일 확인까지 같은 오류 그룹은 0건이었어요. <a href="https://jingeon27.tistory.com/30">Sentry 도입</a> · <a href="https://jingeon27.tistory.com/33">크래시 분석</a></p>
+<p data-source-block="40">Next.js 16 전환 뒤에는 URL에 검색 조건이 붙은 관리자 목록에서 검색이 멈췄어요. 개발 서버와 jsdom 테스트는 통과했지만 프로덕션 빌드에서는 확인한 목록 7개 중 6개에서 재현됐어요. 업스트림 라우터 캐시 이슈를 확인하고, 서버가 조회 조건을 읽지 않는 화면에서는 같은 경로의 쿼리 변경을 History API로 처리하도록 바꿨어요. 8월 18일 History API로 옮긴 뒤 9월 28일까지 같은 증상의 재보고는 없었어요. <a href="https://jingeon27.tistory.com/27">원인과 수정 과정</a></p>
+<p data-source-block="41">dev API 서버에서 회원 조회가 잠깐 늦어지자 로그아웃되는 것을 보고 실패 처리 조건을 확인했어요. 기존에는 5xx·타임아웃도 토큰 만료처럼 취급했어요. 401에서만 로그아웃하고 일시적인 실패는 새로고침으로 복구할 수 있는 에러 화면으로 보내도록 바꿨어요.</p>
+</div>
+  <footer class="page-footer"><span>김진건 · Frontend Engineer</span><span>04 <span class="page-total">/ 05</span></span></footer>
+</article>
+<article class="sheet" id="page-5" aria-label="5쪽 · 왓타임 · 지원동기">
+  <header class="running-header"><span>김진건 <span class="running-role">Frontend Engineer</span></span><span>왓타임 · 지원동기</span></header>
+  <div class="page-content">
+<h3 class="company" data-source-block="42"><span>왓타임</span><span class="company-meta">Frontend Engineer <span aria-hidden="true">·</span> 2024.01 – 2024.11</span></h3>
+<p class="role-note" data-source-block="43"><strong>역할</strong> React·TypeScript로 ATS &#39;RoundHR&#39;의 채용 관리 웹·채용 담당자용 웹·랜딩·후보자 수집 Electron 앱 개발 (팀원) · <strong>협업</strong> 프론트엔드·백엔드 팀, 디자이너 · <strong>관련 글</strong> <a href="https://jingeon27.tistory.com/5">Electron 수집 앱 구조</a> · <a href="https://jingeon27.tistory.com/6">query-key-factory 적용</a></p>
+<p data-source-block="44">제가 합류한 2024년에는 ATS &#39;RoundHR&#39;의 시장성을 확인하며 기능을 늘리고 있었어요. 채용 관리 웹의 설정 폼·자동화 규칙, 채용 담당자용 웹의 서류·면접 평가 화면을 개발했어요. 면접 템플릿은 네 단계의 입력과 검증을 <code>useFunnel</code>로 나눠 중간에 나가도 이어 쓸 수 있게 했어요.</p>
+<p data-source-block="45">채용 공고 순서부터 후보자 필터의 중첩 트리, 설정 테이블의 행 정렬까지 DnD를 여러 화면에 적용했어요. 화면마다 따로 다루던 드래그 컨텍스트·핸들·정렬 대상을 dnd-kit 기반 공통 컴포넌트로 나눴어요. 폴더를 클릭하면 선택이 풀리는 문제처럼 정렬과 다른 조작이 맞물리는 부분도 계속 고쳤어요.</p>
+<p data-source-block="46">후보자 수집 Electron 앱에서는 사이트마다 복제돼 있던 로그인 → 수집 → 중복 확인 → 업로드를 공통 순서와 사이트별 adapter로 나눴어요. 잡플래닛·게임잡을 이 구조에 연결하고, 지원자 한 명의 실패가 전체 수집을 멈추지 않도록 격리했어요. Sentry 오류는 서버 오류·인증 및 조회 실패·그 밖의 API 오류로 구분했어요. 초기 구조는 제가 잡았고 현재 코드는 이후 동료가 다시 작성한 부분이 많아요.</p>
+<h2 data-source-block="47">지원동기</h2>
+<p data-source-block="48">세이프닥에서는 병원 관리자·Back-Office·복지몰을 함께 개발하며, 병원의 프로그램 관리부터 운영팀의 검수와 사용자의 예약까지 이어지는 흐름을 맡아 왔어요. 사용자 대부분이 제휴기업을 통해 들어오는 구조라, 서비스 성장에는 제휴 병원과 기업을 늘리는 영업의 역할이 컸어요. 저는 사용자가 필요한 정보를 얻고, 가입과 인증을 거쳐 예약까지 불편 없이 갈 수 있도록 제품을 개선해 왔어요.</p>
+<p data-source-block="49">앞으로는 제가 개선한 제품이 사용자의 행동과 서비스 성장에 어떤 영향을 주는지 더 직접적으로 확인하며 일하고 싶어요. <a href="https://medium.com/daangn/%ED%98%BC%EC%9E%90-%EC%8B%9C%EC%9E%91%ED%95%B4-%EC%A0%84%EA%B5%AD-%EC%98%A4%ED%94%88%EA%B9%8C%EC%A7%80-%EB%8B%B9%EA%B7%BC-%EB%A0%88%EC%8A%A8-%EA%B3%BC%EC%99%B8-%EB%B9%8C%EB%94%A9-%EB%A1%9C%EA%B7%B8-d4e61f6ba32f">레슨/과외 빌딩 로그</a>에서 당근 안에 이미 올라오던 선생님 찾는 글을 바탕으로 서비스를 만들고, 유입 경로와 글 작성 과정을 개선해 간 점에 관심이 갔어요. 당근 레슨/과외는 수요와 공급을 늘리는 데 제품이 차지하는 비중이 더 커 보였어요. 많은 이웃이 이용하는 당근에서 제품을 개선해 선생님과 수강생의 참여를 함께 늘리고 싶어 지원했어요.</p>
+<p data-source-block="50">병원과 사용자 양쪽의 요구를 구현하며, 요구사항의 빈틈을 채우고 운영 문제를 해결해 온 경험으로 팀에 기여할 수 있어요. 동료들과 함께 지표와 사용자 반응을 살피고 가설을 검증하면서, 다음에 무엇을 개선할지 판단하는 역할까지 넓혀 가고 싶어요.</p>
+<h2 data-source-block="51">학력·자격</h2>
+<ul class="simple-list" data-source-block="52">
+<li>대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</li>
+<li>정보처리기능사 | 2023.04</li>
+</ul>
+</div>
+  <footer class="page-footer"><span>김진건 · Frontend Engineer</span><span>05 <span class="page-total">/ 05</span></span></footer>
+</article>
+</main>
+  <script>document.getElementById('print-button').addEventListener('click', () => window.print());</script>
+</body>
+</html>
