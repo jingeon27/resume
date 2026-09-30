@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--sub); margin-bottom: 12px; }
+  .legend .sep { color: var(--line-strong); }
+
+  /* 필드 이름 칩 */
+  .f { display: inline-block; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.35; padding: 1px 6px; border-radius: 4px; margin: 2px 3px 0 0; background: var(--soft); color: #4a5361; border: 1px solid var(--line); white-space: nowrap; }
+  .f.bo { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-line); }
+  .f.pa { background: #f1ede6; color: #7a5a2e; border-color: #e0d3bf; }
+  .f.sub { background: #fff; color: var(--faint); border-style: dashed; }
+  .cond { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 0 5px; border-radius: 4px; margin-left: 4px; color: var(--coral); background: var(--coral-soft); border: 1px solid #e8cdc4; vertical-align: 1px; white-space: nowrap; }
+  .fm { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 0 5px; border-radius: 4px; margin-left: 4px; color: #fff; background: var(--sub); border: 1px solid var(--sub); vertical-align: 1px; white-space: nowrap; }
+  .aside { display: inline-block; font-size: 11px; color: var(--faint); margin-left: 4px; vertical-align: 1px; }
+  .sync { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--sage); background: var(--sage-soft); border: 1px solid #bcd0ba; border-radius: 4px; padding: 0 5px; margin-left: 4px; vertical-align: 1px; }
+
+  /* 드로어 */
+  .drawer { border: 1.5px solid var(--ink); border-radius: 10px; overflow: hidden; }
+  .drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid var(--line); background: #fff; }
+  .drawer-head b { font-size: 14px; }
+  .drawer-head span { font-size: 11.5px; color: var(--faint); }
+  .drawer-body { display: grid; grid-template-columns: 172px 1fr; gap: 12px; padding: 12px 14px 14px; }
+
+  .divider { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--ink); margin: 2px 0 6px; }
+  .divider::before, .divider::after { content: ''; flex: 1; border-top: 1px solid var(--line); }
+
+  /* 미리보기 */
+  .pv { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+  .pv-img { height: 96px; background: #dfe7f3; }
+  .pv-b { padding: 7px 8px 8px; }
+  .pv-name { font-size: 12px; font-weight: 700; line-height: 1.35; }
+  .pv-old { font-size: 10.5px; color: var(--faint); text-decoration: line-through; text-align: right; margin-top: 3px; }
+  .pv-new { font-size: 12.5px; font-weight: 700; text-align: right; }
+  .pv-new em { font-style: normal; color: var(--blue); margin-right: 3px; }
+  .pv-small { font-size: 10.5px; color: var(--sub); margin-top: 5px; line-height: 1.4; }
+  .pv-row { border-top: 6px solid var(--soft); padding: 6px 8px; font-size: 10.5px; font-weight: 600; }
+  .pv-comp { margin: 0 8px 8px; border: 1px dashed var(--line-strong); border-radius: 6px; padding: 5px 6px; font-size: 10.5px; color: var(--sub); }
+  .pv-detail { background: #eef2f8; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 10.5px; color: var(--faint); }
+  .pv-note { font-size: 11px; color: var(--sub); margin-top: 7px; line-height: 1.45; }
+  .pv-note code { font-size: 10.5px; }
+  .forms { margin-top: 14px; }
+  .fbox { border: 1px solid var(--line-strong); border-radius: 8px; padding: 7px 9px 8px; margin-top: 8px; font-size: 11.5px; color: var(--sub); line-height: 1.45; }
+  .fbox .fh { display: flex; align-items: center; gap: 0; font-size: 12px; font-weight: 700; color: var(--ink); }
+  .fbox .fh .fm { margin-left: 0; margin-right: 5px; }
+  .fbox code { font-size: 10.5px; color: var(--ink); display: block; margin: 2px 0 4px; }
+  .fbox ul { list-style: none; }
+  .fbox li::before { content: '·'; margin-right: 4px; color: var(--faint); }
+  .fbox .has { margin-top: 5px; padding-top: 5px; border-top: 1px solid #eef0f3; }
+  .fbox .has b { color: var(--ink); font-weight: 600; }
+  .watch { margin-top: 12px; border-left: 2px dashed var(--line-strong); padding: 2px 0 2px 9px; font-size: 11px; color: var(--sub); line-height: 1.45; }
+
+  /* 폼 구획 */
+  .sec { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px 8px; margin-bottom: 8px; background: #fff; }
+  .sec.bo { border-color: var(--blue-line); background: #f8faff; }
+  .sec.hc { border-style: dashed; border-color: #d8b3a6; }
+  .sec-h { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .sec-h .count { margin-left: auto; font-size: 11px; font-weight: 500; color: var(--faint); }
+  .row { display: grid; grid-template-columns: 112px 1fr; gap: 6px; align-items: start; padding: 3px 0; border-top: 1px solid #eef0f3; }
+  .row:first-of-type { border-top: 0; }
+  .row > .lb { font-size: 12px; color: var(--ink); padding-top: 2px; line-height: 1.35; }
+  .row > .lb small { display: block; font-size: 11px; color: var(--sub); line-height: 1.4; margin-top: 1px; }
+
+  /* 상세 이미지 분기 */
+  .radio-line { font-size: 11.5px; color: var(--sub); margin: 3px 0 5px; }
+  .radio-line i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--line-strong); margin: 0 3px -1px 8px; }
+  .radio-line i:first-child { margin-left: 0; }
+  .radio-line i.on { border: 3px solid var(--blue); }
+  .branch-side { display: grid; grid-template-columns: 1fr 1.25fr 0.75fr; gap: 6px; margin-top: 6px; }
+  .bx { border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px 6px; }
+  .bx-h { font-size: 11.5px; font-weight: 700; color: var(--sub); margin-bottom: 2px; }
+  .bx-h code { font-size: 10.5px; font-weight: 500; color: var(--faint); }
+  .pair { display: grid; grid-template-columns: 92px 1fr; gap: 4px; align-items: start; padding: 2px 0; border-top: 1px solid #f0f2f5; }
+  .pair:first-of-type { border-top: 0; }
+  .pair .lb { font-size: 11.5px; padding-top: 2px; }
+  .tg { display: inline-block; font-size: 10.5px; color: var(--faint); margin-left: 2px; }
+  .side-note { font-size: 11px; color: var(--sub); line-height: 1.45; margin-top: 4px; }
+
+  /* 숨은 값 */
+  .hidden-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .hid { border: 1px dashed var(--line-strong); border-radius: 8px; padding: 6px 10px 8px; }
+  .hid-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .hid p { font-size: 11px; color: var(--sub); margin-top: 4px; }
+
+  /* 개수 */
+  .tally { margin-top: 12px; border: 1.5px solid var(--ink); border-radius: 10px; padding: 9px 14px 10px; }
+  .tally-h { font-size: 13.5px; font-weight: 700; }
+  .tally-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 7px; }
+  .t { border-radius: 8px; padding: 6px 10px; background: var(--soft); }
+  .t b { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .t b small { font-size: 12px; font-weight: 600; margin-left: 2px; }
+  .t span { display: block; font-size: 11.5px; color: var(--sub); line-height: 1.4; }
+  .t.bo { background: var(--blue-soft); }
+  .t.bo b { color: var(--blue); }
+  .t.pa { background: #f4f0ea; }
+  .t.pa b { color: #7a5a2e; }
+  .tally p { font-size: 11.5px; color: var(--sub); margin-top: 7px; }
+</style></head>
+<body>
+
+<div class="legend">
+  <span><span class="f">programName</span> 공통 <code>IProgramFormCommon</code></span>
+  <span><span class="f bo">memo</span> Back-Office 전용</span>
+  <span><span class="f pa">inspectionType</span> 병원 관리자 전용</span>
+  <span><span class="cond" style="margin-left:0">검진만</span> 검진 프로그램일 때만</span>
+  <span><span class="fm" style="margin-left:0">상세 폼만</span><span class="fm">검수 폼만</span> 한쪽 폼에만 있는 칸</span>
+  <span><span class="sync">↻</span> 하위 시술을 바꾸면 채움</span>
+</div>
+
+<div class="drawer">
+  <div class="drawer-head"><b>프로그램 드로어</b><span>상세 폼과 검수 폼을 한 장에 겹쳐 그렸다. 두 앱이 같은 틀을 쓴다</span></div>
+  <div class="drawer-body">
+
+    <!-- 왼쪽 미리보기 -->
+    <div>
+      <div class="divider">미리보기</div>
+      <div class="pv">
+        <div class="pv-img"></div>
+        <div class="pv-b">
+          <div class="pv-name">레진 충치치료 1치아</div>
+          <div class="pv-old">300,000원 VAT포함</div>
+          <div class="pv-new"><em>20%</em>240,000원</div>
+          <div class="pv-small">추가 비용 없음</div>
+          <div class="pv-small"><b style="color:var(--ink)">프로그램 설명</b><br>충치 1개를 레진으로 치료한다</div>
+        </div>
+        <div class="pv-row">파트너 병원 ›</div>
+        <div class="pv-comp">검사 구성 <span class="cond" style="margin-left:2px">검진만</span></div>
+        <div class="pv-detail">상세 이미지</div>
+      </div>
+      <p class="pv-note">폼 전체를 <code>useWatch([])</code>로 읽어 입력하는 대로 다시 그린다. 검진이면 '검사 구성' 섹션을 더 그리고, 검진 템플릿이면 상세 이미지 자리는 비운다.</p>
+
+      <div class="forms">
+        <div class="divider">폼 두 가지</div>
+        <div class="fbox">
+          <div class="fh"><span class="fm">상세 폼</span></div>
+          <code>ProgramDetailForm.tsx</code>
+          <ul><li>Back-Office 등록·상세·수정</li><li>병원 관리자 상세(수정·삭제 요청)</li></ul>
+          <div class="has">이 폼에만 <b>예약금</b>, <b>검진 구성</b></div>
+        </div>
+        <div class="fbox">
+          <div class="fh"><span class="fm">검수 폼</span></div>
+          <code>ProgramInspectionForm.tsx</code>
+          <ul><li>두 앱의 검수 상세</li><li>병원 관리자 신규 등록</li></ul>
+          <div class="has">이 폼에만 <b>노출예정일</b></div>
+        </div>
+        <p class="watch">나머지 구획은 두 폼이 같은 FormItem을 쓴다. 병원 관리자는 CMS 설정 대신 hidden 값 묶음을 폼에 담는다.</p>
+      </div>
+    </div>
+
+    <!-- 오른쪽 폼 -->
+    <div>
+      <div class="sec bo">
+        <div class="sec-h"><span>CMS 설정</span><span class="app bo">Back-Office만</span></div>
+        <div class="row"><span class="lb">라벨</span><div><span class="f">labels[]</span><span class="f sub">{ id, text, type }</span></div></div>
+        <div class="row"><span class="lb">체크박스 5개<small>가격 미노출 · 숨김 · 특가전 · 당일할인 · 쿠폰</small></span><div><span class="f bo">hidePrice</span><span class="f bo">status</span><span class="f bo">hasEvent</span><span class="f bo">todayDiscount</span><span class="f bo">couponStatus</span></div></div>
+        <div class="row"><span class="lb">CMS 메모</span><div><span class="f bo">memo</span></div></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><span>기본 정보</span></div>
+        <div class="row"><span class="lb">병원명<small>Back-Office만 보인다</small></span><div><span class="f">partnerId</span><span class="f">partnerName</span><span class="aside">등록: 검색 입력</span><br><span class="f bo">defaultPartnerName</span><span class="aside">상세 · 검수: 읽기 전용 표시</span></div></div>
+        <div class="row"><span class="lb">노출예정일</span><div><span class="f">displayStartDt</span><span class="fm">검수 폼만</span><span class="aside">병원 관리자는 신규 등록일 때만</span></div></div>
+        <div class="row"><span class="lb">썸네일 · 프로그램명</span><div><span class="f">thumbnailImage</span><span class="f">programName</span></div></div>
+        <div class="row"><span class="lb">카테고리</span><div><span class="f">departmentId</span><span class="f">treatmentId</span><span class="f">treatmentSubId</span></div></div>
+        <div class="row"><span class="lb">가격 정보</span><div><span class="f">price</span><span class="f">discountPrice</span><span class="f bo">beforePrice</span><span class="f bo">beforeDiscountPrice</span></div></div>
+        <div class="row"><span class="lb">예약금</span><div><span class="f">healthCheckDepositAmount</span><span class="cond">검진만</span><span class="fm">상세 폼만</span></div></div>
+        <div class="row"><span class="lb">VAT</span><div><span class="f">taxType</span></div></div>
+        <div class="row"><span class="lb">추가 금액 · 설명</span><div><span class="f">additionalInfo</span><span class="f">composition</span></div></div>
+      </div>
+
+      <div class="sec hc">
+        <div class="sec-h"><span>검진 구성</span><span class="cond" style="margin-left:0">검진만</span><span class="fm" style="margin-left:0">상세 폼만</span></div>
+        <div class="row"><span class="lb">필수 항목</span><div><span class="f">healthCheckIncludedItemIds</span></div></div>
+        <div class="row"><span class="lb">선택 그룹 × N</span><div><span class="f">healthCheckSelectableGroups[]</span><span class="f sub">{ name, pickCount, itemIds }</span></div></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><span>상세 이미지</span></div>
+        <div class="row"><span class="lb">상세 이미지 유형</span><div><span class="f">detailTemplateType</span>
+          <div class="radio-line"><i class="on"></i>제공 템플릿<i></i>검진 템플릿<i></i>자체제작 이미지<i></i>사용하지 않기</div><p class="side-note" style="margin-top:4px">진료과에 따라 제공 템플릿과 검진 템플릿 중 하나만 보인다</p></div></div>
+        <div class="bx">
+            <div class="bx-h">제공 템플릿일 때 <code>색상 + 토글·목록 7쌍</code></div>
+            <div class="pair"><span class="lb">색상 타입</span><div><span class="f">detailTemplateColor</span></div></div>
+            <div class="pair"><span class="lb">추천대상</span><div><span class="f">isRecommended</span><span class="f">recommendedTarget</span><span class="sync">↻</span></div></div>
+            <div class="pair"><span class="lb">추가혜택</span><div><span class="f">isBenefit</span><span class="f">benefit</span><span class="tg">직접입력</span></div></div>
+            <div class="pair"><span class="lb">시술 특장점</span><div><span class="f">isProcedureHighlights</span><span class="f">procedureHighlights</span><span class="sync">↻</span></div></div>
+            <div class="pair"><span class="lb">시술 장비</span><div><span class="f">isProcedureEquipment</span><span class="f">procedureEquipment</span><span class="sync">↻</span></div></div>
+            <div class="pair"><span class="lb">시술 과정</span><div><span class="f">isProcedureProcess</span><span class="f">procedureProcess</span><span class="sync">↻</span></div></div>
+            <div class="pair"><span class="lb">시술 전후 사진</span><div><span class="f">isBeforeAfterImages</span><span class="f">beforeAfterImages</span><span class="tg">직접입력</span><br><span class="f sub">{ before, after, title }</span></div></div>
+            <div class="pair"><span class="lb">주의사항</span><div><span class="f">isPrecautions</span><span class="f">precautions</span><span class="sync">↻</span></div></div>
+            <p class="side-note" style="margin-top:5px">토글 <code style="font-size:10.5px">is*</code> 는 <b>제공 / 해당없음</b>, <span class="tg" style="margin:0">직접입력</span> 표시만 <b>직접입력 / 해당없음</b>. 목록 한 줄은 <span class="f sub" style="margin:0">{ image, title, content }</span></p>
+          </div>
+          <div class="branch-side">
+            <div class="bx">
+              <div class="bx-h">자체제작 이미지일 때</div>
+              <span class="f">detailCustomImage</span>
+            </div>
+            <div class="bx">
+              <div class="bx-h">검진 템플릿 <span class="cond" style="margin-left:0">검진만</span></div>
+              <p class="side-note" style="margin-top:0">입력 없음. 검진 구성으로 만든다</p>
+            </div>
+            <div class="bx">
+              <div class="bx-h">사용하지 않기</div>
+              <p class="side-note" style="margin-top:0">입력 없음</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hidden-wrap">
+  <div class="hid">
+    <div class="hid-h"><span class="app bo">Back-Office</span>화면에 없는 전용 값</div>
+    <span class="f bo">isEdit</span><span class="f bo">disabled</span><span class="f bo">inspectionStatus</span><span class="f bo">rejectReason</span>
+    <p>입력 모드·잠금·검수 상태처럼 화면을 바꾸는 값</p>
+  </div>
+  <div class="hid">
+    <div class="hid-h"><span class="app pa">병원 관리자</span>hidden 으로 담는 값</div>
+    <span class="f pa">adminId</span><span class="f pa">adminName</span><span class="f pa">programId</span><span class="f pa">inspectionType</span>
+    <span class="f">partnerId</span><span class="f">partnerName</span><span class="f">labels</span><span class="f">displayStartDt</span>
+    <p>로그인한 병원·관리자 정보와 검수 요청 종류</p>
+  </div>
+</div>
+
+<div class="tally">
+  <div class="tally-h">최상위 필드 수</div>
+  <div class="tally-grid">
+    <div class="t"><b>34<small>개</small></b><span>공통 <code>IProgramFormCommon</code><br>라벨 1 · 기본 정보 12 · 상세 이미지 18 · 검진 구성 3</span></div>
+    <div class="t bo"><b>47<small>개</small></b><span>Back-Office 폼<br>공통 34 + 전용 13</span></div>
+    <div class="t pa"><b>38<small>개</small></b><span>병원 관리자 폼<br>공통 34 + 전용 4</span></div>
+  </div>
+  <p>공통 필드 묶음은 타입의 주석 기준이라 화면 구획과 조금 다르다(<code>taxType</code>은 상세 이미지, 예약금은 검진 구성에 센다). 배열 안 필드(<code>{ … }</code>로 표시한 4가지 모양, 각 3개)는 세지 않았다.</p>
+</div>
+
+<p class="foot">2026-09-29 develop 코드와 2026-09-28 stage 화면(병원 관리자 등록 드로어, Back-Office 상세·검진 등록 드로어)을 바탕으로 다시 그렸다. 화면 값은 예시다.</p>
+</body></html>
