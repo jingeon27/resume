@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 12px; color: var(--sub); margin-bottom: 14px; }
+  .src { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 0 6px; border-radius: 4px; line-height: 17px; white-space: nowrap; border: 1px solid; }
+  .src.server { color: #4a5361; background: var(--soft); border-color: var(--line-strong); }
+  .src.user { color: var(--blue); background: var(--blue-soft); border-color: var(--blue-line); }
+  .src.copy { color: var(--sage); background: var(--sage-soft); border-color: #bcd0ba; }
+  .src.off { color: var(--faint); background: #fff; border-color: var(--line); border-style: dashed; }
+
+  .wrap { display: grid; grid-template-columns: 258px 1fr; gap: 18px; align-items: start; }
+
+  /* 모바일 화면 */
+  .phone { border: 1.5px solid var(--ink); border-radius: 22px; padding: 10px 12px 14px; background: #fff; }
+  .ph-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; padding: 2px 2px 8px; border-bottom: 1px solid #eef0f3; }
+  .ph-head i { font-style: normal; color: var(--sub); font-weight: 500; }
+  .ph-block { border-top: 5px solid var(--soft); padding: 7px 2px 8px; position: relative; }
+  .ph-block:first-of-type { border-top: 0; }
+  .ph-dim { opacity: 0.55; }
+  .prog { display: flex; gap: 9px; align-items: center; }
+  .thumb { width: 34px; height: 34px; border-radius: 8px; background: #dfe7f3; flex: none; }
+  .prog b { display: block; font-size: 12px; }
+  .prog span { font-size: 12px; font-weight: 700; }
+  .grayline { font-size: 10.5px; color: var(--sub); margin-top: 5px; display: flex; justify-content: space-between; }
+  .grayline + .grayline { margin-top: 2px; }
+
+  .badge { position: absolute; left: -24px; top: 6px; width: 17px; height: 17px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10.5px; font-weight: 700; text-align: center; line-height: 17px; }
+  .sec-t { font-size: 12.5px; font-weight: 700; }
+  .sec-t small { font-size: 10.5px; font-weight: 600; color: var(--blue); margin-left: 4px; }
+
+  .pcard { border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px 7px; margin-top: 6px; font-size: 10.5px; color: var(--sub); line-height: 1.45; }
+  .pcard.sel { border: 1.5px solid var(--blue); background: #f8faff; }
+  .pcard .nm { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--ink); }
+  .pcard .nm .lb { font-size: 10px; font-weight: 700; color: var(--blue); background: var(--blue-soft); border-radius: 4px; padding: 0 5px; }
+  .pcard .nm .lb.rel { color: var(--sub); background: var(--soft); }
+  .pcard .nm .ic { margin-left: auto; color: var(--faint); font-weight: 500; letter-spacing: 3px; }
+  .pill { display: block; width: 150px; margin: 8px auto 0; text-align: center; font-size: 10.5px; font-weight: 700; color: #fff; background: #26292e; border-radius: 999px; padding: 4px 0; }
+  .tiny { font-size: 10px; color: var(--faint); margin-top: 5px; }
+
+  .callout { background: #fdf0f0; border-radius: 7px; padding: 4px 8px; font-size: 10.5px; font-weight: 600; color: #8a2f2f; margin-top: 6px; }
+  .cal { margin-top: 7px; }
+  .cal-h { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; }
+  .cal-h span { color: var(--faint); font-weight: 500; letter-spacing: 2px; }
+  .cal-g { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 10.5px; margin-top: 3px; row-gap: 2px; }
+  .cal-g .w { color: var(--faint); font-size: 10px; }
+  .cal-g .d { line-height: 19px; color: var(--ink); }
+  .cal-g .d.on { background: var(--blue); color: #fff; border-radius: 6px; font-weight: 700; }
+  .slots-t { font-size: 10.5px; font-weight: 700; margin-top: 7px; }
+  .slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 3px; }
+  .slots span { border: 1px solid var(--line); border-radius: 5px; text-align: center; font-size: 10.5px; line-height: 19px; }
+  .slots span.on { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 700; }
+  .ta { border: 1px solid var(--line-strong); border-radius: 7px; height: 30px; margin-top: 6px; padding: 4px 7px; font-size: 10.5px; color: var(--faint); }
+  .count { text-align: right; font-size: 10px; color: var(--faint); margin-top: 2px; }
+  .dimrow { font-size: 11px; color: var(--sub); display: flex; justify-content: space-between; padding: 4px 0; border-top: 1px dashed var(--line); }
+  .dimrow:first-child { border-top: 0; }
+  .dimrow em { font-style: normal; font-size: 10px; color: var(--faint); }
+  .submit { margin-top: 2px; background: var(--blue); color: #fff; border-radius: 8px; text-align: center; font-size: 12px; font-weight: 700; padding: 7px 0; }
+
+  /* 폼 값 패널 */
+  .pn-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  .pn-head b { font-size: 14.5px; letter-spacing: -0.2px; }
+  .pn-head span { font-size: 12px; color: var(--sub); }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px 10px; background: #fff; margin-bottom: 8px; }
+  .box.main { border: 1.5px solid var(--ink); }
+  .box-h { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .box-h code { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .box-h .d { font-size: 12px; color: var(--sub); }
+  .box-h .src { margin-left: auto; }
+  table { width: 100%; border-collapse: collapse; margin-top: 7px; font-size: 11.5px; }
+  th { text-align: left; font-weight: 600; padding: 4px 5px 5px; background: var(--soft); border-bottom: 1px solid var(--line); vertical-align: top; }
+  th code { font-size: 11px; display: block; color: var(--ink); }
+  th .src { margin-top: 3px; }
+  td { padding: 4px 5px; border-bottom: 1px solid #eef0f3; }
+  td.mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
+  td .yes { color: var(--blue); font-weight: 700; }
+  td .no { color: var(--faint); }
+  .tnote { font-size: 11.5px; color: var(--sub); margin-top: 6px; line-height: 1.45; }
+  .pair2 { display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 8px; }
+  .pair2 .box { margin-bottom: 8px; }
+  .box p { font-size: 11.5px; color: var(--sub); margin-top: 4px; line-height: 1.45; }
+  .box.off { border-style: dashed; background: #fbfcfd; }
+  .box.off .box-h .d { color: var(--faint); }
+  .rules { border-radius: 10px; background: var(--blue-soft); padding: 9px 12px 10px; margin-bottom: 8px; }
+  .rules b { font-size: 12.5px; color: var(--blue); }
+  .rules b code { font-size: 11.5px; color: var(--blue); }
+  .rules ul, .flows ul { list-style: none; margin-top: 4px; }
+  .rules li, .flows li { font-size: 11.5px; color: var(--ink); line-height: 1.5; padding-left: 11px; position: relative; margin-top: 2px; }
+  .rules li::before, .flows li::before { content: '·'; position: absolute; left: 1px; color: var(--faint); }
+  .flows { border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px 10px; }
+  .flows b { font-size: 12.5px; }
+  .flows li .n { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 9.5px; font-weight: 700; text-align: center; line-height: 14px; margin-right: 3px; vertical-align: 1px; }
+  .flows li code, .rules li code { font-size: 10.5px; }
+  .flows li .n.plus { background: var(--ink); }
+  .send { border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px 10px; margin-top: 8px; }
+  .send b { font-size: 12.5px; }
+  .send .n4 { display: inline-block; width: 15px; height: 15px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; text-align: center; line-height: 15px; margin-right: 5px; vertical-align: 1px; }
+  .send pre { margin-top: 6px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.55; background: var(--soft); border-radius: 7px; padding: 6px 9px; color: var(--ink); }
+  .send pre .t { color: var(--blue); font-weight: 700; }
+  .send pre .f { color: var(--faint); }
+  .send p { font-size: 11.5px; color: var(--sub); margin-top: 5px; line-height: 1.45; }
+</style></head>
+<body>
+
+<div class="legend">
+  <span><span class="src server">서버</span> 서버가 정해요</span>
+  <span><span class="src user">①~③</span> 사용자가 화면에서 정해요</span>
+  <span><span class="src copy">② 복사</span> 폼이 공통 일시를 옮겨 적어요</span>
+  <span><span class="src off">흐리게</span> 이 글에서 다루지 않아요</span>
+</div>
+
+<div class="wrap">
+  <!-- 왼쪽: 예약 신청 화면 -->
+  <div style="padding-left:24px">
+    <div class="phone">
+      <div class="ph-head"><i>‹</i>예시 치과</div>
+
+      <div class="ph-block ph-dim">
+        <div class="prog"><div class="thumb"></div><div><b>레진 충치치료 1치아</b><span>240,000원</span></div></div>
+        <div class="grayline"><span>프로그램 설명</span><span>⌄</span></div>
+        <div class="grayline"><span>예약 혜택 안내 · 리뷰 포인트 안내</span></div>
+      </div>
+
+      <div class="ph-block">
+        <span class="badge">1</span>
+        <div class="sec-t">진료 대상<small>진료 받는 분만 선택해주세요.</small></div>
+        <div class="pcard sel">
+          <div class="nm">♂ 홍길동 <span class="lb">본인</span></div>
+          연락처 010-****-****<br>생년월일 ****.**.**
+        </div>
+        <div class="pcard">
+          <div class="nm">♀ 홍길순 <span class="lb rel">부모</span><span class="ic">✎✕</span></div>
+          연락처 010-****-****<br>생년월일 ****.**.**
+        </div>
+        <span class="pill">+ 가족 · 지인 추가하기</span>
+        <div class="tiny">· 가족/지인은 최대 5명까지 등록이 가능합니다.</div>
+      </div>
+
+      <div class="ph-block">
+        <span class="badge">2</span>
+        <div class="sec-t">내원 희망 일시 선택</div>
+        <div class="callout">! 본 신청은 예약 확정이 아니에요</div>
+        <div class="cal">
+          <div class="cal-h">2026년 10월<span>‹ ›</span></div>
+          <div class="cal-g">
+            <span class="w">일</span><span class="w">월</span><span class="w">화</span><span class="w">수</span><span class="w">목</span><span class="w">금</span><span class="w">토</span>
+            <span class="d">11</span><span class="d">12</span><span class="d">13</span><span class="d on">14</span><span class="d">15</span><span class="d">16</span><span class="d">17</span>
+            <span class="d">18</span><span class="d">19</span><span class="d">20</span><span class="d">21</span><span class="d">22</span><span class="d">23</span><span class="d">24</span>
+          </div>
+        </div>
+        <div class="slots-t">오전</div>
+        <div class="slots"><span>10:00</span><span class="on">10:30</span><span>11:00</span><span>11:30</span></div>
+      </div>
+
+      <div class="ph-block">
+        <span class="badge">3</span>
+        <div class="sec-t">병원 전달사항(선택)</div>
+        <div class="ta">병원에 전달하실 내용을 적어주세요.</div>
+        <div class="count">0/200</div>
+      </div>
+
+      <div class="ph-block ph-dim">
+        <div class="dimrow"><span>추가 상담 희망 시술 ⌄</span></div>
+        <div class="dimrow"><span>쿠폰 · 결제 금액</span><em>쿠폰이 있을 때만</em></div>
+        <div class="dimrow"><span>약관 동의 ⌄</span></div>
+      </div>
+
+      <div class="ph-block" style="padding-bottom:0">
+        <span class="badge">4</span>
+        <div class="submit">예약 신청하기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 오른쪽: 폼 값 -->
+  <div>
+    <div class="pn-head"><b>폼 값</b><span>예약 화면의 FormProvider 하나. 가족·회원·쿠폰 조회가 끝난 뒤 초기값을 정해요</span></div>
+
+    <div class="box main">
+      <div class="box-h"><code>participants[]</code><span class="d">서버 목록 순서 그대로, 한 사람에 한 칸</span></div>
+      <table>
+        <tr>
+          <th><code>memberId</code><span class="src server">서버</span></th>
+          <th><code>name</code><span class="src server">서버</span></th>
+          <th><code>selected</code><span class="src user">①</span></th>
+          <th><code>preferredDate</code><span class="src copy">② 복사</span></th>
+          <th><code>preferredTime</code><span class="src copy">② 복사</span></th>
+        </tr>
+        <tr><td>본인 ID</td><td>홍길동</td><td><span class="yes">true</span></td><td class="mono">20261014</td><td class="mono">10:30</td></tr>
+        <tr><td>가족 ID</td><td>홍길순</td><td><span class="no">false</span></td><td class="mono">20261014</td><td class="mono">10:30</td></tr>
+      </table>
+      <p class="tnote">누가 목록에 있는지와 이름은 서버가 정하고, 폼은 선택 여부와 희망 일시만 덧붙여요.</p>
+    </div>
+
+    <div class="pair2">
+      <div class="box">
+        <div class="box-h"><code>preferredDate · preferredTime</code></div>
+        <p><span class="src user">②</span> 공통 희망 일시예요. 날짜만 누르면 시간은 비워요.</p>
+      </div>
+      <div class="box">
+        <div class="box-h"><code>requestNote</code></div>
+        <p><span class="src user">③</span> 200자까지 적어요.</p>
+      </div>
+    </div>
+
+    <div class="box off">
+      <div class="box-h"><span class="d">추가 상담 희망 시술(5개까지) · 쿠폰도 같은 폼에 있지만 이 글에서는 다루지 않아요</span></div>
+    </div>
+
+    <div class="rules">
+      <b>④ 신청 버튼이 켜지는 조건 · <code>BookingFormSchema</code></b>
+      <ul>
+        <li>공통 날짜와 시간이 모두 있어요</li>
+        <li><code>participants</code>가 한 칸 이상이고, 칸마다 날짜와 시간이 있어요</li>
+        <li><code>selected</code>가 true인 사람이 한 명 이상이에요</li>
+      </ul>
+    </div>
+
+    <div class="flows">
+      <b>값이 바뀌는 순간</b>
+      <ul>
+        <li><span class="n">1</span>카드를 누르면 그 사람만 <code>selected</code>가 되고 나머지는 해제돼요. 처음에는 본인이 선택돼 있어요.</li>
+        <li><span class="n">2</span>날짜나 시간을 누를 때마다 공통 일시와 모든 칸의 일시를 한 번에 바꿔요.</li>
+        <li><span class="n plus">+</span>가족을 추가·수정·삭제하면 서버에 먼저 반영돼요. 가족 목록이 바뀌면 <code>participants[]</code>를 그 목록에 맞춰 다시 만들고, 새로 들어온 사람은 선택하지 않은 채 공통 일시를 받아요.</li>
+      </ul>
+    </div>
+
+    <div class="send">
+      <b><span class="n4">4</span>제출 · 확인 시트에서 '확인'을 누른 뒤 보내는 요청</b>
+<pre>{ programId, requestNote,
+  participants: [
+    { 회원 ID, selected: <span class="t">true</span>,  "20261014", "10:30" },
+    { 가족 ID, selected: <span class="f">false</span>, "20261014", "10:30" },
+  ] }</pre>
+      <p>확인 시트에는 선택한 사람만 보이지만, 요청에는 폼 배열의 모든 사람이 선택 여부와 희망 일시를 달고 가요. 본인은 회원 ID, 가족은 가족 ID 칸으로 보내요.</p>
+    </div>
+  </div>
+</div>
+
+<p class="foot">2026-09-28 develop 코드(예약 페이지, 진료 대상·일시 구획, 예약 스키마, 제출 버튼)와 2026-09-28 stage 예약 신청 화면(390×844)을 바탕으로 다시 그렸어요. 화면 값은 예시예요. 요청 본문은 이 글과 관련된 칸만 남겼고, 코드 이름은 글과 같은 가명이에요.</p>
+</body></html>
