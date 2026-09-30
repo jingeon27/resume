@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .seq { display: grid; grid-template-columns: 62px 1fr 124px 1fr; row-gap: 10px; align-items: stretch; }
+  .lane-head { border-radius: 10px; padding: 9px 12px 10px; }
+  .lane-head.form { background: var(--blue-soft); }
+  .lane-head.sheet { background: var(--sage-soft); }
+  .lane-head b { display: block; font-size: 14px; letter-spacing: -0.2px; }
+  .lane-head span { display: block; font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .lane-head code { font-size: 11px; background: rgba(255, 255, 255, 0.7); border-radius: 4px; padding: 0 4px; color: var(--ink); }
+  .blank { }
+
+  .when { font-size: 12px; font-weight: 700; color: var(--sub); padding-top: 11px; }
+  .cell { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 9px 11px 10px; }
+  .cell.form { border-color: var(--blue-line); }
+  .cell.sheet { border-color: #bcd0ba; }
+  .cell.quiet { border-style: dashed; background: #fafbfc; }
+  .cell b { font-size: 13px; letter-spacing: -0.2px; }
+  .cell p { font-size: 12px; color: var(--sub); margin-top: 3px; line-height: 1.5; }
+  .cell code { font-size: 11px; background: var(--soft); border-radius: 4px; padding: 0 4px; color: var(--ink); }
+  .cell pre { margin-top: 5px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; line-height: 1.55; background: var(--soft); border-radius: 6px; padding: 5px 8px; color: var(--ink); white-space: pre; }
+  .cell pre .c { color: var(--faint); }
+  .count { display: inline-block; margin-top: 6px; font-size: 11.5px; font-weight: 700; padding: 1px 7px; border-radius: 5px; }
+  .count.form { color: var(--blue); background: var(--blue-soft); border: 1px solid var(--blue-line); }
+  .count.sheet { color: var(--sage); background: var(--sage-soft); border: 1px solid #bcd0ba; }
+  .count.gone { color: var(--faint); background: var(--soft); border: 1px solid var(--line); text-decoration: line-through; }
+
+  .mini-field { margin-top: 6px; height: 26px; border: 1px solid var(--line-strong); border-radius: 6px; padding: 0 6px; display: flex; align-items: center; gap: 4px; }
+  .gtag { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; padding: 1px 7px; border-radius: 999px; background: #eef0f3; color: var(--ink); white-space: nowrap; }
+  .gtag b { font-weight: 400; color: var(--faint); font-size: 10.5px; }
+  .gtag.hit { box-shadow: 0 0 0 1.5px var(--coral); }
+
+  .mid { display: flex; flex-direction: column; justify-content: center; padding: 0 6px; }
+  .mid .t { font-size: 11.5px; font-weight: 700; color: var(--ink); text-align: center; }
+  .mid .s { font-size: 10.5px; color: var(--sub); text-align: center; line-height: 1.4; margin-top: 3px; }
+  .mid code { font-size: 10.5px; }
+  .harrow { position: relative; height: 0; border-top: 2px solid var(--line-strong); margin: 5px 4px 0; }
+  .harrow.r::after { content: ''; position: absolute; right: -2px; top: -7px; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid var(--line-strong); }
+  .harrow.l::after { content: ''; position: absolute; left: -2px; top: -7px; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 8px solid var(--line-strong); }
+  .harrow.none { border-top-style: dashed; border-top-color: var(--line); }
+
+  .next { margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+  .next b { font-size: 13.5px; }
+  .next p { font-size: 12px; color: var(--sub); margin-top: 3px; }
+  .next code { font-size: 11px; background: var(--soft); border-radius: 4px; padding: 0 4px; color: var(--ink); }
+  .next .btns { display: flex; gap: 6px; }
+  .next .btns span { font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 7px; }
+  .next .btns .on { background: var(--blue); color: #fff; }
+  .next .btns .off { background: #b9c9e4; color: #fff; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .cmp { border-radius: 10px; padding: 10px 12px; font-size: 12.5px; color: var(--sub); line-height: 1.55; }
+  .cmp b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 3px; }
+  .cmp code { font-size: 11px; background: rgba(255, 255, 255, 0.75); border-radius: 4px; padding: 0 4px; color: var(--ink); }
+  .cmp.rule { background: var(--blue-soft); }
+  .cmp.gap { background: var(--coral-soft); }
+  .cmp .hist { display: block; margin-top: 5px; font-size: 12px; }
+</style></head>
+<body>
+
+<p class="caption-top">시트는 열 때의 <code>items</code>로 임시 선택(<code>draft</code>)을 만들고, 확인할 때만 2단계 폼에 넣는다. 닫으면 아무것도 넘기지 않는다.</p>
+
+<div class="seq">
+  <div class="blank"></div>
+  <div class="lane-head form"><b>2단계 폼 · 폼 Provider 안</b><span>단계 폼(<code>mode: 'all'</code>, <code>DetailsStepSchema</code>) 안의 <code>ItemsField</code>가 <code>useFieldArray</code>로 <code>items</code>, <code>replace</code>, <code>remove</code>를 받는다</span></div>
+  <div class="blank"></div>
+  <div class="lane-head sheet"><b>선택 시트 · 폼 Provider 밖</b><span><code>ItemPickerSheet</code>는 overlay-kit가 앱 최상단에 그린다. <code>useFormContext</code> 대신 값과 콜백을 props로 받는다</span></div>
+
+  <!-- 열 때 -->
+  <div class="when">열 때</div>
+  <div class="cell form">
+    <b>필드를 누른다</b>
+    <div class="mini-field"><span class="gtag">스케일링 <b>×</b></span><span class="gtag">치아 미백 <b>×</b></span></div>
+    <span class="count form">items 2개</span>
+  </div>
+  <div class="mid">
+    <div class="t">overlay.open</div>
+    <div class="harrow r"></div>
+    <div class="s"><code>initialItems</code> = 지금의 <code>items</code><br><code>onConfirm</code> = <code>replace</code></div>
+  </div>
+  <div class="cell sheet">
+    <b>열 때마다 새로 마운트한다</b>
+<pre>const [draft, setDraft] =
+  useState(initialItems);</pre>
+    <span class="count sheet">draft 2개</span>
+  </div>
+
+  <!-- 고르는 동안 -->
+  <div class="when">고르는<br>동안</div>
+  <div class="cell quiet">
+    <b>폼 값은 그대로다</b>
+    <p>스키마 검사와 '다음' 버튼 상태도 바뀌지 않는다.</p>
+    <span class="count form">items 2개</span>
+  </div>
+  <div class="mid">
+    <div class="harrow none"></div>
+    <div class="s">넘기는 값 없음</div>
+  </div>
+  <div class="cell sheet">
+    <b><code>draft</code>만 바뀐다</b>
+    <p>행을 누르면 넣고, 다시 누르면 뺀다. 그래서 중복이 생기지 않는다. <code>draft</code>가 5개면 6번째는 토스트로 막는다. 초기화는 <code>draft</code>를 비운다.</p>
+    <span class="count sheet">draft 3개</span>
+  </div>
+
+  <!-- 확인 -->
+  <div class="when">확인</div>
+  <div class="cell form">
+    <b><code>items</code>가 <code>draft</code>로 한 번에 바뀐다</b>
+    <p>단계 폼이 스키마로 다시 검사하고 '다음' 버튼 상태를 갱신한다.</p>
+    <span class="count form">items 3개</span>
+  </div>
+  <div class="mid">
+    <div class="t">replace(draft)</div>
+    <div class="harrow l"></div>
+    <div class="s">확인 버튼에서<br><code>onConfirm(draft)</code></div>
+  </div>
+  <div class="cell sheet">
+    <b>넘기고 닫는다</b>
+<pre>onConfirm(draft);
+onClose();</pre>
+  </div>
+
+  <!-- 닫기 -->
+  <div class="when">닫기</div>
+  <div class="cell quiet">
+    <b>아무것도 바뀌지 않는다</b>
+    <p>닫기가 곧 취소다.</p>
+    <span class="count form">items 2개</span>
+  </div>
+  <div class="mid">
+    <div class="harrow none"></div>
+    <div class="s">넘기는 값 없음</div>
+  </div>
+  <div class="cell sheet">
+    <b>딤, 끌어내리기, 뒤로 가기</b>
+    <p><code>close</code>로 닫고, 닫힘 애니메이션이 끝나면 <code>unmount</code>한다. <code>draft</code>는 시트와 함께 사라진다.</p>
+    <span class="count gone">draft 3개</span>
+  </div>
+
+  <!-- 칩 삭제 -->
+  <div class="when">칩의 ×</div>
+  <div class="cell form">
+    <b>시트를 열지 않고 바로 지운다</b>
+    <div class="mini-field"><span class="gtag">스케일링 <b>×</b></span><span class="gtag hit">치아 미백 <b>×</b></span></div>
+    <p><code>remove(index)</code>로 지우고, 시트는 열리지 않는다.</p>
+  </div>
+  <div class="blank"></div>
+  <div class="blank"></div>
+</div>
+
+<div class="next">
+  <div>
+    <b>'다음' 버튼은 단계 폼의 검사 결과로 켜진다</b>
+    <p><code>DetailsStepSchema</code>가 다른 필드와 함께 확정된 <code>items</code>를 <code>min(1)</code>, <code>max(5)</code>, 중복 검사로 본다. 시술 선택 필드에는 오류 문구가 없어서 결과는 버튼으로만 드러난다.</p>
+  </div>
+  <div class="btns"><span class="off">다음</span><span class="on">다음</span></div>
+</div>
+
+<div class="compare">
+  <div class="cmp rule"><b>5개 제한은 두 곳에 있다</b>시트는 <code>draft</code>를 보고 6번째를 막고, 스키마는 확정된 <code>items</code>를 보고 '다음'을 끈다.<span class="hist">처음 develop에 합칠 때 시트는 <code>draft</code>가 아니라 <code>initialItems</code>의 개수를 봤다. 다음 날, 운영 반영 전에 <code>draft</code> 기준으로 고쳤다.</span></div>
+  <div class="cmp gap"><b>남은 틈</b>숫자 5가 시트와 스키마에 따로 적혀 있다. 시트의 임시 선택, 확인 버튼, 닫기 동작을 검사하는 테스트는 없다(2026-09-30 develop 기준).</div>
+</div>
+
+<p class="foot">2026-09-30 develop 코드를 바탕으로 다시 그렸다. <code>ItemsField</code>, <code>ItemPickerSheet</code>, <code>initialItems</code>, <code>onConfirm</code>, <code>draft</code>, <code>items</code>, <code>DetailsStepSchema</code>는 글의 가명이고 시술명은 예시다.</p>
+</body></html>
