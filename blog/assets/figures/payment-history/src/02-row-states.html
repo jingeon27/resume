@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 7px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+
+  /* 한 행의 구성 */
+  .anat { display: grid; grid-template-columns: 468px 1fr; gap: 14px; align-items: start; }
+  .mock { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; background: #fff; }
+  .mock-label { background: #f2f6ff; border-bottom: 1px solid var(--line); padding: 7px 12px; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .mock-label i { font-style: normal; display: inline-flex; width: 13px; height: 13px; border-radius: 50%; border: 1.3px solid var(--sub); color: var(--sub); font-size: 9px; align-items: center; justify-content: center; font-weight: 700; }
+  .tl { position: relative; padding: 12px 12px 12px 34px; }
+  .tl::before { content: ''; position: absolute; left: 19px; top: 20px; bottom: 26px; border-left: 2px solid #e8ebef; }
+  .it { position: relative; margin-bottom: 9px; }
+  .it:last-child { margin-bottom: 0; }
+  .dot { position: absolute; left: -20px; top: 12px; width: 11px; height: 11px; border-radius: 50%; background: #fff; border: 2.5px solid var(--faint); }
+  .dot.green { border-color: #4f9a55; }
+  .dot.red { border-color: #d0513a; }
+  .dot.gray { border-color: #aab2bd; }
+  .col { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .ch { display: flex; align-items: center; gap: 7px; padding: 7px 9px; min-height: 36px; background: #fafbfc; }
+  .ch b { font-size: 11.5px; white-space: nowrap; }
+  .ch .r { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #9aa5b3; white-space: nowrap; }
+  .ch .r .amt { color: var(--ink); }
+  .ch .r .amt.neg { color: #c9412b; }
+  .t { display: inline-block; font-size: 10px; line-height: 1.5; padding: 0 5px; border-radius: 4px; border: 1px solid; white-space: nowrap; }
+  .t.red { color: #c9412b; background: #fdf1ee; border-color: #f0c4b9; }
+  .t.green { color: #3f7d44; background: #eef6ee; border-color: #bcd6bd; }
+  .t.gray { color: var(--sub); background: var(--soft); border-color: var(--line); }
+  .xbtn { font-size: 10px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 5px; color: var(--ink); background: #fff; }
+  .cb { border-top: 1px solid var(--line); }
+  .dr { display: grid; grid-template-columns: 96px 1fr; border-top: 1px solid var(--line); font-size: 11px; }
+  .dr:first-child { border-top: 0; }
+  .dr > span:first-child { background: #fafafa; border-right: 1px solid var(--line); padding: 6px 6px; font-weight: 700; text-align: center; }
+  .dr > span:last-child { padding: 6px 8px; color: #b0b7c1; display: flex; align-items: center; gap: 6px; }
+  .dr > span.fill { background: #f5f5f5; color: var(--ink); }
+  .dr .cbx { margin-left: auto; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .dr .cbx::before { content: ''; width: 9px; height: 9px; border: 1.2px solid var(--line-strong); border-radius: 2px; }
+  .hidden-note { margin-top: 8px; font-size: 11px; color: var(--faint); border: 1px dashed var(--line-strong); border-radius: 7px; padding: 4px 8px; }
+
+  .mk { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .pin { position: absolute; z-index: 2; }
+  .mk.sm { width: 15px; height: 15px; font-size: 9.5px; }
+  .ch .mk.sm { margin-right: -2px; }
+  .ch .r .mk.sm { margin-left: -3px; }
+
+  .calls { display: flex; flex-direction: column; gap: 7px; }
+  .call { border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px 7px; }
+  .call-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+  .call code { display: block; font-size: 11px; color: var(--blue); margin: 2px 0 1px; }
+  .call p { font-size: 11px; color: var(--sub); line-height: 1.45; }
+  .call p b { color: var(--ink); font-weight: 600; }
+
+  /* 표 */
+  .tbl { margin-top: 16px; border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; }
+  .tr { display: grid; grid-template-columns: 188px 52px 40px 82px 1fr; border-top: 1px solid var(--line); }
+  .tr > div { padding: 6px 7px; font-size: 11.5px; border-left: 1px solid #eef0f3; min-width: 0; }
+  .tr > div:first-child { border-left: 0; }
+  .th { border-top: 0; background: var(--soft); }
+  .th > div { font-size: 11px; font-weight: 700; color: var(--sub); line-height: 1.35; }
+  .th > div .sub { display: block; font-size: 10.5px; font-weight: 500; color: var(--faint); }
+  .th .mk { width: 15px; height: 15px; font-size: 9.5px; margin-right: 3px; vertical-align: -2px; }
+  .grp { border-top: 1px solid var(--line); background: #fafbfc; padding: 5px 9px; font-size: 11.5px; font-weight: 700; color: var(--ink); display: flex; gap: 8px; align-items: baseline; }
+  .grp span { font-weight: 500; color: var(--faint); font-size: 11px; }
+  .c { text-align: center; }
+  .yes { color: var(--sage); font-weight: 700; }
+  .no { color: var(--faint); }
+  .d { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid; vertical-align: -1px; }
+  .d.green { border-color: #4f9a55; } .d.red { border-color: #d0513a; } .d.gray { border-color: #aab2bd; }
+  .m { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); background: var(--soft); color: var(--ink); margin: 1px 2px 1px 0; white-space: nowrap; }
+  .m.coupon { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-line); }
+  .m.cancel { background: var(--coral-soft); color: var(--coral); border-color: #e2c3b9; }
+  .m.rec { background: #f1ede6; color: #7a5a2e; border-color: #e0d3bf; }
+  .st { color: var(--sub); font-size: 11px; }
+  .comp { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; font-weight: 700; color: var(--ink); }
+  .lbls { margin-top: 2px; font-size: 10.5px; color: var(--sub); line-height: 1.45; }
+  .lbls .btn-in { display: inline-block; font-size: 9.5px; border: 1px solid var(--line-strong); border-radius: 3px; padding: 0 3px; color: var(--ink); vertical-align: 1px; }
+  .since { display: inline-block; font-size: 10px; font-weight: 700; color: var(--coral); background: var(--coral-soft); border: 1px solid #e8cdc4; border-radius: 4px; padding: 0 4px; margin-left: 4px; vertical-align: 1px; white-space: nowrap; }
+  .gnote { border-top: 1px dashed var(--line); padding: 5px 9px 6px; font-size: 11px; color: var(--sub); line-height: 1.5; background: #fff; }
+  .gnote b { color: var(--ink); font-weight: 600; }
+  .muted > div { color: var(--sub); }
+  .legend { margin-top: 7px; font-size: 11px; color: var(--sub); line-height: 1.5; }
+</style></head>
+<body>
+
+<div class="zone">결제 내역 한 행과, 그 행을 두고 판단하는 다섯 자리</div>
+<div class="anat">
+  <div class="mock">
+    <div class="mock-label">결제 내역 <i>i</i></div>
+    <div class="tl">
+      <div class="it">
+        <span class="dot gray"></span>
+        <span class="pin mk" style="left:-28px; top:-7px">2</span>
+        <span class="pin mk" style="right:-9px; top:78px">5</span>
+        <div class="col">
+          <div class="ch">
+            <span class="mk sm">3</span><b>결제 내역 (3)</b><span class="t red">하단에 결제일과 결제 금액을 입력해주세요</span>
+            <span class="r">미정<span class="amt">₩ 0</span><span class="xbtn">접기</span><span class="mk sm">4</span></span>
+          </div>
+          <div class="cb">
+            <div class="dr"><span>결제일</span><span>실제 결제를 완료한 경우에만 결제일을…<span class="cbx">내원일과 동일</span></span></div>
+            <div class="dr"><span>미수잔금</span><span class="fill">₩ 30,000</span></div>
+            <div class="dr"><span>현장 결제금액</span><span>현장에서 결제한 금액을 입력해주세요.</span></div>
+            <div class="dr"><span>최종 결제금액</span><span class="fill"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="it">
+        <span class="dot red"></span>
+        <div class="col"><div class="ch"><b>결제 내역 (2)</b><span class="t gray">결제취소</span><span class="r">2026-07-12 14:30<span class="amt neg">₩ -10,000</span><span class="xbtn">펼치기</span></span></div></div>
+      </div>
+      <div class="it">
+        <span class="dot green"></span>
+        <div class="col"><div class="ch"><b>결제 내역 (1)</b><span class="t green">결제완료</span><span class="r">2026-07-10<span class="amt">₩ 40,000</span><span class="xbtn">펼치기</span></span></div></div>
+      </div>
+      <div class="hidden-note"><span class="mk" style="width:14px;height:14px;font-size:9px;margin-right:4px;vertical-align:-2px">1</span>견적추가 같은 행은 타임라인에 올리지 않고 번호도 매기지 않는다. 배열을 뒤집어 마지막 행이 맨 위에 온다.</div>
+    </div>
+  </div>
+
+  <div class="calls">
+    <div class="call"><div class="call-h"><span class="mk">1</span>타임라인에 올릴지</div><code>isVisiblePaymentHistory</code><p>수단·상태를 보고, 쿠폰결제는 <b>id 유무</b>를 본다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">2</span>점 색</div><code>getPaymentHistoryColor</code><p>완료된 현장결제는 초록, 완료된 현장취소는 빨강, 나머지는 회색</p></div>
+    <div class="call"><div class="call-h"><span class="mk">3</span>헤더 태그·날짜·금액</div><code>PaymentHistoryHeader</code><p>수단·상태에 <b>금액 부호</b>까지 본다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">4</span>처음부터 펼칠지</div><code>PaymentHistory</code><p>결제상태가 완료가 아니면 펼친 채로 연다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">5</span>펼쳤을 때의 칸</div><code>PaymentHistoryDescriptions</code><p><b>기록 여부 → id 유무 → 취소 → 연결 쿠폰 → 완료</b> 순서로 컴포넌트를 고른다</p></div>
+  </div>
+</div>
+
+<div class="tbl">
+  <div class="tr th">
+    <div>행<span class="sub">저장 여부 · 결제수단 · 결제상태</span></div>
+    <div class="c"><span class="mk">1</span><br>노출</div>
+    <div class="c"><span class="mk">2</span><br>점</div>
+    <div><span class="mk">3</span>헤더<span class="sub">태그</span></div>
+    <div><span class="mk">5</span>상세 컴포넌트<span class="sub">펼쳤을 때 보이는 칸</span></div>
+  </div>
+
+  <div class="grp">미저장 행<span>클라이언트가 붙인 행, id 없음</span></div>
+  <div class="tr">
+    <div><span class="m coupon">쿠폰결제</span><span class="st">처리 중</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
+    <div><span class="t red">입력 안내</span></div>
+    <div><span class="comp">CouponDescriptions</span><div class="lbls">결제일 · 총 결제 예정 금액 · 쿠폰 사용 금액 <span class="btn-in">쿠폰 변경</span> · 최종 결제금액</div></div>
+  </div>
+  <div class="tr">
+    <div><span class="m">현장결제</span><span class="st">처리 중</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
+    <div><span class="t red">입력 안내</span></div>
+    <div><span class="comp">WaitingDescriptions</span><div class="lbls">결제일 · 미수잔금 · 현장 결제금액 · 최종 결제금액 (입력 칸)</div></div>
+  </div>
+  <div class="gnote">결제일을 고르면 상태가 <b>완료</b>로 바뀐다. 헤더 태그는 결제완료가 되고 현장결제는 점도 초록이 되지만, <b>상세는 id부터 보므로 저장 전까지 입력 칸</b> 그대로다. 결제일을 고른 현장결제 행에 음수 금액을 넣으면 헤더가 결제취소로 바뀌고, 정산 상세에서 저장하면 현장취소 행으로 등록된다.</div>
+
+  <div class="grp">저장된 행<span>id 있음</span></div>
+  <div class="tr">
+    <div><span class="m">현장결제</span><span class="st">완료 · 쿠폰결제 행이 연결됨</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d green"></span></div>
+    <div><span class="t green">결제완료</span></div>
+    <div><span class="comp">CouponCompleteDescriptions</span><span class="since">08-14 분리</span><div class="lbls">결제일 · 현장 결제금액 · 쿠폰 사용 금액 · 최종 결제금액</div></div>
+  </div>
+  <div class="tr">
+    <div><span class="m">현장결제</span><span class="st">완료</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d green"></span></div>
+    <div><span class="t green">결제완료</span></div>
+    <div><span class="comp">CompletedDescriptions</span><div class="lbls">결제일 · 미수잔금 · 현장 결제금액 · 최종 결제금액</div></div>
+  </div>
+  <div class="tr">
+    <div><span class="m cancel">현장취소</span><span class="st">완료</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d red"></span></div>
+    <div><span class="t gray">결제취소</span></div>
+    <div><span class="comp">CanceledDescriptions</span><div class="lbls">취소일 · 미수잔금 · 현장 결제금액(−) · 최종 결제금액(−)</div></div>
+  </div>
+  <div class="tr">
+    <div><span class="m">현장결제</span><span class="m cancel">현장취소</span><span class="st">대기 · 처리 중</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
+    <div><span class="t red">입력 안내</span></div>
+    <div><span class="comp">WaitingDescriptions</span><div class="lbls">미저장 현장결제 행과 같은 입력 칸</div></div>
+  </div>
+  <div class="tr">
+    <div><span class="m rec">예약금</span><span class="m rec">기업지원</span><span class="st">결제·취소 기록, 상태 무관</span></div>
+    <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
+    <div><span class="t green">결제완료</span> <span class="t gray">결제취소</span></div>
+    <div><span class="comp">PaymentRecordDescriptions</span><span class="since">09-11 추가</span><div class="lbls">구분 · 결제일/취소일 · 미수잔금 · 결제금액/취소금액 (읽기 전용, 렌더러가 가장 먼저 가른다)</div></div>
+  </div>
+
+  <div class="grp">타임라인에 올리지 않는 행</div>
+  <div class="tr muted">
+    <div><span class="m coupon">쿠폰결제</span><span class="st">저장됨</span></div>
+    <div class="c no">숨김</div><div class="c no">–</div><div class="c no">–</div>
+    <div>연결된 현장결제 행에서 '쿠폰 사용 금액'으로 보인다</div>
+  </div>
+  <div class="tr muted">
+    <div><span class="m coupon">쿠폰취소</span></div>
+    <div class="c no">숨김</div><div class="c no">–</div><div class="c no">–</div>
+    <div>그 행의 쿠폰 금액·쿠폰명에 취소선을 긋고, 최종 결제금액을 현장 결제금액만으로 보여준다</div>
+  </div>
+  <div class="tr muted">
+    <div><span class="st">요청·거절·취소 상태의 현장결제·현장취소, 견적추가·견적차감, 미수잔금 차감, 앱 예약금, 제휴 포인트</span></div>
+    <div class="c no">숨김</div><div class="c no">–</div><div class="c no">–</div>
+    <div>화면에 올리지 않는다</div>
+  </div>
+</div>
+<p class="legend"><span class="t red">입력 안내</span> 는 헤더의 빨간 태그 '하단에 결제일과 결제 금액을 입력해주세요'다. 헤더 태그는 결제상태를 따르되, 취소 헤더는 상태와 관계없이 결제취소 태그를 달고 금액을 음수로 붉게 적는다.</p>
+
+<p class="foot">2026-09-29 develop 코드(공유 패키지의 결제 내역 helper, PaymentHistory·PaymentHistoryHeader·PaymentHistoryDescriptions)를 바탕으로 그렸다. 화면은 캡처 없이 코드의 antd 구성을 따라 단순화했고 날짜·금액은 예시다.</p>
+</body></html>
