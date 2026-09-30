@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .lane-head { border-radius: 10px; padding: 10px 14px; background: var(--soft); margin-bottom: 10px; }
+  .lane-head.user { background: var(--blue-soft); }
+  .lane-head b { font-size: 14.5px; display: block; letter-spacing: -0.2px; }
+  .lane-head span { font-size: 12.5px; color: var(--sub); }
+  .step { position: relative; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 10px 12px 11px 40px; }
+  .step .n { position: absolute; left: 12px; top: 11px; width: 19px; height: 19px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line-strong); font-size: 11px; font-weight: 700; color: var(--sub); text-align: center; line-height: 17px; }
+  .user .step .n, .step.u .n { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .step .who { font-size: 11.5px; color: var(--faint); margin-bottom: 2px; }
+  .step b { font-size: 13.5px; letter-spacing: -0.2px; }
+  .step p { font-size: 12.5px; color: var(--sub); margin-top: 3px; }
+  .step code { font-size: 11.5px; background: var(--soft); border-radius: 4px; padding: 0 4px; color: var(--ink); white-space: nowrap; }
+  .step pre { margin-top: 5px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11.5px; line-height: 1.55; background: var(--soft); border-radius: 6px; padding: 6px 9px; color: var(--ink); }
+  .step pre .c { color: var(--faint); }
+  .step.skip { border-style: dashed; background: #fafbfc; }
+  .step.write { border-color: var(--blue-line); }
+  .touch { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .touch .state { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
+  .cascader { margin-top: 6px; border: 1px solid var(--line-strong); border-radius: 6px; padding: 3px 8px; font-size: 12px; display: flex; justify-content: space-between; color: var(--ink); }
+  .cascader span { color: var(--faint); }
+  .hint { font-size: 11.5px; color: var(--faint); margin-top: 3px; }
+  .result { margin-top: 6px; font-size: 12.5px; font-weight: 600; }
+  .result.keep { color: var(--sage); }
+  .result.fill { color: var(--blue); }
+
+  .sec-title { font-size: 13.5px; font-weight: 700; margin: 18px 0 8px; letter-spacing: -0.2px; }
+  .sec-title small { font-weight: 400; color: var(--sub); font-size: 12.5px; margin-left: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { white-space: nowrap; text-align: left; font-weight: 600; font-size: 12px; color: var(--sub); background: var(--soft); padding: 6px 9px; border-bottom: 1px solid var(--line); }
+  td { padding: 6px 9px; border-bottom: 1px solid #eef0f3; vertical-align: top; }
+  td code { font-size: 11.5px; }
+  td .k { color: var(--faint); font-size: 11.5px; }
+  td.arrow { color: var(--line-strong); width: 18px; padding: 6px 0; text-align: center; }
+  td.label { font-weight: 600; white-space: nowrap; }
+  td.empty { color: var(--sub); white-space: nowrap; }
+  .tnote { font-size: 12px; color: var(--sub); margin-top: 6px; }
+  .tnote code { font-size: 11px; }
+  .keep-row { margin-top: 8px; font-size: 12.5px; color: var(--sub); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+  .keep-row b { color: var(--ink); }
+  .keep-row code { font-size: 11.5px; }
+  .gap { margin-top: 10px; border: 1px solid #e2c3b9; background: var(--coral-soft); border-radius: 8px; padding: 8px 11px; font-size: 12.5px; color: var(--ink); }
+  .gap b { color: var(--coral); }
+</style></head>
+<body>
+
+<p class="caption-top">두 경우 모두 <code>SyncTreatmentSub</code>는 하위 시술 상세를 조회한다. 폼에 쓸지는 시술 필드의 touched 여부로 가른다.</p>
+
+<div class="lanes">
+  <div>
+    <div class="lane-head"><b>상세를 처음 불러올 때</b><span>저장된 템플릿 값을 그대로 둔다</span></div>
+
+    <div class="step">
+      <span class="n">1</span>
+      <div class="who">드로어 컨테이너 · 변환 계층</div>
+      <b>저장된 프로그램을 폼 값으로</b>
+      <p>상세 응답을 폼 모델로 바꿔 <code>initialValues</code>로 넘기고, 폼이 붙은 뒤 <code>resetFields()</code>로 채운다.</p>
+      <div class="touch"><span class="state mute">treatmentId untouched</span><span class="state mute">treatmentSubId untouched</span></div>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="step">
+      <span class="n">2</span>
+      <div class="who">SyncTreatmentSub 마운트</div>
+      <b>채워진 ID로 하위 시술 상세 조회</b>
+      <p>상세 이미지가 제공 템플릿일 때만 그려진다. <code>useWatch</code>로 두 ID를 읽어 조회한다.</p>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="step skip">
+      <span class="n">3</span>
+      <div class="who">응답 도착 · useEffect</div>
+      <b><code>data</code>는 있지만 touched가 둘 다 false</b>
+      <p>조건을 통과하지 못해 <code>setFieldValue</code>를 부르지 않는다.</p>
+      <div class="result keep">결과: 저장된 추천 대상·시술 과정 등이 남는다</div>
+    </div>
+  </div>
+
+  <div class="user">
+    <div class="lane-head user"><b>사용자가 카테고리를 바꿀 때</b><span>하위 시술의 템플릿으로 다시 채운다</span></div>
+
+    <div class="step">
+      <span class="n">1</span>
+      <div class="who">CategoryFormItem · 캐스케이더 onChange</div>
+      <b>진료과 &gt; 시술 &gt; 하위 시술 선택</b>
+      <div class="cascader">치과 &gt; 충치치료 &gt; 레진<span>⌄</span></div>
+      <pre>form.setFieldsValue({
+  departmentId, treatmentId,
+  treatmentSubId, detailTemplateType,
+})</pre>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="step">
+      <span class="n">2</span>
+      <div class="who">antd Form</div>
+      <b>값이 바뀐 필드가 touched로 바뀐다</b>
+      <p><code>setFieldsValue</code>로 값을 바꾸면 touched가 켜진다. <code>setFields</code>로 값을 넣으면 켜지지 않아 자동 채움이 멈추므로, 값은 <code>setFieldsValue</code>로 넣는다.</p>
+      <div class="touch"><span class="state req">treatmentId touched</span><span class="state req">treatmentSubId touched</span></div>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="step">
+      <span class="n">3</span>
+      <div class="who">treatmentSubDetailQueryOptions</div>
+      <b>새 ID 조합으로 조회</b>
+      <pre>queryKey: ['fetchTreatmentSubDetail',
+           treatmentId, treatmentSubId]
+queryFn:  <span class="c">두 ID가 다 있어야 실행(없으면 skipToken)</span></pre>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="step write">
+      <span class="n">4</span>
+      <div class="who">응답 도착 · useEffect</div>
+      <b><code>data</code> 있음 + touched → 필드 다섯 개 교체</b>
+      <p>아래 표대로 <code>form.setFieldValue</code>를 다섯 번 부른다.</p>
+      <div class="result fill">결과: 입력해 둔 템플릿 값이 새 하위 시술 것으로 바뀐다</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec-title">응답 → 폼 필드<small>비어 있으면 빈 입력 줄로 되돌린다</small></div>
+<table>
+  <tr><th>항목</th><th>하위 시술 상세 응답</th><th></th><th>폼 필드</th><th>비어 있을 때</th></tr>
+  <tr><td class="label">추천 대상</td><td><code>recommendedTargets</code> <span class="k">string[]</span></td><td class="arrow">→</td><td><code>recommendedTarget</code> <span class="k">title</span></td><td class="empty">빈 줄 1개</td></tr>
+  <tr><td class="label">시술 특장점</td><td><code>procedureHighlights</code> <span class="k">{ image, title }[]</span></td><td class="arrow">→</td><td><code>procedureHighlights</code> <span class="k">image · title</span></td><td class="empty">빈 줄 3개</td></tr>
+  <tr><td class="label">시술 장비</td><td><code>procedureEquipment</code> <span class="k">{ image, title, content }[]</span></td><td class="arrow">→</td><td><code>procedureEquipment</code> <span class="k">image · title · content</span></td><td class="empty">빈 줄 1개</td></tr>
+  <tr><td class="label">시술 과정</td><td><code>procedureProcess</code> <span class="k">string[]</span></td><td class="arrow">→</td><td><code>procedureProcess</code> <span class="k">title</span></td><td class="empty">빈 줄 2개</td></tr>
+  <tr><td class="label">주의사항</td><td><code>precautions</code> <span class="k">string[]</span></td><td class="arrow">→</td><td><code>precautions</code> <span class="k">title</span></td><td class="empty">빈 줄 1개</td></tr>
+</table>
+<p class="tnote">폼 필드는 모두 목록 한 줄 <code>ITreatmentTemplatesItem { image?, title, content? }</code>의 배열이고, 회색 글은 그중 채우는 칸이다. image는 업로드 파일 형태로 바꿔 넣는다.</p>
+<div class="keep-row"><b>건드리지 않는 필드</b> · 추가 혜택 <code>benefit</code>, 전후 사진 <code>beforeAfterImages</code>, 템플릿 색상, 섹션마다 붙은 노출 토글(<code>isRecommended</code> 등)</div>
+
+<div class="gap"><b>남은 틈</b> · touched는 폼을 다시 초기화(<code>resetFields</code>)하기 전까지 true로 남는다. 카테고리를 바꾼 뒤 상세 이미지 유형을 바꿨다 되돌리면 <code>SyncTreatmentSub</code>가 다시 마운트되고, 캐시된 응답으로 사용자가 고친 템플릿 값을 한 번 더 덮는다. 테스트로 재현했다.</div>
+
+<p class="foot">2026-09-29 develop 코드(SyncTreatmentSub, 두 앱의 CategoryFormItem·상세 드로어)와 2026-09-28 stage 병원 관리자 등록 화면을 바탕으로 그렸다. 코드는 줄였다.</p>
+</body></html>
