@@ -23,7 +23,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 ## 기술
 
 - **제품 개발:** React, TypeScript, Next.js App Router, 모바일 웹·인앱 WebView, TanStack Query(React Query), React Hook Form, Zod
-- **UI·구조:** Radix UI, Ant Design, shadcn/ui·Base UI, dnd-kit, FSD, pnpm·Turborepo
+- **UI·구조:** Radix UI, Ant Design, shadcn/ui·Base UI, FSD, pnpm·Turborepo
 - **운영·검증:** Sentry, CloudWatch, Vitest, React Testing Library, MSW, Playwright, ESLint 규칙 개발
 - **AI·계측:** Claude Code·Codex, `AGENTS.md`·스킬 설계, git worktree 병렬 작업, Amplitude 행동 이벤트 구현
 
@@ -99,7 +99,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 
 제가 합류한 2024년에는 ATS 'RoundHR'의 시장성을 확인하며 기능을 늘리고 있었어요. 채용 관리 웹에서는 1월부터 8월까지 여러 설정 폼을, 5월 말부터 두 달 동안 자동화 규칙을 만들었고, 채용 담당자용 웹의 서류·면접 평가 화면은 5월부터 10월까지 개발했어요. 7월 초에는 열흘 동안 면접 템플릿의 네 단계 입력과 검증을 `useFunnel`로 나눠, 중간에 나가도 이어 쓸 수 있게 했어요.
 
-2024년 4월 채용 공고 순서를 시작으로, 8월에는 4주 동안 후보자 필터의 중첩 트리와 설정 테이블의 행 정렬까지 DnD를 여러 화면에 적용했어요. 화면마다 따로 다루던 드래그 컨텍스트·핸들·정렬 대상을 dnd-kit 기반 공통 컴포넌트로 나눴어요. 폴더를 클릭하면 선택이 풀리는 문제처럼 정렬과 다른 조작이 맞물리는 부분도 계속 고쳤어요.
+2024년 4월 채용 공고 순서를 시작으로, 8월에는 4주 동안 후보자 필터의 중첩 트리와 설정 테이블의 행 정렬까지 DnD를 여러 화면에 적용했어요. 화면마다 따로 다루던 드래그 컨텍스트·핸들·정렬 대상을 재사용 가능한 공통 컴포넌트로 나눴어요. 폴더를 클릭하면 선택이 풀리는 문제처럼 정렬과 다른 조작이 맞물리는 부분도 계속 고쳤어요.
 
 후보자 수집 Electron 앱에서는 2024년 2월부터 3월까지 사이트마다 복제돼 있던 로그인 → 수집 → 중복 확인 → 업로드를 공통 순서와 사이트별 adapter로 나누고, 잡플래닛을 이 구조에 연결했어요. 9월 말부터 3주 동안은 게임잡을 연결했고, 지원자 한 명의 실패가 전체 수집을 멈추지 않도록 격리했어요. Sentry 오류는 서버 오류·인증 및 조회 실패·그 밖의 API 오류로 구분했어요. 초기 구조는 제가 잡았고 현재 코드는 이후 동료가 다시 작성한 부분이 많아요.
 
