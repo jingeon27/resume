@@ -105,7 +105,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="description" content="김진건 프론트엔드 엔지니어 이력서. 제품 개발, 사용자 경험 개선, AI 개발 워크플로와 운영 문제 해결 경험.">
+  <meta name="description" content="김진건 프론트엔드 엔지니어 이력서. 제품 개발, 사용자 경험 개선, AI 개발 workflow와 운영 문제 해결 경험.">
   <title>김진건 | Frontend Engineer 이력서</title>
   <style>\n${css}\n</style>
 </head>
