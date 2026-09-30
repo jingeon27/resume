@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--sub); margin-bottom: 12px; align-items: center; }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; vertical-align: -2px; }
+  .sw.lay-app { background: var(--blue-soft); border: 1px solid var(--blue-line); }
+  .sw.prog { background: var(--soft); border: 1px solid var(--line-strong); }
+  .sw.tmpl { background: var(--sage-soft); border: 1px solid #bcd0ba; }
+  .sw.shared { background: #fff; border: 1px dashed var(--line-strong); }
+  .api { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 0 5px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; font-family: 'Pretendard', sans-serif; }
+  .api.t { background: var(--blue); color: #fff; }
+  .api.p { background: #6b7684; color: #fff; }
+  .api.a { background: #fff; color: var(--coral); border: 1px solid #e2c3b9; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 6px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px 0; margin-bottom: 14px; }
+  .flow .st { flex: 0 1 auto; border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; font-size: 11px; color: var(--sub); background: #fff; }
+  .flow .st b { display: block; font-size: 11.5px; color: var(--ink); font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-weight: 600; white-space: nowrap; }
+  .flow .ar { width: 18px; display: flex; align-items: center; justify-content: center; color: var(--line-strong); font-size: 13px; }
+  .flow .br { flex-basis: 100%; height: 0; }
+  .flow-note { font-size: 11.5px; color: var(--sub); margin: -8px 0 14px 2px; }
+  .flow-note code { font-size: 10.5px; }
+  .flow .st code { font-size: 11px; }
+  .nw { white-space: nowrap; }
+  .drawer { border: 1.5px solid var(--ink); border-radius: 12px; padding: 10px 12px; }
+  .dh { display: flex; align-items: baseline; gap: 8px; }
+  .dh b { font-size: 13.5px; }
+  .dh span { font-size: 11px; color: var(--faint); }
+  .cols { display: grid; grid-template-columns: 186px 1fr; gap: 12px; margin-top: 8px; }
+  .n .ko { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; font-size: 11.5px; }
+  .n { border-radius: 6px; padding: 3px 7px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; color: var(--ink); margin-top: 4px; overflow-wrap: anywhere; }
+  .n.lay-app { background: var(--blue-soft); border: 1px solid var(--blue-line); }
+  .n.prog { background: var(--soft); border: 1px solid var(--line-strong); }
+  .n.tmpl { background: var(--sage-soft); border: 1px solid #bcd0ba; }
+  .n.shared { background: #fff; border: 1px dashed var(--line-strong); }
+  .n .s { display: block; font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; font-size: 10.5px; color: var(--sub); margin-top: 1px; }
+  .kid { margin-left: 14px; padding-left: 8px; border-left: 1.5px solid var(--line); }
+  .sec { border: 1px solid var(--line); border-radius: 9px; padding: 6px 8px 8px; margin-top: 7px; }
+  .sec-h { font-size: 12px; font-weight: 700; color: var(--ink); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .sec-h .only { font-size: 10.5px; font-weight: 600; color: var(--sub); background: var(--soft); border-radius: 4px; padding: 0 5px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; }
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .rule { border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; font-size: 11.5px; color: var(--sub); }
+  .rule b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
+  .rule code { font-size: 10.5px; color: var(--ink); }
+  .pa { margin-top: 10px; border: 1px solid #e3d6c3; background: #faf6f0; border-radius: 9px; padding: 7px 10px; font-size: 11.5px; color: var(--sub); }
+  .pa b { color: #7a5a2e; }
+  .pa code { font-size: 10.5px; color: var(--ink); }
+</style></head>
+<body>
+
+<div class="legend">
+  <span><i class="sw lay-app"></i>앱</span>
+  <span><i class="sw prog"></i>program 패키지</span>
+  <span><i class="sw tmpl"></i>treatment 템플릿 입력</span>
+  <span><i class="sw shared"></i>shared·asset</span>
+  <span>폼 API <span class="api t">앱 typed</span><span class="api p">ProgramForm</span><span class="api a">antd</span></span>
+</div>
+
+<div class="zone">인스턴스는 하나다</div>
+<div class="flow">
+  <div class="st"><b>ProgramInspectionForm.useForm()</b>컨테이너가 만든다</div><div class="ar">→</div>
+  <div class="st"><b>&lt;ProgramDetailForm form&gt;</b>form prop 으로 넘긴다</div><div class="ar">→</div>
+  <div class="st"><b>ProgramDetailFormWrapper</b><code>props as FormProps</code></div>
+  <div class="br"></div><div class="ar">→</div>
+  <div class="st"><b>TemplateForm</b>antd Form 이 컨텍스트를 연다</div><div class="ar">→</div>
+  <div class="st"><b>XForm.Item · useFormInstance()</b>FormItem 이 컨텍스트에서 받는다</div>
+</div>
+<p class="flow-note">FormItem 은 form 을 props 로 받지 않는다. 폼 컴포넌트 말고 form 을 props 로 받는 것은 폼 밖의 요청 버튼(검수 요청·임시저장·승인·반려)뿐이다.</p>
+
+<div class="zone">프로그램 드로어의 FormItem 트리 · Back-Office 상세 폼 기준</div>
+<div class="drawer">
+  <div class="dh"><b>ProgramDetailForm</b><span>ProgramDetailFormWrapper → TemplateForm</span></div>
+  <div class="cols">
+    <div>
+      <div class="sec-h">왼쪽 미리보기</div>
+      <div class="n lay-app">ProgramPreviewSection<span class="api a">antd</span><span class="s">useWatch([]) 로 폼 전체를 읽는다</span></div>
+      <div class="kid"><div class="n prog">ProgramDetail<wbr>PreviewTemplate<span class="s">폼과 무관한 표시 컴포넌트</span></div></div>
+    </div>
+    <div>
+      <div class="sec">
+        <div class="sec-h">CMS 설정 <span class="only">Back-Office만</span></div>
+        <div class="n lay-app">ProgramLabelFormItem<span class="api t">앱 typed</span></div>
+        <div class="n lay-app">ProgramCmsConfigCheckboxFormItems<span class="api t">앱 typed</span><span class="s">체크박스 다섯 개</span></div>
+        <div class="n lay-app">ProgramCmsMemoFormItem<span class="api t">앱 typed</span></div>
+      </div>
+      <div class="sec">
+        <div class="sec-h">기본 정보</div>
+        <div class="n lay-app">PartnerNameFormItem<span class="api t">앱 typed</span><span class="s">hidden partnerId·partnerName 이 값을 들고, 보이는 칸은 검색 입력이나 읽기 전용</span></div>
+        <div class="n prog">ThumbnailImageFormItem<span class="api p">ProgramForm</span><span class="s">바깥 Item 은 검증 자리</span></div>
+        <div class="kid"><div class="n shared">ImageUploadItem<span class="api a">antd</span><span class="s">같은 name 으로 값을 쥔다</span></div></div>
+        <div class="n prog">ProgramNameFormItem<span class="api p">ProgramForm</span></div>
+        <div class="n lay-app">CategoryFormItem<span class="api t">앱 typed</span><span class="s">캐스케이더의 onChange 에서 setFieldsValue 로 진료과·시술·하위 시술을 한 번에 채운다. 병원 id 는 antd useWatch(preserve)로 읽는다</span></div>
+        <div class="n lay-app">PriceInfoFormItem<span class="api t">앱 typed</span><span class="s">정가·우대가 교차 검증은 빈 name('')을 단 antd Item</span></div>
+        <div class="grid2">
+          <div class="n prog">HealthCheckDepositFormItem<span class="api p">ProgramForm</span><span class="s">상세 폼 · 검진일 때만</span></div>
+          <div class="n lay-app">TaxTypeFormItem<span class="api t">앱 typed</span></div>
+          <div class="n prog">AdditionalPriceFormItem<span class="api p">ProgramForm</span></div>
+          <div class="n prog">ProgramDescriptionFormItem<span class="api p">ProgramForm</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-h">검진 구성 <span class="only">상세 폼 · 검진일 때만</span></div>
+        <div class="n lay-app">HealthCheckCompositionSectionWithItems<span class="api t">앱 typed</span><span class="s">앱이 병원 검사항목을 조회해 props 로 넘긴다</span></div>
+        <div class="kid"><div class="n prog">HealthCheckCompositionFormSection<span class="api p">ProgramForm</span><span class="s">필수 항목 + 선택 그룹 List(끌어서 순서 변경)</span></div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-h">상세 이미지</div>
+        <div class="n lay-app">ProgramDetailImageSectionWithHealthCheck<span class="api t">앱 typed</span><span class="s">진료과로 가른 검진 여부를 props 로 넘긴다</span></div>
+        <div class="kid">
+          <div class="n prog">ProgramDetailImageFormSection<span class="api p">ProgramForm</span><span class="s">detailTemplateType 에 따라 구획을 바꾼다(shouldUpdate 술어)</span></div>
+          <div class="kid">
+            <div class="n tmpl"><span class="ko">추천 대상·특장점·장비·과정·주의사항</span><span class="api a">antd</span><span class="s">하위 시술 템플릿 편집 폼과 함께 쓴다(다음 절)</span></div>
+            <div class="n prog"><span class="ko">추가 혜택·시술 전후 사진</span><span class="api p">ProgramForm</span><span class="s">프로그램 폼 전용. 목록 행 안은 antd Form.Item</span></div>
+            <div class="n prog">SyncTreatmentSub<span class="api p">ProgramForm</span><span class="s">하위 시술을 바꾸면 다섯 섹션 값을 채운다</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pa"><b>병원 관리자</b>도 같은 틀이다. CMS 설정과 병원명 칸 대신 <code>ProgramInspectionAdminInfo</code> 가 요청자·병원·검수 요청 종류 등 hidden 값 여덟 개를 싣고, 노출예정일은 신규 등록일 때만 그린다. 앱 부품(<code>CategoryFormItem</code>·<code>PriceInfoFormItem</code>·<code>TaxTypeFormItem</code>·<code>ProgramPreviewSection</code>·<span class="nw">래퍼)은</span> 같은 이름으로 앱마다 따로 있다.</div>
+
+<div class="rules">
+  <div class="rule"><b>타입은 둘, 인스턴스는 하나</b>앱 부품은 앱 typed form, 공유 부품은 <code>ProgramForm</code> 을 쓴다. <code>ProgramForm</code> 은 패키지 밖으로 내보내지 않는다. 둘 다 같은 antd 인스턴스를 서로 다른 타입으로 본다.</div>
+  <div class="rule"><b>antd 를 직접 쓰는 자리</b>대부분 typed 로 표현하기 어려운 곳이다: <code>Form.List</code> 안 상대 경로와 목록 항목 값 읽기, 빈 name('') 교차 검증, 폼 전체 watch, preserve 옵션 watch, 여러 폼이 함께 쓰는 입력(템플릿 입력·이미지 업로드).</div>
+  <div class="rule"><b>위젯은 폼을 모른다</b>병원 검색·카테고리 캐스케이더·라벨 선택은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다(병원 검색은 value 없이 onChange·onSelect). 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem 이 <code>setFieldsValue</code> 로 한다.</div>
+  <div class="rule"><b>앱이 주입하는 래퍼</b>패키지가 부를 수 없는 조회(병원 검사항목)는 <code class="nw">…WithItems</code> 래퍼가 하고 결과를 props 로 넘긴다. <code class="nw">…WithHealthCheck</code> 는 검진 여부를 props 로 넘기지만, 예약금·검진 구성은 같은 진료과 판정을 패키지가 직접 한다.</div>
+</div>
+
+<p class="foot">2026-09-29 develop 코드(두 앱의 프로그램 폼과 컨테이너, program·treatment 패키지 FormItem)를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner 로 바꿨다.</p>
+</body></html>
