@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 7px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .zone .app { font-size: 10.5px; }
+
+  /* 화면 */
+  .screen { display: grid; grid-template-columns: 488px minmax(0, 1fr); gap: 14px; align-items: start; }
+  .mock { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; background: #fff; }
+  .mock-label { background: #f2f6ff; border-bottom: 1px solid var(--line); padding: 7px 12px; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+  .mock-label i { font-style: normal; display: inline-flex; width: 13px; height: 13px; border-radius: 50%; border: 1.3px solid var(--sub); color: var(--sub); font-size: 9px; align-items: center; justify-content: center; font-weight: 700; }
+  .tl { position: relative; padding: 12px 12px 12px 32px; }
+  .dot { position: absolute; left: 12px; top: 24px; width: 11px; height: 11px; border-radius: 50%; background: #fff; border: 2.5px solid #aab2bd; }
+  .col { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .ch { display: flex; align-items: center; gap: 7px; padding: 7px 9px; min-height: 36px; background: #fafbfc; }
+  .ch b { font-size: 11.5px; white-space: nowrap; }
+  .ch .r { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #9aa5b3; white-space: nowrap; }
+  .ch .r .amt { color: var(--ink); }
+  .t { display: inline-block; font-size: 10px; line-height: 1.5; padding: 0 5px; border-radius: 4px; border: 1px solid; white-space: nowrap; }
+  .t.red { color: #c9412b; background: #fdf1ee; border-color: #f0c4b9; }
+  .xbtn { font-size: 10px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 5px; color: var(--ink); background: #fff; }
+  .dr { display: grid; grid-template-columns: 112px 1fr; border-top: 1px solid var(--line); font-size: 11px; min-height: 34px; }
+  .dr > span:first-child { background: #fafafa; border-right: 1px solid var(--line); padding: 6px 6px; font-weight: 700; text-align: center; display: flex; align-items: center; justify-content: center; }
+  .dr > span:last-child { padding: 6px 8px; color: var(--ink); display: flex; align-items: center; gap: 6px; }
+  .dr > span.ph { color: #b0b7c1; }
+  .dr > span.fill { background: #f5f5f5; }
+  .dr .cbx { margin-left: auto; color: var(--ink); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .dr .cbx::before { content: ''; width: 9px; height: 9px; border: 1.2px solid var(--line-strong); border-radius: 2px; }
+  .dr.hl > span:last-child { box-shadow: inset 0 0 0 1.5px var(--blue); }
+  .cp { color: var(--blue); font-weight: 700; }
+  .cp-sub { color: #8c8c8c; font-size: 10px; }
+  .sbtn { margin-left: auto; font-size: 10px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 6px; background: #fff; white-space: nowrap; }
+  .tip { position: absolute; }
+
+  .mk { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .mk.sm { width: 15px; height: 15px; font-size: 9.5px; }
+
+  .side { display: flex; flex-direction: column; gap: 9px; padding-top: 118px; min-width: 0; }
+  .anno { border-left: 2px solid var(--blue-line); padding: 2px 0 2px 9px; font-size: 11.5px; color: var(--sub); line-height: 1.5; }
+  .anno b { color: var(--ink); font-weight: 600; }
+  .anno code { font-size: 10.5px; color: var(--ink); }
+  .anno .fl { display: block; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; color: var(--ink); line-height: 1.55; }
+
+  /* 모달 + 세 시점 */
+  .act { display: grid; grid-template-columns: 270px 1fr; gap: 12px; align-items: start; margin-top: 14px; }
+  .modal { border: 1px solid var(--line-strong); border-radius: 10px; background: #fff; box-shadow: 0 3px 10px rgba(36, 42, 50, 0.08); overflow: hidden; }
+  .mh { display: flex; align-items: center; padding: 9px 12px; font-size: 12.5px; font-weight: 700; border-bottom: 1px solid #eef0f3; }
+  .mh span { margin-left: auto; color: var(--faint); font-weight: 400; }
+  .mb { padding: 8px 12px 4px; }
+  .rd { display: grid; grid-template-columns: 14px 1fr auto; gap: 6px; align-items: start; padding: 5px 0; font-size: 11.5px; }
+  .rd i { width: 11px; height: 11px; border-radius: 50%; border: 1.3px solid var(--line-strong); margin-top: 3px; }
+  .rd i.on { border: 3.5px solid var(--blue); }
+  .rd small { display: block; font-size: 10px; color: #8c8c8c; }
+  .rd .dc { color: var(--blue); font-size: 11px; white-space: nowrap; }
+  .mf { display: flex; justify-content: flex-end; gap: 5px; padding: 8px 12px 10px; }
+  .mf span { font-size: 10.5px; border: 1px solid var(--line-strong); border-radius: 5px; padding: 1px 7px; background: #fff; white-space: nowrap; }
+  .mf span.p { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .mnote { font-size: 11px; color: var(--sub); line-height: 1.5; margin-top: 7px; }
+  .mnote code { font-size: 10.5px; color: var(--ink); }
+
+  .steps-h { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .step { border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px 8px; margin-bottom: 7px; background: #fff; }
+  .step-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+  .step-h code { font-size: 10.5px; font-weight: 500; color: var(--faint); }
+  .step-h .when { margin-left: auto; font-size: 10px; font-weight: 700; color: var(--sub); background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; white-space: nowrap; }
+  .step p { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 3px; }
+  .step p b { color: var(--ink); font-weight: 600; }
+  .q { color: var(--ink); }
+  .num { display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; border-radius: 50%; font-size: 10.5px; font-weight: 700; color: #fff; background: var(--ink); flex-shrink: 0; }
+  .nw { white-space: nowrap; }
+  .one { font-size: 11px; color: var(--sub); line-height: 1.5; border-left: 2px solid var(--line-strong); padding-left: 8px; }
+
+  /* 확정 뒤 */
+  .after { margin-top: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px 11px; }
+  .after-h { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; }
+  .after-h code { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .after-h .when { font-size: 10px; font-weight: 700; color: var(--coral); background: var(--coral-soft); border: 1px solid #e8cdc4; border-radius: 4px; padding: 0 5px; }
+  .pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  .mini { border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  .mini-h { font-size: 10.5px; font-weight: 700; color: var(--sub); background: var(--soft); padding: 3px 8px; border-bottom: 1px solid var(--line); }
+  .mr { display: grid; grid-template-columns: 86px 1fr; border-top: 1px solid #eef0f3; font-size: 10.5px; }
+  .mr:first-of-type { border-top: 0; }
+  .mr > span:first-child { background: #fafafa; border-right: 1px solid #eef0f3; padding: 4px 6px; font-weight: 700; text-align: center; }
+  .mr > span:last-child { padding: 4px 7px; color: var(--sub); }
+  .mr .cp { font-weight: 600; }
+  .strike { text-decoration: line-through; color: #8c8c8c; }
+  .after p { font-size: 11px; color: var(--sub); line-height: 1.5; margin-top: 7px; }
+  .after p b { color: var(--ink); font-weight: 600; }
+</style></head>
+<body>
+
+<div class="zone">예약 상세 · 쿠폰 예약 · 확정 전 <span class="app pa">병원 관리자</span><span class="app bo">Back-Office</span></div>
+
+<div class="screen">
+  <div class="mock">
+    <div class="mock-label">결제 내역 <i>i</i></div>
+    <div class="tl">
+      <span class="dot"></span>
+      <div class="col">
+        <div class="ch"><b>결제 내역 (1)</b><span class="t red">하단에 결제일과 결제 금액을 입력해주세요</span><span class="r">미정<span class="amt">₩ 100,000</span><span class="xbtn">접기</span></span></div>
+        <div class="dr"><span>결제일</span><span class="ph">실제 결제를 완료한 경우에만 결제일을 선택…<span class="cbx">내원일과 동일</span></span></div>
+        <div class="dr hl"><span>총 결제 예정 금액</span><span>₩ 100,000 <span class="mk sm" style="margin-left:auto">A</span></span></div>
+        <div class="dr"><span>쿠폰 사용 금액</span><span><span class="cp">₩20,000</span><span class="cp-sub">(사용된 쿠폰)</span><span class="cp" style="font-size:10.5px">여름 할인 쿠폰</span><span class="sbtn">쿠폰 변경</span><span class="mk sm">B</span></span></div>
+        <div class="dr"><span>최종 결제금액</span><span class="fill">₩ 80,000 <span class="mk sm" style="margin-left:auto">C</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="anno"><b>A 금액을 바꾸면</b> 적용된 쿠폰을 푼다. <span class="nw">아래 ①②③</span></div>
+    <div class="anno"><b>B 쿠폰 변경</b> 같은 선택 모달을 연다. 고르면 세 값을 한꺼번에 바꾼다<span class="fl" style="margin-top:2px">memberCouponId</span><span class="fl">couponName</span><span class="fl">couponDiscountAmount</span></div>
+    <div class="anno"><b>C 최종 결제금액</b> 총 결제 예정 금액 − 쿠폰 사용 금액. 할인액은 폼 전용 값을 쓴다<span class="fl" style="margin-top:2px">couponDiscountAmount</span></div>
+  </div>
+</div>
+
+<div class="act">
+  <div>
+    <div class="modal">
+      <div class="mh">쿠폰 정보 수정<span>×</span></div>
+      <div class="mb">
+        <div class="rd"><i></i><span>쿠폰 미사용</span><span></span></div>
+        <div class="rd"><i class="on"></i><span>여름 할인 쿠폰 (현재 적용)<small>최대 ₩20,000 · ₩50,000 이상</small></span><span class="dc">-₩20,000</span></div>
+        <div class="rd"><i></i><span>첫 방문 쿠폰<small>최대 ₩10,000 · ₩30,000 이상</small></span><span class="dc">-₩10,000</span></div>
+      </div>
+      <div class="mf"><span>취소</span><span>최대 할인 적용</span><span class="p">확인</span></div>
+    </div>
+    <p class="mnote">쓸 수 있는 쿠폰과 예상 할인액은 예약·프로그램·<b>총 결제 예정 금액</b>으로 조회한다. 금액이 바뀌면 고른 쿠폰의 할인액도 달라질 수 있어 다시 골라야 한다.</p>
+  </div>
+
+  <div>
+    <div class="steps-h">A 총 결제 예정 금액을 바꿀 때</div>
+    <div class="step">
+      <div class="step-h"><span class="num">1</span>입력하는 순간<code>onChange</code><span class="when">06-24 · 08-10</span></div>
+      <p>적용된 쿠폰을 <b>바로 푼다</b>. 쿠폰 id·쿠폰명은 비우고 할인액은 0. 푼 쿠폰을 기억해 두고 '다시 골라야 함'을 켠다.</p>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="num">2</span>입력칸을 벗어날 때<code>onBlur</code><span class="when">08-10</span></div>
+      <p>금액이 실제로 바뀌었으면 <b>선택 모달</b>을 연다. 방금 푼 쿠폰이 '현재 적용'으로 골라져 있다. 취소하면 푼 채로 두고 <span class="q">'총 결제 예정 금액이 변경되어 적용된 쿠폰이 초기화되었습니다.'</span>를 띄운다.</p>
+    </div>
+    <div class="step">
+      <div class="step-h"><span class="num">3</span>결제 내역 확정을 누를 때<code>validator</code><span class="when">08-14</span></div>
+      <p>아직 다시 고르지 않았으면 모달을 한 번 더 연다. 취소하면 <span class="q">'변경된 금액 기준으로 쿠폰을 다시 선택해주세요.'</span>로 <b>제출을 막는다</b>. 견적금액을 넘긴 금액은 견적 검증이 먼저 막으므로 건너뛴다.</p>
+    </div>
+    <p class="one">모달은 한 번에 하나만 뜬다. ②와 ③이 겹치면 이미 열린 모달의 결과를 함께 기다린다. 처음(<span class="nw">06-24·25</span>)에는 ①에서 쿠폰을 풀고 안내 문구만 띄웠고, ②③은 <span class="nw">08-10·08-14</span>에 더했다.</p>
+  </div>
+</div>
+
+<div class="after">
+  <div class="after-h">확정 뒤, 저장된 행은 다른 컴포넌트가 그린다<code>CouponCompleteDescriptions</code><span class="when">08-14 분리</span></div>
+  <div class="pairs">
+    <div class="mini">
+      <div class="mini-h">연결된 쿠폰결제 행이 있을 때</div>
+      <div class="mr"><span>결제일</span><span>2026-07-10</span></div>
+      <div class="mr"><span>현장 결제금액</span><span>현장결제 행의 금액</span></div>
+      <div class="mr"><span>쿠폰 사용 금액</span><span><span class="cp">쿠폰결제 행의 금액</span> (사용된 쿠폰) <span class="cp">쿠폰명</span></span></div>
+      <div class="mr"><span>최종 결제금액</span><span>두 금액의 합</span></div>
+    </div>
+    <div class="mini">
+      <div class="mini-h">같은 거래의 쿠폰취소 행이 붙었을 때</div>
+      <div class="mr"><span>결제일</span><span>2026-07-10</span></div>
+      <div class="mr"><span>현장 결제금액</span><span>현장결제 행의 금액</span></div>
+      <div class="mr"><span>쿠폰 사용 금액</span><span><span class="strike">쿠폰결제 행의 금액</span> (사용된 쿠폰) <span class="strike">쿠폰명</span></span></div>
+      <div class="mr"><span>최종 결제금액</span><span>현장 결제금액만</span></div>
+    </div>
+  </div>
+  <p>금액 칸 → 쿠폰 칸 → 최종 결제금액의 자리를 결제 전과 맞췄다. 쿠폰 선택·해제·다시 고르기는 이 컴포넌트에도 없고, <b>쿠폰 행 편집은 CouponDescriptions에만 있다</b>. 대기·완료·취소 상세와 타임라인·헤더는 쿠폰 모달을 모른다.</p>
+</div>
+
+<p class="foot">2026-09-29 develop 코드(CouponDescriptions·CouponSelectModal·CouponCompleteDescriptions)와 2026-06-24~08-14 쿠폰 커밋을 바탕으로 그렸다. 화면은 캡처 없이 코드를 따라 단순화했고 쿠폰명·금액은 예시다.</p>
+</body></html>
