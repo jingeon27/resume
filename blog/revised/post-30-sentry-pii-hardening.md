@@ -413,7 +413,7 @@ SDK가 수집 키를 추가하면 타입 검사가, 정책 값이나 배선이 �
 - 에이전트가 MCP로 운영 데이터를 조회하고 코드와 함께 판단할 수 있는가?
 - 릴리스와 소스맵 artifact가 실제 배포 파일과 연결됐는가?
 
-이렇게 만든 체계가 먼저 알려 준 문제도 있었어요. Bottom Sheet를 드래그하다 놓으면 화면이 죽는 오류는 수정 전 17명에게서 23건이 잡혔고, 라이브러리 소스까지 따라가 원인 경로가 없는 버전으로 올렸어요. 9월에 응답 타입을 Zod 스키마에서 파생하며 null 허용 범위를 좁혔을 때는, 머지 전에 프로덕션 Sentry에 이미 쌓여 있던 스키마 불일치 33건과 대조해 서버가 실제로 null을 주는 자리를 찾아 되돌렸어요. dev 응답 12건에서는 전부 채워져 있던 필드가 프로덕션에서는 200건 중 27건이 null이었거든요. 그대로 배포했다면 화면은 멀쩡한 채 정상 응답마다 스키마 불일치 경고가 새로 쌓여 진짜 문제를 가렸을 거예요.
+이렇게 만든 체계가 먼저 알려 준 문제도 있었어요. Bottom Sheet를 드래그하다 놓으면 화면이 죽는 오류는 조사 당시 17명에게서 23건이 잡혔고(운영 배포 전까지 누적 57명 이상·75건), 라이브러리 소스까지 따라가 원인 경로가 없는 버전으로 올렸어요. 9월에 응답 타입을 Zod 스키마에서 파생하며 null 허용 범위를 좁혔을 때는, 머지 전에 프로덕션 Sentry에 이미 쌓여 있던 스키마 불일치 33건과 대조해 서버가 실제로 null을 주는 자리를 찾아 되돌렸어요. dev 응답 12건에서는 전부 채워져 있던 필드가 프로덕션에서는 200건 중 27건이 null이었거든요. 그대로 배포했다면 화면은 멀쩡한 채 정상 응답마다 스키마 불일치 경고가 새로 쌓여 진짜 문제를 가렸을 거예요.
 
 가장 크게 배운 건 네 가지였어요.
 
@@ -439,5 +439,5 @@ Sentry를 붙인 일보다, 무엇을 보내지 않을지와 어떤 신호에 �
 - [Next.js · instrumentation-client.js](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client) — 브라우저 초기화와 `onRouterTransitionStart`
 - [getsentry/sentry-javascript](https://github.com/getsentry/sentry-javascript) — `@sentry/core`의 `requestDataIntegration`과 `sendDefaultPii` 기본값 변환, fetch·xhr span 속성
 - [getsentry/sentry-mcp](https://github.com/getsentry/sentry-mcp) — `@sentry/mcp-server`의 `--host` 옵션
-- 관련 글: [Sentry가 잡아 준 Bottom Sheet 드래그 크래시, 원인 경로가 사라진 버전으로 올리기까지](https://jingeon27.tistory.com/36)
+- 관련 글: [Sentry가 잡아 준 Bottom Sheet 드래그 크래시, 원인 경로가 사라진 버전으로 올리기까지](https://jingeon27.tistory.com/33)
 - 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
