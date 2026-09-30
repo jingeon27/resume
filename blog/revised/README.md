@@ -93,7 +93,7 @@
 | 19 | `post-19-cross-domain-token.md` | 회사·도메인·내부 식별자 익명화, 현재 구현과 미구현 보강안 분리, 토큰 전달 방식의 한계 반영 |
 | 20 | `post-20-chatbot-message-layer.md` | 두 SSE를 합친 사건을 중심으로 축약하고 과도한 단계 구분과 연출형 표현을 제거 |
 | 21 | `post-21-sitemap-cache.md` | 현재 인증·캐시 경계와 사이트맵에 남은 정확성 부채를 구분 |
-| 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤 |
+| 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤. 없던 변환 함수·금액 하한을 지우고 확정 요청이 필드를 골라 담는 실제 방식과 helper 추출 시점을 반영. 그림 네 장은 `../assets/figures/payment-history/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
 | 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 다섯 레이어로 다시 정의하고, 옮긴 날 오후 드러난 page 간 참조 62건과 shared 패키지 통합, 정적 검사가 놓친 서버·클라이언트 경계 오류까지 시간순으로 정리. 관리자 서비스는 9월 8일 develop 병합, 복지몰은 브랜치 통합 대기로 구분 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
