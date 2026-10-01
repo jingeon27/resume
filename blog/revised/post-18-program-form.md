@@ -3,7 +3,7 @@
 병원 관리자의 프로그램 폼은 최상위 필드만 세도 34개다. Back-Office의 같은 폼은 42개이고, 그중 30개를 두 앱이 함께 쓴다. 필드가 많아서만 어려운 것은 아니었다.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/01-form-anatomy.png" alt="프로그램 드로어를 다시 그린 그림. 오른쪽 폼은 CMS 설정, 기본 정보, 상세 이미지 세 구획이고 입력마다 담기는 필드 이름을 적었다. 왼쪽에는 미리보기와 상세 폼·검수 폼이 쓰이는 화면을, 아래에는 앱마다 화면 밖에서 담는 값과 최상위 필드 수(공통 30, Back-Office 42, 병원 관리자 34)를 두었다" />
+  <img src="../assets/figures/program-form/01-form-anatomy.png" alt="프로그램 드로어를 다시 그린 그림. 오른쪽 폼의 CMS 설정, 기본 정보, 상세 이미지 세 구획에는 입력마다 담기는 필드 이름을 적었다. 왼쪽에는 미리보기와 상세 폼·검수 폼이 쓰이는 화면을, 아래에는 앱마다 화면 밖에서 담는 값과 최상위 필드 수(공통 30, Back-Office 42, 병원 관리자 34)를 두었다" />
   <figcaption>프로그램 드로어의 구획과 각 입력이 담기는 폼 필드를 짝지었다. 회색은 두 앱이 공유하는 IProgramFormCommon이고, 파란색과 갈색은 각 앱 전용 필드다. 노출예정일은 검수 폼에만 있다.</figcaption>
 </figure>
 
@@ -12,12 +12,12 @@
 이 폼을 다루기 어렵게 만든 조건은 다섯 가지였다.
 
 - Ant Design(antd) Form의 `NamePath`와 일부 API가 느슨해 필드 오타가 런타임까지 남았다.
-- Back-Office와 병원 관리자 두 앱이 공통 필드를 공유하면서 각자 전용 필드도 가졌다.
-- Back-Office의 하위 시술 템플릿 편집 폼도 추천 대상·특장점·장비·과정·주의사항 입력을 따로 갖고 있었다.
+- Back-Office와 병원 관리자 두 앱이 공통 필드를 공유하면서 각자 전용 필드도 두었다.
+- Back-Office의 하위 시술 템플릿 편집 폼에도 추천 대상·특장점·장비·과정·주의사항 입력이 따로 있었다.
 - API 응답은 중첩 객체지만 폼은 편집하기 쉬운 배열과 토글 값을 사용했다.
 - 하위 시술을 바꾸면 그 시술에 저장된 추천 대상·시술 특장점·장비·과정·주의사항을 폼에 가져와야 했다.
 
-처음에는 FormItem과 변환 코드가 앱마다 따로 있었다. 같은 입력이 두 앱의 프로그램 폼과 하위 시술 템플릿 편집 폼에 한 벌씩 있었고, 응답의 템플릿을 폼 값으로 옮기는 코드도 병원 관리자에서는 변환 파일마다 한 벌씩 있었다. 그래서 바뀌는 이유가 서로 다른 네 부분으로 나눴다.
+처음에는 FormItem과 변환 코드가 앱마다 따로 있었다. 같은 입력이 두 앱의 프로그램 폼과 하위 시술 템플릿 편집 폼에 한 벌씩 있었고, 응답의 템플릿을 폼 값으로 옮기는 코드도 병원 관리자에서는 변환 파일마다 한 벌씩 있었다. 그래서 바뀌는 이유가 서로 다른 네 부분으로 폼을 나눴다.
 
 1. 폼 모델: 공통 필드 이름과 타입, 앱 전용 필드
 2. 템플릿 입력: 하위 시술 템플릿 편집 폼과 함께 쓰는 compound FormItem
@@ -28,7 +28,7 @@
 
 ## 공통 필드와 앱 전용 필드 나누기
 
-antd Form은 필드 이름을 `NamePath`(문자열이나 경로 배열)로 받는다. 두 앱과 공유 패키지가 같은 필드를 여러 곳에서 읽고 쓰는데 이름이 문자열로 흩어져 있으면, 오타나 이름 변경이 런타임까지 남는다. 그래서 두 앱이 함께 쓰는 필드 이름을 공유 타입 패키지의 enum 하나에 모으고, 폼 값 타입의 키도 그 enum으로 선언했다.
+antd Form은 필드 이름을 `NamePath`(문자열이나 경로 배열)로 받는다. 두 앱과 공유 패키지가 같은 필드를 여러 곳에서 읽고 쓰는데 이름이 문자열로 흩어져 있으면, 오타나 이름을 바꾸다 빠뜨린 곳이 런타임까지 남는다. 그래서 두 앱이 함께 쓰는 필드 이름을 공유 타입 패키지의 enum 하나에 모으고, 폼 값 타입의 키도 그 enum으로 선언했다.
 
 ```ts
 // 공유 타입 패키지: 두 앱이 같이 쓰는 30개
@@ -94,7 +94,7 @@ export interface IProgramInspectionClient extends IProgramFormCommon {
 }
 ```
 
-공유 패키지의 FormItem은 공통 enum만 알고, 앱의 컨테이너와 변환 함수는 앱 enum과 앱 타입을 쓴다. 두 enum이 같은 문자열을 가리키므로 공유 FormItem과 앱 코드가 같은 칸을 본다. 공통 필드 이름을 바꿀 때는 공통 enum 한 곳을 고치면 되고, enum에 없는 이름을 쓰면 컴파일에서 걸린다.
+공유 패키지의 FormItem은 공통 enum만 알고, 앱의 컨테이너와 변환 함수는 앱 enum과 앱 타입을 쓴다. 두 enum이 같은 문자열을 가리키므로 공유 FormItem과 앱 코드가 같은 칸을 본다. enum으로 적은 자리는 공통 enum 한 곳만 고쳐도 이름이 함께 바뀌고, enum에 없는 멤버를 적으면 컴파일에서 걸린다.
 
 ```tsx
 // 공유 패키지의 FormItem: 공통 enum만 안다
@@ -134,22 +134,22 @@ export function clientProgramFormToProgramInspection(inspectionType: PROGRAM_INS
 폼 하나를 FormItem 단위로 펼치면 다음과 같다.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/06-formitem-design.png" alt="위쪽은 컨테이너가 useForm 으로 만든 인스턴스가 폼 컴포넌트와 래퍼의 antd Form 을 거쳐 FormItem 의 Form.Item·useFormInstance 까지 내려가는 흐름이다. 가운데는 Back-Office 상세 폼의 FormItem 트리로, 왼쪽 미리보기와 오른쪽 CMS 설정·기본 정보·상세 이미지 구획의 부품을 앱, program 패키지, treatment 템플릿 입력, 공용 입력 부품 층으로 색을 나누고 각 부품이 폼과 닿는 방식(name, render, watch, set)을 뱃지로 달았다. 아래에는 병원 관리자와의 차이와 설계 규칙 네 가지를 적었다" />
-  <figcaption>Back-Office 상세 폼을 FormItem 단위로 펼쳤다. 색은 부품이 있는 층이고, 뱃지는 부품이 폼과 닿는 방식이다. 인스턴스는 컨테이너가 한 번 만들고, FormItem은 컨텍스트에서 받는다.</figcaption>
+  <img src="../assets/figures/program-form/06-formitem-design.png" alt="위쪽은 컨테이너가 useForm으로 만든 인스턴스가 폼 컴포넌트와 래퍼의 antd Form을 거쳐 FormItem의 Form.Item·useFormInstance까지 내려가는 흐름이다. 가운데는 Back-Office 상세 폼의 FormItem 트리로, 왼쪽 미리보기와 오른쪽 CMS 설정·기본 정보·상세 이미지 구획의 부품을 앱, program 패키지, treatment 템플릿 입력, 공용 입력 부품 층으로 색을 나누고 각 부품이 폼과 닿는 방식(name, render, watch, set)을 배지로 달았다. 아래에는 병원 관리자와의 차이와 설계 규칙 네 가지를 적었다" />
+  <figcaption>Back-Office 상세 폼을 FormItem 단위로 펼쳤다. 색은 부품이 있는 층이고, 배지는 부품이 폼과 닿는 방식이다. 인스턴스는 컨테이너가 한 번 만들고, FormItem은 컨텍스트에서 받는다.</figcaption>
 </figure>
 
-FormItem은 form을 props로 받지 않는다. 컨테이너가 만든 인스턴스가 래퍼의 antd `Form`을 거쳐 컨텍스트로 내려가고, 각 FormItem은 `Form.Item`의 `name`으로 값을 맡기거나 `Form.useFormInstance()`로 같은 인스턴스를 받는다. 다른 필드 값에 따라 그려야 하는 곳(카테고리, 가격, 상세 이미지 분기, 토글과 목록)은 `shouldUpdate`를 단 `Form.Item`의 render-prop 안에서 `getFieldValue`로 읽는다. 병원 검색이나 카테고리 캐스케이더 같은 위젯은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다. 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem이 `setFieldsValue`로 맡는다. form을 props로 받는 것은 폼 밖에 있는 요청 버튼(검수 요청·임시저장·승인·반려)뿐이다.
+FormItem은 form을 props로 받지 않는다. 컨테이너가 만든 인스턴스가 래퍼의 antd `Form`을 거쳐 컨텍스트로 내려가고, 각 FormItem은 `Form.Item`의 `name`으로 값을 맡기거나 `Form.useFormInstance()`로 같은 인스턴스를 받는다. 다른 필드 값에 따라 그려야 하는 곳(카테고리, 가격, 상세 이미지 분기, 토글과 목록)은 `shouldUpdate`를 단 `Form.Item`의 render-prop 안에서 `getFieldValue`로 읽는다. 병원 검색이나 카테고리 캐스케이더 같은 위젯은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다. 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem이 `setFieldsValue`로 맡는다. 폼 컴포넌트 말고 form을 props로 받는 것은 폼 밖에 있는 요청 버튼(검수 요청·삭제 요청·임시저장·승인·반려)뿐이다.
 
 ## 하위 시술 템플릿 입력을 compound FormItem으로 함께 쓰기
 
-상세 이미지의 템플릿 일곱 섹션 중 '제공 / 해당없음' 토글을 단 다섯은 프로그램 폼에만 있는 입력이 아니다. Back-Office에는 하위 시술마다 템플릿 값을 등록하는 편집 폼이 따로 있고, 프로그램 폼은 하위 시술을 고르면 그 값을 가져온다. 하위 시술 템플릿 편집 폼이 생긴 2026년 1월 14일에는 두 폼이 추천 대상·특장점·장비·과정·주의사항 입력을 따로 들고 있었고, 프로그램 폼 쪽은 두 앱에 한 벌씩 있어서 모두 세 벌이었다. 여러 벌이면 검증이나 안내 문구를 고칠 때마다 모두 같이 고쳐야 한다(1월 21일·23일의 글자 수 변경은 세 곳을 함께 고쳤다). 1월 26일에 프로그램 폼의 두 벌을 공유 패키지로 모았고, 27일에 남은 두 벌을 treatment 슬라이스의 한 벌로 합쳤다.
+상세 이미지의 템플릿 일곱 섹션 중 '제공 / 해당없음' 토글을 단 다섯은 프로그램 폼에만 있는 입력이 아니다. Back-Office에는 하위 시술마다 템플릿 값을 등록하는 편집 폼이 따로 있고, 프로그램 폼은 하위 시술을 고르면 그 값을 가져온다. 하위 시술 템플릿 편집 폼이 생긴 2026년 1월 14일에는 두 폼이 추천 대상·특장점·장비·과정·주의사항 입력을 따로 들고 있었고, 프로그램 폼 쪽은 두 앱에 한 벌씩 있어서 모두 세 벌이었다. 여러 벌이면 검증이나 안내 문구를 고칠 때마다 모두 같이 고쳐야 한다(1월 21일·23일의 글자 수 변경은 세 곳에 함께 반영했다). 1월 26일에 프로그램 폼의 두 벌을 공유 패키지로 모았고, 27일에 남은 두 벌을 treatment 슬라이스의 한 벌로 합쳤다.
 
 <figure class="figure-wide">
   <img src="../assets/figures/program-form/05-shared-template-formitems.png" alt="위쪽은 Back-Office 하위 시술 템플릿 편집 폼과 두 앱의 프로그램 폼 상세 이미지 구획이 각자 조립한 FormItem 목록이다. 초록은 두 폼이 함께 쓰는 템플릿 입력, 회색은 프로그램 폼 전용, 파랑은 Back-Office 전용이다. 아래쪽은 공유 템플릿 입력 층으로, 이름 계약, 토글과 목록을 묶는 ProgramConditionedRender, 같은 antd Form 설정과 공통 스타일로 된 바깥 틀, compound ProcedureHighlight·ProcedureEquipment·Precautions를 적었고, 맨 아래에 하위 시술 값을 프로그램 폼으로 옮기는 흐름과 2026-01-27에 두 벌을 합친 이력을 두었다" />
   <figcaption>하위 시술 템플릿 편집 폼과 프로그램 폼이 treatment 슬라이스의 템플릿 입력 한 벌을 각자 조립한다. 행 구성이 다른 특장점은 compound로 나눠, 하위 시술 편집은 아이콘과 문구를, 프로그램 폼은 문구만 받는다.</figcaption>
 </figure>
 
-함께 쓰는 입력은 세 가지 약속 위에 선다. 필드 이름은 `SAFEDOC_TEMPLATE_NAME_TYPE`의 열 개로 두 폼이 같고, '제공 / 해당없음' 토글과 목록은 `ProgramConditionedRender`가 묶고, 바깥 틀은 두 폼 모두 같은 antd `Form` 설정(`DETAIL_DEFAULT_FORM_PROPS`, 라벨 너비 152px)과 공통 스타일(`CommonTemplatesFormStyle`)이다. 그래서 추천 대상·과정·주의사항과 시술 장비는 두 폼이 같은 컴포넌트를 그대로 쓴다. 두 폼의 값 타입은 전체로는 다르지만 이 열 개 필드는 이름과 타입이 같다. 하위 시술 편집 폼의 타입은 교집합 타입 `ITreatmentTemplateForm`을 확장하고, 프로그램 폼의 공통 타입은 같은 열 개를 같은 타입으로 선언한다. 입력 쪽은 이 열 개 이름만 알면 된다.
+함께 쓰는 입력은 세 가지 약속 위에 선다. 필드 이름은 `SAFEDOC_TEMPLATE_NAME_TYPE`의 열 개로 두 폼이 같고, '제공 / 해당없음' 토글과 목록은 `ProgramConditionedRender`가 묶는다. 바깥 틀은 두 폼 모두 같은 antd `Form` 설정(`DETAIL_DEFAULT_FORM_PROPS`, 라벨 너비 152px)과 공통 스타일(`CommonTemplatesFormStyle`)이다. 그래서 추천 대상·과정·주의사항과 시술 장비는 두 폼이 같은 컴포넌트를 그대로 쓴다. 두 폼의 값 타입은 전체로는 다르지만 이 열 개 필드는 이름과 타입이 같다. 하위 시술 편집 폼의 타입은 교집합 타입 `ITreatmentTemplateForm`을 확장하고, 프로그램 폼의 공통 타입은 같은 열 개를 같은 타입으로 선언한다. 입력 쪽은 이 열 개 이름만 알면 된다.
 
 특장점만 행 구성이 다르다. 하위 시술 템플릿 편집 폼에서는 행마다 아이콘과 문구를 받고, 프로그램 폼에서는 문구만 고치며 아이콘은 하위 시술 템플릿에서 받아 온 값을 그대로 둔다. 그래서 특장점은 목록 틀과 행 입력을 나눈 compound로 만들고, 행을 채우는 방식은 쓰는 쪽이 정하게 했다.
 
@@ -176,7 +176,7 @@ export const ProcedureHighlight = {
 </ProcedureHighlight.FormList>;
 ```
 
-시술 장비(`FormList`·`FormItem`·`ImageWrapper`·`Image`·`Title`·`Content`)와 주의사항(`Form`·`FormItem`)도 같은 방식으로 조각을 열어 두었고, 두 폼 모두 기본 조립(`<ProcedureEquipment />`·`<Precautions />`)을 그대로 쓴다.
+시술 장비(`FormList`·`FormItem`·`ImageWrapper`·`Image`·`Title`·`Content`)와 주의사항(`Form`·`FormItem`)도 같은 방식으로 조각을 열어 두었지만, 두 폼 모두 기본 조립(`<ProcedureEquipment />`·`<Precautions />`)을 그대로 쓴다.
 
 두 폼의 섹션 구성이 같다는 점은 값을 옮길 때도 쓰인다. 마지막 절의 `SyncTreatmentSub`는 하위 시술 상세 응답을 프로그램 폼의 같은 섹션 필드에 넣으면서 모양만 맞춘다.
 
@@ -253,7 +253,7 @@ export function resTemplateToClientTemplate(templates: TProgramTemplate) {
 
 토글 판정은 `null`·`undefined`만 '없음'으로 보고, 빈 배열로 내려온 섹션은 켠다(추가 혜택과 시술 전후 사진은 '직접입력', 나머지는 '제공'). 항목은 섹션 초기값의 빈 줄로 채워진다(시술 특장점 3줄, 시술 과정 2줄, 나머지 1줄). 빈 배열을 '없음'으로 볼지는 토글 함수가 아니라 요청 변환이 정한다. 병원 관리자의 임시저장은 제목이 빈 줄을 거른 뒤 남는 것이 없어도 빈 배열을 보내고, 그 빈 배열이 응답으로 돌아오면 토글이 켜진 채 초기값의 빈 줄로 채워진다. 검수·등록 요청은 토글이 꺼져 있거나 거른 뒤 남는 것이 없으면 섹션째 보내지 않는다.
 
-제출 방향은 보낼 필드만 골라 담고, API가 요구하는 순서와 모양을 다시 만든다. 요청 방향에서 두 앱 헬퍼가 함께 가진 것은 순번을 붙이는 `titleFormToServerMap`과 공통 값을 고르는 `getBaseProgramInspectionItem`뿐이다. 섹션마다 토글을 확인하고 빈 줄을 거르는 `getDetailImageInspection`은 Back-Office만 헬퍼에 두었고, 병원 관리자는 검수 요청·임시저장 파일에 같은 이름으로 한 벌씩 두었다.
+제출 방향은 보낼 필드만 골라 담고, API가 요구하는 순서와 모양을 다시 만든다. 요청 방향에서 두 앱 헬퍼에 모두 있는 것은 순번을 붙이는 `titleFormToServerMap`과 공통 값을 고르는 `getBaseProgramInspectionItem`뿐이다. 섹션마다 토글을 확인하고 빈 줄을 거르는 `getDetailImageInspection`은 Back-Office만 헬퍼에 두었고, 병원 관리자는 검수 요청·임시저장 파일에 같은 이름으로 한 벌씩 두었다.
 
 ```ts
 export const titleFormToServerMap =
@@ -318,10 +318,10 @@ function ProgramInspectionDetailFormContainer() {
 
 ## 하위 시술 변경에 따른 작업을 한곳에 모으기
 
-카테고리를 바꿔 하위 시술이 달라지면 시술에 저장된 템플릿을 프로그램 폼으로 가져온다. 초기 상세 조회로 ID가 채워졌을 때는 템플릿을 다시 적용하지 않고, 사용자가 시술을 직접 바꾼 경우에만 적용하도록 `isFieldsTouched`로 `treatmentId`를 확인했다.
+카테고리를 바꿔 시술이 달라지면 하위 시술에 저장된 템플릿을 프로그램 폼으로 가져온다. 초기 상세 조회로 ID가 채워졌을 때는 템플릿을 다시 적용하지 않고, 사용자가 시술을 직접 바꾼 경우에만 적용하도록 `isFieldsTouched`로 `treatmentId`를 확인했다.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/04-treatment-sync.png" alt="왼쪽은 저장된 프로그램을 열 때, 오른쪽은 사용자가 카테고리를 바꿀 때의 순서다. 두 경우 모두 하위 시술 상세를 조회하지만, 왼쪽은 treatmentId가 touched가 아니라 저장된 템플릿이 남고 오른쪽은 touched라 템플릿 필드 다섯 개가 교체된다. 아래 표는 응답 필드와 폼 필드의 대응, 건드리지 않는 필드, 남은 틈을 적었다" />
+  <img src="../assets/figures/program-form/04-treatment-sync.png" alt="왼쪽은 저장된 프로그램을 열 때, 오른쪽은 사용자가 카테고리를 바꿀 때의 순서다. 두 경우 모두 하위 시술 상세를 조회하지만, 왼쪽은 treatmentId가 touched가 아니어서 저장된 템플릿이 남고 오른쪽은 touched라 템플릿 필드 다섯 개가 교체된다. 아래에는 응답 필드와 폼 필드의 대응 표, 건드리지 않는 필드, 남은 틈을 적었다" />
   <figcaption>SyncTreatmentSub는 두 경우 모두 하위 시술 상세를 조회하지만, treatmentId가 touched일 때만 템플릿 필드 다섯 개를 교체한다.</figcaption>
 </figure>
 
