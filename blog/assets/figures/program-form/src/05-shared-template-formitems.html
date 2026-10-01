@@ -88,7 +88,7 @@
     <p class="when">상세 이미지 유형이 제공 템플릿일 때</p>
     <div class="stack">
       <div class="blk prog">DetailTemplateColorFormItem<span class="s">템플릿 색상</span></div>
-      <div class="blk prog">SyncTreatmentSub<span class="s">하위 시술을 바꾸면 값을 가져온다(마지막 절)</span></div>
+      <div class="blk prog">SyncTreatmentSub<span class="s">카테고리를 바꾸면 값을 가져온다(마지막 절)</span></div>
       <div class="blk shared">RecommendedTargetFormItem</div>
       <div class="blk prog">BenefitFormItem<span class="s">직접입력 / 해당없음</span></div>
       <div class="blk prog">ProcedureHighlightsFormItem
@@ -110,7 +110,7 @@
   <div class="trio">
     <div class="mini"><b>이름 계약</b><code>SAFEDOC_TEMPLATE_NAME_TYPE</code><br><code>isRecommended · recommendedTarget · isProcedureHighlights · … · precautions</code><br>두 폼의 초기값과 타입이 이 열 개 이름을 그대로 쓴다</div>
     <div class="mini"><b>토글 + 목록</b><code>ProgramConditionedRender.<wbr>SafedocProvider(<wbr>{ name, renderItem })</code><br><code>Form.Item shouldUpdate</code> 안에서 <span class="nw">'제공 / 해당없음'</span> 라디오를 그리고, '제공'일 때만 목록을 그린다. <code>.Direct</code>는 <span class="nw">'직접입력 / 해당없음'</span></div>
-    <div class="mini"><b>바깥 틀</b><code>TemplateForm</code><br>antd Form 에 공통 스타일을 입힌 틀. 하위 시술 템플릿 편집 폼과 두 앱의 프로그램 폼 래퍼가 모두 이 틀로 그린다</div>
+    <div class="mini"><b>바깥 틀</b><code>DETAIL_DEFAULT_FORM_PROPS</code> · <code>CommonTemplatesFormStyle</code><br>하위 시술 템플릿 편집 폼과 두 앱의 프로그램 폼 래퍼가 같은 antd Form 설정(라벨 너비 152px)과 공통 스타일로 그린다</div>
   </div>
 
   <div class="comp">
@@ -146,5 +146,5 @@
 
 <div class="hist"><b>2026-01-26 전까지는</b> 두 앱의 프로그램 폼과 하위 시술 템플릿 편집 폼(01-14 생성)이 추천 대상·특장점·장비·과정·주의사항 입력을 한 벌씩, 모두 세 벌 들고 있었다. 01-26 에 프로그램 폼 두 벌을 공유 패키지로 모았고, 01-27 에 두 커밋으로 남은 두 벌을 한 벌로 합치면서 특장점·시술 장비·주의사항을 조각을 나눈 compound 로 만들었다. 두 폼의 조립이 실제로 다른 것은 특장점뿐이다.</div>
 
-<p class="foot">2026-09-29 develop 코드(treatment 템플릿 입력, TreatmentSubForm, ProgramDetailImageFormSection, SyncTreatmentSub)와 git 이력을 바탕으로 그렸다. 코드는 줄였다.</p>
+<p class="foot">2026-02-12 develop 코드(treatment 템플릿 입력, TreatmentSubForm, ProgramDetailImageFormSection, SyncTreatmentSub)와 git 이력을 바탕으로 그렸다. 코드는 줄였다.</p>
 </body></html>
