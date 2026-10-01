@@ -4,7 +4,11 @@
   body { word-break: keep-all; }
   .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 7px 2px; display: flex; align-items: center; gap: 8px; }
   .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
-  .zone .app { font-size: 10.5px; }
+  .svc { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; letter-spacing: -0.1px; background: #f1ede6; color: #7a5a2e; }
+  .tipbox { display: inline-block; margin-top: 5px; background: rgba(0, 0, 0, 0.82); color: #fff; font-size: 11px; line-height: 1.45; border-radius: 6px; padding: 4px 9px; position: relative; }
+  .tipbox::after { content: ''; position: absolute; right: -5px; top: calc(50% - 5px); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 5px solid rgba(0, 0, 0, 0.82); }
+  .toast { display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; background: #fff; border-radius: 7px; box-shadow: 0 2px 8px rgba(36, 42, 50, 0.14); font-size: 11px; color: var(--ink); padding: 4px 10px; }
+  .toast i { font-style: normal; width: 13px; height: 13px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 9px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
 
   /* 화면 */
   .screen { display: grid; grid-template-columns: 488px minmax(0, 1fr); gap: 14px; align-items: start; }
@@ -37,7 +41,7 @@
   .mk { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; flex-shrink: 0; }
   .mk.sm { width: 15px; height: 15px; font-size: 9.5px; }
 
-  .side { display: flex; flex-direction: column; gap: 9px; padding-top: 118px; min-width: 0; }
+  .side { display: flex; flex-direction: column; gap: 16px; padding-top: 112px; min-width: 0; }
   .anno { border-left: 2px solid var(--blue-line); padding: 2px 0 2px 9px; font-size: 11.5px; color: var(--sub); line-height: 1.5; }
   .anno b { color: var(--ink); font-weight: 600; }
   .anno code { font-size: 10.5px; color: var(--ink); }
@@ -91,7 +95,7 @@
 </style></head>
 <body>
 
-<div class="zone">예약 상세 · 쿠폰 예약 · 확정 전 <span class="app pa">병원 관리자</span><span class="app bo">Back-Office</span></div>
+<div class="zone">예약 상세 · 쿠폰 예약 · 확정 전 <span class="svc">병원 관리자</span></div>
 
 <div class="screen">
   <div class="mock">
@@ -99,19 +103,19 @@
     <div class="tl">
       <span class="dot"></span>
       <div class="col">
-        <div class="ch"><b>결제 내역 (1)</b><span class="t red">하단에 결제일과 결제 금액을 입력해주세요</span><span class="r">미정<span class="amt">₩ 100,000</span><span class="xbtn">접기</span></span></div>
-        <div class="dr"><span>결제일</span><span class="ph">실제 결제를 완료한 경우에만 결제일을 선택…<span class="cbx">내원일과 동일</span></span></div>
-        <div class="dr hl"><span>총 결제 예정 금액</span><span>₩ 100,000 <span class="mk sm" style="margin-left:auto">A</span></span></div>
+        <div class="ch"><b>결제 내역 (1)</b><span class="t red">결제 금액 입력하기</span><span class="r">미정<span class="amt">₩ 100,000</span><span class="xbtn">접기</span></span></div>
+        <div class="dr"><span>결제일</span><span class="ph">결제완료를 위해 실제 결제일을 선택…<span class="cbx">내원일과 동일</span></span></div>
         <div class="dr"><span>쿠폰 사용 금액</span><span><span class="cp">₩20,000</span><span class="cp-sub">(사용된 쿠폰)</span><span class="cp" style="font-size:10.5px">여름 할인 쿠폰</span><span class="sbtn">쿠폰 변경</span><span class="mk sm">B</span></span></div>
+        <div class="dr hl"><span>총 결제 예정 금액</span><span>₩ 100,000 <span class="mk sm" style="margin-left:auto">A</span></span></div>
         <div class="dr"><span>최종 결제금액</span><span class="fill">₩ 80,000 <span class="mk sm" style="margin-left:auto">C</span></span></div>
       </div>
     </div>
   </div>
 
   <div class="side">
-    <div class="anno"><b>A 금액을 바꾸면</b> 적용된 쿠폰을 푼다. <span class="nw">아래 ①②③</span></div>
-    <div class="anno"><b>B 쿠폰 변경</b> 같은 선택 모달을 연다. 고르면 세 값을 한꺼번에 바꾼다<span class="fl" style="margin-top:2px">memberCouponId</span><span class="fl">couponName</span><span class="fl">couponDiscountAmount</span></div>
-    <div class="anno"><b>C 최종 결제금액</b> 총 결제 예정 금액 − 쿠폰 사용 금액. 할인액은 폼 전용 값을 쓴다<span class="fl" style="margin-top:2px">couponDiscountAmount</span></div>
+    <div class="anno"><b>B 쿠폰 변경</b> 선택 모달을 연다. 고르면 세 값을 한꺼번에 바꾼다<span class="fl" style="margin-top:2px">memberCouponId · couponName ·<br>couponDiscountAmount</span></div>
+    <div class="anno"><b>A 금액을 바꾸면</b> 적용된 쿠폰을 바로 푼다. <span class="nw">아래 ①②③</span></div>
+    <div class="anno"><b>C 최종 결제금액</b> 총 결제 예정 금액 − 쿠폰 사용 금액. 할인액은 폼 전용 값을 쓴다</div>
   </div>
 </div>
 
@@ -124,49 +128,51 @@
         <div class="rd"><i class="on"></i><span>여름 할인 쿠폰 (현재 적용)<small>최대 ₩20,000 · ₩50,000 이상</small></span><span class="dc">-₩20,000</span></div>
         <div class="rd"><i></i><span>첫 방문 쿠폰<small>최대 ₩10,000 · ₩30,000 이상</small></span><span class="dc">-₩10,000</span></div>
       </div>
-      <div class="mf"><span>취소</span><span>최대 할인 적용</span><span class="p">확인</span></div>
+      <div class="mf"><span>취소</span><span class="p">확인</span></div>
     </div>
-    <p class="mnote">쓸 수 있는 쿠폰과 예상 할인액은 예약·프로그램·<b>총 결제 예정 금액</b>으로 조회한다. 금액이 바뀌면 고른 쿠폰의 할인액도 달라질 수 있어 다시 골라야 한다.</p>
+    <p class="mnote">쓸 수 있는 쿠폰과 예상 할인액은 예약·프로그램·<b>총 결제 예정 금액</b>으로 조회한다. 금액이 바뀌면 같은 쿠폰의 할인액도 달라질 수 있다.</p>
   </div>
 
   <div>
     <div class="steps-h">A 총 결제 예정 금액을 바꿀 때</div>
     <div class="step">
-      <div class="step-h"><span class="num">1</span>입력하는 순간<code>onChange</code><span class="when">06-24 · 08-10</span></div>
-      <p>적용된 쿠폰을 <b>바로 푼다</b>. 쿠폰 id·쿠폰명은 비우고 할인액은 0. 푼 쿠폰을 기억해 두고 '다시 골라야 함'을 켠다.</p>
+      <div class="step-h"><span class="num">1</span>행을 펼쳐 둔 동안<code>Tooltip</code><span class="when">06-24</span></div>
+      <p>라벨 왼쪽에 툴팁을 띄워 둔다.</p>
+      <span class="tipbox">총 결제 예정 금액 수정 시 적용된 쿠폰이 초기화됩니다.</span>
     </div>
     <div class="step">
-      <div class="step-h"><span class="num">2</span>입력칸을 벗어날 때<code>onBlur</code><span class="when">08-10</span></div>
-      <p>금액이 실제로 바뀌었으면 <b>선택 모달</b>을 연다. 방금 푼 쿠폰이 '현재 적용'으로 골라져 있다. 취소하면 푼 채로 두고 <span class="q">'총 결제 예정 금액이 변경되어 적용된 쿠폰이 초기화되었습니다.'</span>를 띄운다.</p>
+      <div class="step-h"><span class="num">2</span>입력하는 순간<code>onChange</code><span class="when">06-24 · 06-25</span></div>
+      <p>적용된 쿠폰이 있으면 <b>바로 푼다</b>. 쿠폰 id·쿠폰명은 비우고 할인액은 0. 안내 메시지를 띄운다.</p>
+      <span class="toast"><i>i</i>총 결제 예정 금액이 변경되어 적용된 쿠폰이 초기화되었습니다.</span>
     </div>
     <div class="step">
-      <div class="step-h"><span class="num">3</span>결제 내역 확정을 누를 때<code>validator</code><span class="when">08-14</span></div>
-      <p>아직 다시 고르지 않았으면 모달을 한 번 더 연다. 취소하면 <span class="q">'변경된 금액 기준으로 쿠폰을 다시 선택해주세요.'</span>로 <b>제출을 막는다</b>. 견적금액을 넘긴 금액은 견적 검증이 먼저 막으므로 건너뛴다.</p>
+      <div class="step-h"><span class="num">3</span>다시 고를 때<span class="sbtn" style="margin-left:2px; font-weight:500">쿠폰 변경</span></div>
+      <p>쿠폰을 다시 고를지는 사용자에게 맡긴다. 선택 모달에는 <b>'쿠폰 미사용'</b>도 있다.</p>
     </div>
-    <p class="one">모달은 한 번에 하나만 뜬다. ②와 ③이 겹치면 이미 열린 모달의 결과를 함께 기다린다. 처음(<span class="nw">06-24·25</span>)에는 ①에서 쿠폰을 풀고 안내 문구만 띄웠고, ②③은 <span class="nw">08-10·08-14</span>에 더했다.</p>
+    <p class="one">06-24에는 금액을 바꾸면 쿠폰이 없어도 세 값을 비우기만 했고, 06-25에 쿠폰이 있을 때만 풀고 안내 메시지를 띄우게 했다. 라벨과 문구의 '현장 결제금액'은 <span class="nw">07-01</span>에 '총 결제 예정 금액'으로 바꿨다.</p>
   </div>
 </div>
 
 <div class="after">
-  <div class="after-h">확정 뒤, 저장된 행은 다른 컴포넌트가 그린다<code>CouponCompleteDescriptions</code><span class="when">08-14 분리</span></div>
+  <div class="after-h">확정 뒤, 저장된 현장결제 행은 완료 상세가 그린다<code>CompletedDescriptions</code></div>
   <div class="pairs">
     <div class="mini">
       <div class="mini-h">연결된 쿠폰결제 행이 있을 때</div>
-      <div class="mr"><span>결제일</span><span>2026-07-10</span></div>
-      <div class="mr"><span>현장 결제금액</span><span>현장결제 행의 금액</span></div>
+      <div class="mr"><span>결제일</span><span>2026-06-30</span></div>
       <div class="mr"><span>쿠폰 사용 금액</span><span><span class="cp">쿠폰결제 행의 금액</span> (사용된 쿠폰) <span class="cp">쿠폰명</span></span></div>
+      <div class="mr"><span>총 결제 예정 금액</span><span>현장결제 행의 금액</span></div>
       <div class="mr"><span>최종 결제금액</span><span>두 금액의 합</span></div>
     </div>
     <div class="mini">
-      <div class="mini-h">같은 거래의 쿠폰취소 행이 붙었을 때</div>
-      <div class="mr"><span>결제일</span><span>2026-07-10</span></div>
-      <div class="mr"><span>현장 결제금액</span><span>현장결제 행의 금액</span></div>
-      <div class="mr"><span>쿠폰 사용 금액</span><span><span class="strike">쿠폰결제 행의 금액</span> (사용된 쿠폰) <span class="strike">쿠폰명</span></span></div>
-      <div class="mr"><span>최종 결제금액</span><span>현장 결제금액만</span></div>
+      <div class="mini-h">연결된 쿠폰결제 행이 없을 때</div>
+      <div class="mr"><span>결제일</span><span>2026-06-30</span></div>
+      <div class="mr"><span>미수잔금</span><span>현장결제 행의 미수잔금</span></div>
+      <div class="mr"><span>총 결제 예정 금액</span><span>현장결제 행의 금액</span></div>
+      <div class="mr"><span>최종 결제금액</span><span>현장결제 행의 금액</span></div>
     </div>
   </div>
-  <p>금액 칸 → 쿠폰 칸 → 최종 결제금액의 자리를 결제 전과 맞췄다. 쿠폰 선택·해제·다시 고르기는 이 컴포넌트에도 없고, <b>쿠폰 행 편집은 CouponDescriptions에만 있다</b>. 대기·완료·취소 상세와 타임라인·헤더는 쿠폰 모달을 모른다.</p>
+  <p>현장결제 행의 <code>transactionId</code>와 같은 id를 가진 쿠폰결제 행을 찾아 <b>미수잔금 자리에 쿠폰 사용 금액</b>을 넣는다. 그래서 칸 순서가 확정 전 쿠폰 행과 같다. 쿠폰 선택·해제는 이 컴포넌트에 없고 <b>쿠폰 행 편집은 CouponDescriptions에만 있다</b>. 완료된 현장결제 행이 생기면 예약 상세 폼은 읽기 전용이 된다.</p>
 </div>
 
-<p class="foot">2026-09-29 develop 코드(CouponDescriptions·CouponSelectModal·CouponCompleteDescriptions)와 2026-06-24~08-14 쿠폰 커밋을 바탕으로 그렸다. 화면은 캡처 없이 코드를 따라 단순화했고 쿠폰명·금액은 예시다.</p>
+<p class="foot">2026-07-02 develop 코드(CouponDescriptions·CouponSelectModal·CompletedDescriptions, 병원 관리자 예약 상세)와 <span class="nw">2026-06-24~07-01</span> 쿠폰 커밋을 바탕으로 그렸다. 화면은 캡처 없이 코드를 따라 단순화했고 쿠폰명·날짜·금액은 예시다.</p>
 </body></html>
