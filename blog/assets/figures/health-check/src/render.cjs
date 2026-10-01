@@ -2,9 +2,15 @@
 // 결과: ../<이름>.png (2배율 원본), ../<이름>.jpg 는 sips 로 따로 만든다.
 const path = require('node:path');
 const fs = require('node:fs');
-const { chromium } = require(
-  require.resolve('playwright', { paths: ['/Users/gimjingeon/Desktop/feedback-loof/projects/safedoc-usermall'] }),
-);
+// playwright 는 이 저장소에 없어서, 설치된 곳을 차례로 찾는다
+const CANDIDATES = [
+  '/Users/gimjingeon/Desktop/safedoc/user-mall/safedoc-usermall',
+  '/Users/gimjingeon/Desktop/safedoc/safedoc-global/frontend',
+  '/Users/gimjingeon/Desktop/feedback-loof/projects/safedoc-usermall',
+];
+const base = CANDIDATES.find((dir) => fs.existsSync(path.join(dir, 'node_modules/playwright')));
+if (!base) throw new Error('playwright 를 찾지 못했다: ' + CANDIDATES.join(', '));
+const { chromium } = require(require.resolve('playwright', { paths: [base] }));
 
 (async () => {
   const srcDir = __dirname;
