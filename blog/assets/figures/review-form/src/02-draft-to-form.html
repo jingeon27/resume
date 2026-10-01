@@ -65,7 +65,7 @@
   <div class="blank"></div>
   <div class="lane-head form"><b>2단계 폼 · 폼 Provider 안</b><span>단계 폼(<code>mode: 'all'</code>, <code>DetailsStepSchema</code>) 안의 <code>ItemsField</code>가 <code>useFieldArray</code>로 <code>items</code>, <code>replace</code>, <code>remove</code>를 받는다</span></div>
   <div class="blank"></div>
-  <div class="lane-head sheet"><b>선택 시트 · 폼 Provider 밖</b><span><code>ItemPickerSheet</code>는 overlay-kit가 앱 최상단에 그린다. <code>useFormContext</code> 대신 값과 콜백을 props로 받는다</span></div>
+  <div class="lane-head sheet"><b>선택 시트 · 폼 Provider 밖</b><span>공용 시트가 전역 스토어에서 <code>ItemPickerSheet</code>를 받아 앱 최상단에 그린다. <code>useFormContext</code> 대신 값과 콜백을 props로 받는다</span></div>
 
   <!-- 열 때 -->
   <div class="when">열 때</div>
@@ -75,12 +75,12 @@
     <span class="count form">items 2개</span>
   </div>
   <div class="mid">
-    <div class="t">overlay.open</div>
+    <div class="t">openBottomSheet</div>
     <div class="harrow r"></div>
     <div class="s"><code>initialItems</code> = 지금의 <code>items</code><br><code>onConfirm</code> = <code>replace</code></div>
   </div>
   <div class="cell sheet">
-    <b>열 때마다 새로 마운트한다</b>
+    <b>열 때마다 새로 마운트된다</b>
 <pre>const [draft, setDraft] =
   useState(initialItems);</pre>
     <span class="count sheet">draft 2개</span>
@@ -118,7 +118,7 @@
   <div class="cell sheet">
     <b>넘기고 닫는다</b>
 <pre>onConfirm(draft);
-onClose();</pre>
+closeBottomSheet();</pre>
   </div>
 
   <!-- 닫기 -->
@@ -134,7 +134,7 @@ onClose();</pre>
   </div>
   <div class="cell sheet">
     <b>딤, 끌어내리기, 뒤로 가기</b>
-    <p><code>close</code>로 닫고, 닫힘 애니메이션이 끝나면 <code>unmount</code>한다. <code>draft</code>는 시트와 함께 사라진다.</p>
+    <p>스토어의 열림 상태만 꺼진다. 공용 시트가 닫힘 애니메이션 뒤 내용을 언마운트하므로 <code>draft</code>는 시트와 함께 사라진다.</p>
     <span class="count gone">draft 3개</span>
   </div>
 
@@ -159,8 +159,8 @@ onClose();</pre>
 
 <div class="compare">
   <div class="cmp rule"><b>5개 제한은 두 곳에 있다</b>시트는 <code>draft</code>를 보고 6번째를 막고, 스키마는 확정된 <code>items</code>를 보고 '다음'을 끈다.<span class="hist">처음 develop에 합칠 때 시트는 <code>draft</code>가 아니라 <code>initialItems</code>의 개수를 봤다. 다음 날, 운영 반영 전에 <code>draft</code> 기준으로 고쳤다.</span></div>
-  <div class="cmp gap"><b>남은 틈</b>숫자 5가 시트와 스키마에 따로 적혀 있다. 시트의 임시 선택, 확인 버튼, 닫기 동작을 검사하는 테스트는 없다(2026-09-30 develop 기준).</div>
+  <div class="cmp gap"><b>남은 틈</b>숫자 5가 시트와 스키마에 따로 적혀 있다. 시트의 임시 선택, 확인 버튼, 닫기 동작을 검사하는 테스트는 없다(2025-12-13 develop 기준).</div>
 </div>
 
-<p class="foot">2026-09-30 develop 코드를 바탕으로 다시 그렸다. <code>ItemsField</code>, <code>ItemPickerSheet</code>, <code>initialItems</code>, <code>onConfirm</code>, <code>draft</code>, <code>items</code>, <code>DetailsStepSchema</code>는 글의 가명이고 시술명은 예시다.</p>
+<p class="foot">2025-12-13 develop 코드를 바탕으로 다시 그렸다. <code>ItemsField</code>, <code>ItemPickerSheet</code>, <code>initialItems</code>, <code>onConfirm</code>, <code>draft</code>, <code>items</code>, <code>DetailsStepSchema</code>는 글의 가명이고 시술명은 예시다.</p>
 </body></html>
