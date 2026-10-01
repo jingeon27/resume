@@ -29,6 +29,7 @@
   .pv { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
   .pv-img { height: 96px; background: #dfe7f3; }
   .pv-b { padding: 7px 8px 8px; }
+  .pv-label { display: inline-block; font-size: 10px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border-radius: 4px; padding: 0 5px; margin-bottom: 3px; }
   .pv-name { font-size: 12px; font-weight: 700; line-height: 1.35; }
   .pv-old { font-size: 10.5px; color: var(--faint); text-decoration: line-through; text-align: right; margin-top: 3px; }
   .pv-new { font-size: 12.5px; font-weight: 700; text-align: right; }
@@ -66,7 +67,7 @@
   .radio-line i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--line-strong); margin: 0 3px -1px 8px; }
   .radio-line i:first-child { margin-left: 0; }
   .radio-line i.on { border: 3px solid var(--blue); }
-  .branch-side { display: grid; grid-template-columns: 1fr 1.25fr 0.75fr; gap: 6px; margin-top: 6px; }
+  .branch-side { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
   .bx { border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px 6px; }
   .bx-h { font-size: 11.5px; font-weight: 700; color: var(--sub); margin-bottom: 2px; }
   .bx-h code { font-size: 10.5px; font-weight: 500; color: var(--faint); }
@@ -102,9 +103,8 @@
   <span><span class="f">programName</span> 공통 <code>IProgramFormCommon</code></span>
   <span><span class="f bo">memo</span> Back-Office 전용</span>
   <span><span class="f pa">inspectionType</span> 병원 관리자 전용</span>
-  <span><span class="cond" style="margin-left:0">검진만</span> 검진 프로그램일 때만</span>
-  <span><span class="fm" style="margin-left:0">상세 폼만</span><span class="fm">검수 폼만</span> 한쪽 폼에만 있는 칸</span>
-  <span><span class="sync">↻</span> 하위 시술을 바꾸면 채움</span>
+  <span><span class="fm" style="margin-left:0">검수 폼만</span> 검수 폼에만 있는 칸</span>
+  <span><span class="sync">↻</span> 카테고리를 바꾸면 채움</span>
 </div>
 
 <div class="drawer">
@@ -117,17 +117,19 @@
       <div class="pv">
         <div class="pv-img"></div>
         <div class="pv-b">
+          <span class="pv-label">라벨</span>
           <div class="pv-name">레진 충치치료 1치아</div>
-          <div class="pv-old">300,000원 VAT포함</div>
+          <div class="pv-old">300,000원</div>
           <div class="pv-new"><em>20%</em>240,000원</div>
-          <div class="pv-small">추가 비용 없음</div>
-          <div class="pv-small"><b style="color:var(--ink)">프로그램 설명</b><br>충치 1개를 레진으로 치료한다</div>
         </div>
-        <div class="pv-row">파트너 병원 ›</div>
-        <div class="pv-comp">검사 구성 <span class="cond" style="margin-left:2px">검진만</span></div>
+        <div class="pv-row">병원명 › <span style="font-weight:400;color:var(--faint)">병원 주소</span></div>
+        <div class="pv-b" style="padding-top:0">
+          <div class="pv-small"><b style="color:var(--ink)">프로그램 설명</b><br>충치 1개를 레진으로 치료한다</div>
+          <div class="pv-small"><b style="color:var(--ink)">추가금액/VAT</b><br>추가 비용 없음</div>
+        </div>
         <div class="pv-detail">상세 이미지</div>
       </div>
-      <p class="pv-note">폼 전체를 <code>useWatch([])</code>로 읽어 입력하는 대로 다시 그린다. 검진이면 '검사 구성' 섹션을 더 그리고, 검진 템플릿이면 상세 이미지 자리는 비운다.</p>
+      <p class="pv-note">폼 전체를 <code>useWatch([])</code>로 읽어 입력하는 대로 다시 그린다. 상세 이미지 자리는 유형에 따라 템플릿이나 자체제작 이미지를 그리고, 사용하지 않기면 비운다.</p>
 
       <div class="forms">
         <div class="divider">폼 두 가지</div>
@@ -135,7 +137,6 @@
           <div class="fh"><span class="fm">상세 폼</span></div>
           <code>ProgramDetailForm.tsx</code>
           <ul><li>Back-Office 등록·상세·수정</li><li>병원 관리자 상세(수정·삭제 요청)</li></ul>
-          <div class="has">이 폼에만 <b>예약금</b>, <b>검진 구성</b></div>
         </div>
         <div class="fbox">
           <div class="fh"><span class="fm">검수 폼</span></div>
@@ -152,7 +153,7 @@
       <div class="sec bo">
         <div class="sec-h"><span>CMS 설정</span><span class="app bo">Back-Office만</span></div>
         <div class="row"><span class="lb">라벨</span><div><span class="f">labels[]</span><span class="f sub">{ id, text, type }</span></div></div>
-        <div class="row"><span class="lb">체크박스 5개<small>가격 미노출 · 숨김 · 특가전 · 당일할인 · 쿠폰</small></span><div><span class="f bo">hidePrice</span><span class="f bo">status</span><span class="f bo">hasEvent</span><span class="f bo">todayDiscount</span><span class="f bo">couponStatus</span></div></div>
+        <div class="row"><span class="lb">체크박스 4개<small>가격 미노출 · 숨김 · 특가전 · 당일할인</small></span><div><span class="f bo">hidePrice</span><span class="f bo">status</span><span class="f bo">hasEvent</span><span class="f bo">todayDiscount</span></div></div>
         <div class="row"><span class="lb">CMS 메모</span><div><span class="f bo">memo</span></div></div>
       </div>
 
@@ -162,22 +163,15 @@
         <div class="row"><span class="lb">노출예정일</span><div><span class="f">displayStartDt</span><span class="fm">검수 폼만</span><span class="aside">병원 관리자는 신규 등록일 때만</span></div></div>
         <div class="row"><span class="lb">썸네일 · 프로그램명</span><div><span class="f">thumbnailImage</span><span class="f">programName</span></div></div>
         <div class="row"><span class="lb">카테고리</span><div><span class="f">departmentId</span><span class="f">treatmentId</span><span class="f">treatmentSubId</span></div></div>
-        <div class="row"><span class="lb">가격 정보</span><div><span class="f">price</span><span class="f">discountPrice</span><span class="f bo">beforePrice</span><span class="f bo">beforeDiscountPrice</span></div></div>
-        <div class="row"><span class="lb">예약금</span><div><span class="f">healthCheckDepositAmount</span><span class="cond">검진만</span><span class="fm">상세 폼만</span></div></div>
-        <div class="row"><span class="lb">VAT</span><div><span class="f">taxType</span></div></div>
-        <div class="row"><span class="lb">추가 금액 · 설명</span><div><span class="f">additionalInfo</span><span class="f">composition</span></div></div>
-      </div>
-
-      <div class="sec hc">
-        <div class="sec-h"><span>검진 구성</span><span class="cond" style="margin-left:0">검진만</span><span class="fm" style="margin-left:0">상세 폼만</span></div>
-        <div class="row"><span class="lb">필수 항목</span><div><span class="f">healthCheckIncludedItemIds</span></div></div>
-        <div class="row"><span class="lb">선택 그룹 × N</span><div><span class="f">healthCheckSelectableGroups[]</span><span class="f sub">{ name, pickCount, itemIds }</span></div></div>
+        <div class="row"><span class="lb">가격 정보</span><div><span class="f">price</span><span class="f">discountPrice</span><br><span class="f bo">beforePrice</span><span class="f bo">beforeDiscountPrice</span><span class="aside">변경 검수일 때 이전 가격</span></div></div>
+        <div class="row"><span class="lb">프로그램 설명</span><div><span class="f">composition</span></div></div>
+        <div class="row"><span class="lb">추가금액/VAT</span><div><span class="f">additionalInfo</span></div></div>
       </div>
 
       <div class="sec">
         <div class="sec-h"><span>상세 이미지</span></div>
         <div class="row"><span class="lb">상세 이미지 유형</span><div><span class="f">detailTemplateType</span>
-          <div class="radio-line"><i class="on"></i>제공 템플릿<i></i>검진 템플릿<i></i>자체제작 이미지<i></i>사용하지 않기</div><p class="side-note" style="margin-top:4px">진료과에 따라 제공 템플릿과 검진 템플릿 중 하나만 보인다</p></div></div>
+          <div class="radio-line"><i class="on"></i>제공 템플릿<i></i>자체제작 이미지<i></i>사용하지 않기</div></div></div>
         <div class="bx">
             <div class="bx-h">제공 템플릿일 때 <code>색상 + 토글·목록 7쌍</code></div>
             <div class="pair"><span class="lb">색상 타입</span><div><span class="f">detailTemplateColor</span></div></div>
@@ -194,10 +188,6 @@
             <div class="bx">
               <div class="bx-h">자체제작 이미지일 때</div>
               <span class="f">detailCustomImage</span>
-            </div>
-            <div class="bx">
-              <div class="bx-h">검진 템플릿 <span class="cond" style="margin-left:0">검진만</span></div>
-              <p class="side-note" style="margin-top:0">입력 없음. 검진 구성으로 만든다</p>
             </div>
             <div class="bx">
               <div class="bx-h">사용하지 않기</div>
@@ -227,12 +217,12 @@
 <div class="tally">
   <div class="tally-h">최상위 필드 수</div>
   <div class="tally-grid">
-    <div class="t"><b>34<small>개</small></b><span>공통 <code>IProgramFormCommon</code><br>라벨 1 · 기본 정보 12 · 상세 이미지 18 · 검진 구성 3</span></div>
-    <div class="t bo"><b>47<small>개</small></b><span>Back-Office 폼<br>공통 34 + 전용 13</span></div>
-    <div class="t pa"><b>38<small>개</small></b><span>병원 관리자 폼<br>공통 34 + 전용 4</span></div>
+    <div class="t"><b>30<small>개</small></b><span>공통 <code>IProgramFormCommon</code><br>라벨 1 · 기본 정보 12 · 상세 이미지 17</span></div>
+    <div class="t bo"><b>42<small>개</small></b><span>Back-Office 폼<br>공통 30 + 전용 12</span></div>
+    <div class="t pa"><b>34<small>개</small></b><span>병원 관리자 폼<br>공통 30 + 전용 4</span></div>
   </div>
-  <p>공통 필드 묶음은 타입의 주석 기준이라 화면 구획과 조금 다르다(<code>taxType</code>은 상세 이미지, 예약금은 검진 구성에 센다). 배열 안 필드(<code>{ … }</code>로 표시한 4가지 모양, 각 3개)는 세지 않았다.</p>
+  <p>공통 필드 묶음은 타입의 주석 기준이다. 라벨은 화면에서는 CMS 설정 구획에 있지만 따로 센다. 배열 안 필드(<code>{ … }</code>로 표시한 3가지 모양, 각 3개)는 세지 않았다.</p>
 </div>
 
-<p class="foot">2026-09-29 develop 코드와 2026-09-28 stage 화면(병원 관리자 등록 드로어, Back-Office 상세·검진 등록 드로어)을 바탕으로 다시 그렸다. 화면 값은 예시다.</p>
+<p class="foot">2026-02-12 develop 코드를 바탕으로 다시 그렸다. 화면 값은 예시다.</p>
 </body></html>
