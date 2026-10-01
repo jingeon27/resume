@@ -125,7 +125,7 @@
   </div>
 </div>
 
-<p class="sec">대표 규칙 넷<small>예시 값은 중립 예시</small></p>
+<p class="sec">대표 규칙 넷<small>값은 예시</small></p>
 
 <!-- ① 이미지 -->
 <div class="rule">
@@ -175,7 +175,7 @@
   { title: <span class="x">''</span> },
   { title: '앞니가 깨진 분' },
 ]
-<span class="c">// orderNo 는 버리고 순서로만</span></pre></div>
+<span class="c">// orderNo는 버리고 순서로만</span></pre></div>
     <div class="arr"></div>
     <div class="col"><p class="col-h">요청 본문</p>
 <pre>RECOMMENDED_TARGET: [
@@ -185,12 +185,12 @@
     title: '앞니가 깨진 분' },
 ]</pre></div>
   </div>
-  <p class="note">제목이 빈 행을 거른 뒤 남은 순서대로 0부터 다시 매긴다. 이미지가 있는 섹션(특장점·장비·전후 사진)은 제목이 비어도 거르지 않는다. 전후 사진은 <b>BEFORE_IMAGES·AFTER_IMAGES</b>를 같은 orderNo로 짝지어 한 행 <code>{ title, before, after }</code>으로 합치고, 제출할 때 같은 순번의 두 배열로 다시 나눈다.</p>
+  <p class="note">제목이 빈 행을 거른 뒤 남은 순서대로 0부터 다시 매긴다. 이미지가 있는 섹션(특장점·장비·전후 사진)은 제목이 비어도 거르지 않는다. 전후 사진은 <b>BEFORE_IMAGES·AFTER_IMAGES</b>를 같은 orderNo로 짝지어 한 행 <code>{ title, before, after }</code>로 합치고, 제출할 때 같은 순번의 두 배열로 다시 나눈다.</p>
 </div>
 
 <!-- ③ 토글 -->
 <div class="rule">
-  <div class="rule-h"><span class="num">3</span><b>'제공 / 해당없음' 토글 판정</b><span class="by">toVisibilityType: isNil 만 본다</span></div>
+  <div class="rule-h"><span class="num">3</span><b>'제공 / 해당없음' 토글 판정</b><span class="by">toVisibilityType: isNil만 본다</span></div>
   <div class="tt">
     <div class="tr head"><div>서버 응답 PRECAUTIONS</div><div class="arr-sp"></div><div>폼 값 isPrecautions · precautions</div><div class="arr-sp"></div><div>요청 본문 PRECAUTIONS</div></div>
     <div class="tr">
@@ -209,7 +209,7 @@
       <div><span class="s" style="color:var(--ink)">검수·등록 요청: <span class="m">undefined</span></span><span class="s">임시저장 요청: 빈 줄을 거른 <span class="m">[]</span></span></div>
     </div>
   </div>
-  <p class="note">빈 배열을 '없음'으로 되돌리는 판단은 토글 함수가 아니라 <b>요청 방향</b>에 있다. 검수·등록 요청은 토글이 NONE 이거나 제목을 거른 뒤 비면 섹션을 빼고, 임시저장은 빈 줄을 거른 뒤 남는 것이 없어도 <code>[]</code> 를 보낸다. 빈 줄 수는 섹션 초기값을 따른다(특장점 3, 과정 2, 나머지 1). 추가 혜택·전후 사진은 같은 규칙의 <code>toFormItemVisibilityType</code>(DIRECT_INPUT / NONE)을 쓴다.</p>
+  <p class="note">빈 배열을 '없음'으로 되돌리는 판단은 토글 함수가 아니라 <b>요청 방향</b>에 있다. 검수·등록 요청은 토글이 NONE이거나 제목을 거른 뒤 비면 섹션을 빼고, 임시저장은 빈 줄을 거른 뒤 남는 것이 없어도 <code>[]</code>를 보낸다. 빈 줄 수는 섹션 초기값을 따른다(특장점 3, 과정 2, 나머지 1). 추가 혜택·전후 사진은 같은 규칙의 <code>toFormItemVisibilityType</code>(DIRECT_INPUT / NONE)을 쓴다.</p>
 </div>
 
 <!-- ④ 폼 전용 필드 -->
@@ -235,16 +235,16 @@
     <div class="tr">
       <div class="m">partnerName: '…'</div><div class="arr"></div>
       <div class="mid"><span class="m">defaultPartnerName</span><span class="m">partnerName</span></div><div class="arr"></div>
-      <div><span class="drop">보내지 않음</span><span class="s">partnerId 는 호출부 인자로</span></div>
+      <div><span class="drop">보내지 않음</span><span class="s">partnerId는 호출부 인자로</span></div>
     </div>
     <div class="tr">
       <div class="m">inspectionType: 'UPDATE'</div><div class="arr"></div>
       <div class="mid"><span class="m">isEdit: true</span><span class="s">변경 전 가격을 함께 보일지</span></div><div class="arr"></div>
-      <div><span class="drop">isEdit 은 보내지 않음</span><span class="s">inspectionType 은 조회 값을 인자로</span></div>
+      <div><span class="drop">isEdit은 보내지 않음</span><span class="s">inspectionType은 조회 값을 인자로</span></div>
     </div>
   </div>
   <p class="note">요청 함수는 폼 값을 펼쳐 넘기지 않고 보낼 필드를 이름으로 골라 담는다. 그래서 토글(<code>is…</code>)·비교용 값은 요청에 섞이지 않고, 폼 전용 필드를 새로 더해도 마찬가지다.</p>
 </div>
 
-<p class="foot">실제 코드(두 앱의 transfer·helper 파일)를 바탕으로 다시 그렸다. 코드는 줄였고 예시 값은 중립 예시다.</p>
+<p class="foot">실제 코드(두 앱의 transfer·helper 파일)를 바탕으로 다시 그렸다. 코드는 줄였고 값은 예시다.</p>
 </body></html>
