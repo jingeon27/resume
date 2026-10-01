@@ -9,9 +9,10 @@
   .sw.tmpl { background: var(--sage-soft); border: 1px solid #bcd0ba; }
   .sw.shared { background: #fff; border: 1px dashed var(--line-strong); }
   .api { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 0 5px; border-radius: 4px; margin-left: 4px; vertical-align: 1px; font-family: 'Pretendard', sans-serif; }
-  .api.t { background: var(--blue); color: #fff; }
-  .api.p { background: #6b7684; color: #fff; }
-  .api.a { background: #fff; color: var(--coral); border: 1px solid #e2c3b9; }
+  .api.nm { background: #fff; color: var(--sub); border: 1px solid var(--line-strong); }
+  .api.rd { background: #6b7684; color: #fff; }
+  .api.wt { background: var(--blue); color: #fff; }
+  .api.st { background: #fff; color: var(--coral); border: 1px solid #e2c3b9; }
   .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 6px 2px; display: flex; align-items: center; gap: 8px; }
   .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
   .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px 0; margin-bottom: 14px; }
@@ -54,81 +55,70 @@
   <span><i class="sw lay-app"></i>앱</span>
   <span><i class="sw prog"></i>program 패키지</span>
   <span><i class="sw tmpl"></i>treatment 템플릿 입력</span>
-  <span><i class="sw shared"></i>shared·asset</span>
-  <span>폼 API <span class="api t">앱 typed</span><span class="api p">ProgramForm</span><span class="api a">antd</span></span>
+  <span><i class="sw shared"></i>공용 입력 부품</span>
+  <span>폼과 닿는 방식 <span class="api nm">name</span><span class="api rd">render</span><span class="api wt">watch</span><span class="api st">set</span></span>
 </div>
+<p class="flow-note" style="margin:-4px 0 14px 2px"><span class="nw"><code>name</code> Form.Item 에 값을 맡긴다</span> · <span class="nw"><code>render</code> shouldUpdate 를 단 Form.Item 의 render-prop 에서 읽는다</span> · <span class="nw"><code>watch</code> useWatch 로 읽는다</span> · <span class="nw"><code>set</code> setFieldsValue·setFieldValue 로 여러 값을 쓴다</span></p>
 
 <div class="zone">인스턴스는 하나다</div>
 <div class="flow">
-  <div class="st"><b>ProgramInspectionForm.useForm()</b>컨테이너가 만든다</div><div class="ar">→</div>
+  <div class="st"><b>useForm()</b>컨테이너가 만든다</div><div class="ar">→</div>
   <div class="st"><b>&lt;ProgramDetailForm form&gt;</b>form prop 으로 넘긴다</div><div class="ar">→</div>
-  <div class="st"><b>ProgramDetailFormWrapper</b><code>props as FormProps</code></div>
+  <div class="st"><b>ProgramDetailFormWrapper</b>antd <code>&lt;Form {...props}&gt;</code> 이 컨텍스트를 연다</div>
   <div class="br"></div><div class="ar">→</div>
-  <div class="st"><b>TemplateForm</b>antd Form 이 컨텍스트를 연다</div><div class="ar">→</div>
-  <div class="st"><b>XForm.Item · useFormInstance()</b>FormItem 이 컨텍스트에서 받는다</div>
+  <div class="st"><b>Form.Item · useFormInstance()</b>FormItem 이 컨텍스트에서 받는다</div>
 </div>
 <p class="flow-note">FormItem 은 form 을 props 로 받지 않는다. 폼 컴포넌트 말고 form 을 props 로 받는 것은 폼 밖의 요청 버튼(검수 요청·임시저장·승인·반려)뿐이다.</p>
 
 <div class="zone">프로그램 드로어의 FormItem 트리 · Back-Office 상세 폼 기준</div>
 <div class="drawer">
-  <div class="dh"><b>ProgramDetailForm</b><span>ProgramDetailFormWrapper → TemplateForm</span></div>
+  <div class="dh"><b>ProgramDetailForm</b><span>ProgramDetailFormWrapper(antd Form)</span></div>
   <div class="cols">
     <div>
       <div class="sec-h">왼쪽 미리보기</div>
-      <div class="n lay-app">ProgramPreviewSection<span class="api a">antd</span><span class="s">useWatch([]) 로 폼 전체를 읽는다</span></div>
-      <div class="kid"><div class="n prog">ProgramDetail<wbr>PreviewTemplate<span class="s">폼과 무관한 표시 컴포넌트</span></div></div>
+      <div class="n lay-app">ProgramPreviewSection<span class="api wt">watch</span><span class="s">useWatch([]) 로 폼 전체를, 병원 id 로 주소를 읽는다</span></div>
+      <div class="kid"><div class="n prog">ProgramDetail<wbr>PreviewTemplate<span class="s">폼과 무관한 표시 컴포넌트. props 는 IProgramFormCommon</span></div></div>
     </div>
     <div>
       <div class="sec">
         <div class="sec-h">CMS 설정 <span class="only">Back-Office만</span></div>
-        <div class="n lay-app">ProgramLabelFormItem<span class="api t">앱 typed</span></div>
-        <div class="n lay-app">ProgramCmsConfigCheckboxFormItems<span class="api t">앱 typed</span><span class="s">체크박스 다섯 개</span></div>
-        <div class="n lay-app">ProgramCmsMemoFormItem<span class="api t">앱 typed</span></div>
+        <div class="n lay-app">ProgramLabelFormItem<span class="api nm">name</span></div>
+        <div class="n lay-app">ProgramCmsConfigCheckboxFormItems<span class="api nm">name</span><span class="s">체크박스 네 개</span></div>
+        <div class="n lay-app">ProgramCmsMemoFormItem<span class="api nm">name</span></div>
       </div>
       <div class="sec">
         <div class="sec-h">기본 정보</div>
-        <div class="n lay-app">PartnerNameFormItem<span class="api t">앱 typed</span><span class="s">hidden partnerId·partnerName 이 값을 들고, 보이는 칸은 검색 입력이나 읽기 전용</span></div>
-        <div class="n prog">ThumbnailImageFormItem<span class="api p">ProgramForm</span><span class="s">바깥 Item 은 검증 자리</span></div>
-        <div class="kid"><div class="n shared">ImageUploadItem<span class="api a">antd</span><span class="s">같은 name 으로 값을 쥔다</span></div></div>
-        <div class="n prog">ProgramNameFormItem<span class="api p">ProgramForm</span></div>
-        <div class="n lay-app">CategoryFormItem<span class="api t">앱 typed</span><span class="s">캐스케이더의 onChange 에서 setFieldsValue 로 진료과·시술·하위 시술을 한 번에 채운다. 병원 id 는 antd useWatch(preserve)로 읽는다</span></div>
-        <div class="n lay-app">PriceInfoFormItem<span class="api t">앱 typed</span><span class="s">정가·우대가 교차 검증은 빈 name('')을 단 antd Item</span></div>
-        <div class="grid2">
-          <div class="n prog">HealthCheckDepositFormItem<span class="api p">ProgramForm</span><span class="s">상세 폼 · 검진일 때만</span></div>
-          <div class="n lay-app">TaxTypeFormItem<span class="api t">앱 typed</span></div>
-          <div class="n prog">AdditionalPriceFormItem<span class="api p">ProgramForm</span></div>
-          <div class="n prog">ProgramDescriptionFormItem<span class="api p">ProgramForm</span></div>
-        </div>
-      </div>
-      <div class="sec">
-        <div class="sec-h">검진 구성 <span class="only">상세 폼 · 검진일 때만</span></div>
-        <div class="n lay-app">HealthCheckCompositionSectionWithItems<span class="api t">앱 typed</span><span class="s">앱이 병원 검사항목을 조회해 props 로 넘긴다</span></div>
-        <div class="kid"><div class="n prog">HealthCheckCompositionFormSection<span class="api p">ProgramForm</span><span class="s">필수 항목 + 선택 그룹 List(끌어서 순서 변경)</span></div></div>
+        <div class="n lay-app">PartnerNameFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">hidden partnerId·partnerName 이 값을 들고, 보이는 칸은 검색 입력이나 읽기 전용</span></div>
+        <div class="n prog">ThumbnailImageFormItem<span class="api nm">name</span><span class="api wt">watch</span><span class="s">바깥 Item 은 검증 자리. 값이 바뀌면 오류를 다시 검사한다</span></div>
+        <div class="kid"><div class="n shared">ProgramImageUploadItem<span class="api nm">name</span><span class="s">같은 name 으로 값을 쥔다</span></div></div>
+        <div class="n prog">ProgramNameFormItem<span class="api nm">name</span></div>
+        <div class="n lay-app">CategoryFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">캐스케이더의 onChange 에서 진료과·시술·하위 시술을 한 번에 채운다. 병원 id 로 고를 수 있는 진료과를 좁힌다</span></div>
+        <div class="n lay-app">PriceInfoFormItem<span class="api rd">render</span><span class="s">정가·우대가 교차 검증은 빈 name('')을 단 Item</span></div>
+        <div class="n prog">ProgramDescriptionFormItem<span class="api nm">name</span></div>
+        <div class="n prog">AdditionalPriceFormItem<span class="api nm">name</span></div>
       </div>
       <div class="sec">
         <div class="sec-h">상세 이미지</div>
-        <div class="n lay-app">ProgramDetailImageSectionWithHealthCheck<span class="api t">앱 typed</span><span class="s">진료과로 가른 검진 여부를 props 로 넘긴다</span></div>
+        <div class="n prog">ProgramDetailImageFormSection<span class="api rd">render</span><span class="s">detailTemplateType 에 따라 구획을 바꾼다(shouldUpdate 술어)</span></div>
         <div class="kid">
-          <div class="n prog">ProgramDetailImageFormSection<span class="api p">ProgramForm</span><span class="s">detailTemplateType 에 따라 구획을 바꾼다(shouldUpdate 술어)</span></div>
-          <div class="kid">
-            <div class="n tmpl"><span class="ko">추천 대상·특장점·장비·과정·주의사항</span><span class="api a">antd</span><span class="s">하위 시술 템플릿 편집 폼과 함께 쓴다(다음 절)</span></div>
-            <div class="n prog"><span class="ko">추가 혜택·시술 전후 사진</span><span class="api p">ProgramForm</span><span class="s">프로그램 폼 전용. 목록 행 안은 antd Form.Item</span></div>
-            <div class="n prog">SyncTreatmentSub<span class="api p">ProgramForm</span><span class="s">하위 시술을 바꾸면 다섯 섹션 값을 채운다</span></div>
-          </div>
+          <div class="n prog"><span class="ko">유형 · 색상 · 자체제작 이미지</span><span class="api nm">name</span></div>
+          <div class="n tmpl"><span class="ko">추천 대상·특장점·장비·과정·주의사항</span><span class="api rd">render</span><span class="s">하위 시술 템플릿 편집 폼과 함께 쓴다(다음 절). 토글과 Form.List 를 묶는다</span></div>
+          <div class="n prog"><span class="ko">추가 혜택·시술 전후 사진</span><span class="api rd">render</span><span class="s">프로그램 폼 전용</span></div>
+          <div class="n prog">SyncTreatmentSub<span class="api wt">watch</span><span class="api st">set</span><span class="s">카테고리를 바꾸면 다섯 섹션 값을 채운다</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="pa"><b>병원 관리자</b>도 같은 틀이다. CMS 설정과 병원명 칸 대신 <code>ProgramInspectionAdminInfo</code> 가 요청자·병원·검수 요청 종류 등 hidden 값 여덟 개를 싣고, 노출예정일은 신규 등록일 때만 그린다. 앱 부품(<code>CategoryFormItem</code>·<code>PriceInfoFormItem</code>·<code>TaxTypeFormItem</code>·<code>ProgramPreviewSection</code>·<span class="nw">래퍼)은</span> 같은 이름으로 앱마다 따로 있다.</div>
+<div class="pa"><b>병원 관리자</b>도 같은 틀이다. CMS 설정과 병원명 칸 대신 <code>ProgramInspectionAdminInfo</code> 가 요청자·병원·프로그램 id·라벨·검수 요청 종류·노출예정일 hidden 값 여덟 개를 싣고, 노출예정일 입력은 검수 폼의 신규 등록일 때만 그린다. 래퍼는 로그인한 병원·관리자 정보를 <code>initialValues</code> 에 더한다. 앱 부품(<code>CategoryFormItem</code>·<code>PriceInfoFormItem</code>·<code>ProgramPreviewSection</code>·<span class="nw">래퍼)은</span> 같은 이름으로 앱마다 따로 있다.</div>
 
 <div class="rules">
-  <div class="rule"><b>타입은 둘, 인스턴스는 하나</b>앱 부품은 앱 typed form, 공유 부품은 <code>ProgramForm</code> 을 쓴다. <code>ProgramForm</code> 은 패키지 밖으로 내보내지 않는다. 둘 다 같은 antd 인스턴스를 서로 다른 타입으로 본다.</div>
-  <div class="rule"><b>antd 를 직접 쓰는 자리</b>대부분 typed 로 표현하기 어려운 곳이다: <code>Form.List</code> 안 상대 경로와 목록 항목 값 읽기, 빈 name('') 교차 검증, 폼 전체 watch, preserve 옵션 watch, 여러 폼이 함께 쓰는 입력(템플릿 입력·이미지 업로드).</div>
-  <div class="rule"><b>위젯은 폼을 모른다</b>병원 검색·카테고리 캐스케이더·라벨 선택은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다(병원 검색은 value 없이 onChange·onSelect). 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem 이 <code>setFieldsValue</code> 로 한다.</div>
-  <div class="rule"><b>앱이 주입하는 래퍼</b>패키지가 부를 수 없는 조회(병원 검사항목)는 <code class="nw">…WithItems</code> 래퍼가 하고 결과를 props 로 넘긴다. <code class="nw">…WithHealthCheck</code> 는 검진 여부를 props 로 넘기지만, 예약금·검진 구성은 같은 진료과 판정을 패키지가 직접 한다.</div>
+  <div class="rule"><b>인스턴스는 하나, 이름은 enum</b>공유 부품은 <code>PROGRAM_FORM_NAME_TYPE_COMMON</code>, 앱 부품은 앱의 <code>PROGRAM_FORM_NAME_TYPE</code> 을 name 으로 쓴다. 두 enum 이 같은 문자열을 가리켜서 같은 antd 인스턴스의 같은 칸을 본다.</div>
+  <div class="rule"><b>다른 값에 따라 그리는 곳</b>카테고리·가격·상세 이미지 분기·토글과 목록은 <code>shouldUpdate</code> 를 단 <code>Form.Item</code> 의 render-prop 안에서 <code>getFieldValue</code> 로 읽는다.</div>
+  <div class="rule"><b>위젯은 폼을 모른다</b>병원 검색·카테고리 캐스케이더·라벨 선택은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다. 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem 이 <code>setFieldsValue</code> 로 한다.</div>
+  <div class="rule"><b>읽은 값에는 타입이 없다</b><code>getFieldValue</code>·<code>useWatch</code> 로 읽은 값은 <code>any</code> 라서, FormItem 안에서 확인되는 것은 enum 으로 맞춘 이름까지다.</div>
 </div>
 
-<p class="foot">2026-09-29 develop 코드(두 앱의 프로그램 폼과 컨테이너, program·treatment 패키지 FormItem)를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner 로 바꿨다.</p>
+<p class="foot">2026-02-12 develop 코드(두 앱의 프로그램 폼과 컨테이너, program·treatment 공유 FormItem)를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner 로 바꿨다.</p>
 </body></html>
