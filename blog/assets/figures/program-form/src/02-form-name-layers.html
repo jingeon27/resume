@@ -62,12 +62,12 @@
   <div class="head"><span class="app server">공유 타입</span><b>PROGRAM_FORM_NAME_TYPE_COMMON · IProgramFormCommon</b><span class="file">program.type.ts</span></div>
 <pre><span class="k">enum</span> PROGRAM_FORM_NAME_TYPE_COMMON { ProgramName = <span class="k">'programName'</span>, … }
 <span class="k">interface</span> IProgramFormCommon {
-  [PROGRAM_FORM_NAME_TYPE_COMMON.ProgramName]: string;   <span class="c">// 키를 enum 으로 선언</span>
+  [PROGRAM_FORM_NAME_TYPE_COMMON.ProgramName]: string;   <span class="c">// 키를 enum으로 선언</span>
   …
 }</pre>
   <div class="pair">
     <div class="mini"><b>이름</b>enum 값이 그대로 antd <code>name</code> 문자열이 된다. 템플릿 열 개는 <code>SAFEDOC_TEMPLATE_NAME_TYPE</code> 값을 다시 단다</div>
-    <div class="mini"><b>값 타입</b>키를 enum 으로 선언한 인터페이스. 변환 함수와 미리보기 템플릿의 props 가 이 타입을 쓴다</div>
+    <div class="mini"><b>값 타입</b>키를 enum으로 선언한 인터페이스. 미리보기 템플릿의 props가 이 타입을 쓰고, 변환 함수는 이를 확장한 앱 타입으로 폼 값을 다룬다</div>
   </div>
   <div class="groups">
     <div class="grp"><div class="t">라벨<span>1</span></div><div class="f">labels</div></div>
@@ -75,7 +75,7 @@
     <div class="grp"><div class="t">상세 이미지<span>17</span></div><div class="f">detailTemplateType · isRecommended · recommendedTarget · benefit · beforeAfterImages …</div></div>
   </div>
   <p class="basis">공통 필드 30개. 묶음은 타입의 주석 기준이다.</p>
-  <div class="sub-h">공통 enum 만 아는 공유 FormItem</div>
+  <div class="sub-h">공통 enum만 아는 공유 FormItem</div>
   <div class="items">
     <span class="tag">ProgramNameFormItem</span><span class="tag">ThumbnailImageFormItem</span><span class="tag">ProgramDescriptionFormItem</span><span class="tag">AdditionalPriceFormItem</span><span class="tag">ExposureDateFormItem</span><span class="tag">ProgramDetailImageFormSection</span><span class="tag">SyncTreatmentSub</span>
   </div>
@@ -120,7 +120,7 @@
       <div class="row"><span>요청자</span><code>adminId · adminName</code></div>
       <div class="row"><span>검수 요청</span><span><code>programId? · inspectionType</code> (INSERT · UPDATE · DELETE)</span></div>
       <div class="row"><span>앱 FormItem</span><code>ProgramInspectionAdminInfo(hidden) · PaExposureDateFormItem · CategoryFormItem · PriceInfoFormItem</code></div>
-      <div class="row"><span>labels</span><span>공통 필드지만 편집 UI 없이 폼에 hidden 으로만 담는다(요청에는 없음)</span></div>
+      <div class="row"><span>labels</span><span>공통 필드지만 편집 UI 없이 폼에 hidden으로만 담는다(요청에는 없음)</span></div>
     </div>
     <div class="submit">
       <div class="s"><code>clientInspectionDraftToReqInspectionDraft</code><span>임시저장 (최대 50개)</span></div>
@@ -129,15 +129,15 @@
   </div>
 </div>
 
-<div class="runtime"><b>런타임에는 폼이 하나다.</b> 앱 컨테이너가 antd <code>useForm()</code> 으로 만든 인스턴스를 폼 컴포넌트가 <code>form</code> prop 으로 antd <code>Form</code> 에 넘기고, 공유 FormItem 은 <code>Form.Item</code> 컨텍스트와 <code>Form.useFormInstance()</code> 로 같은 인스턴스를 받는다. 두 enum 이 같은 문자열을 가리켜서 앱 부품과 공유 부품이 같은 칸을 본다. 앱 전용 필드와 제출 흐름은 패키지로 올라가지 않는다.</div>
+<div class="runtime"><b>런타임에는 폼 인스턴스가 하나다.</b> 앱 컨테이너가 antd <code>useForm()</code>으로 만든 인스턴스를 폼 컴포넌트가 <code>form</code> prop으로 antd <code>Form</code>에 넘기고, 공유 FormItem은 <code>Form.Item</code> 컨텍스트와 <code>Form.useFormInstance()</code>로 같은 인스턴스를 받는다. 두 enum이 같은 문자열을 가리켜서 앱 부품과 공유 부품이 같은 칸을 본다. 앱 전용 필드와 제출 흐름은 패키지로 올라가지 않는다.</div>
 
 <div class="limit"><b>타입이 닿지 않는 곳</b>
   <ul>
-    <li>antd <code>Form.Item</code> 의 <code>name</code> 은 아무 문자열이나 받는다. enum 을 쓰는 것은 약속이고, 문자열을 직접 적어도 컴파일은 통과한다.</li>
-    <li><code>getFieldValue</code> 가 돌려주는 값은 <code>any</code> 다. 미리보기의 <code>Form.useWatch&lt;IProgramFormCommon&gt;([], form)</code> 같은 제네릭도 확인이 아니라 선언이다.</li>
-    <li>Back-Office 컨테이너는 <code>useForm()</code> 을 제네릭 없이 만들고 <code>onFinish</code> 의 값에 <code>IProgramInspectionClient</code> 를 적어서 받는다. 폼 값이 이 타입으로 다뤄지는 것은 변환 함수로 넘길 때부터다.</li>
+    <li>antd <code>Form.Item</code>의 <code>name</code>은 아무 문자열이나 받는다. enum을 쓰는 것은 약속이고, 문자열을 직접 적어도 컴파일은 통과한다.</li>
+    <li><code>getFieldValue</code>가 돌려주는 값은 <code>any</code>다. 미리보기의 <code>Form.useWatch&lt;IProgramFormCommon&gt;([], form)</code> 같은 제네릭도 확인이 아니라 선언이다.</li>
+    <li>Back-Office 컨테이너는 <code>useForm()</code>을 제네릭 없이 만들고 <code>onFinish</code>의 값에 <code>IProgramInspectionClient</code>를 적어서 받는다. 폼 값이 이 타입으로 다뤄지는 것은 변환 함수로 넘길 때부터다.</li>
   </ul>
 </div>
 
-<p class="foot">실제 코드를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner 로 바꿨다.</p>
+<p class="foot">실제 코드를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner로 바꿨다.</p>
 </body></html>
