@@ -44,7 +44,7 @@
 | 공용 폼 훅(zodResolver 연결 + 화면 숨김 시 reset) | `useSchemaForm` |
 | 인증 토큰 쿠키 | `sessionToken` / `renewalToken` |
 
-`useZodForm`은 쓰지 않는다. reset 메커니즘의 상세 설명은 27번(Next.js 글)에만 두고 11번은 요약과 링크로 대체한다.
+`useZodForm`은 쓰지 않는다. reset 메커니즘의 상세 설명은 27번(Next.js 글)에만 둔다. 11번은 27번보다 먼저 공개된 글(2025-06-30)이라 reset 이야기와 27번 링크를 넣지 않는다.
 
 ### 글 한 편의 필수 요소
 
@@ -62,11 +62,12 @@
 - 가명을 쓴 식별자는 그 자리에서 가명임을 한 번 밝힌다(패키지 스코프, 공용 훅 이름 등).
 - 확인하지 못한 것은 "재현하지 못했어요"로 낮추고, 추정은 추정으로 쓴다.
 - 저장소마다 구현이 다르면 어느 저장소 사례인지 밝힌다.
+- 이미 공개된 글의 개정본은 티스토리 공개 시점에 쓴 글처럼 쓴다. 코드·수치·그림은 공개 시각 직전 develop 기준이고, 그 뒤의 커밋·변경·링크·참고 문서와 나중에 고쳐진 문제를 미리 아는 듯한 서술은 넣지 않는다(2026-10-01, 11·15·18·22번 적용).
 
 ## 이번 판단에서 바로잡은 부분
 
 - 11번 글은 서비스명과 내부 코드 식별자를 역할 중심의 가명으로 바꿨다. 예약 대상 선택 컴포넌트가 리팩터링 당시 519줄에서 55줄로 줄었다는 범위로 수치를 바로잡고, 가족 선택 기능 전체가 줄어든 것처럼 표현하지 않았다. 현재 구현에 없는 `mode: 'onChange'`와 `setValue`의 `shouldDirty`·`shouldValidate`가 적용된 것처럼 쓴 설명은 제거하고, 이를 남은 부채로 명시했다.
-- 15번 글은 회사·서비스 이름을 생략하고 내부 코드 식별자를 역할 중심의 가명으로 바꿨다. 개선안 예시를 현재 구현인 것처럼 서술한 부분도 바로잡았다. 값과 단계를 관리하던 두 Zustand 스토어를 없애고 `@use-funnel/core` 기반 퍼널, 단계별 폼, `reset + history.replace`, `useQueries` 대기 로직을 사용한 현재 구조는 유지했다. `_def` 의존과 최종 전체 검증 부재, 불리언 값의 의미가 불분명한 문제는 완료된 개선이 아니라 남은 기술 부채로 구분했다.
+- 15번 글은 회사·서비스 이름을 생략하고 내부 코드 식별자를 역할 중심의 가명으로 바꿨다. 개선안 예시를 현재 구현인 것처럼 서술한 부분도 바로잡았다. 값과 단계를 관리하던 두 Zustand 스토어를 없애고 `@use-funnel/core` 기반 퍼널, 단계별 폼, `reset + history.replace`, 서버 prefetch 뒤 `useQueries`로 캐시를 읽는 구조는 유지했다. `_def` 의존과 최종 전체 검증 부재, 불리언 값의 의미가 불분명한 문제는 완료된 개선이 아니라 남은 기술 부채로 구분했다.
 - 19번 글은 서로 다른 호스트 사이에서 인증 정보를 한 번 넘겨야 했던 제약을 다룬다. 회사 실명·실제 도메인·내부 경로와 사용자 정의 식별자를 익명화했다. 현재 코드의 `no-referrer`·`unsafe-inline` 설정과 Origin 검증 부재를 그대로 적고, Origin 검증과 nonce 기반 CSP는 적용된 코드가 아니라 검토 중인 보강안으로 구분했다. URL 방식에서 줄어든 노출 범위와 리프레시 토큰 복제, 갱신 충돌, 로그아웃 동기화, 브라우저 자바스크립트에 토큰이 다시 노출되는 위험도 함께 적었다.
 - 20번 글은 번호를 따라가는 개발 일지 형식을 걷어내고, 서로 다른 두 SSE를 하나의 화면에 연결한 제약과 판단 중심으로 다시 썼다. 응답을 읽고 버리는 연결, 인증 헤더, 상태 전이, `@tanstack/ai` 어댑터와 남은 한계를 필요한 코드와 함께 설명한다.
 - 12번 낙관적 업데이트 글도 수정 대상에 포함했다. 자동으로 롤백된다는 잘못된 설명을 제거하고, 목록·상세 캐시의 스냅샷을 `onMutate`에서 반환해 `onError`에서 직접 복구하는 흐름으로 다시 작성했다.
@@ -85,15 +86,15 @@
 | 6 | `post-06-query-key-factory.md` | 버전과 API를 정확히 명시하고 예제 수정 |
 | 7 | `post-07-typescript-patterns.md` | 오타와 개념 오류를 고치고 XOR 프로퍼티로 교체 |
 | 8 | `post-08-next-tanstack-query.md` | `QueryClient` 생성 조건과 병렬 프리페치 수정 |
-| 11 | `post-11-reservation-form.md` | 519→55의 정확한 범위와 책임 이동을 구분 |
+| 11 | `post-11-reservation-form.md` | 519→55의 정확한 범위와 책임 이동을 구분. 공개일(2025-06-30) develop 기준. 그림 네 장은 `../assets/figures/reservation-form/` |
 | 12 | `post-12-review-like-optimistic-update.md` | 캐시 스냅샷과 직접 롤백하는 과정, 동시성 한계를 반영 |
 | 14 | `post-14-next-seo-prefetch.md` | `await`한 결과와 대기 중인 쿼리의 직렬화를 구분해 재작성 |
-| 15 | `post-15-review-form.md` | 실제 단계별 폼 구조와 남은 추가 검증 소실·최종 검증 부채를 구분. 시술 선택이 드롭다운에서 Bottom Sheet로 바뀌며 고르는 도중의 값을 시트가 갖게 된 과정. 그림 두 장은 `../assets/figures/review-form/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
-| 18 | `post-18-program-form.md` | 타입 폼과 변환 계층, 동기화 경계를 보강 |
+| 15 | `post-15-review-form.md` | 실제 단계별 폼 구조와 남은 추가 검증 소실·최종 검증 부채를 구분. 시술 선택이 드롭다운에서 Bottom Sheet로 바뀌며 고르는 도중의 값을 시트가 갖게 된 과정. 공개일(2025-12-13) develop 기준. 그림 두 장은 `../assets/figures/review-form/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
+| 18 | `post-18-program-form.md` | 공통 enum·타입과 변환 계층, 동기화 경계를 보강. 공개일(2026-02-13) develop 기준이라 `createTypedForm`(06-25) 이전 구조이고 제목의 필드 수도 34개. 그림 여섯 장은 `../assets/figures/program-form/` |
 | 19 | `post-19-cross-domain-token.md` | 회사·도메인·내부 식별자 익명화, 현재 구현과 미구현 보강안 분리, 토큰 전달 방식의 한계 반영 |
 | 20 | `post-20-chatbot-message-layer.md` | 두 SSE를 합친 사건을 중심으로 축약하고 과도한 단계 구분과 연출형 표현을 제거 |
 | 21 | `post-21-sitemap-cache.md` | 현재 인증·캐시 경계와 사이트맵에 남은 정확성 부채를 구분 |
-| 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤. 없던 변환 함수·금액 하한을 지우고 확정 요청이 필드를 골라 담는 실제 방식과 helper 추출 시점을 반영. 그림 네 장은 `../assets/figures/payment-history/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
+| 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤. 없던 변환 함수·금액 하한을 지우고 확정 요청이 필드를 골라 담는 실제 방식과 helper 추출 시점을 반영. 공개일(2026-07-02) develop 기준. 그림 네 장은 `../assets/figures/payment-history/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
 | 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 다섯 레이어로 다시 정의하고, 옮긴 날 오후 드러난 page 간 참조 62건과 shared 패키지 통합, 정적 검사가 놓친 서버·클라이언트 경계 오류까지 시간순으로 정리. 관리자 서비스는 9월 8일 develop 병합, 복지몰은 브랜치 통합 대기로 구분 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
