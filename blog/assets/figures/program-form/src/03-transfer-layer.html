@@ -81,7 +81,7 @@
   <div class="dir"></div>
   <div class="stage form"><b>폼 값 <span class="mono" style="display:inline;font-weight:400">IProgramInspectionClient</span></b><span><span class="mono" style="display:inline">UploadFile[]</span> · 섹션 토글 · 편집용 배열 · 폼 전용 필드</span></div>
   <div class="dir"></div>
-  <div class="stage"><b>요청 본문</b><span>이미지 id · <span class="mono" style="display:inline">orderNo</span> 다시 매긴 템플릿 · 서버 enum 문자열</span></div>
+  <div class="stage"><b>요청 본문</b><span>썸네일 id · 에셋 · <span class="mono" style="display:inline">orderNo</span> 다시 매긴 템플릿 · 서버 enum 문자열</span></div>
 </div>
 
 <p class="sec">파일마다 맡은 방향<small>함수 이름은 코드 그대로</small></p>
@@ -99,14 +99,9 @@
     <div><span class="fn">clientProgramFormToInspectionRequest</span><span class="what">폼 → 승인·반려·검수중 요청</span></div>
   </div>
   <div class="frow">
-    <div><span class="app bo">Back-Office</span><span class="fname">program-health-check.<wbr>transfer.ts</span></div>
-    <div><span class="fn">healthCheckConfigurationToProgramForm</span><span class="what">검진 구성 응답(별도 API) → 폼 조각</span></div>
-    <div><span class="fn">programFormToHealthCheckConfiguration</span><span class="what">폼 조각 → 검진 구성 저장 값(별도 API)</span></div>
-  </div>
-  <div class="frow">
     <div><span class="app pa">병원 관리자</span><span class="fname">program.transfer.ts</span></div>
-    <div><span class="fn">resProgramDetailToClientInspection</span><span class="what">프로그램 상세 → 폼(검진 구성은 조회용으로만 채움)</span></div>
-    <div><span class="none">없음 — 수정·삭제 검수 요청도 아래 파일로 보낸다</span></div>
+    <div><span class="fn">resProgramDetailToClientInspection</span><span class="what">프로그램 상세 → 폼</span></div>
+    <div><span class="none">없음. 수정·삭제 검수 요청도 아래 파일로 보낸다</span></div>
   </div>
   <div class="frow">
     <div><span class="app pa">병원 관리자</span><span class="fname">program.inspection.<wbr>transfer.ts</span></div>
@@ -115,18 +110,18 @@
   </div>
   <div class="frow">
     <div><span class="app pa">병원 관리자</span><span class="fname">program.draft.<wbr>transfer.ts</span></div>
-    <div><span class="fn">resInspectionToClientInspection</span><span class="what">임시저장 → 폼(진료과는 시술 트리에서 찾아 채움)</span></div>
+    <div><span class="fn">resInspectionToClientInspection</span><span class="what">임시저장 → 폼</span></div>
     <div><span class="fn" style="white-space:normal">clientInspectionDraft<wbr>ToReqInspectionDraft</span><span class="what">폼 → 임시저장 요청</span></div>
   </div>
   <div class="frow group">
     <div><div class="apps"><span class="app bo">Back-Office</span><span class="app pa">병원 관리자</span></div><span class="fname">program.transfer.<wbr>helper.ts</span></div>
     <div><span class="fn">resTemplateToClientTemplate</span><span class="what">템플릿 8섹션 → 토글 + 편집 배열<br>(병원 관리자 쪽 이름은 resTemplateClientTemplate)</span></div>
-    <div><span class="fn">titleFormToServerMap</span><span class="fn">getBaseProgramInspectionItem</span><span class="what">편집 배열 → orderNo 붙인 항목 · 이미지 id</span><span class="fn">getDetailImageInspection</span><span class="what">섹션별 토글 확인 · 빈 줄 거르기. Back-Office만 헬퍼에 있고, 병원 관리자는 검수 요청·임시저장 파일에 한 벌씩 있다</span></div>
+    <div><span class="fn">titleFormToServerMap</span><span class="fn">getBaseProgramInspectionItem</span><span class="what">편집 배열 → orderNo 붙인 항목 · 썸네일 id</span><span class="fn">getDetailImageInspection</span><span class="what">섹션별 토글 확인 · 빈 줄 거르기. Back-Office만 헬퍼에 있고, 병원 관리자는 검수 요청·임시저장 파일에 한 벌씩 있다</span></div>
   </div>
   <div class="frow group">
     <div><span class="app server">공유 패키지</span><span class="fname">template.transfer.<wbr>helper.ts</span></div>
     <div><span class="fn">convertCommonAssetToUploadFile</span><span class="fn">toVisibilityType</span><span class="fn">toFormItemVisibilityType</span></div>
-    <div><span class="what" style="margin-top:0">요청 방향 함수는 없다 — 앱 쪽이 <code style="font-size:11px">UploadFile.response</code>에서 에셋을 꺼낸다</span></div>
+    <div><span class="what" style="margin-top:0">요청 방향 함수는 없다. 앱 쪽이 <code style="font-size:11px">UploadFile.response</code>에서 에셋을 꺼낸다</span></div>
   </div>
 </div>
 
@@ -157,10 +152,9 @@
 <pre>thumbnailCommonImageId:
   <span class="k">900</span>
 <span class="c">// thumbnailImage?.[0]
-//   ?.response?.id ?? null
-// 지우면 null</span></pre></div>
+//   ?.response?.id</span></pre></div>
   </div>
-  <p class="note">에셋을 <b>response</b>에 통째로 실어 두어 제출할 때 id를 다시 꺼낸다. 새로 올린 파일도 업로드 응답이 같은 자리에 들어온다.</p>
+  <p class="note">에셋을 <b>response</b>에 통째로 실어 두어 제출할 때 다시 꺼낸다. 썸네일은 id만 보내고, 템플릿 항목의 이미지는 에셋째 <code>imageFileInfo</code>에 싣는다. 새로 올린 파일도 업로드 응답이 같은 자리에 들어온다.</p>
 </div>
 
 <!-- ② orderNo -->
@@ -196,7 +190,7 @@
 
 <!-- ③ 토글 -->
 <div class="rule">
-  <div class="rule-h"><span class="num">3</span><b>'제공 / 해당없음' 토글 판정</b><span class="by">toVisibilityType — isNil 만 본다</span></div>
+  <div class="rule-h"><span class="num">3</span><b>'제공 / 해당없음' 토글 판정</b><span class="by">toVisibilityType: isNil 만 본다</span></div>
   <div class="tt">
     <div class="tr head"><div>서버 응답 PRECAUTIONS</div><div class="arr-sp"></div><div>폼 값 isPrecautions · precautions</div><div class="arr-sp"></div><div>요청 본문 PRECAUTIONS</div></div>
     <div class="tr">
@@ -215,7 +209,7 @@
       <div><span class="s" style="color:var(--ink)">검수·등록 요청: <span class="m">undefined</span></span><span class="s">임시저장 요청: 빈 줄을 거른 <span class="m">[]</span></span></div>
     </div>
   </div>
-  <p class="note">빈 배열을 '없음'으로 되돌리는 판단은 토글 함수가 아니라 <b>요청 방향</b>에 있다 — 검수·등록 요청은 토글이 NONE 이거나 제목을 거른 뒤 비면 섹션을 빼고, 임시저장은 빈 줄을 거른 뒤 남는 것이 없어도 <code>[]</code> 를 보낸다. 빈 줄 수는 섹션 초기값을 따른다(특장점 3, 과정 2, 나머지 1). 추가 혜택·전후 사진은 같은 규칙의 <code>toFormItemVisibilityType</code>(DIRECT_INPUT / NONE)을 쓴다.</p>
+  <p class="note">빈 배열을 '없음'으로 되돌리는 판단은 토글 함수가 아니라 <b>요청 방향</b>에 있다. 검수·등록 요청은 토글이 NONE 이거나 제목을 거른 뒤 비면 섹션을 빼고, 임시저장은 빈 줄을 거른 뒤 남는 것이 없어도 <code>[]</code> 를 보낸다. 빈 줄 수는 섹션 초기값을 따른다(특장점 3, 과정 2, 나머지 1). 추가 혜택·전후 사진은 같은 규칙의 <code>toFormItemVisibilityType</code>(DIRECT_INPUT / NONE)을 쓴다.</p>
 </div>
 
 <!-- ④ 폼 전용 필드 -->
@@ -229,9 +223,9 @@
       <div class="m">status: 'HIDDEN'</div>
     </div>
     <div class="tr">
-      <div class="m">displayStartDt: '2026-10-01'</div><div class="arr"></div>
-      <div class="mid"><span class="m">dayjs('2026-10-01')</span></div><div class="arr"></div>
-      <div class="m">displayStartDt: '2026-10-01'</div>
+      <div class="m">displayStartDt: '2026-03-03'</div><div class="arr"></div>
+      <div class="mid"><span class="m">dayjs('2026-03-03')</span></div><div class="arr"></div>
+      <div class="m">displayStartDt: '2026-03-03'</div>
     </div>
     <div class="tr">
       <div class="m">originPrice: 300000</div><div class="arr"></div>
@@ -249,8 +243,8 @@
       <div><span class="drop">isEdit 은 보내지 않음</span><span class="s">inspectionType 은 조회 값을 인자로</span></div>
     </div>
   </div>
-  <p class="note">요청 함수는 폼 값을 펼쳐 넘기지 않고 보낼 필드를 이름으로 골라 담는다. 그래서 토글(<code>is…</code>)·비교용 값은 요청에 섞이지 않고, 폼 전용 필드를 새로 더해도 마찬가지다. 검진 구성은 Back-Office 등록·상세·수정 화면이 프로그램을 저장한 뒤 구성 저장 API 로 따로 보내고(상세·수정은 저장된 구성을 먼저 조회한다), 검수 상세에서는 다루지 않는다.</p>
+  <p class="note">요청 함수는 폼 값을 펼쳐 넘기지 않고 보낼 필드를 이름으로 골라 담는다. 그래서 토글(<code>is…</code>)·비교용 값은 요청에 섞이지 않고, 폼 전용 필드를 새로 더해도 마찬가지다.</p>
 </div>
 
-<p class="foot">2026-09-29 develop 코드(두 앱의 transfer·helper 파일과 테스트)를 바탕으로 다시 그렸다. 코드는 줄였고 예시 값은 중립 예시다.</p>
+<p class="foot">2026-02-12 develop 코드(두 앱의 transfer·helper 파일)를 바탕으로 다시 그렸다. 코드는 줄였고 예시 값은 중립 예시다.</p>
 </body></html>
