@@ -58,17 +58,17 @@
   <span><i class="sw shared"></i>공용 입력 부품</span>
   <span>폼과 닿는 방식 <span class="api nm">name</span><span class="api rd">render</span><span class="api wt">watch</span><span class="api st">set</span></span>
 </div>
-<p class="flow-note" style="margin:-4px 0 14px 2px"><span class="nw"><code>name</code> Form.Item 에 값을 맡긴다</span> · <span class="nw"><code>render</code> shouldUpdate 를 단 Form.Item 의 render-prop 에서 읽는다</span> · <span class="nw"><code>watch</code> useWatch 로 읽는다</span> · <span class="nw"><code>set</code> setFieldsValue·setFieldValue 로 여러 값을 쓴다</span></p>
+<p class="flow-note" style="margin:-4px 0 14px 2px"><span class="nw"><code>name</code> Form.Item에 값을 맡긴다</span> · <span class="nw"><code>render</code> shouldUpdate를 단 Form.Item의 render-prop에서 읽는다</span> · <span class="nw"><code>watch</code> useWatch로 읽는다</span> · <span class="nw"><code>set</code> setFieldsValue·setFieldValue로 여러 값을 쓴다</span></p>
 
 <div class="zone">인스턴스는 하나다</div>
 <div class="flow">
   <div class="st"><b>useForm()</b>컨테이너가 만든다</div><div class="ar">→</div>
-  <div class="st"><b>&lt;ProgramDetailForm form&gt;</b>form prop 으로 넘긴다</div><div class="ar">→</div>
-  <div class="st"><b>ProgramDetailFormWrapper</b>antd <code>&lt;Form {...props}&gt;</code> 이 컨텍스트를 연다</div>
+  <div class="st"><b>&lt;ProgramDetailForm form&gt;</b>form prop으로 넘긴다</div><div class="ar">→</div>
+  <div class="st"><b>ProgramDetailFormWrapper</b>antd <code>&lt;Form {...props}&gt;</code>이 컨텍스트를 연다</div>
   <div class="br"></div><div class="ar">→</div>
-  <div class="st"><b>Form.Item · useFormInstance()</b>FormItem 이 컨텍스트에서 받는다</div>
+  <div class="st"><b>Form.Item · useFormInstance()</b>FormItem이 컨텍스트에서 받는다</div>
 </div>
-<p class="flow-note">FormItem 은 form 을 props 로 받지 않는다. 폼 컴포넌트 말고 form 을 props 로 받는 것은 폼 밖의 요청 버튼(검수 요청·임시저장·승인·반려)뿐이다.</p>
+<p class="flow-note">FormItem은 form을 props로 받지 않는다. 폼 컴포넌트 말고 form을 props로 받는 것은 폼 밖의 요청 버튼(검수 요청·삭제 요청·임시저장·승인·반려)뿐이다.</p>
 
 <div class="zone">프로그램 드로어의 FormItem 트리 · Back-Office 상세 폼 기준</div>
 <div class="drawer">
@@ -76,8 +76,8 @@
   <div class="cols">
     <div>
       <div class="sec-h">왼쪽 미리보기</div>
-      <div class="n lay-app">ProgramPreviewSection<span class="api wt">watch</span><span class="s">useWatch([]) 로 폼 전체를, 병원 id 로 주소를 읽는다</span></div>
-      <div class="kid"><div class="n prog">ProgramDetail<wbr>PreviewTemplate<span class="s">폼과 무관한 표시 컴포넌트. props 는 IProgramFormCommon</span></div></div>
+      <div class="n lay-app">ProgramPreviewSection<span class="api wt">watch</span><span class="s">useWatch([])로 폼 전체를, 병원 id로 주소를 읽는다</span></div>
+      <div class="kid"><div class="n prog">ProgramDetail<wbr>PreviewTemplate<span class="s">폼과 무관한 표시 컴포넌트. props는 IProgramFormCommon</span></div></div>
     </div>
     <div>
       <div class="sec">
@@ -88,21 +88,21 @@
       </div>
       <div class="sec">
         <div class="sec-h">기본 정보</div>
-        <div class="n lay-app">PartnerNameFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">hidden partnerId·partnerName 이 값을 들고, 보이는 칸은 검색 입력이나 읽기 전용</span></div>
-        <div class="n prog">ThumbnailImageFormItem<span class="api nm">name</span><span class="api wt">watch</span><span class="s">바깥 Item 은 검증 자리. 값이 바뀌면 오류를 다시 검사한다</span></div>
-        <div class="kid"><div class="n shared">ProgramImageUploadItem<span class="api nm">name</span><span class="s">같은 name 으로 값을 쥔다</span></div></div>
+        <div class="n lay-app">PartnerNameFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">hidden partnerId·partnerName이 값을 들고, 보이는 칸은 검색 입력이나 읽기 전용</span></div>
+        <div class="n prog">ThumbnailImageFormItem<span class="api nm">name</span><span class="api wt">watch</span><span class="s">바깥 Item은 검증 자리. 값이 바뀌면 오류를 다시 검사한다</span></div>
+        <div class="kid"><div class="n shared">ProgramImageUploadItem<span class="api nm">name</span><span class="s">같은 name으로 값을 쥔다</span></div></div>
         <div class="n prog">ProgramNameFormItem<span class="api nm">name</span></div>
-        <div class="n lay-app">CategoryFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">캐스케이더의 onChange 에서 진료과·시술·하위 시술을 한 번에 채운다. 병원 id 로 고를 수 있는 진료과를 좁힌다</span></div>
+        <div class="n lay-app">CategoryFormItem<span class="api rd">render</span><span class="api st">set</span><span class="s">캐스케이더의 onChange에서 진료과·시술·하위 시술을 한 번에 채운다. 병원 id로 고를 수 있는 진료과를 좁힌다</span></div>
         <div class="n lay-app">PriceInfoFormItem<span class="api rd">render</span><span class="s">정가·우대가 교차 검증은 빈 name('')을 단 Item</span></div>
         <div class="n prog">ProgramDescriptionFormItem<span class="api nm">name</span></div>
         <div class="n prog">AdditionalPriceFormItem<span class="api nm">name</span></div>
       </div>
       <div class="sec">
         <div class="sec-h">상세 이미지</div>
-        <div class="n prog">ProgramDetailImageFormSection<span class="api rd">render</span><span class="s">detailTemplateType 에 따라 구획을 바꾼다(shouldUpdate 술어)</span></div>
+        <div class="n prog">ProgramDetailImageFormSection<span class="api rd">render</span><span class="s">detailTemplateType에 따라 구획을 바꾼다(shouldUpdate 술어)</span></div>
         <div class="kid">
           <div class="n prog"><span class="ko">유형 · 색상 · 자체제작 이미지</span><span class="api nm">name</span></div>
-          <div class="n tmpl"><span class="ko">추천 대상·특장점·장비·과정·주의사항</span><span class="api rd">render</span><span class="s">하위 시술 템플릿 편집 폼과 함께 쓴다(다음 절). 토글과 Form.List 를 묶는다</span></div>
+          <div class="n tmpl"><span class="ko">추천 대상·특장점·장비·과정·주의사항</span><span class="api rd">render</span><span class="s">하위 시술 템플릿 편집 폼과 함께 쓴다(다음 절). 토글과 Form.List를 묶는다</span></div>
           <div class="n prog"><span class="ko">추가 혜택·시술 전후 사진</span><span class="api rd">render</span><span class="s">프로그램 폼 전용</span></div>
           <div class="n prog">SyncTreatmentSub<span class="api wt">watch</span><span class="api st">set</span><span class="s">카테고리를 바꾸면 다섯 섹션 값을 채운다</span></div>
         </div>
@@ -111,14 +111,14 @@
   </div>
 </div>
 
-<div class="pa"><b>병원 관리자</b>도 같은 틀이다. CMS 설정과 병원명 칸 대신 <code>ProgramInspectionAdminInfo</code> 가 요청자·병원·프로그램 id·라벨·검수 요청 종류·노출예정일 hidden 값 여덟 개를 싣고, 노출예정일 입력은 검수 폼의 신규 등록일 때만 그린다. 래퍼는 로그인한 병원·관리자 정보를 <code>initialValues</code> 에 더한다. 앱 부품(<code>CategoryFormItem</code>·<code>PriceInfoFormItem</code>·<code>ProgramPreviewSection</code>·<span class="nw">래퍼)은</span> 같은 이름으로 앱마다 따로 있다.</div>
+<div class="pa"><b>병원 관리자</b>도 같은 틀이다. CMS 설정과 병원명 칸 대신 <code>ProgramInspectionAdminInfo</code>가 요청자·병원·프로그램 id·라벨·검수 요청 종류·노출예정일 hidden 값 여덟 개를 싣고, 노출예정일 입력은 검수 폼의 신규 등록일 때만 그린다. 래퍼는 로그인한 병원·관리자 정보를 <code>initialValues</code>에 더한다. 앱 부품(<code>CategoryFormItem</code>·<code>PriceInfoFormItem</code>·<code>ProgramPreviewSection</code>·<span class="nw">래퍼)은</span> 같은 이름으로 앱마다 따로 있다.</div>
 
 <div class="rules">
-  <div class="rule"><b>인스턴스는 하나, 이름은 enum</b>공유 부품은 <code>PROGRAM_FORM_NAME_TYPE_COMMON</code>, 앱 부품은 앱의 <code>PROGRAM_FORM_NAME_TYPE</code> 을 name 으로 쓴다. 두 enum 이 같은 문자열을 가리켜서 같은 antd 인스턴스의 같은 칸을 본다.</div>
-  <div class="rule"><b>다른 값에 따라 그리는 곳</b>카테고리·가격·상세 이미지 분기·토글과 목록은 <code>shouldUpdate</code> 를 단 <code>Form.Item</code> 의 render-prop 안에서 <code>getFieldValue</code> 로 읽는다.</div>
-  <div class="rule"><b>위젯은 폼을 모른다</b>병원 검색·카테고리 캐스케이더·라벨 선택은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다. 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem 이 <code>setFieldsValue</code> 로 한다.</div>
-  <div class="rule"><b>읽은 값에는 타입이 없다</b><code>getFieldValue</code>·<code>useWatch</code> 로 읽은 값은 <code>any</code> 라서, FormItem 안에서 확인되는 것은 enum 으로 맞춘 이름까지다.</div>
+  <div class="rule"><b>인스턴스는 하나, 이름은 enum</b>공유 부품은 <code>PROGRAM_FORM_NAME_TYPE_COMMON</code>, 앱 부품은 앱의 <code>PROGRAM_FORM_NAME_TYPE</code>을 name으로 쓴다. 두 enum이 같은 문자열을 가리켜서 같은 antd 인스턴스의 같은 칸을 본다.</div>
+  <div class="rule"><b>다른 값에 따라 그리는 곳</b>카테고리·가격·상세 이미지 분기·토글과 목록은 <code>shouldUpdate</code>를 단 <code>Form.Item</code>의 render-prop 안에서 <code>getFieldValue</code>로 읽는다.</div>
+  <div class="rule"><b>위젯은 폼을 모른다</b>병원 검색·카테고리 캐스케이더·라벨 선택은 폼 인스턴스를 받지 않고 값과 콜백만 주고받는다. 화면에 칸이 없는 값(병원 id·이름, 진료과, 하위 시술)은 hidden 필드가 들고, 여러 필드를 한 번에 채우는 일은 FormItem이 <code>setFieldsValue</code>로 한다.</div>
+  <div class="rule"><b>읽은 값에는 타입이 없다</b><code>getFieldValue</code>·<code>useWatch</code>로 읽은 값은 <code>any</code>라서, FormItem 안에서 확인되는 것은 enum으로 맞춘 이름까지다.</div>
 </div>
 
-<p class="foot">실제 코드(두 앱의 프로그램 폼과 컨테이너, program·treatment 공유 FormItem)를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner 로 바꿨다.</p>
+<p class="foot">실제 코드(두 앱의 프로그램 폼과 컨테이너, program·treatment 공유 FormItem)를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner로 바꿨다.</p>
 </body></html>
