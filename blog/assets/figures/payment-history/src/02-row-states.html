@@ -71,12 +71,10 @@
   .m { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); background: var(--soft); color: var(--ink); margin: 1px 2px 1px 0; white-space: nowrap; }
   .m.coupon { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-line); }
   .m.cancel { background: var(--coral-soft); color: var(--coral); border-color: #e2c3b9; }
-  .m.rec { background: #f1ede6; color: #7a5a2e; border-color: #e0d3bf; }
   .st { color: var(--sub); font-size: 11px; }
   .comp { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; font-weight: 700; color: var(--ink); }
   .lbls { margin-top: 2px; font-size: 10.5px; color: var(--sub); line-height: 1.45; }
   .lbls .btn-in { display: inline-block; font-size: 9.5px; border: 1px solid var(--line-strong); border-radius: 3px; padding: 0 3px; color: var(--ink); vertical-align: 1px; }
-  .since { display: inline-block; font-size: 10px; font-weight: 700; color: var(--coral); background: var(--coral-soft); border: 1px solid #e8cdc4; border-radius: 4px; padding: 0 4px; margin-left: 4px; vertical-align: 1px; white-space: nowrap; }
   .gnote { border-top: 1px dashed var(--line); padding: 5px 9px 6px; font-size: 11px; color: var(--sub); line-height: 1.5; background: #fff; }
   .gnote b { color: var(--ink); font-weight: 600; }
   .muted > div { color: var(--sub); }
@@ -95,24 +93,24 @@
         <span class="pin mk" style="right:-9px; top:78px">5</span>
         <div class="col">
           <div class="ch">
-            <span class="mk sm">3</span><b>결제 내역 (3)</b><span class="t red">하단에 결제일과 결제 금액을 입력해주세요</span>
+            <span class="mk sm">3</span><b>결제 내역 (3)</b><span class="t red">결제 금액 입력하기</span>
             <span class="r">미정<span class="amt">₩ 0</span><span class="xbtn">접기</span><span class="mk sm">4</span></span>
           </div>
           <div class="cb">
-            <div class="dr"><span>결제일</span><span>실제 결제를 완료한 경우에만 결제일을…<span class="cbx">내원일과 동일</span></span></div>
+            <div class="dr"><span>결제일</span><span>결제완료를 위해 실제 결제일을 선택해주세요.<span class="cbx">내원일과 동일</span></span></div>
             <div class="dr"><span>미수잔금</span><span class="fill">₩ 30,000</span></div>
-            <div class="dr"><span>현장 결제금액</span><span>현장에서 결제한 금액을 입력해주세요.</span></div>
+            <div class="dr"><span>총 결제 예정 금액</span><span>현장에서 결제한 금액을 입력해주세요.</span></div>
             <div class="dr"><span>최종 결제금액</span><span class="fill"></span></div>
           </div>
         </div>
       </div>
       <div class="it">
         <span class="dot red"></span>
-        <div class="col"><div class="ch"><b>결제 내역 (2)</b><span class="t gray">결제취소</span><span class="r">2026-07-12 14:30<span class="amt neg">₩ -10,000</span><span class="xbtn">펼치기</span></span></div></div>
+        <div class="col"><div class="ch"><b>결제 내역 (2)</b><span class="t gray">결제취소</span><span class="r">2026-06-26 14:30<span class="amt neg">₩ -10,000</span><span class="xbtn">펼치기</span></span></div></div>
       </div>
       <div class="it">
         <span class="dot green"></span>
-        <div class="col"><div class="ch"><b>결제 내역 (1)</b><span class="t green">결제완료</span><span class="r">2026-07-10<span class="amt">₩ 40,000</span><span class="xbtn">펼치기</span></span></div></div>
+        <div class="col"><div class="ch"><b>결제 내역 (1)</b><span class="t green">결제완료</span><span class="r">2026-06-22<span class="amt">₩ 40,000</span><span class="xbtn">펼치기</span></span></div></div>
       </div>
       <div class="hidden-note"><span class="mk" style="width:14px;height:14px;font-size:9px;margin-right:4px;vertical-align:-2px">1</span>견적추가 같은 행은 타임라인에 올리지 않고 번호도 매기지 않는다. 배열을 뒤집어 마지막 행이 맨 위에 온다.</div>
     </div>
@@ -121,9 +119,9 @@
   <div class="calls">
     <div class="call"><div class="call-h"><span class="mk">1</span>타임라인에 올릴지</div><code>isVisiblePaymentHistory</code><p>수단·상태를 보고, 쿠폰결제는 <b>id 유무</b>를 본다</p></div>
     <div class="call"><div class="call-h"><span class="mk">2</span>점 색</div><code>getPaymentHistoryColor</code><p>완료된 현장결제는 초록, 완료된 현장취소는 빨강, 나머지는 회색</p></div>
-    <div class="call"><div class="call-h"><span class="mk">3</span>헤더 태그·날짜·금액</div><code>PaymentHistoryHeader</code><p>수단·상태에 <b>금액 부호</b>까지 본다</p></div>
-    <div class="call"><div class="call-h"><span class="mk">4</span>처음부터 펼칠지</div><code>PaymentHistory</code><p>결제상태가 완료가 아니면 펼친 채로 연다</p></div>
-    <div class="call"><div class="call-h"><span class="mk">5</span>펼쳤을 때의 칸</div><code>PaymentHistoryDescriptions</code><p><b>기록 여부 → id 유무 → 취소 → 연결 쿠폰 → 완료</b> 순서로 컴포넌트를 고른다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">3</span>헤더 태그·날짜·금액</div><code>PaymentHistoryHeader</code><p>수단·상태로 <b>완료·취소·대기</b> 헤더 중 하나를 고른다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">4</span>처음부터 펼칠지</div><code>PaymentHistory</code><p>처음 그릴 때 결제상태가 완료가 아니면 펼친 채로 연다</p></div>
+    <div class="call"><div class="call-h"><span class="mk">5</span>펼쳤을 때의 칸</div><code>PaymentHistoryDescriptions</code><p><b>id 유무 → 취소 → 완료</b> 순서로 컴포넌트를 고른다</p></div>
   </div>
 </div>
 
@@ -141,46 +139,34 @@
     <div><span class="m coupon">쿠폰결제</span><span class="st">처리 중</span></div>
     <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
     <div><span class="t red">입력 안내</span></div>
-    <div><span class="comp">CouponDescriptions</span><div class="lbls">결제일 · 총 결제 예정 금액 · 쿠폰 사용 금액 <span class="btn-in">쿠폰 변경</span> · 최종 결제금액</div></div>
+    <div><span class="comp">CouponDescriptions</span><div class="lbls">결제일 · 쿠폰 사용 금액 <span class="btn-in">쿠폰 변경</span> · 총 결제 예정 금액 · 최종 결제금액</div></div>
   </div>
   <div class="tr">
     <div><span class="m">현장결제</span><span class="st">처리 중</span></div>
     <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
     <div><span class="t red">입력 안내</span></div>
-    <div><span class="comp">WaitingDescriptions</span><div class="lbls">결제일 · 미수잔금 · 현장 결제금액 · 최종 결제금액 (입력 칸)</div></div>
+    <div><span class="comp">WaitingDescriptions</span><div class="lbls">결제일 · 미수잔금 · 총 결제 예정 금액 · 최종 결제금액 (입력 칸)</div></div>
   </div>
-  <div class="gnote">결제일을 고르면 상태가 <b>완료</b>로 바뀐다. 헤더 태그는 결제완료가 되고 현장결제는 점도 초록이 되지만, <b>상세는 id부터 보므로 저장 전까지 입력 칸</b> 그대로다. 결제일을 고른 현장결제 행에 음수 금액을 넣으면 헤더가 결제취소로 바뀌고, 정산 상세에서 저장하면 현장취소 행으로 등록된다.</div>
+  <div class="gnote">결제일을 고르면 상태가 <b>완료</b>로 바뀐다. 헤더 태그는 결제완료가 되고 현장결제는 점도 초록이 되지만, <b>상세는 id부터 보므로 저장 전까지 입력 칸</b> 그대로다.</div>
 
   <div class="grp">저장된 행<span>id 있음</span></div>
-  <div class="tr">
-    <div><span class="m">현장결제</span><span class="st">완료 · 쿠폰결제 행이 연결됨</span></div>
-    <div class="c yes">보임</div><div class="c"><span class="d green"></span></div>
-    <div><span class="t green">결제완료</span></div>
-    <div><span class="comp">CouponCompleteDescriptions</span><span class="since">08-14 분리</span><div class="lbls">결제일 · 현장 결제금액 · 쿠폰 사용 금액 · 최종 결제금액</div></div>
-  </div>
   <div class="tr">
     <div><span class="m">현장결제</span><span class="st">완료</span></div>
     <div class="c yes">보임</div><div class="c"><span class="d green"></span></div>
     <div><span class="t green">결제완료</span></div>
-    <div><span class="comp">CompletedDescriptions</span><div class="lbls">결제일 · 미수잔금 · 현장 결제금액 · 최종 결제금액</div></div>
+    <div><span class="comp">CompletedDescriptions</span><div class="lbls">결제일 · 미수잔금 · 총 결제 예정 금액 · 최종 결제금액<br>연결된 쿠폰결제 행이 있으면 미수잔금 자리에 쿠폰 사용 금액을 넣고, 최종 결제금액에 쿠폰 금액을 더한다</div></div>
   </div>
   <div class="tr">
     <div><span class="m cancel">현장취소</span><span class="st">완료</span></div>
     <div class="c yes">보임</div><div class="c"><span class="d red"></span></div>
     <div><span class="t gray">결제취소</span></div>
-    <div><span class="comp">CanceledDescriptions</span><div class="lbls">취소일 · 미수잔금 · 현장 결제금액(−) · 최종 결제금액(−)</div></div>
+    <div><span class="comp">CanceledDescriptions</span><div class="lbls">취소일 · 미수잔금 · 총 결제 예정 금액(−) · 최종 결제금액(−)</div></div>
   </div>
   <div class="tr">
     <div><span class="m">현장결제</span><span class="m cancel">현장취소</span><span class="st">대기 · 처리 중</span></div>
     <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
     <div><span class="t red">입력 안내</span></div>
     <div><span class="comp">WaitingDescriptions</span><div class="lbls">미저장 현장결제 행과 같은 입력 칸</div></div>
-  </div>
-  <div class="tr">
-    <div><span class="m rec">예약금</span><span class="m rec">기업지원</span><span class="st">결제·취소 기록, 상태 무관</span></div>
-    <div class="c yes">보임</div><div class="c"><span class="d gray"></span></div>
-    <div><span class="t green">결제완료</span> <span class="t gray">결제취소</span></div>
-    <div><span class="comp">PaymentRecordDescriptions</span><span class="since">09-11 추가</span><div class="lbls">구분 · 결제일/취소일 · 미수잔금 · 결제금액/취소금액 (읽기 전용, 렌더러가 가장 먼저 가른다)</div></div>
   </div>
 
   <div class="grp">타임라인에 올리지 않는 행</div>
@@ -190,17 +176,12 @@
     <div>연결된 현장결제 행에서 '쿠폰 사용 금액'으로 보인다</div>
   </div>
   <div class="tr muted">
-    <div><span class="m coupon">쿠폰취소</span></div>
-    <div class="c no">숨김</div><div class="c no">–</div><div class="c no">–</div>
-    <div>그 행의 쿠폰 금액·쿠폰명에 취소선을 긋고, 최종 결제금액을 현장 결제금액만으로 보여준다</div>
-  </div>
-  <div class="tr muted">
-    <div><span class="st">요청·거절·취소 상태의 현장결제·현장취소, 견적추가·견적차감, 미수잔금 차감, 앱 예약금, 제휴 포인트</span></div>
+    <div><span class="st">요청·거절·취소 상태의 현장결제·현장취소, 견적추가·견적차감, 미수잔금 차감 신청, 앱결제·앱결제 취소</span></div>
     <div class="c no">숨김</div><div class="c no">–</div><div class="c no">–</div>
     <div>화면에 올리지 않는다</div>
   </div>
 </div>
-<p class="legend"><span class="t red">입력 안내</span> 는 헤더의 빨간 태그 '하단에 결제일과 결제 금액을 입력해주세요'다. 헤더 태그는 결제상태를 따르되, 취소 헤더는 상태와 관계없이 결제취소 태그를 달고 금액을 음수로 붉게 적는다.</p>
+<p class="legend"><span class="t red">입력 안내</span> 는 헤더의 빨간 태그 '결제 금액 입력하기'다. 헤더 태그는 결제상태를 따르고, 완료된 현장취소만 결제취소 태그를 달아 등록일시와 음수 금액을 붉게 적는다.</p>
 
-<p class="foot">2026-09-29 develop 코드(공유 패키지의 결제 내역 helper, PaymentHistory·PaymentHistoryHeader·PaymentHistoryDescriptions)를 바탕으로 그렸다. 화면은 캡처 없이 코드의 antd 구성을 따라 단순화했고 날짜·금액은 예시다.</p>
+<p class="foot">2026-07-02 develop 코드(공유 패키지의 결제 내역 helper, PaymentHistory·PaymentHistoryHeader·PaymentHistoryDescriptions)를 바탕으로 그렸다. 화면은 캡처 없이 코드의 antd 구성을 따라 단순화했고 날짜·금액은 예시다.</p>
 </body></html>
