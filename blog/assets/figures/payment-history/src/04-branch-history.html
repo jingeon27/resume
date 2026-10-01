@@ -4,50 +4,45 @@
   body { word-break: keep-all; }
   .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 7px 2px; display: flex; align-items: center; gap: 8px; }
   .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .nw { white-space: nowrap; }
 
   /* 세 시점 */
   .stages { display: grid; grid-template-columns: 1fr 14px 1fr 14px 1fr; align-items: stretch; }
   .arr { position: relative; }
   .arr::before { content: ''; position: absolute; left: 2px; right: 4px; top: 50%; border-top: 1.5px solid var(--line-strong); }
   .arr::after { content: ''; position: absolute; right: 0; top: calc(50% - 5px); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6px solid var(--line-strong); }
-  .st { border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px 10px; background: #fff; min-width: 0; }
+  .st { border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px 10px; background: #fff; min-width: 0; display: flex; flex-direction: column; }
   .st.now { border: 1.5px solid var(--ink); }
   .st-d { font-size: 11px; font-weight: 700; color: var(--faint); }
   .st-t { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; margin-top: 1px; }
   .st-s { font-size: 11px; color: var(--sub); line-height: 1.45; margin-top: 2px; }
   .st-s code { font-size: 10px; color: var(--sub); }
   .br { margin-top: 7px; border-top: 1px solid #eef0f3; padding-top: 5px; }
-  .b { display: grid; grid-template-columns: 14px 1fr; gap: 3px; padding: 3px 0; font-size: 11px; line-height: 1.4; }
+  .b { display: grid; grid-template-columns: 16px 1fr; gap: 3px; padding: 3px 0; font-size: 11px; line-height: 1.4; }
   .b > span:first-child { color: var(--faint); font-size: 10px; font-weight: 700; padding-top: 1px; }
+  .b.sub { padding-left: 12px; }
   .b .cond { color: var(--ink); }
   .b .to { display: block; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10px; color: var(--blue); overflow-wrap: anywhere; }
   .b .to.w { color: var(--sub); }
   .grp-l { font-size: 10.5px; font-weight: 700; color: var(--sub); margin: 5px 0 1px; padding: 1px 6px; background: var(--soft); border-radius: 4px; display: inline-block; }
-  .new { display: inline-block; font-size: 9.5px; font-weight: 700; color: var(--coral); background: var(--coral-soft); border: 1px solid #e8cdc4; border-radius: 3px; padding: 0 3px; margin-left: 3px; vertical-align: 1px; font-family: 'Pretendard', sans-serif; }
-  .st-n { font-size: 10.5px; color: var(--faint); line-height: 1.45; margin-top: 6px; }
+  .st-n { font-size: 10.5px; color: var(--sub); line-height: 1.5; margin-top: auto; padding-top: 7px; }
+  .st-n b { color: var(--ink); font-weight: 600; }
+  .mix { color: var(--coral); font-weight: 600; }
 
-  /* 표 */
-  .tbl { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; margin-top: 2px; }
-  .tr { display: grid; grid-template-columns: 200px repeat(7, minmax(0, 1fr)); border-top: 1px solid #eef0f3; }
-  .tr > div { padding: 5px 5px; font-size: 11px; border-left: 1px solid #eef0f3; min-width: 0; }
-  .tr > div:first-child { border-left: 0; padding-left: 8px; }
+  /* 손댄 곳 */
+  .tbl { border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; }
+  .tr { display: grid; grid-template-columns: 84px 214px 1fr 96px; border-top: 1px solid #eef0f3; }
+  .tr > div { padding: 6px 8px; font-size: 11.5px; border-left: 1px solid #eef0f3; min-width: 0; line-height: 1.45; }
+  .tr > div:first-child { border-left: 0; font-weight: 600; }
   .th { border-top: 0; background: var(--soft); }
-  .th > div { font-size: 10.5px; font-weight: 700; color: var(--sub); text-align: center; line-height: 1.3; display: flex; flex-direction: column; justify-content: flex-end; }
-  .th > div:first-child { text-align: left; }
-  .th > div small { font-size: 9.5px; font-weight: 500; color: var(--faint); }
-  .th > div.hl { color: var(--blue); }
-  .ch { line-height: 1.35; }
-  .ch .dt { font-size: 10px; font-weight: 700; color: var(--faint); margin-right: 4px; }
-  .ch b { font-weight: 600; color: var(--ink); }
-  .ch small { display: block; font-size: 9.5px; color: var(--faint); font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }
-  .c { text-align: center; }
-  .hit { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; }
-  .hit i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); }
-  .hit.cp i { background: var(--blue); }
-  .hit.app i { background: #aab2bd; }
-  .hit span { font-size: 9.5px; color: var(--sub); line-height: 1.3; text-align: center; }
-  .col-cp { background: #f7f9fe; }
-  .col-rd { background: #fffaf8; }
+  .th > div { font-size: 11px; font-weight: 700; color: var(--sub); }
+  .tr .code { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 10.5px; color: var(--ink); overflow-wrap: anywhere; }
+  .tr .what { color: var(--sub); }
+  .tr .what b { color: var(--ink); font-weight: 600; }
+  .tr .dt { font-size: 10.5px; color: var(--sub); font-weight: 600; white-space: nowrap; }
+  .tr.keep > div { background: #fafbfc; }
+  .tr.keep .what { color: var(--faint); }
+  .tr.focus > div:first-child { color: var(--blue); }
 
   .notes { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .nb { border-radius: 10px; padding: 8px 12px 9px; font-size: 11.5px; line-height: 1.55; }
@@ -66,22 +61,37 @@
   <div class="st">
     <div class="st-d">2026-06-24 오전</div>
     <div class="st-t">쿠폰을 막 넣었을 때</div>
-    <p class="st-s">한 파일 469줄, 안에 컴포넌트 6개 (쿠폰 전 301줄)</p>
+    <p class="st-s">한 파일 469줄에 렌더러와 하위 컴포넌트 6개 (쿠폰 전 301줄)</p>
     <div class="br">
-      <div class="b"><span>if</span><span><span class="cond">쿠폰결제 · 완료</span><span class="to">CompletedCouponDescriptions</span></span></div>
-      <div class="b"><span>if</span><span><span class="cond">쿠폰결제 · 그 외</span><span class="to">CouponDescriptions</span></span></div>
+      <span class="grp-l">if 쿠폰결제</span>
+      <div class="b sub"><span>if</span><span><span class="cond">완료</span><span class="to">CompletedCouponDescriptions</span></span></div>
+      <div class="b sub"><span>–</span><span><span class="cond">그 외</span><span class="to">CouponDescriptions</span></span></div>
       <div class="b"><span>if</span><span><span class="cond">id 없음, 또는 대기·처리 중</span><span class="to w">WaitingDescriptions</span></span></div>
       <div class="b"><span>if</span><span><span class="cond">완료된 현장결제</span><span class="to">CompletedDescriptions</span></span></div>
       <div class="b"><span>if</span><span><span class="cond">완료된 현장취소</span><span class="to">CanceledDescriptions</span></span></div>
       <div class="b"><span>–</span><span><span class="cond">나머지</span><span class="to w">WaitingDescriptions</span></span></div>
     </div>
-    <p class="st-n">쿠폰은 상태로, 나머지는 id와 상태를 섞어 가른다.</p>
+    <p class="st-n">if 다섯 개, 갈래 여섯. 쿠폰은 <b>상태</b>로, 나머지는 <span class="mix">id와 상태를 섞어</span> 가른다.</p>
   </div>
   <div class="arr"></div>
   <div class="st">
-    <div class="st-d">06-24 오후 ~ 06-25 오전</div>
-    <div class="st-t">파일로 나누고 match 하나로</div>
-    <p class="st-s">컴포넌트 파일 분리 → <code>ts-pattern</code> → 저장 여부로 먼저 묶기</p>
+    <div class="st-d">06-24 오후</div>
+    <div class="st-t">파일로 나누고 match로 옮김</div>
+    <p class="st-s">14:48 컴포넌트별 파일 분리, 렌더러 41줄 → 16:50 <code>ts-pattern</code>, 34줄</p>
+    <div class="br">
+      <div class="b"><span>1</span><span><span class="cond">쿠폰결제 · id 없음</span><span class="to">CouponDescriptions</span></span></div>
+      <div class="b"><span>2</span><span><span class="cond">id 없음, 또는 대기·처리 중</span><span class="to w">WaitingDescriptions</span></span></div>
+      <div class="b"><span>3</span><span><span class="cond">완료된 현장결제</span><span class="to">CompletedDescriptions</span></span></div>
+      <div class="b"><span>4</span><span><span class="cond">완료된 현장취소</span><span class="to">CanceledDescriptions</span></span></div>
+      <div class="b"><span>5</span><span><span class="cond">나머지</span><span class="to w">WaitingDescriptions</span></span></div>
+    </div>
+    <p class="st-n">if 순서를 그대로 옮겨 <span class="mix">id와 상태가 여전히 섞여</span> 있다. 완료 쿠폰 전용 컴포넌트는 없애고, 완료 상세가 연결된 쿠폰결제 행을 함께 그린다.</p>
+  </div>
+  <div class="arr"></div>
+  <div class="st now">
+    <div class="st-d">06-25 오전 ~ 07-02 develop</div>
+    <div class="st-t">저장 여부로 먼저 묶음</div>
+    <p class="st-s">렌더러 34줄. 07-02까지 바뀐 것은 폼 타입과 파일 위치뿐</p>
     <div class="br">
       <span class="grp-l">id 없음</span>
       <div class="b"><span>1</span><span><span class="cond">쿠폰결제</span><span class="to">CouponDescriptions</span></span></div>
@@ -91,120 +101,44 @@
       <div class="b"><span>4</span><span><span class="cond">완료된 현장결제</span><span class="to">CompletedDescriptions</span></span></div>
       <div class="b"><span>5</span><span><span class="cond">그 외</span><span class="to w">WaitingDescriptions</span></span></div>
     </div>
-    <p class="st-n">4는 연결된 쿠폰결제 행이 있으면 미수잔금 자리에 쿠폰 칸을 넣는다. 노출 판정도 쿠폰 행을 상태 대신 id 유무로 보게 바꿨다.</p>
-  </div>
-  <div class="arr"></div>
-  <div class="st now">
-    <div class="st-d">2026-09-29 develop</div>
-    <div class="st-t">갈래 7개</div>
-    <p class="st-s">바뀐 것은 맨 앞 갈래 하나와 저장 쪽 갈래 하나</p>
-    <div class="br">
-      <div class="b"><span>0</span><span><span class="cond">예약금·기업지원 기록</span><span class="to">PaymentRecordDescriptions<span class="new">09-11</span></span></span></div>
-      <span class="grp-l">id 없음</span>
-      <div class="b"><span>1</span><span><span class="cond">쿠폰결제</span><span class="to">CouponDescriptions</span></span></div>
-      <div class="b"><span>2</span><span><span class="cond">그 외</span><span class="to w">WaitingDescriptions</span></span></div>
-      <span class="grp-l">id 있음</span>
-      <div class="b"><span>3</span><span><span class="cond">완료된 현장취소</span><span class="to">CanceledDescriptions</span></span></div>
-      <div class="b"><span>4</span><span><span class="cond">쿠폰결제가 연결된 완료 현장결제</span><span class="to">CouponCompleteDescriptions<span class="new">08-14</span></span></span></div>
-      <div class="b"><span>5</span><span><span class="cond">완료된 현장결제</span><span class="to">CompletedDescriptions</span></span></div>
-      <div class="b"><span>6</span><span><span class="cond">그 외</span><span class="to w">WaitingDescriptions</span></span></div>
-    </div>
+    <p class="st-n">같은 날 오전 노출 판정도 쿠폰 행을 상태 대신 <b>id 유무</b>로 보게 바꿨다.</p>
   </div>
 </div>
 
-<div class="zone" style="margin-top:16px">그 뒤 쿠폰·결제수단을 바꾼 커밋이 손댄 곳</div>
+<div class="zone" style="margin-top:16px">쿠폰을 넣으며 손댄 곳 <span class="nw" style="font-weight:500">2026-06-23 ~ 06-25</span></div>
 <div class="tbl">
-  <div class="tr th">
-    <div>변경<small>테스트·목 제외</small></div>
-    <div>결제수단<small>enum·라벨</small></div>
-    <div>helper<small>판정·금액·훅</small></div>
-    <div>헤더</div>
-    <div>렌더러<small>갈래</small></div>
-    <div class="hl">쿠폰 편집<small>Coupon·모달</small></div>
-    <div>다른 상세<small>쿠폰 편집 밖</small></div>
-    <div>앱 코드<small>예약·정산 상세</small></div>
-  </div>
-
+  <div class="tr th"><div>자리</div><div>코드</div><div>바꾼 것</div><div>날짜</div></div>
   <div class="tr">
-    <div class="ch"><span class="dt">06-25</span><b>금액 변경으로 쿠폰이 풀리면 안내</b><small>8640c7975</small></div>
-    <div></div><div></div><div></div><div></div>
-    <div class="c col-cp"><span class="hit cp"><i></i></span></div>
-    <div></div>
-    <div class="c"><span class="hit app"><i></i><span>확정 결과 안내</span></span></div>
+    <div>결제수단</div><div class="code">PAYMENT_METHODS<br>PAYMENT_METHODS_LABEL</div>
+    <div class="what"><b>PAYMENT_COUPON</b>과 라벨 '쿠폰결제'를 더했다</div><div class="dt">06-23</div>
   </div>
   <div class="tr">
-    <div class="ch"><span class="dt">07-08</span><b>모달에 '최대 할인 적용'</b><small>c9bdb0b66</small></div>
-    <div></div><div></div><div></div><div></div>
-    <div class="c col-cp"><span class="hit cp"><i></i></span></div>
-    <div></div><div></div>
+    <div>응답 타입</div><div class="code">ITreatmentPaymentHistoryResDTO</div>
+    <div class="what">memberCouponId·couponName을 더했다. 같이 넣었던 할인액은 이튿날 <b>폼 전용 타입</b>으로 뗐다</div><div class="dt">06-23 · 06-24</div>
   </div>
   <div class="tr">
-    <div class="ch"><span class="dt">07-09</span><b>취소금액이 쿠폰 결제금액을 넘으면 안내</b><small>f1c9c07c5 외 2건</small></div>
-    <div></div>
-    <div class="c"><span class="hit"><i></i><span>쿠폰 결제금액·모달 훅</span></span></div>
-    <div></div><div></div><div class="col-cp"></div><div></div>
-    <div class="c"><span class="hit app"><i></i><span>정산 상세</span></span></div>
+    <div>노출 판정</div><div class="code">isVisiblePaymentHistory</div>
+    <div class="what">미저장 쿠폰 행을 올린다. 처리 중 상태로 고르다가 <b>id 유무</b>로 바꿨다</div><div class="dt">06-24 · 06-25</div>
+  </div>
+  <div class="tr keep">
+    <div>점 색·헤더</div><div class="code">getPaymentHistoryColor<br>PaymentHistoryHeader</div>
+    <div class="what">그대로. 쿠폰 행은 기본 갈래로 떨어져 회색 점과 대기 헤더를 쓴다</div><div class="dt">–</div>
+  </div>
+  <div class="tr focus">
+    <div>렌더러</div><div class="code">PaymentHistoryDescriptions</div>
+    <div class="what">쿠폰 갈래를 더하고 위 세 단계를 거쳤다</div><div class="dt">06-24 · 06-25</div>
+  </div>
+  <div class="tr focus">
+    <div>쿠폰 편집</div><div class="code">CouponDescriptions<br>CouponSelectModal</div>
+    <div class="what"><b>새로 만들었다</b>. 선택·해제·할인 계산이 여기에 있다</div><div class="dt">06-24 · 06-25</div>
   </div>
   <div class="tr">
-    <div class="ch"><span class="dt">08-05</span><b>쿠폰 행 칼럼 순서</b><small>8e3cd59e2</small></div>
-    <div></div><div></div><div></div><div></div>
-    <div class="c col-cp"><span class="hit cp"><i></i></span></div>
-    <div class="c"><span class="hit"><i></i><span>공통 결제일 칸 문구</span></span></div>
-    <div class="c"><span class="hit app"><i></i><span>견적금액 따로 저장</span></span></div>
+    <div>완료 상세</div><div class="code">CompletedDescriptions</div>
+    <div class="what">연결된 쿠폰결제 행을 찾아 미수잔금 자리에 쿠폰 칸을 넣는다</div><div class="dt">06-24</div>
   </div>
   <div class="tr">
-    <div class="ch"><span class="dt">08-10</span><b>벗어나면 모달, 입력 즉시 해제</b><small>efb1bdd97 · aae2279f2</small></div>
-    <div></div><div></div><div></div><div></div>
-    <div class="c col-cp"><span class="hit cp"><i></i></span></div>
-    <div></div><div></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">08-14</span><b>확정 전에 쿠폰 다시 고르기</b><small>8aa2af2e3</small></div>
-    <div></div>
-    <div class="c"><span class="hit"><i></i><span>문구 1줄</span></span></div>
-    <div></div><div></div>
-    <div class="c col-cp"><span class="hit cp"><i></i></span></div>
-    <div></div><div></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">08-14</span><b>결제완료 쿠폰 행 칼럼 순서</b><small>b060342f8</small></div>
-    <div></div>
-    <div class="c"><span class="hit"><i></i><span>연결 판정</span></span></div>
-    <div></div>
-    <div class="c col-rd"><span class="hit"><i></i><span>갈래 +1</span></span></div>
-    <div class="col-cp"></div>
-    <div class="c"><span class="hit"><i></i><span>Coupon<wbr>Complete 새로</span></span></div>
-    <div></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">08-26</span><b>Back-Office 쿠폰 확정, 재확정 때 옛 쿠폰 행을 집던 문제</b><small>76e483789 · 691c73037</small></div>
-    <div></div><div></div><div></div><div></div><div class="col-cp"></div><div></div>
-    <div class="c"><span class="hit app"><i></i><span>확정 핸들러</span></span></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">08-31</span><b>쿠폰취소 결제수단</b><small>72605ee25 외 3건</small></div>
-    <div class="c"><span class="hit"><i></i><span>+1</span></span></div>
-    <div class="c"><span class="hit"><i></i><span>노출·취소 목록 → 제거 판정</span></span></div>
-    <div></div><div></div><div class="col-cp"></div>
-    <div class="c"><span class="hit"><i></i><span>쿠폰 칸 취소선</span></span></div>
-    <div></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">09-01</span><b>취소 상한을 쿠폰 결제금액 대신 서버 최소 결제금액으로</b><small>5de11117c</small></div>
-    <div></div>
-    <div class="c"><span class="hit"><i></i><span>상한 계산·<br>모달 훅</span></span></div>
-    <div></div><div></div><div class="col-cp"></div><div></div>
-    <div class="c"><span class="hit app"><i></i><span>정산 상세</span></span></div>
-  </div>
-  <div class="tr">
-    <div class="ch"><span class="dt">09-11</span><b>예약금·기업지원 기록 행</b><small>e1e3cd787</small></div>
-    <div class="c"><span class="hit"><i></i><span>+6</span></span></div>
-    <div class="c"><span class="hit"><i></i><span>기록 판정</span></span></div>
-    <div class="c"><span class="hit"><i></i><span>취소 기록</span></span></div>
-    <div class="c col-rd"><span class="hit"><i></i><span>갈래 +1</span></span></div>
-    <div class="col-cp"></div>
-    <div class="c"><span class="hit"><i></i><span>Record 새로</span></span></div>
-    <div></div>
+    <div>앱 코드</div><div>병원 관리자<br>Back-Office</div>
+    <div class="what">두 앱 결제 합계에 완료된 쿠폰결제를 넣고(06-23), 병원 관리자 예약 상세에 쿠폰 행과 확정 요청을 붙이고(06-24), 확정 전 쿠폰 예약은 두 앱 정산 상세에서 입력을 막았다(06-25)</div><div class="dt">06-23~06-25</div>
   </div>
 </div>
 
@@ -212,20 +146,19 @@
   <div class="nb ok">
     <b>고칠 자리가 정해졌다</b>
     <ul>
-      <li>쿠폰 행 편집 규칙은 다섯 번 바뀌었다. 공유 코드에서는 문구 두 줄을 빼면 쿠폰 편집 칸 안에서 끝났다.</li>
-      <li>렌더러의 갈래는 08-14와 09-11에 한 줄씩 늘었다. 그 밖의 렌더러 수정은 결제일 수정 핸들러를 넘기는 prop과 파일 이동·이름 정리였다.</li>
-      <li>08-31 쿠폰취소는 처음에 노출·취소 판정 목록에 넣어 현장취소와 같은 취소 줄로 띄웠다가, 같은 날 연결된 현장결제 줄 안의 취소선으로 옮겼다. 두 번 다 렌더러는 그대로였다.</li>
+      <li>미저장 행은 첫 갈래 안에서, 저장된 행은 그 아래에서 가른다. 어떤 행이 어느 상세로 가는지 렌더러 한 파일에서 읽힌다.</li>
+      <li>쿠폰 선택·해제·할인 계산은 <code>CouponDescriptions</code> 안에 있다. <span class="nw">대기·취소</span> 상세와 타임라인·헤더는 쿠폰 모달을 모른다.</li>
     </ul>
   </div>
   <div class="nb lim">
     <b>한곳은 아니다</b>
     <ul>
-      <li>새 결제수단 두 번은 enum과 helper를 함께 고쳤고, 09-11에는 헤더와 렌더러까지 닿았다.</li>
-      <li>쿠폰취소와 예약금·기업지원은 서버에 이미 있던 값이 프론트 enum에 빠져 있었다. 그런 값이 오면 응답 검증 로그만 남고 행은 타임라인에 뜨지 않는 구조였다.</li>
+      <li>노출·점 색·헤더는 각자 결제수단과 상태를 다시 본다. 쿠폰은 기본 갈래로 떨어져 점 색과 헤더를 고치지 않았을 뿐이다.</li>
+      <li>저장된 쿠폰결제 행은 렌더러가 아니라 완료 상세가 <code>transactionId</code>로 찾아 그린다.</li>
       <li>렌더러는 <code>.otherwise()</code>로 끝나, 새 수단의 갈래를 빠뜨려도 컴파일러가 잡지 않는다.</li>
     </ul>
   </div>
 </div>
 
-<p class="foot">2026-06-24~09-29 develop 커밋 이력과 2026-09-29 develop 코드를 바탕으로 그렸다. 06-25 오후부터 쿠폰 결제·결제수단을 바꾼 feat·fix·hotfix 중 결제 내역 공유 코드나 쿠폰 확정 흐름에 닿은 것만 골랐다. 같은 작업의 후속 수정은 한 줄로 묶었고, 문구·리팩터링·테스트 커밋은 뺐다.</p>
+<p class="foot">2026-06-23~07-02 develop 커밋 이력과 2026-07-02 develop 코드를 바탕으로 그렸다. 줄 수는 각 커밋의 렌더러 파일을 그대로 센 값이다.</p>
 </body></html>
