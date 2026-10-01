@@ -53,7 +53,7 @@
 
   <div class="lab">수명</div>
   <div class="c life">대상 목록은 조회 뒤 10분 동안 다시 조회하지 않고, 화면을 떠나도 10분 동안 선택·일시가 남아요</div>
-  <div class="c life">전역이라 화면이 끝나도 남아요. 예약 페이지와 대상 컴포넌트가 언마운트될 때 각각 비워요</div>
+  <div class="c life">전역이라 화면을 떠나도 남아요. 예약 페이지와 대상 컴포넌트가 언마운트될 때 각각 비워요</div>
   <div class="c life">컴포넌트가 사라지면 함께 사라져요</div>
 
   <div class="lab">들고 있던 값</div>
@@ -71,7 +71,7 @@
   <div class="c">
     <div class="item">
       <div class="t"><code>form.participants[]</code></div>
-      <p>체크한 가족만 넣고 뺐어요. 본인은 늘 들어가요</p>
+      <p>가족은 체크하면 넣고, 해제하면 뺐어요. 본인은 늘 들어가요</p>
       <span class="v who">구성원</span><span class="v sel">선택 여부</span><span class="v date">희망 일시</span>
     </div>
     <div class="item">
@@ -135,5 +135,5 @@
 
 <div class="sum"><b>한 값에 주인이 여럿</b> · 선택 여부와 희망 일시는 캐시와 스토어에 사람마다 한 벌씩 있었고, 희망 일시는 로컬 상태에도 컴포넌트마다 따로 있었어요. 동작마다 이 복사본들을 손으로 맞췄고, 제출 가능 여부는 스토어의 액션이 끝날 때마다 다시 계산해 저장했어요.</div>
 
-<p class="foot">리팩터링 직전 코드(예약 페이지, 대상 선택 컴포넌트 519줄, BookingDraftStore 140줄, 대상 목록 훅, 날짜 선택기, 사람별 일시 바텀시트)를 바탕으로 그렸어요. 코드는 줄였고, 코드 이름은 글과 같은 가명이에요.</p>
+<p class="foot">리팩터링 직전 코드(예약 페이지, 대상 선택 컴포넌트 519줄, BookingDraftStore 140줄, 대상 목록 훅, 날짜 선택기, 사람별 일시 바텀시트)를 바탕으로 그렸어요. 코드는 간추려 옮겼고, 코드 이름은 글과 같은 가명이에요.</p>
 </body></html>
