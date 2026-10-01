@@ -17,6 +17,8 @@
   .chip-src.client { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-line); }
   .chip-src.form { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
 
+  .type.code-pre { white-space: pre; font-size: 10.5px; line-height: 1.55; background: var(--soft); border-radius: 6px; padding: 5px 8px; margin-top: 6px; }
+  .nw { white-space: nowrap; }
   .type { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12px; color: var(--ink); margin-top: 6px; }
   .small { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 3px; }
   .small b { color: var(--ink); font-weight: 600; }
@@ -60,7 +62,6 @@
   .list li { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 2px; padding-left: 10px; position: relative; }
   .list li::before { content: '·'; position: absolute; left: 1px; color: var(--faint); }
   .list li b { color: var(--ink); font-weight: 600; }
-  .date { display: inline-block; font-size: 10.5px; font-weight: 600; color: var(--sub); background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 3px; vertical-align: 1px; white-space: nowrap; }
 
   .after { margin-top: 0; border: 1px solid var(--blue-line); background: var(--blue-soft); border-radius: 10px; padding: 9px 13px 10px; font-size: 12px; color: var(--ink); line-height: 1.55; }
   .after b { color: var(--blue); }
@@ -79,12 +80,12 @@
 <div class="two">
   <div class="box">
     <div class="head"><span class="chip-src server">서버 응답</span><b>저장된 행</b><span class="id">id 있음</span></div>
-    <div class="type">TTreatmentPaymentHistoryResDTO</div>
-    <p class="small">응답을 검증하는 zod 스키마에서 타입을 뽑는다.</p>
+    <div class="type">ITreatmentPaymentHistoryResDTO</div>
+    <p class="small">공유 패키지에 인터페이스로 선언한 응답 타입이다.</p>
     <div class="fields">
-      <span class="f">treatmentPaymentHistoryId</span><span class="f">paymentMethod<small>15종</small></span><span class="f">paymentStatus<small>6종</small></span><span class="f">transactionId</span><span class="f">memberCouponId</span><span class="f">couponName</span><span class="f">paymentAmt</span><span class="f">remainAmt</span><span class="f">paymentDtm</span>
+      <span class="f">treatmentPaymentHistoryId</span><span class="f">paymentMethod<small>8종</small></span><span class="f">paymentStatus<small>6종</small></span><span class="f">transactionId</span><span class="f">memberCouponId</span><span class="f">couponName</span><span class="f">paymentAmt</span><span class="f">remainAmt</span><span class="f">paymentDtm</span>
     </div>
-    <p class="note">결제를 취소해도 원래 행은 그대로 두고 <b style="color:var(--ink)">현장취소</b> 행이 새로 쌓인다. 쿠폰을 빼면 같은 거래를 가리키는 <b style="color:var(--ink)">쿠폰취소</b> 행이 붙는다.</p>
+    <p class="note">결제를 취소해도 원래 행은 그대로 두고 <b style="color:var(--ink)">현장취소</b> 행이 새로 쌓인다.</p>
   </div>
 
   <div class="box">
@@ -94,8 +95,8 @@
       <p class="small">대기 중인 현장결제·현장취소 행이 없으면 하나 붙인다. <code style="font-size:10.5px">withPendingPayment</code><br>현장결제 · 처리 중 · 0원 · 미수잔금은 시술 내역의 총 미수잔금</p>
     </div>
     <div class="made coupon">
-      <div class="made-h"><span class="num blue">2</span>쿠폰 행<span class="where">예약 상세 · 쿠폰 예약 · 확정 전</span></div>
-      <p class="small">쿠폰결제 · 처리 중 · 금액은 쿠폰 할인 전 총 결제 예정 금액<br>쿠폰 값은 예약 응답에서 옮겨 담는다</p>
+      <div class="made-h"><span class="num blue">2</span>쿠폰 행<span class="where">병원 관리자 예약 상세 · 쿠폰 예약 · 확정 전</span></div>
+      <p class="small">쿠폰결제 · 처리 중 · 금액은 쿠폰 할인 전 총 결제 예정 금액<br>처음 금액은 프로그램 우대가, 쿠폰 값은 예약 응답에서 옮겨 담는다</p>
       <span class="f blue">memberCouponId</span><span class="f blue">couponName</span><span class="f form">couponDiscountAmount</span>
     </div>
   </div>
@@ -105,10 +106,10 @@
 
 <div class="box core">
   <div class="head"><span class="chip-src form">폼 값</span><b>treatmentPaymentHistory: ITreatmentPaymentHistoryClient[]</b></div>
-<pre><span class="k">interface</span> ITreatmentPaymentHistoryClient <span class="k">extends</span> TTreatmentPaymentHistoryResDTO {
+<pre><span class="k">interface</span> ITreatmentPaymentHistoryClient <span class="k">extends</span> ITreatmentPaymentHistoryResDTO {
   <span class="add">couponDiscountAmount</span>?: number | null; <span class="c">// 폼 전용. 쿠폰 행의 최종 결제금액 미리보기에만 쓴다</span>
 }</pre>
-  <p class="small">타임라인·헤더·상세는 모두 이 배열을 읽는다(그림 2). 서버에 없는 값은 이 필드 하나다.</p>
+  <p class="small">타임라인·헤더·상세는 모두 이 배열을 읽는다(그림 2). 서버에 없는 값은 이 필드 하나다. 예약 상세는 확정 전 이 배열이 쿠폰 행 하나뿐이라 <code style="font-size:10.5px">[ITreatmentPaymentHistoryClient]</code> 튜플로 좁힌다.</p>
 </div>
 
 <div class="fan"><i class="l"></i><i class="r"></i></div>
@@ -118,24 +119,25 @@
   <div class="box">
     <div class="head"><b>정산 상세 '저장'</b><span class="id">두 앱</span></div>
     <p class="small" style="margin-top:6px">시술 내역 수정 요청에 폼 행을 거의 그대로 싣는다.</p>
-    <div class="type" style="font-size:11px">paymentHistories:<br>&nbsp;&nbsp;행.filter(isSavablePaymentHistory)</div>
+    <div class="type code-pre">paymentHistories: 행.filter((행) =&gt;
+  !(INCLUDE_PAYMENT.includes(행.paymentMethod) &amp;&amp;
+    PENDING_STATUSES.includes(행.paymentStatus)))</div>
     <ul class="list">
       <li><b>뺀다</b> 대기·처리 중인 현장결제·현장취소 행. 결제일을 고르면 완료가 되어 실린다</li>
-      <li><b>그대로</b> 쿠폰결제·예약금 같은 나머지 행</li>
+      <li><b>그대로</b> 쿠폰결제·견적추가 같은 나머지 행</li>
     </ul>
   </div>
 
   <div class="box coupon">
-    <div class="head"><b>예약 상세 '결제 내역 확정'</b><span class="id">두 앱</span></div>
-    <p class="small" style="margin-top:6px">미저장 쿠폰 행 하나를 찾아, 확정 요청의 필드를 이름으로 채운다.</p>
+    <div class="head"><b>예약 상세 '결제 내역 확정'</b><span class="id">병원 관리자</span></div>
+    <p class="small" style="margin-top:6px">쿠폰결제 행을 찾아, 확정 요청의 필드를 이름으로 채운다.</p>
     <div class="map">
       <code>paymentAmount</code><span class="arr">←</span><span>쿠폰 행 <code>paymentAmt</code> (총 결제 예정 금액)</span>
       <code>memberCouponId</code><span class="arr">←</span><span>쿠폰 행 <code>memberCouponId</code></span>
       <code>paymentDtm</code><span class="arr">←</span><span>쿠폰 행 <code>paymentDtm</code></span>
     </div>
     <p class="small" style="margin-top:4px">견적금액(<code style="font-size:10.5px">quoteAmount</code>)·내원일·메모는 폼의 다른 칸에서 채운다.</p>
-    <div class="dropline"><span class="f drop">couponName</span><span class="f drop">couponDiscountAmount</span> 두 값은 집지 않으니 요청에 실리지 않는다</div>
-    <p class="note">저장된 쿠폰 행은 집지 않는다.<span class="date">08-26 추가</span> 확정을 취소해도 서버가 지난 확정의 쿠폰 행을 지우지 않아서다.</p>
+    <div class="dropline"><span class="f drop">couponName</span><span class="f drop">couponDiscountAmount</span> <span class="nw">요청에 싣지 않는다</span></div>
   </div>
 </div>
 
@@ -145,5 +147,5 @@
   <div class="rows"><span class="r">현장결제 · 완료 → 타임라인 한 줄</span><span class="r hide">쿠폰결제 → 그 줄의 '쿠폰 사용 금액'으로만</span></div>
 </div>
 
-<p class="foot">2026-09-29 develop 코드(공유 패키지의 결제 내역 타입·helper, 두 앱의 예약 상세·정산 상세 제출 코드)와 2026-08-26 커밋을 바탕으로 그렸다. 코드는 줄였다.</p>
+<p class="foot">2026-07-02 develop 코드(공유 패키지의 결제 내역 타입·helper, 병원 관리자 예약 상세의 확정 코드, 두 앱 정산 상세의 저장 코드)를 바탕으로 그렸다. 코드는 줄였다.</p>
 </body></html>
