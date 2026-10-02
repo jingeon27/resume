@@ -5,6 +5,8 @@ const fs = require('node:fs');
 
 // playwright 는 이 저장소에 없어서, 설치된 곳을 차례로 찾는다
 const CANDIDATES = [
+  path.resolve(__dirname, '../../../../../../safedoc-usermall'),
+  path.resolve(__dirname, '../../../../../../safedoc-global/frontend'),
   '/Users/gimjingeon/Desktop/safedoc/user-mall/safedoc-usermall',
   '/Users/gimjingeon/Desktop/safedoc/safedoc-global/frontend',
 ];

@@ -2,142 +2,78 @@
 <html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
 <style>
   body { word-break: keep-all; }
-  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 6px 2px; display: flex; align-items: center; gap: 8px; }
-  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
-  .layer { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 12px 14px; }
-  .layer.core { border: 1.5px solid var(--ink); }
-  .head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .head b { font-size: 14.5px; letter-spacing: -0.2px; }
-  .head .file { margin-left: auto; font-size: 11.5px; color: var(--faint); }
-  pre { margin-top: 8px; font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12px; line-height: 1.6; color: var(--ink); background: var(--soft); border-radius: 8px; padding: 8px 11px; white-space: pre-wrap; }
-  pre .c { color: var(--faint); }
-  pre .k { color: var(--blue); font-weight: 600; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-  .mini { border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; font-size: 12px; color: var(--sub); }
-  .mini b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 2px; }
-  .mini code { font-size: 11.5px; color: var(--ink); }
-  .groups { display: grid; grid-template-columns: 0.55fr 1.2fr 1.3fr; gap: 8px; margin-top: 8px; }
-  .basis { font-size: 11.5px; color: var(--faint); margin-top: 6px; }
-  .grp { background: var(--soft); border-radius: 8px; padding: 7px 9px; }
-  .grp .t { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; }
-  .grp .t span { color: var(--faint); font-weight: 500; }
-  .grp .f { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; color: var(--sub); margin-top: 3px; line-height: 1.55; }
-  .sub-h { font-size: 12px; font-weight: 700; color: var(--sub); margin-top: 10px; }
-  .items { margin-top: 2px; }
-  .items .tag { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; }
-  .fan { height: 44px; position: relative; }
-  .fan::before { content: ''; position: absolute; left: 25%; right: 25%; top: 24px; border-top: 1.5px solid var(--line-strong); }
-  .fan::after { content: ''; position: absolute; left: 50%; top: 0; height: 24px; border-left: 1.5px solid var(--line-strong); }
-  .fan i { position: absolute; top: 24px; height: 18px; border-left: 1.5px solid var(--line-strong); }
-  .fan i::after { content: ''; position: absolute; left: -5.5px; bottom: -4px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid var(--line-strong); }
-  .fan i.l { left: 25%; } .fan i.r { left: 75%; }
-  .fan-label { position: absolute; left: calc(50% + 10px); top: 1px; font-size: 11.5px; color: var(--faint); white-space: nowrap; }
-  .apps { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 14px; }
+  h1 { font-size: 20px; margin-bottom: 6px; letter-spacing: -.6px; }
+  .lead { font-size: 13px; color: var(--sub); margin-bottom: 18px; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); margin: 16px 0 7px; }
+  .layer { border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .core { border-color: var(--blue-line); background: var(--blue-soft); }
+  .head { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; }
+  pre { font: 12px/1.7 "JetBrains Mono", "SF Mono", Menlo, monospace; padding: 10px 12px; background: var(--soft); border-radius: 7px; margin-top: 9px; white-space: pre-wrap; }
+  .core pre { background: #fff; }
+  .c { color: var(--faint); }
+  .apps, .pair { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; }
   .apps .layer { min-width: 0; }
-  .apps code { overflow-wrap: anywhere; }
-  .apps .layer { padding: 11px 12px; }
-  .apps pre { font-size: 11.5px; padding: 7px 9px; }
-  .own { margin-top: 8px; }
-  .own .row { display: grid; grid-template-columns: 62px 1fr; gap: 6px; font-size: 11.5px; color: var(--sub); margin-top: 4px; align-items: baseline; }
-  .own .row code { font-size: 11px; color: var(--ink); }
-  .submit { margin-top: 8px; border-top: 1px solid #eef0f3; padding-top: 7px; }
-  .submit .s { font-size: 11.5px; margin-top: 5px; line-height: 1.45; }
-  .submit .s code { font-size: 11px; color: var(--ink); }
-  .submit .s span { display: block; color: var(--sub); }
-  .count { font-size: 11.5px; color: var(--faint); font-weight: 500; }
-  .runtime { margin-top: 12px; border: 1px solid var(--blue-line); background: var(--blue-soft); border-radius: 10px; padding: 9px 13px; font-size: 12.5px; color: var(--ink); }
-  .runtime b { color: var(--blue); }
-  .runtime code { font-size: 11.5px; }
-  .limit { margin-top: 8px; border: 1px dashed var(--line-strong); border-radius: 10px; padding: 9px 13px; font-size: 12.5px; color: var(--sub); }
-  .limit b { color: var(--coral); }
-  .limit code { font-size: 11.5px; color: var(--ink); }
-  .limit li { list-style: none; margin-top: 3px; }
-  .limit li::before { content: '·'; margin-right: 5px; color: var(--faint); }
-</style></head>
-<body>
-
+  .apps pre { font-size: 11px; overflow-wrap: anywhere; }
+  .apps p, .pair p { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .arrow { text-align: center; color: var(--faint); padding: 8px; font-size: 12px; }
+  .pair .layer { padding: 11px 13px; }
+  .pair b { font-size: 13px; }
+  .example { margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 13px 14px; }
+  .example b { font-size: 14px; }
+  .ok { color: var(--sage); }
+  .error { color: var(--coral); }
+  .context { margin-top: 12px; border-left: 3px solid var(--blue); padding: 7px 12px; font-size: 12px; color: var(--sub); }
+</style></head><body>
+<h1>필드 이름과 값의 타입을 함께 연결해요</h1>
+<p class="lead">필드 이름을 enum으로 모으던 방식에서, 폼 타입으로 접근 경로와 값을 제한하는 방식으로 옮겼어요.</p>
 <div class="zone">공유 패키지</div>
-
 <div class="layer core">
-  <div class="head"><span class="app server">공유 타입</span><b>PROGRAM_FORM_NAME_TYPE_COMMON · IProgramFormCommon</b><span class="file">program.type.ts</span></div>
-<pre><span class="k">enum</span> PROGRAM_FORM_NAME_TYPE_COMMON { ProgramName = <span class="k">'programName'</span>, … }
-<span class="k">interface</span> IProgramFormCommon {
-  [PROGRAM_FORM_NAME_TYPE_COMMON.ProgramName]: string;   <span class="c">// 키를 enum으로 선언</span>
-  …
-}</pre>
-  <div class="pair">
-    <div class="mini"><b>이름</b>enum 값이 그대로 antd <code>name</code> 문자열이 된다. 템플릿 열 개는 <code>SAFEDOC_TEMPLATE_NAME_TYPE</code> 값을 다시 단다</div>
-    <div class="mini"><b>값 타입</b>키를 enum으로 선언한 인터페이스. 미리보기 템플릿의 props가 이 타입을 쓰고, 변환 함수는 이를 확장한 앱 타입으로 폼 값을 다룬다</div>
-  </div>
-  <div class="groups">
-    <div class="grp"><div class="t">라벨<span>1</span></div><div class="f">labels</div></div>
-    <div class="grp"><div class="t">기본 정보<span>12</span></div><div class="f">partnerId · partnerName · programName · price · discountPrice · treatmentSubId …</div></div>
-    <div class="grp"><div class="t">상세 이미지<span>17</span></div><div class="f">detailTemplateType · isRecommended · recommendedTarget · benefit · beforeAfterImages …</div></div>
-  </div>
-  <p class="basis">공통 필드 30개. 묶음은 타입의 주석 기준이다.</p>
-  <div class="sub-h">공통 enum만 아는 공유 FormItem</div>
-  <div class="items">
-    <span class="tag">ProgramNameFormItem</span><span class="tag">ThumbnailImageFormItem</span><span class="tag">ProgramDescriptionFormItem</span><span class="tag">AdditionalPriceFormItem</span><span class="tag">ExposureDateFormItem</span><span class="tag">ProgramDetailImageFormSection</span><span class="tag">SyncTreatmentSub</span>
-  </div>
+  <div class="head"><span class="app server">공통</span>IProgramFormCommon → ProgramForm</div>
+<pre>interface IProgramFormCommon {
+  programName: string;
+  price: number;
+  treatmentSubId: number;
+  <span class="c">// 공통 입력 · 이미지 · 템플릿 · 검진 구성</span>
+}
+const ProgramForm = createTypedForm&lt;IProgramFormCommon&gt;();</pre>
 </div>
-
-<div class="fan"><span class="fan-label">interface IProgramInspectionClient extends IProgramFormCommon</span><i class="l"></i><i class="r"></i></div>
-
-<div class="zone">앱 (두 앱이 같은 이름의 enum·타입을 각자 정의한다)</div>
-
+<div class="arrow">공통 타입에 앱 전용 필드를 더해요 ↓</div>
 <div class="apps">
   <div class="layer">
-    <div class="head"><span class="app bo">Back-Office</span><span class="count">공통 30 + 전용 12</span></div>
-<pre>enum PROGRAM_FORM_NAME_TYPE {
-  Memo = 'memo', …          <span class="c">// 전용</span>
-  ProgramName =
-    PROGRAM_FORM_NAME_TYPE_COMMON
-      .ProgramName, …       <span class="c">// 공통</span>
+    <div class="head"><span class="app bo">Back-Office</span></div>
+<pre>interface IProgramInspectionClient
+  extends IProgramFormCommon {
+  memo?: string;
+  rejectReason?: string;
+  hidePrice?: boolean | null;
+  <span class="c">// 운영·검수 전용 값</span>
 }</pre>
-    <div class="own">
-      <div class="row"><span>CMS 설정</span><code>hidePrice · status · hasEvent · todayDiscount · memo</code></div>
-      <div class="row"><span>가격 이력</span><code>beforePrice · beforeDiscountPrice</code></div>
-      <div class="row"><span>검수 상태</span><code>inspectionStatus · rejectReason</code></div>
-      <div class="row"><span>화면 상태</span><code>isEdit · disabled</code></div>
-      <div class="row"><span>병원명</span><span><code>defaultPartnerName</code> 상세·검수에서 읽기 전용 표시</span></div>
-      <div class="row"><span>앱 FormItem</span><code>ProgramCmsConfigCheckboxFormItems · ProgramCmsMemoFormItem · ProgramLabelFormItem · PartnerNameFormItem · CategoryFormItem · PriceInfoFormItem · DerivedStateFormSection(hidden)</code></div>
-    </div>
-    <div class="submit">
-      <div class="s"><code>clientProgramFormToCreateRequest</code><span>직접 등록 · 수정</span></div>
-      <div class="s"><code>clientProgramFormToInspectionRequest</code><span>승인 · 반려 · 검수중</span></div>
-    </div>
+    <p>운영 설정과 승인·반려에 필요한 값을 다뤄요.</p>
   </div>
-
   <div class="layer">
-    <div class="head"><span class="app pa">병원 관리자</span><span class="count">공통 30 + 전용 4</span></div>
-<pre>enum PROGRAM_FORM_NAME_TYPE {
-  AdminId = 'adminId', …    <span class="c">// 전용</span>
-  ProgramName =
-    PROGRAM_FORM_NAME_TYPE_COMMON
-      .ProgramName, …       <span class="c">// 공통</span>
+    <div class="head"><span class="app pa">병원 관리자</span></div>
+<pre>interface IProgramInspectionClient
+  extends IProgramFormCommon {
+  adminId: number;
+  adminName: string;
+  programId?: number;
+  inspectionType: InspectionType;
 }</pre>
-    <div class="own">
-      <div class="row"><span>요청자</span><code>adminId · adminName</code></div>
-      <div class="row"><span>검수 요청</span><span><code>programId? · inspectionType</code> (INSERT · UPDATE · DELETE)</span></div>
-      <div class="row"><span>앱 FormItem</span><code>ProgramInspectionAdminInfo(hidden) · PaExposureDateFormItem · CategoryFormItem · PriceInfoFormItem</code></div>
-      <div class="row"><span>labels</span><span>공통 필드지만 편집 UI 없이 폼에 hidden으로만 담는다(요청에는 없음)</span></div>
-    </div>
-    <div class="submit">
-      <div class="s"><code>clientInspectionDraftToReqInspectionDraft</code><span>임시저장 (최대 50개)</span></div>
-      <div class="s"><code>clientProgramFormToProgramInspection(type)</code><span>검수 요청</span></div>
-    </div>
+    <p>등록·수정·삭제 검수 요청의 정보를 다뤄요. InspectionType은 설명용으로 줄인 이름이에요.</p>
   </div>
 </div>
-
-<div class="runtime"><b>런타임에는 폼 인스턴스가 하나다.</b> 앱 컨테이너가 antd <code>useForm()</code>으로 만든 인스턴스를 폼 컴포넌트가 <code>form</code> prop으로 antd <code>Form</code>에 넘기고, 공유 FormItem은 <code>Form.Item</code> 컨텍스트와 <code>Form.useFormInstance()</code>로 같은 인스턴스를 받는다. 두 enum이 같은 문자열을 가리켜서 앱 부품과 공유 부품이 같은 칸을 본다. 앱 전용 필드와 제출 흐름은 패키지로 올라가지 않는다.</div>
-
-<div class="limit"><b>타입이 닿지 않는 곳</b>
-  <ul>
-    <li>antd <code>Form.Item</code>의 <code>name</code>은 아무 문자열이나 받는다. enum을 쓰는 것은 약속이고, 문자열을 직접 적어도 컴파일은 통과한다.</li>
-    <li><code>getFieldValue</code>가 돌려주는 값은 <code>any</code>다. 미리보기의 <code>Form.useWatch&lt;IProgramFormCommon&gt;([], form)</code> 같은 제네릭도 확인이 아니라 선언이다.</li>
-    <li>Back-Office 컨테이너는 <code>useForm()</code>을 제네릭 없이 만들고 <code>onFinish</code>의 값에 <code>IProgramInspectionClient</code>를 적어서 받는다. 폼 값이 이 타입으로 다뤄지는 것은 변환 함수로 넘길 때부터다.</li>
-  </ul>
+<div class="zone">같은 factory, 앱마다 필요한 타입</div>
+<div class="pair">
+  <div class="layer"><b>TFieldNamePath&lt;T&gt;</b><p>keyof와 중첩 경로로 Item·List·watch·get/set의 필드 이름을 제한해요.</p></div>
+  <div class="layer"><b>TPathValue&lt;T, P&gt;</b><p>조건부 타입과 infer로 경로를 따라가 get의 반환값과 set의 입력값을 연결해요.</p></div>
 </div>
-
-<p class="foot">실제 코드를 바탕으로 그렸다. 코드는 줄였고, 병원을 가리키는 식별자는 partner로 바꿨다.</p>
+<div class="example">
+  <b>ProgramForm.useFormInstance()</b>
+<pre><span class="ok">form.getFieldValue('programName');       // string
+form.setFieldValue('price', 100000);     // 허용</span>
+<span class="error">form.getFieldValue('programNmae');       // 없는 필드
+form.setFieldValue('price', '100000');   // 값 타입 불일치</span></pre>
+</div>
+<div class="context"><b>실제 폼 인스턴스는 하나예요.</b> 공통·앱 전용 typed API는 같은 Ant Design Form 컨텍스트를 사용해요. 입력을 공유해도 요청 처리까지 공유하지는 않아요.</div>
+<p class="foot">현재 프로그램 폼 타입과 createTypedForm 구현을 바탕으로 그렸어요. 일부 필드와 타입 이름은 줄였어요.</p>
 </body></html>

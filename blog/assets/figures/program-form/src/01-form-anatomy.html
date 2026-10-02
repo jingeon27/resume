@@ -166,6 +166,7 @@
         <div class="row"><span class="lb">가격 정보</span><div><span class="f">price</span><span class="f">discountPrice</span><br><span class="f bo">beforePrice</span><span class="f bo">beforeDiscountPrice</span><span class="aside">변경 검수일 때 이전 가격</span></div></div>
         <div class="row"><span class="lb">프로그램 설명</span><div><span class="f">composition</span></div></div>
         <div class="row"><span class="lb">추가금액/VAT</span><div><span class="f">additionalInfo</span></div></div>
+        <div class="row"><span class="lb">부가세 표시</span><div><span class="f">taxType</span><span class="aside">포함 · 별도 · 없음</span></div></div>
       </div>
 
       <div class="sec">
@@ -204,7 +205,8 @@
   <div class="hid">
     <div class="hid-h"><span class="app bo">Back-Office</span>화면에 없는 전용 값</div>
     <span class="f bo">isEdit</span><span class="f bo">disabled</span><span class="f bo">inspectionStatus</span><span class="f bo">rejectReason</span>
-    <p>입력 모드·잠금·검수 상태처럼 화면을 바꾸는 값</p>
+    <span class="f bo">couponStatus</span>
+    <p>입력 모드·잠금·검수 상태와 쿠폰 적용 여부</p>
   </div>
   <div class="hid">
     <div class="hid-h"><span class="app pa">병원 관리자</span>hidden으로 담는 값</div>
@@ -215,13 +217,18 @@
 </div>
 
 <div class="tally">
-  <div class="tally-h">최상위 필드 수</div>
-  <div class="tally-grid">
-    <div class="t"><b>30<small>개</small></b><span>공통 <code>IProgramFormCommon</code><br>라벨 1 · 기본 정보 12 · 상세 이미지 17</span></div>
-    <div class="t bo"><b>42<small>개</small></b><span>Back-Office 폼<br>공통 30 + 전용 12</span></div>
-    <div class="t pa"><b>34<small>개</small></b><span>병원 관리자 폼<br>공통 30 + 전용 4</span></div>
+  <div class="sec hc">
+    <div class="sec-h">건강검진 구성 <span class="aside">검진 프로그램일 때</span></div>
+    <span class="f">healthCheckDepositAmount</span><span class="f">healthCheckIncludedItemIds</span><span class="f">healthCheckSelectableGroups</span>
+    <p>예약금·기본 검사·선택 검사. 프로그램 요청과 별도 API로 저장해요. 검진 상세 이미지는 이 구성에서 자동으로 만들어요.</p>
   </div>
-  <p>공통 필드 묶음은 타입의 주석 기준이다. 라벨은 화면에서는 CMS 설정 구획에 있지만 따로 센다. 배열 안 필드(<code>{ … }</code>로 표시한 3가지 모양, 각 3개)는 세지 않았다.</p>
+  <div class="tally-h">현재 타입에 선언된 최상위 필드 수</div>
+  <div class="tally-grid">
+    <div class="t"><b>34<small>개</small></b><span>공통 <code>IProgramFormCommon</code><br>기본 정보 · 이미지 · 검진 구성</span></div>
+    <div class="t bo"><b>47<small>개</small></b><span>Back-Office 폼<br>공통 34 + 전용 13</span></div>
+    <div class="t pa"><b>38<small>개</small></b><span>병원 관리자 폼<br>공통 34 + 전용 4</span></div>
+  </div>
+  <p>타입에 선언된 최상위 키만 세었어요. 배열 안의 항목은 세지 않았고, 한 화면에서 모든 필드를 입력하는 것은 아니에요.</p>
 </div>
 
 <p class="foot">실제 코드를 바탕으로 다시 그렸다. 화면 값은 예시다.</p>

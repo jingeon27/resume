@@ -47,7 +47,7 @@
 </style></head>
 <body>
 
-<p class="caption-top">두 경우 모두 <code>SyncTreatmentSub</code>는 하위 시술 상세를 조회한다. 폼에 쓸지는 <code>treatmentId</code> 필드의 touched 여부로 가른다.</p>
+<p class="caption-top"><code>SyncTreatmentSub</code>가 하위 시술 상세를 조회해요. 응답을 적용할 때는 <code>treatmentId</code>와 <code>treatmentSubId</code> 중 하나라도 touched인지 확인해요.</p>
 
 <div class="lanes">
   <div>
@@ -58,7 +58,7 @@
       <div class="who">드로어 컨테이너 · 변환 계층</div>
       <b>저장된 프로그램을 폼 값으로</b>
       <p>응답이 올 때까지 폼을 그리지 않고, 상세 응답을 폼 모델로 바꿔 <code>initialValues</code>로 넘긴다. 검수 상세처럼 같은 드로어에서 건이 바뀌는 화면은 <code>resetFields()</code>로 다시 채운다.</p>
-      <div class="touch"><span class="state mute">treatmentId untouched</span></div>
+      <div class="touch"><span class="state mute">treatmentId untouched</span><span class="state mute">treatmentSubId untouched</span></div>
     </div>
     <div class="arrow-down"></div>
 
@@ -99,8 +99,8 @@
       <span class="n">2</span>
       <div class="who">antd Form</div>
       <b>값이 바뀐 필드에 touched가 켜진다</b>
-      <p><code>setFieldsValue</code>는 값이 바뀐 필드만 touched로 켠다. 시술이 바뀌면 <code>treatmentId</code>가 켜진다.</p>
-      <div class="touch"><span class="state req">treatmentId touched</span></div>
+      <p>현재 동기화는 시술과 하위 시술의 touched 상태를 함께 확인해요. 같은 시술 안에서 하위 항목만 바꾸는 경우도 포함해요.</p>
+      <div class="touch"><span class="state req">treatmentId || treatmentSubId touched</span></div>
     </div>
     <div class="arrow-down"></div>
 
@@ -110,7 +110,7 @@
       <b>새 ID 조합으로 조회</b>
       <pre>queryKey: ['fetchTreatmentSubDetail',
            treatmentId, treatmentSubId]
-enabled:  <span class="c">두 ID가 다 있을 때만</span></pre>
+queryFn: <span class="c">두 ID가 없으면 skipToken</span></pre>
     </div>
     <div class="arrow-down"></div>
 
@@ -136,7 +136,7 @@ enabled:  <span class="c">두 ID가 다 있을 때만</span></pre>
 <p class="tnote">폼 필드는 모두 목록 한 줄 <code>ITreatmentTemplatesItem { image?, title, content? }</code>의 배열이고, 회색 글은 그중 채우는 칸이다. image는 업로드 파일 형태로 바꿔 넣는다.</p>
 <div class="keep-row"><b>건드리지 않는 필드</b> · 추가 혜택 <code>benefit</code>, 전후 사진 <code>beforeAfterImages</code>, 템플릿 색상, 섹션마다 붙은 노출 토글(<code>isRecommended</code> 등)</div>
 
-<div class="gap"><b>남은 틈</b> · touched는 폼을 다시 초기화(<code>resetFields</code>)하기 전까지 true로 남는다. 그래서 카테고리를 바꾼 뒤 상세 이미지 유형을 바꿨다 되돌리면 다시 마운트된 <code>SyncTreatmentSub</code>가 캐시된 응답으로 사용자가 고친 템플릿 값을 한 번 더 덮는다.</div>
+<div class="keep-row"><b>값을 갱신하는 곳은 한곳이에요.</b> 조회 응답을 편집용 배열과 업로드 파일로 바꾸고, typed form의 <code>setFieldValue</code>로 다섯 필드에 적용해요. 현재 구현은 조회 결과와 touched 상태를 확인하는 effect 방식이에요.</div>
 
 <p class="foot">실제 코드(SyncTreatmentSub, 두 앱의 CategoryFormItem·폼 컨테이너)를 바탕으로 그렸다. 코드는 줄였다.</p>
 </body></html>
