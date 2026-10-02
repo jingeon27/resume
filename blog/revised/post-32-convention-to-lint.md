@@ -146,4 +146,4 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 - [ESLint · no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
 - [ESLint · Ignore files](https://eslint.org/docs/latest/use/configure/ignore)
 - [리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정](https://jingeon27.tistory.com/29) — 셀렉터로 안 되는 규칙을 어떻게 만들고 테스트했는지
-- [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/34) — 정적으로 판정할 수 있는 기준을 lint로 내린 이유
+- [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31) — 정적으로 판정할 수 있는 기준을 lint로 내린 이유
