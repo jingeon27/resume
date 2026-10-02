@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .m { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 8px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .zone.next { margin-top: 22px; }
+  .zone .num.zn { width: 17px; height: 17px; font-size: 11px; margin-right: -2px; }
+
+  /* A. 실행 구성 */
+  .cfg { border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px 12px; display: grid; grid-template-columns: 1fr 330px; gap: 18px; align-items: center; }
+  .cfg-h { display: flex; align-items: center; gap: 8px; }
+  .cfg-h b { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 13px; font-weight: 700; }
+  .cfg p { font-size: 12.5px; color: var(--sub); margin-top: 5px; line-height: 1.55; }
+  .projs { display: flex; flex-direction: column; gap: 5px; border-left: 1px solid #eef0f3; padding-left: 14px; }
+  .proj { display: grid; grid-template-columns: 82px 1fr; align-items: baseline; font-size: 12px; color: var(--sub); }
+  .pj { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; font-weight: 600; color: var(--ink); background: var(--soft); border: 1px solid var(--line); border-radius: 5px; padding: 0 6px; justify-self: start; }
+
+  .fan { position: relative; height: 30px; }
+  .fan i { position: absolute; display: block; }
+  .fan .v { border-left: 1.5px solid var(--line-strong); width: 0; }
+  .fan .hz { border-top: 1.5px solid var(--line-strong); height: 0; }
+  .fan .tip { width: 0; height: 0; border-left: 5.5px solid transparent; border-right: 5.5px solid transparent; border-top: 7px solid var(--line-strong); }
+  .fan .lb { font-style: normal; font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+
+  .duo { display: grid; grid-template-columns: 290px 132px 290px; align-items: stretch; }
+  .ac { border: 1px solid var(--line); border-radius: 10px; padding: 10px 13px 11px; background: #fff; }
+  .ac-h { display: flex; align-items: center; gap: 8px; }
+  .port { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12px; font-weight: 600; color: var(--ink); }
+  .kv { display: grid; grid-template-columns: 52px 1fr; gap: 3px 6px; margin-top: 8px; font-size: 12px; color: var(--sub); line-height: 1.5; }
+  .kv > span:nth-child(odd) { color: var(--faint); font-size: 11.5px; }
+  .kv b { color: var(--ink); font-weight: 600; }
+  .kv .m { font-size: 11.5px; color: var(--ink); }
+  .wall { position: relative; display: flex; align-items: center; justify-content: center; }
+  .wall::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; border-left: 1.5px dashed var(--line-strong); }
+  .wall p { position: relative; background: #fff; padding: 6px 4px; font-size: 11.5px; line-height: 1.5; color: var(--sub); text-align: center; width: 112px; }
+
+  .api { border: 1px solid var(--line); border-radius: 10px; background: var(--soft); padding: 9px 14px; display: flex; align-items: center; gap: 10px; }
+  .api .app.server { background: #fff; }
+  .api p { font-size: 12.5px; color: var(--sub); }
+  .api .m { font-size: 11.5px; color: var(--ink); }
+
+  /* B. 한 사이클 */
+  .flow { display: grid; grid-template-columns: 1fr 22px 1fr 22px 1fr; align-items: stretch; }
+  .step { padding: 11px 12px 12px; }
+  .sh { display: flex; align-items: center; gap: 6px; }
+  .num { font-size: 11.5px; font-weight: 700; color: #fff; background: var(--ink); border-radius: 999px; width: 19px; height: 19px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .step h4 { font-size: 13.5px; margin: 7px 0 5px; }
+  .step li { font-size: 12px; line-height: 1.55; padding-left: 10px; text-indent: -10px; margin-top: 3px; }
+  .step li .m { font-size: 11px; color: var(--ink); }
+  .step .btn { margin: 0; padding: 1px 7px; font-size: 11px; text-indent: 0; }
+  .btn.danger { color: var(--coral); border-color: #e2c3b9; }
+  .res { display: grid; grid-template-columns: 38px 1fr; gap: 6px; align-items: start; font-size: 12px; color: var(--sub); line-height: 1.55; margin-top: 7px; }
+  .res .state { margin: 1px 0 0; justify-self: start; }
+  .res b { color: var(--ink); font-weight: 600; }
+  .harr { position: relative; }
+  .harr::before { content: ''; position: absolute; left: 4px; right: 6px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+  .harr::after { content: ''; position: absolute; right: 2px; top: calc(50% - 5px); border-top: 5.5px solid transparent; border-bottom: 5.5px solid transparent; border-left: 7px solid var(--line-strong); }
+  .fnote { margin-top: 9px; font-size: 12px; color: var(--sub); line-height: 1.55; padding-left: 2px; }
+  .fnote b { color: var(--ink); font-weight: 600; }
+
+  /* C. 반려 확인 */
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: stretch; }
+  .pane { border-radius: 10px; padding: 11px 13px 12px; display: flex; flex-direction: column; }
+  .pane.bad { border: 1px dashed #d9b3a7; }
+  .pane.good { border: 1px solid var(--blue-line); }
+  .ph { display: flex; align-items: center; gap: 8px; }
+  .ph b { font-size: 13.5px; letter-spacing: -0.2px; }
+  .mk { width: 20px; height: 20px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex: none; }
+  .mk.x { background: var(--coral-soft); color: var(--coral); border: 1px solid #e2c3b9; }
+  .mk.o { background: var(--blue-soft); color: var(--blue); border: 1px solid var(--blue-line); }
+  .look { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 8px; margin-top: 8px; font-size: 11.5px; color: var(--faint); }
+  .look small { flex-basis: 100%; font-size: 11.5px; color: var(--sub); }
+  .look code { font-size: 11.5px; color: var(--ink); background: var(--soft); border-radius: 4px; padding: 1px 6px; }
+
+  .dw { margin-top: 9px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+  .dw-t { font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-bottom: 1px solid var(--line); background: #fafbfc; }
+  .dw-b { padding: 8px 10px 9px; display: flex; flex-direction: column; gap: 6px; }
+  .banner { font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 5px; }
+  .banner.wait { background: var(--soft); color: var(--ink); }
+  .banner.rej { background: var(--coral-soft); color: var(--coral); }
+  .desc { display: grid; grid-template-columns: 64px 1fr; border: 1px solid #e6e9ee; border-radius: 5px; overflow: hidden; font-size: 11.5px; }
+  .desc > span { padding: 4px 8px; }
+  .desc > span:first-child { background: var(--soft); color: var(--sub); font-weight: 600; border-right: 1px solid #e6e9ee; }
+  .desc .empty { color: var(--faint); }
+  .desc .hit { color: var(--blue); font-weight: 600; background: var(--blue-soft); box-shadow: inset 0 0 0 1.5px var(--blue); border-radius: 0 4px 4px 0; }
+  .ph-form { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--faint); }
+  .ph-form::before, .ph-form::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
+  .acts { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font-size: 11.5px; color: var(--sub); min-height: 24px; }
+  .acts .btn { margin: 0; padding: 2px 8px; font-size: 11px; }
+  .sw { width: 26px; height: 14px; border-radius: 999px; background: var(--blue); position: relative; display: inline-block; }
+  .sw::after { content: ''; position: absolute; right: 2px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: #fff; }
+  .btn.hit { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--coral); }
+  .acts.gone { justify-content: center; border: 1px dashed var(--line); border-radius: 5px; color: var(--faint); font-size: 11px; }
+
+  .verdict { margin-top: 9px; font-size: 12px; line-height: 1.55; color: var(--sub); }
+  .verdict b { display: block; font-size: 12.5px; margin-bottom: 2px; }
+  .bad .verdict b { color: var(--coral); }
+  .good .verdict b { color: var(--blue); }
+  .verdict .btn { margin: 0 1px; padding: 0 6px; font-size: 11px; vertical-align: 1px; }
+</style></head>
+<body>
+
+<div class="zone">실행 구성</div>
+
+<div class="cfg">
+  <div>
+    <div class="cfg-h"><span class="app server">Playwright</span><b>playwright.cross.config.ts</b></div>
+    <p>앱별 E2E 설정과 따로 뒀어요. 한쪽 앱 설정에 넣으면 그 앱의 E2E가 매번 반대편 서버까지 띄우게 돼요.</p>
+  </div>
+  <div class="projs">
+    <div class="proj"><span class="pj">webServer</span><span>두 앱을 로컬 dev 서버로 띄워요</span></div>
+    <div class="proj"><span class="pj">setup</span><span>두 앱에 로그인해 세션을 파일 둘로 남겨요</span></div>
+    <div class="proj"><span class="pj">chromium</span><span>setup이 끝나면 본 테스트를 돌려요</span></div>
+  </div>
+</div>
+
+<div class="fan">
+  <i class="v" style="left:355.25px; top:0; height:14px"></i>
+  <i class="hz" style="left:145px; width:422px; top:14px"></i>
+  <i class="v" style="left:144.25px; top:14px; height:9px"></i>
+  <i class="v" style="left:566.25px; top:14px; height:9px"></i>
+  <i class="tip" style="left:139.5px; top:22px"></i>
+  <i class="tip" style="left:561.5px; top:22px"></i>
+</div>
+
+<div class="duo">
+  <div class="ac">
+    <div class="ac-h"><span class="app pa">병원 관리자</span><span class="port">localhost:3002</span></div>
+    <div class="kv">
+      <span>세션</span><span class="m">.auth/pa.json</span>
+      <span>context</span><span><b>별도</b>로 열어요 · <span class="m">browser.newContext</span></span>
+    </div>
+  </div>
+  <div class="wall"><p>쿠키 도메인이 같은 localhost라 context를 나눠요</p></div>
+  <div class="ac">
+    <div class="ac-h"><span class="app bo">Back-Office</span><span class="port">localhost:3000</span></div>
+    <div class="kv">
+      <span>세션</span><span class="m">.auth/cms.json</span>
+      <span>context</span><span><b>기본</b> · 따로 열지 않고 그대로 써요</span>
+    </div>
+  </div>
+</div>
+
+<div class="fan" style="height:34px">
+  <i class="v" style="left:144.25px; top:0; height:12px"></i>
+  <i class="v" style="left:566.25px; top:0; height:12px"></i>
+  <i class="hz" style="left:145px; width:422px; top:12px"></i>
+  <i class="v" style="left:355.25px; top:12px; height:15px"></i>
+  <i class="tip" style="left:350.5px; top:26px"></i>
+  <i class="lb" style="left:366px; top:14px">두 앱 모두 dev API 서버를 불러요</i>
+</div>
+
+<div class="api">
+  <span class="app server">dev API 서버</span>
+  <p>CORS 허용 목록에 든 <span class="m">localhost:3000</span> · <span class="m">localhost:3002</span>에 두 앱을 띄워요</p>
+</div>
+
+<div class="zone next">한 사이클</div>
+
+<div class="flow">
+  <div class="card step">
+    <div class="sh"><span class="num">1</span><span class="app pa">병원 관리자</span></div>
+    <h4>프로그램 등록 → 검수 요청</h4>
+    <ul>
+      <li>상세 이미지·썸네일을 올리고 이름은 <span class="m">E2E 반려사이클 ${Date.now()}</span></li>
+      <li><span class="btn primary">검수요청</span> → 확인 모달 <span class="btn">검수 요청하기</span></li>
+      <li>등록한 이름이 검수 이력 목록에 보이는지 확인</li>
+    </ul>
+  </div>
+  <div class="harr"></div>
+  <div class="card step">
+    <div class="sh"><span class="num">2</span><span class="app bo">Back-Office</span></div>
+    <h4>검수중 전환 → 반려 또는 승인</h4>
+    <ul>
+      <li>검수요청 목록에서 같은 이름의 행을 열어 상세 드로어로</li>
+      <li>검수중 스위치를 켜고, 서버 응답 뒤에도 켜져 있는지 확인</li>
+      <li><span class="btn danger">반려</span> 사유 입력, 또는 <span class="btn primary">승인</span></li>
+    </ul>
+  </div>
+  <div class="harr"></div>
+  <div class="card step">
+    <div class="sh"><span class="num">3</span><span class="app bo">Back-Office</span></div>
+    <h4>결과 확인</h4>
+    <div class="res"><span class="state no">반려</span><span>테스트가 입력한 사유가 상세에 다시 보이는지 <b>(아래)</b></span></div>
+    <div class="res"><span class="state ok">승인</span><span>상태 배너가 '승인'으로 바뀌고 승인 버튼이 사라졌는지</span></div>
+  </div>
+</div>
+<p class="fnote">반려와 승인은 둘 다 종료 상태라 케이스마다 병원 관리자에서 새로 등록해요. 썸네일 없이 올린 요청은 승인만 막히고 반려는 나가는지도 따로 봐요.</p>
+
+<div class="zone next"><span class="num zn">3</span>반려 확인: 무엇을 찾아야 하는지</div>
+
+<div class="vs">
+  <div class="pane bad">
+    <div class="ph"><span class="mk x">✕</span><b>화면의 '반려' 글자를 찾으면</b></div>
+    <div class="look">찾는 글자 <code>반려</code><small>드로어에 처음부터 있는 글자예요</small></div>
+    <div class="dw">
+      <div class="dw-t">검수요청 상세</div>
+      <div class="dw-b">
+        <div class="banner wait">검수중</div>
+        <div class="desc"><span>반려사유</span><span class="empty">-</span></div>
+        <div class="ph-form">프로그램 정보 폼</div>
+        <div class="acts"><span>검수중</span><span class="sw"></span><span class="btn danger hit">반려</span><span class="btn primary">승인</span></div>
+      </div>
+    </div>
+    <p class="verdict"><b>상태가 그대로여도 통과해요</b>반려가 반영되지 않아 검수중에 머물러도 원래 있던 <span class="btn danger">반려</span> 버튼에 걸려 성공으로 끝나요.</p>
+  </div>
+
+  <div class="pane good">
+    <div class="ph"><span class="mk o">○</span><b>테스트가 입력한 사유를 찾으면</b></div>
+    <div class="look">찾는 글자 <code>반려 사유 ${programName}</code><small>이번 회차 이름을 섞어 옛 이력과도 구분해요</small></div>
+    <div class="dw">
+      <div class="dw-t">검수요청 상세</div>
+      <div class="dw-b">
+        <div class="banner rej">반려</div>
+        <div class="desc"><span>반려사유</span><span class="hit">반려 사유 E2E 반려사이클 …</span></div>
+        <div class="ph-form">프로그램 정보 폼</div>
+        <div class="acts gone">검수중 스위치와 반려·승인 버튼이 사라져요</div>
+      </div>
+    </div>
+    <p class="verdict"><b>반려가 반영된 뒤에만 통과해요</b>반려사유 칸은 검수 이력을 다시 읽어 와야 채워져요. 상태 배너가 '반려'인지, 승인 버튼이 사라졌는지도 봐요.</p>
+  </div>
+</div>
+
+<p class="foot">이 E2E는 CI에 넣지 않고 <span class="m" style="font-size:11.5px">test:e2e:cross</span> 스크립트로 따로 실행해요.</p>
+</body></html>

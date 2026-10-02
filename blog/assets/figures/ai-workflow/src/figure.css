@@ -1,0 +1,83 @@
+@font-face { font-family: 'Pretendard'; src: local('Pretendard Regular'), local('Pretendard-Regular'); font-weight: 400; }
+@font-face { font-family: 'Pretendard'; src: local('Pretendard Medium'), local('Pretendard-Medium'); font-weight: 500; }
+@font-face { font-family: 'Pretendard'; src: local('Pretendard SemiBold'), local('Pretendard-SemiBold'); font-weight: 600; }
+@font-face { font-family: 'Pretendard'; src: local('Pretendard Bold'), local('Pretendard-Bold'); font-weight: 700; }
+
+:root {
+  --ink: #242a32;
+  --sub: #626c79;
+  --faint: #8a93a0;
+  --line: #d9dee5;
+  --line-strong: #b9c1cc;
+  --soft: #f5f7fa;
+  --blue: #2859a3;
+  --blue-soft: #e9eff8;
+  --blue-line: #b8cae6;
+  --sage: #526c50;
+  --sage-soft: #eef3ed;
+  --coral: #a64b34;
+  --coral-soft: #f8eeea;
+  --disabled: #c3c9d2;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: #ffffff; }
+
+body {
+  width: 760px;
+  padding: 28px 24px 30px;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, .mono { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 12.5px; }
+
+.caption-top { font-size: 13px; color: var(--sub); margin-bottom: 16px; }
+
+/* 앱 표시 */
+.app { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; letter-spacing: -0.1px; }
+.app.pa { background: #f1ede6; color: #7a5a2e; }
+.app.bo { background: var(--blue-soft); color: var(--blue); }
+.app.mall { background: var(--sage-soft); color: var(--sage); }
+.app.server { background: var(--soft); color: var(--sub); border: 1px solid var(--line); }
+
+/* 카드 */
+.card { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 12px 14px; }
+.card h4 { font-size: 14.5px; font-weight: 700; margin: 6px 0 4px; letter-spacing: -0.2px; }
+.card p, .card li { font-size: 13px; color: var(--sub); }
+.card ul { list-style: none; }
+.card li::before { content: '·'; margin-right: 5px; color: var(--faint); }
+
+/* 상태 칩 */
+.state { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 1px 7px; border-radius: 5px; margin: 2px 2px 0 0; border: 1px solid var(--line); color: var(--sub); background: #fff; }
+.state.req { border-color: var(--blue-line); color: var(--blue); background: var(--blue-soft); }
+.state.ok { border-color: #bcd0ba; color: var(--sage); background: var(--sage-soft); }
+.state.no { border-color: #e2c3b9; color: var(--coral); background: var(--coral-soft); }
+.state.mute { color: var(--faint); background: var(--soft); }
+
+/* 버튼 모양 */
+.btn { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--line-strong); color: var(--ink); background: #fff; margin: 4px 3px 0 0; }
+.btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.btn.off { color: var(--disabled); border-color: var(--line); background: var(--soft); text-decoration: line-through; }
+.btn.locked { background: #b9c9e4; border-color: #b9c9e4; color: #fff; }
+
+/* 화살표 */
+.arrow-down { height: 22px; position: relative; }
+.arrow-down::before { content: ''; position: absolute; left: 50%; top: 2px; bottom: 7px; border-left: 1.5px solid var(--line-strong); }
+.arrow-down::after { content: ''; position: absolute; left: calc(50% - 5px); bottom: 2px; border-left: 5.5px solid transparent; border-right: 5.5px solid transparent; border-top: 7px solid var(--line-strong); }
+.arrow-label { position: absolute; left: calc(50% + 10px); top: 2px; font-size: 11.5px; color: var(--faint); white-space: nowrap; }
+
+/* 칩(검사 항목) */
+.chip { display: inline-block; font-size: 11.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--ink); margin: 3px 3px 0 0; }
+.chip.on { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); font-weight: 600; }
+.chip.dis { color: var(--disabled); border-color: #e7eaee; }
+.tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--soft); color: var(--sub); border: 1px solid var(--line); margin: 2px 2px 0 0; }
+.tag.gray { color: var(--faint); background: #f0f2f5; border-color: #e3e7ec; }
+.pick { display: inline-block; font-size: 11px; font-weight: 700; color: var(--blue); background: var(--blue-soft); padding: 0 6px; border-radius: 4px; margin-left: 4px; }
+
+.note-line { font-size: 12.5px; color: var(--sub); }
+.foot { margin-top: 16px; font-size: 12px; color: var(--faint); }

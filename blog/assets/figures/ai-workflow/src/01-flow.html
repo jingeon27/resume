@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  :root { --ret: #c98f80; }
+  body { word-break: keep-all; }
+
+  /* 단계 열 + 되돌아가는 길 열. 줄 높이를 정수 px로 두어 행 높이가 정수가 되게 한다(연결선이 같은 굵기로 찍히도록) */
+  .flow { display: grid; grid-template-columns: minmax(0, 1fr) 96px; }
+
+  /* 단계 카드 */
+  .step { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 10px 14px 11px; min-width: 0; }
+  .step.judge { border-color: var(--blue-line); border-left: 4px solid var(--blue); background: var(--blue-soft); padding-left: 11px; }
+  .step.gate { border-color: var(--line-strong); border-left: 4px solid var(--ink); background: var(--soft); padding-left: 11px; }
+  .hd { display: flex; align-items: center; gap: 8px; height: 22px; }
+  .num { flex: none; width: 20px; height: 20px; border-radius: 999px; background: var(--faint); color: #fff; font-size: 11.5px; font-weight: 700; line-height: 20px; display: inline-flex; align-items: center; justify-content: center; }
+  .judge .num { background: var(--blue); }
+  .gate .num { background: var(--ink); }
+  .hd b { font-size: 14.5px; font-weight: 700; letter-spacing: -0.2px; line-height: 22px; }
+  .who { margin-left: auto; flex: none; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; line-height: 16px; }
+  .who.me { background: var(--blue); color: #fff; }
+  .who.agent { background: #fff; color: var(--sub); border: 1px solid var(--line-strong); padding: 1px 8px; }
+  .who.auto { background: var(--ink); color: #fff; }
+  .who.other { background: var(--sage-soft); color: var(--sage); border: 1px solid #bcd0ba; padding: 1px 8px; }
+
+  .bd { padding-left: 28px; margin-top: 4px; }
+  .bd p { font-size: 12.5px; color: var(--sub); line-height: 20px; }
+  .bd p b { color: var(--ink); font-weight: 600; }
+  .bd code { font-size: 11.5px; color: var(--ink); }
+  .line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; }
+  .line .chip, .line .state { margin: 0; line-height: 17px; }
+  .line .chip code { font-size: 11px; }
+  .line .k { font-size: 11.5px; line-height: 17px; color: var(--faint); font-weight: 600; margin-right: 2px; }
+  .line .t { font-size: 12px; line-height: 18px; color: var(--sub); margin: 0 10px 0 3px; }
+  .line .t:last-child { margin-right: 0; }
+  .judge .chip { border-color: var(--blue-line); }
+  .line + p { margin-top: 5px; }
+
+  /* 되돌아가는 길: 세로선은 x 48~49px. 선은 1px 막대로(크롬이 CSS px 단위로 맞춰 찍으므로 소수 굵기는 행마다 굵기가 달라진다), 모서리는 같은 x에 맞춘 SVG 호로 그린다 */
+  .rl { position: relative; }
+  .rl::before { content: ''; position: absolute; left: 48px; width: 1px; top: 0; bottom: 0; background: var(--ret); }
+  .rl.top::before { top: calc(50% + 10px); }
+  .rl.end::before { bottom: calc(50% + 9px); }
+  .rl .cn { position: absolute; left: 6px; width: 43px; top: 50%; height: 1px; background: var(--ret); }
+  .rl .cn.from { left: 4px; width: 45px; }
+  .rl.top .cn { width: 33px; }
+  .rl.end .cn { left: 4px; width: 35px; }
+  .rl .arc { position: absolute; left: 38px; width: 11px; height: 11px; overflow: visible; }
+  .rl.top .arc { top: 50%; }
+  .rl.end .arc { top: calc(50% - 10px); }
+  .rl .arc path { fill: none; stroke: var(--ret); stroke-width: 1; }
+  .rl .ah { position: absolute; left: 0; top: calc(50% - 4.5px); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 7px solid var(--coral); }
+  .rl .dot { position: absolute; left: 0; top: calc(50% - 2.5px); width: 6px; height: 6px; border-radius: 50%; background: var(--coral); }
+  .rl .lbl { position: absolute; z-index: 2; left: 4px; width: 88px; top: 50%; transform: translateY(-50%); background: var(--coral-soft); border: 1px solid #e2c3b9; border-radius: 8px; padding: 6px 4px 7px; text-align: center; font-size: 12px; font-weight: 600; color: var(--coral); line-height: 17px; }
+
+  .legend { display: flex; gap: 18px; margin-top: 16px; font-size: 12px; color: var(--sub); align-items: center; flex-wrap: wrap; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { display: inline-block; width: 16px; height: 14px; border-radius: 3px; border: 1px solid var(--line); background: #fff; }
+  .sw.judge { border-color: var(--blue-line); border-left: 4px solid var(--blue); background: var(--blue-soft); }
+  .sw.gate { border-color: var(--line-strong); border-left: 4px solid var(--ink); background: var(--soft); }
+</style></head>
+<body>
+
+<div class="flow">
+
+  <!-- 1 -->
+  <div class="step judge">
+    <div class="hd"><span class="num">1</span><b>티켓·plan 검토</b><span class="who me">사람</span></div>
+    <div class="bd">
+      <p>티켓 브랜치 스킬이 plan을 내고 멈춰요. auto mode여도 <b>승인 전에는 구현하지 않아요.</b></p>
+      <div class="line"><span class="k">plan</span><span class="chip">티켓 요약</span><span class="chip">영향 범위</span><span class="chip">작업 순서</span><span class="chip">검토 필요 항목</span></div>
+    </div>
+  </div>
+  <div class="rl top"><span class="ah"></span><span class="cn"></span><svg class="arc" viewBox="0 0 11 11"><path d="M0 0.5 H1.5 A9 9 0 0 1 10.5 9.5 V11"/></svg></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"></div>
+
+  <!-- 2 -->
+  <div class="step">
+    <div class="hd"><span class="num">2</span><b>테스트 작성</b><span class="who agent">에이전트</span></div>
+    <div class="bd">
+      <div class="line" style="margin-top:3px"><span class="chip"><code>*.spec</code></span><span class="t">새 기능의 기대 동작(BDD 형식)</span><span class="chip"><code>*.test</code></span><span class="t">운영·QA에서 발견한 오류 재현</span></div>
+      <p>새 패턴의 테스트는 코드를 일부러 깨뜨려 실제로 실패하는지 확인한 뒤 넣어요.</p>
+    </div>
+  </div>
+  <div class="rl"><span class="ah"></span><span class="cn"></span></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"></div>
+
+  <!-- 3 -->
+  <div class="step">
+    <div class="hd"><span class="num">3</span><b>에이전트 구현·에이전트 코드 리뷰</b><span class="who agent">에이전트</span></div>
+    <div class="bd">
+      <p>리뷰 에이전트가 diff를 읽고 항목마다 심각도와 확신도를 붙여요.</p>
+      <div class="line"><span class="state no">Critical</span><span class="state">Warning</span><span class="state mute">Nit</span><span class="t">Critical이 있으면 push 전에 사람이 확인해요.</span></div>
+    </div>
+  </div>
+  <div class="rl"><span class="ah"></span><span class="cn"></span></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"><span class="lbl">문제가 나오면<br>앞 단계로<br>돌아가요</span></div>
+
+  <!-- 4 -->
+  <div class="step gate">
+    <div class="hd"><span class="num">4</span><b>변경분 테스트·lint·typecheck</b><span class="who auto">push 게이트</span></div>
+    <div class="bd">
+      <div class="line" style="margin-top:3px"><span class="chip">변경 파일 <code>eslint</code></span><span class="chip">타입 검사</span><span class="chip"><code>vitest --changed</code></span><span class="chip"><code>knip</code></span></div>
+      <p>하나라도 실패하면 <b>push를 멈춰요.</b></p>
+    </div>
+  </div>
+  <div class="rl"><span class="dot"></span><span class="cn from"></span></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"></div>
+
+  <!-- 5 -->
+  <div class="step judge">
+    <div class="hd"><span class="num">5</span><b>제 diff 리뷰·로컬 화면 확인</b><span class="who me">사람</span></div>
+    <div class="bd">
+      <p>AI가 만든 코드는 <b>테스트까지 전부 읽고</b>, 로컬에서 화면을 직접 확인해요.</p>
+    </div>
+  </div>
+  <div class="rl"><span class="dot"></span><span class="cn from"></span></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"></div>
+
+  <!-- 6 -->
+  <div class="step gate">
+    <div class="hd"><span class="num">6</span><b>전체 CI(테스트·knip·lint)</b><span class="who auto">CI</span></div>
+    <div class="bd">
+      <p>PR을 열거나 커밋을 더 올릴 때마다 돌아요. 실패한 작업은 <b>완료로 보지 않아요.</b></p>
+    </div>
+  </div>
+  <div class="rl"><span class="dot"></span><span class="cn from"></span></div>
+
+  <div><div class="arrow-down"></div></div><div class="rl"></div>
+
+  <!-- 7 -->
+  <div class="step">
+    <div class="hd"><span class="num">7</span><b>QA 더블 체크 요청</b><span class="who other">다른 사람</span></div>
+    <div class="bd">
+      <p>stage 화면에서 다른 사람이 한 번 더 확인해요.</p>
+    </div>
+  </div>
+  <div class="rl end"><span class="dot"></span><span class="cn"></span><svg class="arc" viewBox="0 0 11 11"><path d="M10.5 0 V1.5 A9 9 0 0 1 1.5 10.5 H0"/></svg></div>
+
+</div>
+
+<div class="legend">
+  <span><i class="sw judge"></i>사람이 판단하는 자리</span>
+  <span><i class="sw gate"></i>자동으로 검사하는 자리</span>
+</div>
+</body></html>

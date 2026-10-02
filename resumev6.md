@@ -319,8 +319,8 @@
 
 - [설계와 추상화 기준](https://jingeon27.tistory.com/26) — 공통 UI의 조합 가능성과 기능·화면의 구체적인 책임을 나누는 기준.
 - [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25) — 제품 로직을 복제한 Harness와 잘못된 Mock 계약을 발견하고 검증 대상을 바꾼 과정.
-- [타입 단언을 걷어내다 다시 세운 기준](https://jingeon27.tistory.com/35) — 폴백 제거로 발생한 회귀를 통해 타입 정리와 런타임 실패 정책을 구분한 과정.
-- [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/34) — plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬·CI 검증 범위를 정한 이유.
+- [타입 단언을 걷어내다 다시 세운 기준](https://jingeon27.tistory.com/32) — 폴백 제거로 발생한 회귀를 통해 타입 정리와 런타임 실패 정책을 구분한 과정.
+- [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/31) — plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬·CI 검증 범위를 정한 이유.
 
 ---
 

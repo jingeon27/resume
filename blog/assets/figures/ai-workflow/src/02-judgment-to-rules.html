@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .zone { font-size: 12px; font-weight: 700; color: var(--faint); letter-spacing: 0.2px; margin: 0 0 9px 2px; display: flex; align-items: center; gap: 8px; }
+  .zone::after { content: ''; flex: 1; border-top: 1px dashed var(--line-strong); }
+  .zone code { font-size: 11.5px; font-weight: 600; color: var(--sub); }
+  .app.admin { background: #f0ecf6; color: #5f4b85; }
+
+  /* 판단 → 자리 */
+  .map { display: grid; grid-template-columns: 182px 20px minmax(0, 1fr); }
+  .heads { grid-column: 3; display: grid; grid-template-columns: 118px 22px minmax(0, 1fr); padding: 0 13px 5px; font-size: 11.5px; font-weight: 700; color: var(--faint); }
+  .heads span:last-child { grid-column: 3; padding-left: 13px; }
+
+  .start { grid-column: 1; grid-row: 2 / span 5; align-self: center; }
+  .sc { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 10px 12px 11px; }
+  .sc .lbl { font-size: 11.5px; font-weight: 700; color: var(--faint); }
+  .sc b { display: block; font-size: 14px; letter-spacing: -0.2px; line-height: 1.4; margin-top: 2px; }
+  .sc p { font-size: 12px; color: var(--sub); line-height: 1.5; margin-top: 4px; }
+  .sc.miss { border-color: #e2c3b9; margin-right: 12px; }
+  .sc.miss .lbl { color: var(--coral); }
+  .sc.keep { border: 1.5px solid var(--ink); }
+  .start .arrow-down { height: 24px; margin-right: 12px; }
+  .keepwrap { position: relative; padding-right: 12px; }
+  .keepwrap::after { content: ''; position: absolute; right: 0; width: 12px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+
+  .stub { grid-column: 2; position: relative; }
+  .stub::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; border-left: 1.5px solid var(--line-strong); }
+  .stub.first::before { top: 50%; }
+  .stub.last::before { bottom: 50%; }
+  .stub::after { content: ''; position: absolute; left: 0; right: 6px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+  .stub i { position: absolute; right: 1px; top: calc(50% - 4.25px); border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 6.5px solid var(--line-strong); }
+
+  .row { grid-column: 3; padding: 4px 0; }
+  .rc { display: grid; grid-template-columns: 118px 22px minmax(0, 1fr); align-items: center; border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 9px 12px 10px; }
+  .judge { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.45; }
+  .arr { position: relative; align-self: stretch; }
+  .arr::before { content: ''; position: absolute; left: 2px; right: 6px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+  .arr::after { content: ''; position: absolute; right: 2px; top: calc(50% - 4.25px); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; border-left: 6px solid var(--line-strong); }
+  .dest { min-width: 0; border-left: 1px solid #eef0f3; padding-left: 12px; }
+  .dh { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .dh b { font-size: 14px; letter-spacing: -0.2px; }
+  .dh b code { font-size: 13px; }
+  .dh .hint { font-size: 11.5px; color: var(--faint); }
+  .dh .hint code { font-size: 11px; }
+  .dh .path { font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace; font-size: 11px; color: var(--faint); }
+  .how { font-size: 11.5px; color: var(--sub); margin-top: 1px; }
+  .exs { margin-top: 2px; }
+  .ex { display: inline-block; font-size: 11.5px; line-height: 1.5; padding: 2px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); margin: 4px 4px 0 0; }
+  .ex code { font-size: 11px; }
+  .ex .app { font-size: 11px; padding: 0 6px; margin-left: 5px; }
+  .ex.hl { border-color: var(--blue-line); background: var(--blue-soft); color: var(--blue); font-weight: 600; }
+
+  /* 실제 예 띠 */
+  .band { border: 1px solid var(--blue-line); background: var(--blue-soft); border-radius: 10px; padding: 10px 12px 11px; }
+  .steps { display: grid; grid-template-columns: minmax(0, 1fr) 24px minmax(0, 1fr) 24px minmax(0, 1fr); align-items: stretch; }
+  .step { background: #fff; border: 1px solid var(--blue-line); border-radius: 8px; padding: 8px 10px 9px; }
+  .step .k { display: block; font-size: 11.5px; font-weight: 700; color: var(--blue); }
+  .step b { display: block; font-size: 13px; letter-spacing: -0.2px; margin-top: 1px; }
+  .step b code { font-size: 12px; }
+  .step p { font-size: 11.5px; color: var(--sub); line-height: 1.5; margin-top: 3px; }
+  .step p code { font-size: 11px; color: var(--ink); }
+  .sarr { position: relative; }
+  .sarr::before { content: ''; position: absolute; left: 4px; right: 7px; top: 50%; border-top: 1.5px solid var(--blue-line); }
+  .sarr::after { content: ''; position: absolute; right: 3px; top: calc(50% - 4.25px); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; border-left: 6px solid var(--blue-line); }
+</style></head>
+<body>
+
+<div class="zone">반복 지적이 남는 자리</div>
+
+<div class="map">
+  <div class="heads"><span>판단의 성격</span><span></span><span>남는 자리 · 예</span></div>
+
+  <div class="start">
+    <div class="sc miss">
+      <span class="lbl">출발점</span>
+      <b>에이전트 구현이<br>의도와 어긋남</b>
+      <p>테스트나 diff 리뷰,<br>화면 확인에서 드러나요</p>
+    </div>
+    <div class="arrow-down"></div>
+    <div class="keepwrap">
+      <div class="sc keep">
+        <b>코드만 고치지 않고<br>기준을 남겨요</b>
+        <p>다음 구현부터<br>맞게 나오도록</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 lint -->
+  <div class="stub first"><i></i></div>
+  <div class="row"><div class="rc">
+    <div class="judge">코드만 보고<br>판정할 수 있는 것</div>
+    <div class="arr"></div>
+    <div class="dest">
+      <div class="dh"><b>lint 규칙</b><span class="hint">ESLint 자체 규칙</span></div>
+      <p class="how">push 게이트와 CI에서 기계가 판정해요</p>
+      <div class="exs">
+        <span class="ex">레이어 역참조</span><span class="ex">다른 슬라이스 내부 import</span><span class="ex">raw query key</span><span class="ex">page 간 직접 참조<span class="app mall">복지몰</span></span><span class="ex hl"><code>&lt;Form key&gt;</code>로 재초기화<span class="app admin">관리자 서비스</span></span>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 2 skill -->
+  <div class="stub"><i></i></div>
+  <div class="row"><div class="rc">
+    <div class="judge">작업 종류마다<br>되풀이되는 판단</div>
+    <div class="arr"></div>
+    <div class="dest">
+      <div class="dh"><b>skill</b><span class="path">skills/*/SKILL.md</span></div>
+      <p class="how">그 작업을 구현하고 리뷰할 때 에이전트가 읽어요</p>
+      <div class="exs">
+        <span class="ex">폼</span><span class="ex">Query</span><span class="ex">FSD</span><span class="ex">테스트</span><span class="ex">디자인 시스템<span class="app mall">복지몰</span></span>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 3 AGENTS.md -->
+  <div class="stub"><i></i></div>
+  <div class="row"><div class="rc">
+    <div class="judge">저장소 전체에<br>걸리는 원칙</div>
+    <div class="arr"></div>
+    <div class="dest">
+      <div class="dh"><b>AGENTS.md</b><span class="hint">규칙 정본</span></div>
+      <p class="how">세션을 열면 먼저 읽혀요</p>
+      <div class="exs">
+        <span class="ex">바꾸기 전 계약을 테스트로 먼저 고정</span><span class="ex">뮤테이션 체크</span><span class="ex">검증은 push 직전에 변경분만</span><span class="ex hl"><code>&lt;Form key&gt;</code> 함정<span class="app admin">관리자 서비스</span></span>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 4 문서·리뷰어 -->
+  <div class="stub"><i></i></div>
+  <div class="row"><div class="rc">
+    <div class="judge">사용처를<br>봐야 하는 판단</div>
+    <div class="arr"></div>
+    <div class="dest">
+      <div class="dh"><b>문서 · 리뷰어 정의</b><span class="path">code-reviewer.md</span></div>
+      <p class="how">리뷰 에이전트가 diff를 볼 때 기준이 돼요</p>
+      <div class="exs">
+        <span class="ex">한 화면의 조각인지 도메인 UI인지</span><span class="ex">오탐 예외: 두 앱의 API route를 공통 팩토리로<br>뽑으라고 권하지 않음<span class="app admin">관리자 서비스</span></span>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- 5 *.test -->
+  <div class="stub last"><i></i></div>
+  <div class="row"><div class="rc">
+    <div class="judge">다시 나오면<br>안 되는 회귀</div>
+    <div class="arr"></div>
+    <div class="dest">
+      <div class="dh"><b><code>*.test</code> 재현 테스트</b><span class="hint">기대 동작을 적는 <code>*.spec</code>과 따로 둬요</span></div>
+      <p class="how">고친 뒤에도 남아 같은 회귀를 잡아요</p>
+      <div class="exs">
+        <span class="ex">운영·QA에서 발견한 오류를 재현</span><span class="ex"><code>it</code>은 버그 이름이 아니라 고쳐진 뒤의 동작으로</span>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<div class="zone" style="margin-top:18px">실제로 옮겨 간 예 · <code>&lt;Form key&gt;</code> 함정 <span class="app admin">관리자 서비스</span></div>
+<div class="band">
+  <div class="steps">
+    <div class="step">
+      <span class="k">테스트</span>
+      <b>테스트가 먼저 잡음</b>
+      <p>동의 모달 테스트를 쓰다가<br>key로 재초기화하게 바꾼 폼에<br>이전 값이 남는 걸 찾았어요</p>
+    </div>
+    <div class="sarr"></div>
+    <div class="step">
+      <span class="k">AGENTS.md</span>
+      <b>작업 원칙으로 적음</b>
+      <p><code>&lt;Form key&gt;</code>로는 폼이 재초기화되지 않아요. <code>useForm()</code>을 부르는 컴포넌트째 key를 주거나 <code>resetFields()</code>를 써요</p>
+    </div>
+    <div class="sarr"></div>
+    <div class="step">
+      <span class="k">lint 규칙</span>
+      <b><code>form/no-key-reset</code></b>
+      <p>key와 form을 함께 준 폼 루트를 잡아요.<br>저장소 위반 0건을 확인한 뒤<br>error로 켰어요</p>
+    </div>
+  </div>
+</div>
+
+<p class="foot">저장소 표시가 없는 예는 두 저장소에 모두 있어요.</p>
+</body></html>
