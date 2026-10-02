@@ -153,4 +153,4 @@ useEffect(() => {
 - [Amplitude — HTTP V2 API](https://amplitude.com/docs/apis/analytics/http-v2) — `insert_id`로 같은 이벤트를 한 번만 받는 중복 제거
 - [Next.js — `NextResponse` cookies](https://nextjs.org/docs/app/api-reference/functions/next-response#cookies)
 - [MDN — Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) — `Max-Age`, `HttpOnly`
-- 관련 글: [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25) · [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/34)
+- 관련 글: [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25) · [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
