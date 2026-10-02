@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="figure.css">
+<style>
+  body { word-break: keep-all; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) 244px; column-gap: 16px; }
+  .lane-head { font-size: 15px; font-weight: 700; padding: 8px 12px; border-radius: 8px; letter-spacing: -0.2px; margin-bottom: 12px; }
+  .lane-head small { display: block; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 2px; letter-spacing: 0; }
+  .par .lane-head { background: var(--soft); }
+  .co .lane-head { background: var(--blue-soft); }
+  .col { display: flex; flex-direction: column; min-width: 0; }
+  .nw { white-space: nowrap; }
+
+  /* 같은 것 셋 */
+  .eq { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .eq-i { font-size: 12.5px; font-weight: 700; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--line-strong); background: #fff; white-space: nowrap; }
+  .eq-i code { font-size: 11px; font-weight: 400; color: var(--sub); margin-left: 4px; }
+  .eq-s { font-size: 13px; font-weight: 700; color: var(--faint); }
+  .eq-note { font-size: 11.5px; color: var(--sub); margin-top: 6px; line-height: 1.5; }
+
+  /* 레인 */
+  .tracks { margin-top: 12px; display: grid; row-gap: 6px; }
+  .track { display: grid; grid-template-columns: 96px minmax(0, 1fr); align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 7px 10px; background: #fff; }
+  .tk b { display: block; font-size: 13px; letter-spacing: -0.2px; }
+  .tk code { display: block; font-size: 11px; color: var(--sub); margin-top: 1px; }
+  .steps { display: flex; align-items: center; }
+  .steps .ar { flex: 1 1 15px; max-width: 34px; }
+  .st { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line-strong); background: #fff; color: var(--ink); white-space: nowrap; }
+  .st.me { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .st code { font-size: 11px; font-weight: 600; }
+  .ar { display: inline-block; width: 15px; height: 10px; position: relative; flex: none; }
+  .ar::before { content: ''; position: absolute; left: 2px; right: 4px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+  .ar::after { content: ''; position: absolute; right: 1px; top: calc(50% - 4px); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; border-left: 5.5px solid var(--line-strong); }
+  .cap { font-size: 11.5px; color: var(--sub); margin-top: 7px; line-height: 1.5; margin-bottom: 12px; }
+  .cap code { font-size: 11px; color: var(--ink); }
+
+  /* CPU */
+  .cpu { margin-top: auto; border: 1px dashed var(--line-strong); border-radius: 10px; padding: 9px 12px 10px; }
+  .cpu-h { font-size: 12.5px; font-weight: 700; color: var(--coral); }
+  .cpu-flow { display: grid; grid-template-columns: minmax(0, 1fr) 15px minmax(0, 1.3fr) 15px minmax(0, 1fr); align-items: stretch; margin-top: 6px; }
+  .cf { font-size: 11.5px; line-height: 1.45; padding: 5px 8px; border-radius: 7px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+  .cf.bad { background: var(--coral-soft); border-color: #e2c3b9; }
+  .cf.fix { background: var(--sage-soft); border-color: #bcd0ba; }
+  .cpu-flow .ar { height: auto; width: auto; }
+
+  /* 함께 편집 */
+  .pre { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px 9px; background: #fff; }
+  .pre-k { font-size: 11px; font-weight: 700; color: var(--faint); }
+  .pre p { font-size: 12px; color: var(--ink); line-height: 1.45; margin-top: 1px; }
+  .co .arrow-down { height: 20px; }
+  .ed { border: 1px solid var(--blue-line); border-radius: 10px; padding: 10px 12px 11px; background: #fff; }
+  .ed-h { display: flex; align-items: center; gap: 7px; }
+  .ed-h b, .ses-h b { font-size: 13.5px; letter-spacing: -0.2px; }
+  .loop { position: relative; width: 146px; margin: 11px auto 0; }
+  .loop .st { display: block; width: 92px; text-align: center; padding: 4px 0; }
+  .loop .dn { height: 18px; width: 92px; position: relative; }
+  .loop .dn::before { content: ''; position: absolute; left: 46px; top: 2px; bottom: 6px; border-left: 1.5px solid var(--line-strong); }
+  .loop .dn::after { content: ''; position: absolute; left: 41.5px; bottom: 1px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid var(--line-strong); }
+  .back { position: absolute; left: 92px; top: 13px; bottom: 13px; width: 20px; border: 1.5px solid var(--line-strong); border-left: 0; border-radius: 0 7px 7px 0; }
+  .back::after { content: ''; position: absolute; left: -1px; top: -5.25px; border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; border-right: 6px solid var(--line-strong); }
+  .again { position: absolute; left: 118px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--faint); white-space: nowrap; }
+  .ed p { font-size: 11.5px; color: var(--sub); margin-top: 9px; line-height: 1.5; text-align: center; }
+
+  .bi { height: 34px; position: relative; }
+  .bi::before { content: ''; position: absolute; left: 50%; top: 8px; bottom: 8px; border-left: 1.5px solid var(--line-strong); }
+  .bi i { position: absolute; left: calc(50% - 4.75px); border-left: 5.5px solid transparent; border-right: 5.5px solid transparent; }
+  .bi i.u { top: 2px; border-bottom: 7px solid var(--line-strong); }
+  .bi i.d { bottom: 2px; border-top: 7px solid var(--line-strong); }
+  .bi span { position: absolute; left: calc(50% + 12px); top: 50%; transform: translateY(-50%); font-size: 11.5px; color: var(--sub); white-space: nowrap; }
+
+  .ses { border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px 10px; background: #fff; margin-top: auto; }
+  .ses-h { display: flex; align-items: center; gap: 7px; }
+  .ses p { font-size: 11.5px; color: var(--sub); margin-top: 4px; line-height: 1.5; }
+
+  /* 기준 띠 */
+  .band { margin-top: 16px; border-radius: 10px; background: var(--soft); border: 1px solid var(--line); padding: 11px 14px 12px; }
+  .band-h { display: flex; align-items: baseline; gap: 10px; }
+  .band-k { font-size: 11.5px; font-weight: 700; color: #fff; background: var(--ink); border-radius: 5px; padding: 1px 7px; flex: none; position: relative; top: -1px; }
+  .band-h b { font-size: 14px; letter-spacing: -0.2px; }
+  .band-h .lg { margin-left: auto; font-size: 11px; color: var(--sub); white-space: nowrap; display: flex; align-items: center; gap: 5px; align-self: center; }
+  /* 띠 안쪽 여백(15px)만큼 위 두 열에서 양쪽으로 들여, 오른쪽 칸이 위 오른쪽 열 바로 아래에 오게 한다 */
+  .band-row { display: grid; grid-template-columns: minmax(0, 1fr) 214px; column-gap: 46px; margin-top: 12px; }
+  .jl { font-size: 11.5px; font-weight: 700; color: var(--sub); margin-bottom: 4px; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex: none; }
+  .j-line { display: flex; align-items: center; height: 14px; position: relative; }
+  .j-line::before { content: ''; position: absolute; left: 4px; right: 4px; top: 50%; border-top: 1.5px solid var(--line-strong); }
+  .j-line .dot { position: relative; }
+  .j-line .mid { flex: 1; text-align: center; position: relative; }
+  .j-line .mid span { background: var(--soft); padding: 0 7px; font-size: 11px; color: var(--faint); }
+  .j-line .mid code { font-size: 11px; color: var(--faint); }
+  .j-line.dense { justify-content: space-between; }
+  .j-ends { display: flex; justify-content: space-between; gap: 12px; margin-top: 5px; font-size: 11.5px; color: var(--ink); line-height: 1.45; }
+  .j-ends span:last-child { text-align: right; }
+</style></head>
+<body>
+
+<div class="grid">
+  <section class="col par">
+    <div class="lane-head">병렬로 맡기는 일<small>독립 티켓</small></div>
+
+    <div class="eq">
+      <span class="eq-i">티켓 하나</span><span class="eq-s">=</span>
+      <span class="eq-i">git worktree 하나<code>../&lt;브랜치&gt;</code></span><span class="eq-s">=</span>
+      <span class="eq-i">에이전트 세션 하나</span>
+    </div>
+    <p class="eq-note">worktree는 저장소의 티켓 브랜치·worktree 스킬이 만들어요.<br>브랜치와 의존성이 worktree마다 따로라 한 세션이 건드려도 다른 세션은 그대로예요.</p>
+
+    <div class="tracks">
+      <div class="track">
+        <div class="tk"><b>티켓 A</b><code>../&lt;브랜치 A&gt;</code></div>
+        <div class="steps"><span class="st me">plan 승인</span><i class="ar"></i><span class="st">테스트 작성</span><i class="ar"></i><span class="st">구현</span><i class="ar"></i><span class="st"><code>/push</code></span><i class="ar"></i><span class="st">PR</span></div>
+      </div>
+      <div class="track">
+        <div class="tk"><b>티켓 B</b><code>../&lt;브랜치 B&gt;</code></div>
+        <div class="steps"><span class="st me">plan 승인</span><i class="ar"></i><span class="st">테스트 작성</span><i class="ar"></i><span class="st">구현</span><i class="ar"></i><span class="st"><code>/push</code></span><i class="ar"></i><span class="st">PR</span></div>
+      </div>
+      <div class="track">
+        <div class="tk"><b>티켓 C</b><code>../&lt;브랜치 C&gt;</code></div>
+        <div class="steps"><span class="st me">plan 승인</span><i class="ar"></i><span class="st">테스트 작성</span><i class="ar"></i><span class="st">구현</span><i class="ar"></i><span class="st"><code>/push</code></span><i class="ar"></i><span class="st">PR</span></div>
+      </div>
+    </div>
+    <p class="cap"><code>/push</code>는 메인 worktree로 옮기지 않고<br>그 worktree 안에서 에이전트 리뷰와 변경분 검증을 돌린 뒤 PR을 올려요.</p>
+
+    <div class="cpu">
+      <div class="cpu-h">세션이 늘자 검증이 병목이 됐어요</div>
+      <div class="cpu-flow">
+        <div class="cf">세션마다 동시에<br><span class="nw">전체 lint·테스트</span></div>
+        <i class="ar"></i>
+        <div class="cf bad">turbo가 전 패키지를 콜드로 돌려 CPU를 다 씀</div>
+        <i class="ar"></i>
+        <div class="cf fix">push 직전 검증을 변경분으로 좁힘</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="col co">
+    <div class="lane-head">함께 편집하는 일<small>리팩터링처럼 코드를 계속 보며 결정하는 일</small></div>
+
+    <div class="pre">
+      <span class="pre-k">먼저</span>
+      <p>리팩터링은 바꾸기 전 계약을<br>테스트로 고정해요</p>
+    </div>
+    <div class="arrow-down"></div>
+
+    <div class="ed">
+      <div class="ed-h"><span class="app server">VS Code</span><b>제가 직접 편집해요</b></div>
+      <div class="loop">
+        <span class="st">코드 보기</span>
+        <div class="dn"></div>
+        <span class="st me">결정</span>
+        <div class="dn"></div>
+        <span class="st">편집</span>
+        <div class="back"></div>
+        <span class="again">다시</span>
+      </div>
+      <p>코드를 보며 정하고 고치기를 이어 가요</p>
+    </div>
+
+    <div class="bi"><i class="u"></i><i class="d"></i><span>변경 맥락 공유</span></div>
+
+    <div class="ses">
+      <div class="ses-h"><span class="app server">에이전트</span><b>세션 하나</b></div>
+      <p>제 편집과 같은 변경 맥락을 함께 봐요</p>
+    </div>
+  </section>
+</div>
+
+<div class="band">
+  <div class="band-h"><span class="band-k">구분 기준</span><b>작업 수보다 판단을 얼마나 연속해서 함께해야 하는지</b><span class="lg"><i class="dot"></i>제 판단이 들어가는 자리</span></div>
+  <div class="band-row">
+    <div>
+      <div class="jl">병렬로 맡기는 일</div>
+      <div class="j-line"><i class="dot"></i><span class="mid"><span>테스트 작성부터 <code>/push</code>까지는 세션이 진행해요</span></span><i class="dot"></i></div>
+      <div class="j-ends"><span>plan에서 기준을 맞춰요</span><span>diff·테스트를 전부 읽고 기준대로인지 확인해요</span></div>
+    </div>
+    <div>
+      <div class="jl">함께 편집하는 일</div>
+      <div class="j-line dense"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i></div>
+      <div class="j-ends"><span>코드를 보는 내내 정해요</span></div>
+    </div>
+  </div>
+</div>
+
+</body></html>
