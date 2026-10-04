@@ -1,19 +1,21 @@
-# 선언적 코드는 변경을 작게 만든다
+# 선언적이라고 다 읽기 쉬운 건 아니었어요
+
+복지몰 검색 화면의 Chip 구성을 확인하려고 코드를 열었는데, 어떤 Chip이 보이는지 바로 알기 어려웠어요. 설정 배열에는 라벨과 클릭 동작뿐 아니라 노출 조건까지 들어 있었거든요. 프로그램 탭에서 필터 검색을 했을 때의 화면을 보려면 각 항목의 조건을 하나씩 따라가야 했어요.
+
+설정으로 화면을 만들면 반복을 줄일 수는 있어요. 그런데 사용처가 짧아진 만큼 공통 렌더러를 더 많이 읽어야 한다면, 이해하기 쉬워진 것인지는 따로 봐야겠더라고요.
+
+React에서는 현재 상태에 맞는 UI를 선언하고, 실제 DOM을 어떻게 갱신할지는 React에 맡겨요. 설정 배열로 UI를 만드는 것도 선언적인 방식일 수 있어요. 제가 바꾸고 싶었던 건 배열이라는 형식 자체가 아니라, 화면 구성을 읽으려면 공통 구현의 분기까지 따라가야 하는 구조였어요.
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>제가 말하는 선언적 코드가 무엇인지 실제로 바꾼 구조 세 가지로 설명해요. 복지몰의 검색 Chip, 관리자 서비스 모노레포의 검색 필터와 폼 타입 팩토리를 두고 무엇이 문제였는지, 어떻게 바꿨는지, 이후 변경이 어디까지 닿았는지 순서로 적었어요. 그 결과 쿠폰 필터 요구사항 세 건의 화면 쪽 변경은 Chip 파일 안에서 끝났어요. 검색 필터에 칸 단위 에러 처리를 붙일 때는 화면의 필터 선언을 건드리지 않고 필터 위젯과 공유 모듈만 고쳤고, 폼 타입 팩토리 위에는 번역 입력과 검색 필터 팩토리가 경로 타입을 다시 만들지 않고 올라갔어요. 걸린 시간은 재지 않았어요. 뒤쪽에는 `skipToken`, 변환과 실행 분리, 파생값, 테스트처럼 더 작은 단위에 같은 기준을 적용한 규칙을 모았어요. 저장소 사례는 2026-09-28 develop 기준이고, 식별자 일부는 공개용으로 바꿨어요.</p>
+  <p>복지몰의 검색 Chip과 관리자 서비스의 검색 필터를 바꾸면서, 공통으로 처리할 동작과 사용처에 남길 구성을 어떻게 나눴는지 적었어요. 코드 예제는 저장소에서 필요한 부분만 줄였고, 내부 식별자 일부는 공개용으로 바꿨어요.</p>
 </div>
 
-제가 말하는 선언적 코드는 `map`이나 커스텀 훅을 많이 쓰는 코드가 아니에요. VOC(고객 의견)나 예외가 추가돼도 공통 구조를 다시 뜯지 않고, 바뀐 요구사항이 코드의 한 구획에 그대로 보이는 구조에 가까워요.
+## Chip 하나를 바꾸는데 설정의 문법부터 봐야 했어요
 
-물론 읽기 쉬워야 해요. 확장을 위해 설정 객체와 범용 렌더러를 만들었는데 실제 화면을 이해하려고 여러 파일을 오가야 한다면 좋은 구조라고 보기 어려워요.
+복지몰 검색 화면은 병원·프로그램 탭과 필터 검색·통합 검색의 조합에 따라 Chip 구성이 달라요. 지역과 진료과는 Bottom Sheet을 열고, 혜택은 선택 여부를 토글해요. 보여주는 라벨도 다르고요.
 
-## 설정 배열 안의 조건이 화면 구성을 가리고 있었어요
-
-복지몰의 검색 화면에는 검색 모드(필터 검색·통합 검색)와 탭(파트너·프로그램)에 따라 서로 다른 Filter Chip이 나타나요. 각 Chip은 라벨, 선택 상태와 클릭 동작이 달라요.
-
-처음 구조는 설정 배열 하나였어요.
+이전에는 이런 차이를 설정 배열 안에 넣었어요.
 
 ```tsx
 const FILTER_CHIPS_CONFIG: FilterChipConfig[] = [
@@ -30,94 +32,142 @@ const FILTER_CHIPS_CONFIG: FilterChipConfig[] = [
     label: BENEFIT_LABEL.hasEvent,
     pressed: (state) => state.selectedBenefits?.includes('hasEvent') || false,
     onClick: (_, toggleBenefit) => toggleBenefit('hasEvent'),
-    visible: (tab, isFilterSearch) => (tab === 'program' ? isFilterSearch : tab === 'partner'),
+    visible: (tab, isFilterSearch) =>
+      tab === 'program' ? isFilterSearch : tab === 'partner',
   },
-  // ... 여섯 항목 더
+  // 나머지 항목 생략
 ];
 
-return FILTER_CHIPS_CONFIG.filter((config) => config.visible(currentTab, isFilterSearch)).map((config) => (
-  <Chip key={config.key} pressed={config.pressed(filterState)} onClick={() => config.onClick(handleOpenFilter, handleBenefitToggle)}>
-    {typeof config.label === 'function' ? config.label(filterState) : config.label}
-  </Chip>
-));
+return FILTER_CHIPS_CONFIG
+  .filter((config) => config.visible(currentTab, isFilterSearch))
+  .map((config) => (
+    <Chip
+      key={config.key}
+      pressed={config.pressed(filterState)}
+      onClick={() => config.onClick(handleOpenFilter, handleBenefitToggle)}
+    >
+      {typeof config.label === 'function'
+        ? config.label(filterState)
+        : config.label}
+    </Chip>
+  ));
 ```
 
-반복은 줄었지만 읽는 비용이 컸어요. 프로그램 탭의 필터 검색에 어떤 Chip이 보이는지 알려면 여덟 항목의 `visible`을 하나씩 계산해 봐야 했어요. 항목마다 쓰는 콜백은 하나뿐인데 `onClick`은 `openFilter`와 `toggleBenefit`을 둘 다 받았고요. Chip 하나에 예외가 생기면 모든 항목이 공유하는 `FilterChipConfig`의 문법을 넓히거나 그 문법 밖으로 새어 나가야 했어요. 지역·진료과 Chip은 선택 여부가 `filterState`만으로 나오지 않아서, 위 예시의 진료과처럼 `pressed`가 바깥의 URL 파라미터(`currentParams`)를 클로저로 읽고 있었어요. 나중에 들어온 "쿠폰 Chip에만 아이콘" 같은 요구를 이 구조에서 받았다면 설정에 필드가 하나 더 늘었을 거예요. 데이터 구조가 UI 컴포넌트를 흉내 내기 시작하는 지점이에요.
+각 항목은 자기에게 필요한 동작만 쓰는데, 렌더러는 `openFilter`와 `toggleBenefit`을 모두 넘겨요. 라벨이 문자열인지 함수인지도 렌더러가 판단하고요. 선택 상태를 읽는 방법까지 항목마다 달랐어요.
 
-2026년 6월 5일에 각 Chip을 완성된 컴포넌트로 만들고 검색 케이스별로 나열하도록 바꿨어요. 지금 코드는 이래요.
+쿠폰 Chip에만 아이콘을 넣거나 선택했을 때 글자를 굵게 표시하려면 어떻게 해야 할까요? 이 구조에서는 설정에 속성을 더하고, 렌더러도 그 속성을 처리하게 바꾸기 쉬워요. Chip 하나의 예외를 공통 렌더러가 계속 알아야 하는 셈이에요.
+
+그래서 각 Chip이 자기 동작을 가진 컴포넌트가 되도록 바꿨어요.
 
 ```tsx
 function RegionChip({ filterState, filterType, isFilterSearch }: IFilterChipProps) {
   const openFilter = useOpenFilterSheet('region', filterType, isFilterSearch);
 
   return (
-    <Chip hasArrow pressed={(filterState.selectedRegions?.length ?? 0) > 0} onClick={openFilter}>
+    <Chip
+      hasArrow
+      pressed={(filterState.selectedRegions?.length ?? 0) > 0}
+      onClick={openFilter}
+    >
       {getRegionLabel(filterState)}
     </Chip>
   );
 }
 
-// 혜택 Chip은 URL의 boolean 하나를 토글하고 라벨만 달라서 컴포넌트 하나를 같이 써요.
-function BenefitChip({ benefit, className }: { benefit: BenefitKey; className?: string }) {
+function BenefitChip({
+  benefit,
+  className,
+}: {
+  benefit: BenefitKey;
+  className?: string;
+}) {
   const { currentParams, toggleBenefit } = useSearchFilter();
   const pressed = currentParams[benefit] === 'true' || currentParams[benefit] === true;
 
   return (
-    <Chip pressed={pressed} className={className} onClick={() => toggleBenefit(benefit)}>
+    <Chip
+      pressed={pressed}
+      className={className}
+      onClick={() => toggleBenefit(benefit)}
+    >
       {BENEFIT_CHIP_LABEL[benefit]}
     </Chip>
   );
 }
 
 function CouponChip(_: IFilterChipProps) {
-  return <BenefitChip benefit="couponDiscount" className="data-[state=on]:text-body-md-semibold" />;
+  return (
+    <BenefitChip
+      benefit="couponDiscount"
+      className="data-[state=on]:text-body-md-semibold"
+    />
+  );
 }
+```
 
+지역 Chip은 지역 선택 동작을, 혜택 Chip은 토글 동작을 갖고 있어요. 쿠폰 Chip의 선택 스타일도 그 컴포넌트에서 정해요. 혜택처럼 동작이 같고 라벨만 다른 것은 `BenefitChip`을 같이 쓰고요.
+
+화면마다 어떤 Chip을 놓을지는 별도로 남겼어요.
+
+```tsx
 const FILTER_CONFIG: Record<SearchFilterCase, ComponentType<IFilterChipProps>[]> = {
-  partner_filter: [RegionChip, DepartmentChip, CouponChip, HasEventChip, NewPartnerChip, PartnerInfoChip, TreatmentTimeChip],
-  partner_integrated: [RegionChip, DepartmentIdsChip, CouponChip, HasEventChip, NewPartnerChip, PartnerInfoChip, TreatmentTimeChip],
-  program_filter: [RegionChip, DepartmentChip, CouponChip, TodayDiscountChip, HasEventChip],
-  program_integrated: [RegionChip, DepartmentIdsChip, CouponChip],
+  partner_filter: [
+    RegionChip, DepartmentChip, CouponChip, HasEventChip,
+    NewPartnerChip, PartnerInfoChip, TreatmentTimeChip,
+  ],
+  partner_integrated: [
+    RegionChip, DepartmentIdsChip, CouponChip, HasEventChip,
+    NewPartnerChip, PartnerInfoChip, TreatmentTimeChip,
+  ],
+  program_filter: [
+    RegionChip, DepartmentChip, CouponChip, TodayDiscountChip, HasEventChip,
+  ],
+  program_integrated: [
+    RegionChip, DepartmentIdsChip, CouponChip,
+  ],
 };
 ```
 
-배열을 쓰지만 데이터 조합은 아니에요. 각 항목은 자기 동작을 가진 컴포넌트이고, 배열은 화면에 놓을 순서와 조합만 말해요. 한 검색 케이스의 구성은 그 케이스의 배열 한 줄에서 읽혀요.
+여전히 배열을 써요. 다만 이제 배열에는 컴포넌트의 순서와 조합만 있어요. 프로그램 탭의 통합 검색에 무엇이 나오는지 알려면 `program_integrated`만 보면 돼요.
 
-이후 들어온 요구사항에서 화면 쪽 변경은 Chip 파일 안에서 끝났어요.
+이후 쿠폰 Chip에 아이콘과 선택 스타일을 넣을 때는 Chip 컴포넌트 쪽을 바꿨어요. 병원 탭에도 노출할 때는 해당 배열에 `CouponChip`을 넣었고요. 요청 파라미터와 API 타입은 따로 수정했지만, 화면 쪽 변경을 위해 공통 렌더러에 새로운 규칙을 추가하지는 않았어요.
 
-- 6월 18일 쿠폰 필터 추가: `CouponChip` 함수 하나를 만들고 프로그램 배열 두 줄에 넣었어요. 혜택 키와 라벨, API 파라미터 매핑과 응답 타입은 다른 파일에서 바꿨어요.
-- 7월 3일 쿠폰 Chip에만 아이콘을 넣고 선택 시 굵게 표시: 변경은 이 파일 하나였어요(18줄 추가, 6줄 삭제). 혜택 라벨 표가 아이콘을 담을 수 있게 바꾸고, `BenefitChip`에 `className`을 열고, `CouponChip`에서만 그 값을 넘겼어요.
-- 7월 9일 파트너 탭에도 쿠폰 필터 노출: 파트너 배열 두 곳에 `CouponChip`을 넣었어요. 요청 타입과 API 파라미터 매핑은 타입 파일과 helper에서 바꿨어요.
+모든 항목을 별도 컴포넌트로 만들 필요는 없어요. 같은 모양의 서버 목록을 렌더링할 때는 데이터와 `map`이 자연스럽죠. 여기서는 항목마다 다른 동작과 예외를 설정 객체 안에 맞춰 넣는 게 더 복잡했어요.
 
-혜택 Chip처럼 구조가 정말 같고 라벨만 다른 항목은 컴포넌트 하나와 라벨 표로 묶었어요. 서버가 내려주는 임의 길이 목록도 같은 이유로 `map`이 맞고요. 고정된 소수의 UI가 저마다 예외를 가질 때만 직접 나열해요.
+## 검색 필터의 필드명도 사용처에서 보이게 했어요
 
-<div class="note note-decision">
-  <strong>map과 나열을 가르는 기준</strong>
-  <p>항목의 구조가 같고 데이터만 다르면 데이터와 `map`으로 둬요. 항목마다 동작과 예외가 다르면 컴포넌트로 만들고, 배열에는 순서와 조합만 남겨요. 한 Chip의 요구사항은 그 컴포넌트에서, 한 검색 케이스의 구성은 그 배열에서 고칠 수 있게 하려는 기준이에요.</p>
-</div>
+관리자 서비스의 검색 필터에도 비슷한 구조가 있었어요. 페이지가 `{ key, type, options }` 같은 설정을 넘기면, 공통 레이아웃이 `type`을 보고 입력 컴포넌트를 골랐어요.
 
-## 필드 종류가 늘 때마다 렌더러의 분기가 커졌어요
-
-관리자 서비스 모노레포의 검색 필터도 설정 배열을 받는 레이아웃 컴포넌트였어요. 페이지가 `filters: [{ key, type: 'select', options }]` 같은 배열을 넘기면 레이아웃이 `filter.type`별 `switch`로 입력 위젯을 골랐어요. 날짜 범위만 해도 `date`, `reservationRangeDate`·`consultationRangeDate`, `multiRangeDate`로 갈렸고, 예약 관리 전용 렌더러는 key 문자열을 보고 폼 필드명을 골랐어요.
+날짜 범위는 예약일인지 상담일인지에 따라 쓰는 필드명이 달랐는데요. 그 필드명을 페이지가 적는 게 아니라 공통 렌더러가 `key`에서 알아냈어요.
 
 ```tsx
-// 이전: 필드명을 key 문자열에서 역산해요
 const isConsultationDate = filter.key === 'consultationDate';
 const startKey = isConsultationDate ? 'consultationStartDt' : 'reservationStartDt';
 const endKey = isConsultationDate ? 'consultationEndDt' : 'reservationEndDt';
 ```
 
-사용처는 짧았지만 실제 화면을 알려면 렌더러 내부를 읽어야 했어요. 날짜 필드가 하나 더 생기면 이 분기에 조건이 하나 더 붙는 구조였고요.
+공통 날짜 입력이 예약 관리 화면의 필드명까지 알고 있었어요. 다른 종류의 날짜가 필요해지면 공통 코드의 분기도 늘어나기 쉬웠고요.
 
-2026년 8월 11일에 필터를 JSX로 선언하는 compound 컴포넌트로 바꿨어요.
+이를 compound 컴포넌트로 바꾸면서 필드명과 화면 구성을 페이지에 남겼어요. 아래는 예약 목록의 검색 필터를 줄인 코드예요.
 
 ```tsx
-const SearchFilter = createSearchFilter(reservationSearchParamsSchema);
+const SearchFilter = createSearchFilter(
+  reservationSearchParamsSchema,
+  RESERVATION_SEARCH_PARAMS_FALLBACK,
+);
 
 <SearchFilter onSubmit={handleSearch}>
-  <SearchFilter.Keyword name="keyword" typeName="keywordType" options={SEARCH_KEYWORD_TYPES} />
+  <SearchFilter.Keyword
+    name="keyword"
+    typeName="keywordType"
+    options={SEARCH_KEYWORD_TYPES}
+  />
   <SearchFilter.Fields>
-    <SearchFilter.DateRange label="상담일" startName="consultationStartDt" endName="consultationEndDt" />
+    <SearchFilter.DateRange
+      label="상담일"
+      startName="consultationStartDt"
+      endName="consultationEndDt"
+    />
     <SearchFilter.DateRange
       label="예약일"
       startName="reservationStartDt"
@@ -129,206 +179,122 @@ const SearchFilter = createSearchFilter(reservationSearchParamsSchema);
 </SearchFilter>
 ```
 
-필드명은 호출부에 그대로 적히고, `createSearchFilter`가 받은 Zod 스키마의 경로로 좁혀져요. 필드명이 스키마에 없으면 컴파일 오류가 나고, URL을 읽을 때도 같은 스키마로 걸러요. 8월 11일 처음에는 타입 인자를 받았는데, 폼 타입과 URL 검증 규칙이 갈라질 수 있어서 다음 날 스키마를 받게 바꿨어요. 네 갈래였던 날짜 범위는 시작·끝 필드명을 직접 받는 `DateRange` 하나로 합쳐졌어요.
+이제 `DateRange`는 날짜 범위를 입력받는 방법만 알아요. 그 값이 상담일인지 예약일인지, 어느 필드에 들어가야 하는지는 페이지에서 정해요. JSX를 읽으면 검색 화면의 입력 구성과 필드명을 함께 볼 수 있고요.
 
-Root는 폼 인스턴스, URL과 폼 값의 동기화, 초기화, 레이아웃과 에러 바운더리를 맡아요. 제출이 무엇을 할지는 페이지가 `onSubmit`으로 정하고요. 화면의 구조는 JSX에 남기고 잘못된 필드명만 닫은 셈이에요.
+그렇다고 폼 동작까지 각 페이지에서 새로 만든 건 아니에요. 폼 인스턴스, URL과 입력값의 동기화, 초기화, 레이아웃은 `SearchFilter`가 맡아요. 검색을 제출한 뒤 무엇을 할지는 페이지가 `onSubmit`으로 정하고요.
 
-같은 날 옛 검색 필터 위젯을 걷어냈고, 지금은 Back-Office와 병원 관리자의 검색 필터 27곳이 이 방식으로 선언돼 있어요. 8월 20일에는 옵션 조회 하나가 실패해도 검색바 전체가 사라지지 않게 칸 단위 에러 바운더리를 붙였는데, 옵션을 조회하는 필터 위젯과 공유 모듈만 고쳤어요. 화면의 필터 선언은 한 곳도 건드리지 않았고요. 필터가 엘리먼트가 되면서 필터만 따로 에러 바운더리로 감쌀 수 있게 된 경위는 [에러 처리 개편 글](https://jingeon27.tistory.com/28)에 적었어요.
+나중에 옵션 조회가 실패한 필터만 에러 바운더리로 감쌀 때도 이 구분을 썼어요. 옵션을 가져오는 위젯과 공유 구현을 바꾸고, 각 페이지에 적힌 필터 구성은 그대로 뒀어요. 그 과정은 [에러 처리를 바꾼 글](https://jingeon27.tistory.com/28)에 더 자세히 적었어요.
 
-## 팩토리는 여러 사용처의 타입 계약을 한 번에 고정할 때 만들어요
+### 자유롭게 조합하되 필드명까지 자유롭게 두지는 않았어요
 
-Ant Design Form도 `Form.useForm<T>()`로 받은 인스턴스는 `getFieldValue`에 없는 필드명을 넣으면 컴파일 오류를 내요. 하지만 돌려주는 값은 `any`예요. `Form.Item`은 호출마다 `<Form.Item<T>>`처럼 제네릭을 붙여야 이름을 검사하고, `Form.List`의 `name`은 아예 좁혀지지 않아요. 호출부마다 단언으로 타입을 붙이면 그 단언 하나하나가 폼 타입과 어긋날 자리가 되고요.
+사용처에서 필드명을 직접 적으면 오타나 잘못된 연결이 생길 수 있어요. 그래서 `createSearchFilter`는 Zod 스키마에서 폼 타입을 추론하고, 입력 컴포넌트의 필드명을 그 타입의 경로로 제한해요. URL에서 읽은 값도 같은 스키마로 검증하고요.
 
-2026년 6월 25일에 폼 값 타입 하나로 Ant Design Form을 좁히는 `createTypedForm`을 만들었어요.
+이때 쓰는 폼은 Ant Design Form을 감싼 `createTypedForm`이에요. Ant Design의 `getFieldValue` 반환 타입이 `any`라서, 필드명과 그 필드의 값 타입을 함께 다룰 수 있게 만들었어요. 아래는 사용 방법을 보여주려고 폼 타입을 줄인 예제예요.
 
 ```tsx
+type ProgramFormValues = {
+  programName: string;
+  templates: { title: string }[];
+};
+
 const ProgramForm = createTypedForm<ProgramFormValues>();
-const [form] = ProgramForm.useForm();
 
-form.getFieldValue('programName'); // string (antd 원본은 any)
+function ProgramEditor() {
+  const [form] = ProgramForm.useForm();
+  // form.getFieldValue('programName')은 string으로 추론돼요.
 
-// 'progamName' 오타는 제네릭을 따로 붙이지 않아도 컴파일 오류
-<ProgramForm.Item name="progamName">
-  <Input />
-</ProgramForm.Item>
-
-<ProgramForm.Item name={['templates', 0, 'title']}>
-  <Input />
-</ProgramForm.Item>
-```
-
-`Item`·`List`의 `name`, `useWatch`, 폼 인스턴스의 `getFieldValue`·`setFieldValue`가 같은 `T`의 경로와 그 경로의 값 타입으로 묶여요. Ant Design의 넓은 타입과 잇는 단언은 팩토리 파일 안에만 뒀어요. 호출부가 같은 제네릭과 필드 타입을 반복하지 않아도 되니 팩토리를 둘 이유가 있었어요.
-
-지금은 관리자 서비스 모노레포의 세 앱(Back-Office·병원 관리자·글로벌 서비스 관리 화면)과 공유 패키지가 이 팩토리를 써요. 폼 위에 기능을 얹는 팩토리도 경로 타입을 다시 만들지 않고 이 위에 올라갔어요. 8월 4일에는 글로벌 서비스 관리 화면의 번역 입력을 옮겼어요. 필드명을 자유 문자열로 받아 어느 폼에 붙여도 통과하던 컴포넌트였는데, `createTypedForm` 위에 번역 입력만 얹은 팩토리로 바꾸자 필드명이 폼 타입의 번역 키로 좁혀졌어요. 앞의 검색 필터 팩토리도 내부에서 이걸로 폼을 만들고요. 경로 타입을 만든 방식은 [프로그램 폼을 정리한 글](https://jingeon27.tistory.com/18)에 따로 적었어요.
-
-다만 좁혀진 타입이 런타임 값까지 보장하지는 않아요. `useWatch`는 반환 타입에 `undefined`를 붙이는데, `getFieldValue`는 경로의 타입을 그대로 돌려줘요. 폼 타입에서 필수로 적은 필드는 아직 채워지지 않았어도 `undefined`가 타입에 드러나지 않아요.
-
-반대로 한 화면에서 한 번 쓰는 컴포넌트에는 팩토리를 만들지 않아요. 추상화 이름이 사용처보다 더 어려우면 그냥 가까이에 둬요.
-
-## 작은 규칙도 변경이 닿는 곳을 기준으로 정했어요
-
-아래 규칙들은 더 작은 단위에 같은 질문을 적용한 것이에요. 다음 요구사항이 오면 어디를 고치게 되는지, 그 자리가 코드에서 바로 보이는지를 봐요.
-
-### 여러 동작을 한 컴포넌트에 모으지 않아요
-
-대화 UI를 예로 들면 다음 책임은 바뀌는 이유가 달라요.
-
-```text
-Conversation
-  MessageList       목록 렌더링과 자동 스크롤
-  ChatInput         입력과 전송
-  MessageBubble     메시지 한 건 렌더링
-  SessionConnection SSE 연결과 정리
-```
-
-API 호출, 입력 상태, 스크롤과 메시지 분기를 한 `Conversation` 안에 넣으면 요구사항 하나가 전체 컴포넌트를 건드려요. 분리할 수 있는 동작은 각자의 컴포넌트나 순수 함수로 둬요. 컨테이너는 어떤 부품이 함께 동작하는지만 보여주고요. 그러면 메시지 모양이 바뀔 때는 `MessageBubble`만, 재연결 정책이 바뀔 때는 `SessionConnection`만 열면 돼요.
-
-컴포넌트의 추상화 수준도 맞춰요. `MessageList`, `ChatInput`, `MessageBubble` 옆에 특정 버튼 하나인 `SendIcon`을 같은 레벨로 올리지 않아요. 한 트리를 읽을 때 형제 이름이 비슷한 크기의 책임을 말해야 하니까요.
-
-### 한 번 쓰는 로직은 먼저 가까이에 둬요
-
-커스텀 훅이라는 형태만으로 코드가 재사용 가능해지지는 않아요.
-
-```tsx
-function ReservationDetail() {
-  const reservationId = useReservationId();
-  const query = useQuery(reservationDetailOptions(reservationId));
-
-  // 이 화면에만 있는 실행 흐름
-  const handleCancel = async () => {
-    await cancelReservation(reservationId);
-    toast.success('예약을 취소했습니다.');
-    router.back();
-  };
-
-  // ...
+  return (
+    <ProgramForm form={form}>
+      <ProgramForm.Item name="programName">
+        <Input />
+      </ProgramForm.Item>
+      <ProgramForm.Item name={['templates', 0, 'title']}>
+        <Input />
+      </ProgramForm.Item>
+    </ProgramForm>
+  );
 }
 ```
 
-한곳에서만 쓰는 위 흐름을 `useReservationCancellation`으로 옮기면 이름 하나가 더 생길 뿐이에요. 취소 흐름이 바뀌면 이 화면만 고치면 되는데, 훅으로 빼면 파일 하나를 더 따라가야 해요. 독립된 도메인 동작으로 여러 화면에서 쓰이거나 별도 테스트 계약이 생겼을 때 추출해요.
+`programName`을 `progamName`으로 잘못 적으면 타입 오류가 나요. 중첩 필드도 같은 폼 타입을 기준으로 검사하고, 값을 읽거나 쓸 때도 그 경로의 타입을 사용해요. 라이브러리 타입과 연결하기 위한 단언은 팩토리 내부에 모았어요.
 
-### 커링으로 클릭 핸들러의 두 입력을 구분해요
+이 팩토리 자체가 선언적 코드를 만드는 건 아니에요. 사용처에 드러낸 필드명과 연결이 틀렸을 때 타입으로 확인하려고 만든 것이에요. 실제로 검색 필터를 조합하는 방식과, 그 조합을 검사하는 타입의 역할은 달라요.
 
-목록 항목의 ID는 렌더 시점에 알고 클릭 이벤트는 나중에 들어와요. 두 인자를 같은 콜백에 억지로 맞추기보다 고정할 값과 이벤트가 주는 값을 나눠요.
+물론 타입이 입력 완료까지 보장하지는 않아요. 위의 `getFieldValue`는 `string`으로 추론해도 초기화되지 않은 필드에서는 `undefined`가 나올 수 있어요. 입력 검증까지 타입으로 대체하지는 않아요. 필드 경로를 다룬 구현은 [프로그램 폼을 정리한 글](https://jingeon27.tistory.com/18)에 따로 적었어요.
+
+## 화면의 상태를 따로 복사할 필요도 줄였어요
+
+구성이 잘 보여도 선택 상태가 여러 곳에 있으면 동작을 이해하기 어려워요. 검색 조건은 URL에 있는데, Chip의 선택 여부를 별도 state에 복사하고 effect로 맞추면 두 값 사이의 동기화도 살펴봐야 하거든요.
+
+복지몰의 검색 필터는 URL에서 현재 선택 상태를 계산하도록 바꿨어요. 현재 훅에서 그 부분만 가져오면 이렇게 돼요.
 
 ```tsx
-const handleSelect = (programId: number) => (event: MouseEvent<HTMLButtonElement>) => {
-  event.preventDefault();
-  openProgram(programId);
-};
+const currentParams = useTypedQueryParams({
+  schema: keywordSearchParamsSchema,
+});
 
-<button onClick={handleSelect(program.id)}>상세 보기</button>
+const filterState = useMemo(
+  () => urlParamsToFilterState(currentParams),
+  [currentParams],
+);
 ```
 
-모든 핸들러를 커링하지는 않아요. 반복되는 인라인 클로저가 있고, 첫 인자가 도메인 값이고 두 번째 인자가 UI 콜백의 값일 때 써요.
+Chip을 눌렀을 때는 URL을 바꾸고, 화면은 그 URL에서 계산한 상태를 보여줘요. 필터 적용과 화면 표시가 같은 검색 조건을 읽도록 한 거예요.
 
-### 실행할 수 없는 Query는 `skipToken`으로 표현해요
+여기서 중요한 건 `useMemo`를 썼다는 사실이 아니에요. 원본에서 계산할 수 있는 값을 다시 저장하지 않았다는 점이에요. [React의 상태 설계 문서](https://react.dev/learn/choosing-the-state-structure#avoid-redundant-state)도 렌더링 중 계산할 수 있는 값은 중복 상태로 두지 않는 쪽을 설명해요.
 
-상세 조회에는 ID가 필요해요. ID가 없을 때 `enabled: false`만 붙이면 `queryFn`은 여전히 ID가 있다고 가정한 채 작성되기 쉬워요.
+반면 Bottom Sheet에서 고르는 중인 값은 URL과 달라도 돼요. 사용자가 ‘적용하기’를 누르기 전까지는 목록의 검색 조건을 바꾸지 않아야 하니까요. 같은 필터 값처럼 보여도, 적용된 조건과 편집 중인 조건은 역할이 달라요. 중복 상태를 없앤다고 임시 선택까지 모두 URL에 넣는 건 다른 문제예요.
+
+## 테스트에서도 조건과 결과는 숨기지 않았어요
+
+코드를 읽기 쉽게 만들려는 기준은 테스트에도 적용하고 있어요. 테스트를 읽을 때는 어떤 조건에서 무엇을 했고, 무엇이 남아야 하는지가 바로 보였으면 해요.
+
+아래는 검색 필터 훅의 실제 테스트에서 가져온 두 시나리오예요.
 
 ```ts
-const programDetailOptions = (programId?: number) =>
-  queryOptions({
-    queryKey: ['program', 'detail', programId],
-    queryFn: programId ? () => getProgramDetail(programId) : skipToken,
-  });
-```
-
-호출부는 조회 가능 여부를 다시 계산하지 않아요. 필수 입력이 없을 때의 처리가 options 한 곳에 있어서, 호출부가 늘어도 조건을 복사하지 않아요.
-
-```tsx
-const { data } = useQuery(programDetailOptions(programId));
-```
-
-`enabled`가 나쁘다는 뜻은 아니에요. 복지몰도 위 예시처럼 ID가 없거나 `0`이면 `id ? … : skipToken`으로 조회를 막아요. 그런데 서버에서 `ensureQueryData`로 미리 받는 options에는 이렇게 쓰지 않아요. `ensureQueryData`는 `enabled`를 무시하고, `queryFn`이 `skipToken`이면 `Missing queryFn`으로 거절하거든요. 404를 `notFound()`로 바꾸는 상세 페이지에 ID `0`이 들어오면 404 대신 500이 되는 셈이라, 그런 options는 안에 `enabled: !!id`를 둬요. 다른 options와 queryKey를 나눠 쓰는 경우에도 `skipToken`이 그 키에 남아 이후 다시 조회할 때 실패할 수 있어서 `enabled`를 써요.
-
-### 변환과 실행을 섞지 않아요
-
-다음 함수는 URL을 만들면서 이동까지 해요.
-
-```ts
-function moveToProgram(programId: number, keyword: string) {
-  router.push(`/program/${programId}?q=${encodeURIComponent(keyword)}`);
-}
-```
-
-이러면 URL 규칙만 테스트하거나 `Link`와 공유하기 어려워요. 값 변환과 실행을 나눠요.
-
-```tsx
-const createProgramHref = (programId: number, keyword: string) =>
-  `/program/${programId}?q=${encodeURIComponent(keyword)}`;
-
-<Link href={createProgramHref(program.id, keyword)}>상세 보기</Link>;
-
-const handleOpenProgram = (programId: number) => {
-  router.push(createProgramHref(programId, keyword));
-};
-```
-
-인코딩, 요청 DTO 변환과 금액 계산은 값을 반환하는 함수에 둬요. `router.push`, 토스트, API 호출은 실행 경계에 두고요. URL 규칙이 바뀌면 `createProgramHref` 하나만 고치면 되고, 순수 함수 안에서 다른 작업이 함께 실행되지도 않아요.
-
-### 파생값은 다시 저장하지 않아요
-
-현재 경로가 탭 값과 같다면 별도의 매핑과 `activeTab` 상태가 필요 없어요.
-
-```tsx
-const BENEFIT_TAB_PATH = {
-  Sale: '/benefit',
-  Event: '/benefit/event',
-} as const;
-
-<TabsRoot value={pathname} onValueChange={(path) => router.push(path)}>
-  <TabsTrigger value={BENEFIT_TAB_PATH.Sale}>특가전</TabsTrigger>
-  <TabsTrigger value={BENEFIT_TAB_PATH.Event}>이벤트</TabsTrigger>
-</TabsRoot>
-```
-
-선택한 쿠폰에서 계산되는 할인 금액, URL에서 알 수 있는 선택 탭, Query 결과로 알 수 있는 로딩 여부도 같은 기준을 써요. 원본이 이미 있다면 state와 effect로 복사하지 않아요. 앞의 검색 Chip도 옛 구조에서는 URL 파라미터를 `useState`에 복사하고 `useEffect`로 맞추고 있었는데, 지금은 `useMemo`로 URL에서 바로 파생해요.
-
-상태는 실제로 함께 읽고 수정하는 컴포넌트의 가장 가까운 공통 부모에 둬요. "나중에 다른 곳에서도 쓸 것 같다"는 이유만으로 전역 store에 올리지 않아요.
-
-## 테스트도 한눈에 읽혀야 해요
-
-테스트는 실패했을 때 다시 읽는 문서예요. 고정된 시나리오 몇 개를 데이터 배열과 범용 함수로 줄이면 줄 수는 줄지만 조건과 행동을 찾기 어려워져요. 복지몰의 검색 필터 훅 테스트는 이렇게 써요.
-
-```ts
-it('꺼져 있던 혜택 칩을 누르면 그 파라미터를 true 로 붙여야 한다', () => {
+it('꺼져 있던 혜택 칩을 누르면 그 파라미터를 true로 붙여야 한다', () => {
   const result = renderSearchFilter('q=검색어&tab=partner');
 
   result.current.toggleBenefit('todayDiscount');
 
-  expect(writtenParams()).toEqual({ q: '검색어', tab: 'partner', todayDiscount: 'true' });
+  expect(writtenParams()).toEqual({
+    q: '검색어',
+    tab: 'partner',
+    todayDiscount: 'true',
+  });
 });
 
 it('켜져 있던 혜택 칩을 다시 누르면 그 파라미터만 빼야 한다', () => {
-  const result = renderSearchFilter('q=검색어&tab=partner&todayDiscount=true&hasEvent=true');
+  const result = renderSearchFilter(
+    'q=검색어&tab=partner&todayDiscount=true&hasEvent=true',
+  );
 
   result.current.toggleBenefit('todayDiscount');
 
-  expect(writtenParams()).toEqual({ q: '검색어', tab: 'partner', hasEvent: 'true' });
+  expect(writtenParams()).toEqual({
+    q: '검색어',
+    tab: 'partner',
+    hasEvent: 'true',
+  });
 });
 ```
 
-`renderSearchFilter`는 경로·검색 파라미터 mock과 조회 캐시 준비를, `writtenParams`는 History API로 쓰인 URL을 객체로 읽는 일만 감춰요. 입력 URL, 행동, 기대 결과는 테스트마다 반복되지만 테스트 하나만 읽어도 보장하는 동작이 보여요. 두 번째 테스트는 `hasEvent`까지 비교해서, 토글이 다른 혜택을 같이 지우는 회귀도 잡아요. 행동과 기대 결과까지 다시 서술하는 범용 함수는 만들지 않아요.
+`renderSearchFilter` 안에는 경로 mock과 Query 캐시 준비가 있고, `writtenParams`는 History API로 쓴 URL을 객체로 읽어줘요. 이런 준비 과정은 묶어도 돼요. 하지만 입력 URL과 토글할 혜택, 기대 결과는 테스트 안에 남겼어요.
 
-계층도 나눠요. 단위 테스트는 순수 변환과 경곗값, 통합 테스트는 컴포넌트와 API의 연결, E2E는 브라우저 흐름, dev API 서버 계약 테스트는 프론트가 이해한 계약과 서버의 차이를 맡아요. 같은 사실을 모든 계층에서 반복하지 않아요. 계층별 통과가 무엇을 보장하고 무엇은 보장하지 않는지는 [테스트를 다시 만든 글](https://jingeon27.tistory.com/25)에 적었어요.
+두 번째 테스트에서 `hasEvent`도 비교하는 이유가 있어요. 누른 혜택만 해제돼야 하고, 다른 혜택까지 지워지면 안 되거든요. 이름에 ‘그 파라미터만’이라고 적는 데 그치지 않고, 다른 값이 남았는지도 확인한 거예요.
 
-## 추상화의 개수보다 변경 지점이 보여야 해요
+같은 규칙을 입력값만 바꿔 여러 번 확인할 때는 `it.each`를 써도 돼요. 여기서는 선택과 해제라는 서로 다른 행동을 각각 읽을 수 있게 뒀어요. 테스트 작성 방식은 [테스트 체계를 다시 만든 글](https://jingeon27.tistory.com/25)에 이어서 적었어요.
 
-정리하면, 데이터 구조가 같고 개수만 달라질 때는 `map`을 써요. 고정된 UI가 저마다 동작과 예외를 가진다면 컴포넌트를 직접 나열해요. compound 컴포넌트와 팩토리도 반복을 없애려고 미리 만드는 게 아니라, 여러 사용처에서 같은 생명주기나 타입 계약이 확인됐을 때 꺼내요.
+## 줄 수보다 읽으면서 확인할 수 있는 게 중요했어요
 
-다음 VOC가 들어왔을 때 바뀐 요구사항이 적힌 곳을 바로 찾고 그 부분만 고칠 수 있다면 충분해요. 추상화의 개수보다 변경 지점이 잘 보이는지가 더 중요해요.
+이번 변경에서도 배열을 없애지는 않았고, 공통 컴포넌트를 쪼개기만 한 것도 아니에요. Chip의 동작은 컴포넌트에, 화면별 조합은 배열에 뒀어요. 검색 필터에서는 공통 폼 동작을 모으되 화면의 필드명과 구성은 사용처에 남겼고요.
 
-<div class="note note-limit">
-  <strong>확인하지 못한 것</strong>
-  <p>변경이 작아졌다는 근거는 이후 커밋 몇 건의 diff를 다시 본 것이에요. 변경에 든 시간, 리뷰 비용, 동료가 코드를 이해하는 데 걸린 시간은 측정하지 않았어요. `createTypedForm`의 `getFieldValue`는 필수로 적은 필드가 아직 비어 있을 때의 `undefined`를 타입에 드러내지 않아요. 검색 필터의 스키마는 서버 조회 파라미터를 보고 옮겨 적은 것이라, 서버 쪽 이름이 바뀌는 것까지 타입이 잡지는 못해요. 검색 Chip·검색 필터·혜택 탭·테스트 코드는 저장소 코드를 줄이고 식별자를 바꾼 것이고, 폼 팩토리 사용 예와 대화 UI·예약 취소·커링·`skipToken`·변환과 실행 예시는 원칙을 보이려고 쓴 코드예요.</p>
-</div>
+제가 원했던 건 코드가 짧아 보이는 것보다, 코드를 읽을 때 화면과 동작을 같이 확인할 수 있는 구조였어요. 쿠폰이 어느 탭에 나오는지, 날짜 입력이 어느 필드에 연결되는지, 혜택을 해제할 때 다른 조건은 남는지 같은 것들이요.
+
+코드 확인도 검증의 일부라서 이런 부분을 중요하게 보고 있어요. 선언적으로 썼다는 이유만으로 좋은 코드라고 판단하기보다, 실제로 읽으면서 어떤 동작을 확인할 수 있는지 보려고 해요.
 
 ## 참고
 
-- [TanStack Query — Disabling/Pausing Queries (`skipToken`)](https://tanstack.com/query/latest/docs/framework/react/guides/disabling-queries)
-- [TanStack Query — `queryClient.ensureQueryData`](https://tanstack.com/query/latest/docs/reference/QueryClient#queryclientensurequerydata)
-- [Ant Design — Form](https://ant.design/components/form)
-- [React — Choosing the State Structure: Avoid redundant state](https://react.dev/learn/choosing-the-state-structure#avoid-redundant-state)
-- [Kent C. Dodds — AHA Testing](https://kentcdodds.com/blog/aha-testing)
-- 관련 글: [프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://jingeon27.tistory.com/18) · [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25) · [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+- [React: Describing the UI](https://react.dev/learn/describing-the-ui)
+- [React: Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure#avoid-redundant-state)
+- [Ant Design: Form](https://ant.design/components/form)
