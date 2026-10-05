@@ -1,6 +1,6 @@
 # 회사별 이력서
 
-공통 이력서는 [resumev6.md](../resumev6.md)에, 성격상 장단점은 [별도 문서](../성격상-장단점.md)에 정리합니다. 회사별 문서의 파일명은 유지하고 폴더만 나눴습니다.
+공통 이력서는 [resumev6.md](../resumev6.md), 성격상 장단점은 [장단점 메모](../성격상-장단점.md)에서 볼 수 있습니다.
 
 | 회사 | 문서 |
 | --- | --- |
@@ -19,6 +19,3 @@
 | 사이오닉AI | [이력서](sionic-ai/resume-sionic-ai.md) |
 | 뤼튼 | [AX Frontend](wrtn/resume-wrtn-ax-frontend.md) · [Frontend](wrtn/resume-wrtn-frontend.md) |
 | 제타 | [이력서](zeta/resume-zeta.md) |
-
-
-초안과 제출용 문서는 별도로 유지합니다. 폴더 정리는 경력·역할·성과를 수정하는 작업이 아닙니다.
