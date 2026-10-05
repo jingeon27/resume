@@ -194,64 +194,102 @@ const SearchFilter = createSearchFilter(
 
 ## 값을 만드는 코드
 
-건강검진 예약금 칸은 결제 상태만 보고 그리면 안 돼요. 사용자가 직접 결제한 건인지, 기업이 지원하는 건인지, 예약금이 없는 건인지 먼저 구분해야 하거든요. 여기서는 `ts-pattern`으로 각 경우에 표시할 값을 반환했어요.
+왓타임의 채용 관리 화면에는 공고를 폴더로 묶고 드래그해서 순서를 바꾸는 사이드바가 있었어요. 전체 공고와 내가 담당하는 공고를 따로 볼 수 있었는데요. 서버가 보내주는 공고·지원자 수·그룹 정보를 화면에서 쓸 트리로 만들어야 했어요.
 
-```tsx
-import { match } from 'ts-pattern';
+당시에는 `lodash-es`를 썼어요. 아래는 훅에서 값을 만드는 부분만 꺼낸 코드예요. `useMemo`는 생략하고, 배열을 합치는 부분은 펼침 연산자로 정리했어요.
 
-function renderHealthCheckPaymentTag(
-  healthCheckInfo?: THealthCheckInfoDTO | null,
-): ReactNode {
-  if (!healthCheckInfo) return '-';
-
-  const { benefitType, paymentState, supportAffiliationName } = healthCheckInfo;
-
-  return match(benefitType)
-    .with(HEALTH_CHECK_BENEFIT_TYPE.CustomerPayment, () =>
-      renderHealthCheckPaymentStateTag(paymentState),
-    )
-    .with(HEALTH_CHECK_BENEFIT_TYPE.CompanySupported, () => (
-      <Tag color="geekblue" className="!whitespace-normal [overflow-wrap:anywhere]">
-        {supportAffiliationName ?? '기업지원'}
-      </Tag>
-    ))
-    .with(HEALTH_CHECK_BENEFIT_TYPE.NoPayment, () => '-')
-    .exhaustive();
-}
-```
-
-사용자 결제 건은 결제·환불 상태를, 기업 지원 건은 지원한 기업명을 보여줘요. 예약금이 없는 건은 `-`로 표시하고요. 중간에 결과 변수를 바꿔 가며 읽을 필요 없이, 부담 주체마다 무엇을 보여주는지 볼 수 있어요. `benefitType`의 union 타입에 새 종류가 추가되면 빠진 분기는 `.exhaustive()`에서 타입 오류로 확인할 수 있어요. [ts-pattern 문서](https://github.com/gvergnaud/ts-pattern#exhaustive-otherwise-and-run)에서도 이 검사를 설명해요.
-
-모든 분기를 `match`로 바꾸지는 않아요. 위 코드도 데이터가 없으면 바로 반환해요. 두 값 중 하나를 고르면 삼항식으로 충분하고, 결제 상태처럼 키마다 표시할 값이 정해져 있으면 `Record`를 써요.
-
-배열을 정렬하거나 묶을 때는 `es-toolkit`을 자주 써요. 검진 프로그램 편집에서는 검사항목을 카테고리와 항목 순서로 정렬하고, 카테고리별 Select 옵션으로 바꿔야 했어요. 다른 그룹에서 이미 고른 항목은 중복 선택하지 못하게 비활성화하고요.
+먼저 공고 정보에 지원자 수를 붙여요. 공고는 다른 공고를 자식으로 가질 수 없어서 `canHaveChildren`을 `false`로 뒀어요.
 
 ```ts
-import { groupBy, sortBy } from 'es-toolkit';
+const jobCountData = (data?.job_infos ?? []).map(({ job, ...rest }) => ({
+  ...job,
+  ...rest,
+  canHaveChildren: false,
+}));
 
-function toHealthCheckItemOptionGroups(
-  items: IHealthCheckItem[] | undefined,
-  disabledItemIds: number[],
-): IHealthCheckItemOptionGroup[] {
-  const taken = new Set(disabledItemIds);
-  const byCategory = groupBy(
-    sortBy(items ?? [], ['categoryId', 'orderNo']),
-    (item) => item.categoryName,
-  );
+const jobCountDataIdReplace = ({ id, ...rest }: JobCountData) => ({
+  ...rest,
+  id: `${id}`,
+  type: 'item',
+});
 
-  return Object.entries(byCategory).map(([categoryName, categoryItems]) => ({
-    label: categoryName,
-    options: categoryItems.map((item) => ({
-      label: item.name,
-      additionalText: item.additionalText,
-      value: item.id,
-      disabled: taken.has(item.id),
-    })),
-  }));
-}
+const getChildren = (jobGroup: JobGroup) =>
+  jobCountData
+    .filter(
+      ({ job_group_id, group_key }) =>
+        job_group_id === jobGroup.id || group_key === jobGroup.title,
+    )
+    .map(jobCountDataIdReplace);
 ```
 
-[sortBy](https://es-toolkit.dev/reference/array/sortBy.html)에는 정렬 기준을, [groupBy](https://es-toolkit.dev/reference/array/groupBy.html)에는 묶는 기준을 적었어요. 그다음 `map`에서는 Select가 받을 옵션을 만들어요. 객체에 값을 하나씩 채우는 코드를 직접 작성하지 않아도 돼서, 검사항목을 어떤 기준으로 나누고 표시하는지 읽기 편해요.
+`getChildren`은 그룹에 속한 공고를 고르고 트리 노드로 바꿔요. 어떤 공고를 넣을지와 어떤 모양으로 바꿀지를 나눠서 읽을 수 있어요.
+
+폴더도 같은 방식으로 만들어요. 폴더 ID에는 접두어를 붙여 공고 ID와 구분하고, 접힘 상태와 자식 목록을 함께 넣었어요.
+
+```ts
+const transformFolderFormat = ({
+  job_group,
+  count,
+}: CandidateCountResponse['job_group_infos'][number]): TreeItem<JobGroupData> => {
+  const id = `${GROUP_ID_PREFIX}${job_group.id}`;
+
+  return {
+    ...job_group,
+    id,
+    count,
+    group_id: job_group.id,
+    collapsed: collapsedList.includes(id),
+    type: 'folder',
+    canHaveChildren: ({ type }: JobGroupData) => type === 'item',
+    children: getChildren(job_group),
+  };
+};
+
+const ungroupedJobs = jobCountData
+  .filter(({ job_group_id, group_key }) => isNil(job_group_id) && isNil(group_key))
+  .map(jobCountDataIdReplace);
+
+const allJobGroupData: TreeItems<JobGroupData> = sortBy(
+  [
+    ...(data?.job_group_infos ?? []).map(transformFolderFormat),
+    ...ungroupedJobs,
+  ],
+  'order',
+);
+```
+
+폴더는 공고만 자식으로 받을 수 있어요. 이 조건을 드래그 이벤트 안에서 일일이 처리하지 않고 `canHaveChildren`으로 전달했어요. 그룹이 없는 공고는 폴더 밖에 두고, 폴더와 함께 정렬하면 전체 트리가 돼요.
+
+담당 공고만 보는 경우에는 전체 트리에서 필요한 공고를 남겨요. 폴더는 유지하되, 그 안의 공고를 거른 뒤 지원자 수도 다시 합산해야 해요. 전체 공고의 지원자 수를 그대로 보여주면 지금 보이는 목록과 숫자가 달라지니까요.
+
+```ts
+const filterJobCountData = ({ type, ...job }: TreeItem<JobGroupData>) =>
+  type === 'folder' || ('manager' in job && job.manager);
+
+const myJobGroupData: TreeItems<JobGroupData> = allJobGroupData
+  .filter(filterJobCountData)
+  .map((groupData) => {
+    if (groupData.type !== 'folder') return groupData;
+
+    const children = groupData.children?.filter(filterJobCountData);
+    const count = children?.reduce((total, job) => total + job.count, 0) ?? 0;
+
+    return { ...groupData, children, count };
+  });
+```
+
+지원자가 없는 항목을 뒤로 보내는 정렬 기준도 값으로 표현했어요.
+
+```ts
+const sortedAllJobGroupData = sortBy(
+  jobGroupData.all,
+  (job) => job.count === 0 ? Number.MAX_SAFE_INTEGER : job.order,
+);
+```
+
+이 코드에서 제가 좋아하는 부분은 화면에 필요한 값이 만들어지는 순서를 따라갈 수 있다는 점이에요. 공고를 노드로 바꾸고, 폴더의 자식을 구성하고, 전체 트리에서 담당 공고를 골라요. JSX 안에서 이 조건을 다시 판단하지 않아도 되고요. 표시 규칙이 바뀌면 해당 값을 만드는 부분부터 보면 돼요.
+
+사용자가 드래그해서 바꾼 트리는 별도 state에 둬요. 서버 응답에서 처음 만든 트리와 사용자가 편집 중인 트리는 역할이 다르거든요. 값을 계산해서 만들 수 있는 부분과 사용자 입력으로 유지해야 하는 부분은 구분해서 다뤄요.
 
 ### 같은 값을 두 번 관리하지 않기
 
