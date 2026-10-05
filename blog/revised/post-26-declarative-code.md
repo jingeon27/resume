@@ -194,42 +194,64 @@ const SearchFilter = createSearchFilter(
 
 ## 값을 만드는 코드
 
-목록을 걸러낼 때도 중간 변수를 계속 바꾸는 코드는 잘 쓰지 않아요. 간단한 예로 이런 코드가 있어요.
+건강검진 예약금 칸은 결제 상태만 보고 그리면 안 돼요. 사용자가 직접 결제한 건인지, 기업이 지원하는 건인지, 예약금이 없는 건인지 먼저 구분해야 하거든요. 여기서는 `ts-pattern`으로 각 경우에 표시할 값을 반환했어요.
 
-```ts
-let result = programs;
+```tsx
+import { match } from 'ts-pattern';
 
-if (keyword) result = result.filter((program) => program.name.includes(keyword));
-if (partnerId !== undefined) result = result.filter((program) => program.partnerId === partnerId);
+function renderHealthCheckPaymentTag(
+  healthCheckInfo?: THealthCheckInfoDTO | null,
+): ReactNode {
+  if (!healthCheckInfo) return '-';
+
+  const { benefitType, paymentState, supportAffiliationName } = healthCheckInfo;
+
+  return match(benefitType)
+    .with(HEALTH_CHECK_BENEFIT_TYPE.CustomerPayment, () =>
+      renderHealthCheckPaymentStateTag(paymentState),
+    )
+    .with(HEALTH_CHECK_BENEFIT_TYPE.CompanySupported, () => (
+      <Tag color="geekblue" className="!whitespace-normal [overflow-wrap:anywhere]">
+        {supportAffiliationName ?? '기업지원'}
+      </Tag>
+    ))
+    .with(HEALTH_CHECK_BENEFIT_TYPE.NoPayment, () => '-')
+    .exhaustive();
+}
 ```
 
-이 경우에는 조건을 한 번의 `filter`에서 확인하면 돼요. 조건이 없으면 원본 목록을 그대로 쓰고요.
+사용자 결제 건은 결제·환불 상태를, 기업 지원 건은 지원한 기업명을 보여줘요. 예약금이 없는 건은 `-`로 표시하고요. 중간에 결과 변수를 바꿔 가며 읽을 필요 없이, 부담 주체마다 무엇을 보여주는지 볼 수 있어요. `benefitType`의 union 타입에 새 종류가 추가되면 빠진 분기는 `.exhaustive()`에서 타입 오류로 확인할 수 있어요. [ts-pattern 문서](https://github.com/gvergnaud/ts-pattern#exhaustive-otherwise-and-run)에서도 이 검사를 설명해요.
+
+모든 분기를 `match`로 바꾸지는 않아요. 위 코드도 데이터가 없으면 바로 반환해요. 두 값 중 하나를 고르면 삼항식으로 충분하고, 결제 상태처럼 키마다 표시할 값이 정해져 있으면 `Record`를 써요.
+
+배열을 정렬하거나 묶을 때는 `es-toolkit`을 자주 써요. 검진 프로그램 편집에서는 검사항목을 카테고리와 항목 순서로 정렬하고, 카테고리별 Select 옵션으로 바꿔야 했어요. 다른 그룹에서 이미 고른 항목은 중복 선택하지 못하게 비활성화하고요.
 
 ```ts
-const result =
-  !keyword && partnerId === undefined
-    ? programs
-    : programs.filter(
-        (program) =>
-          (!keyword || program.name.includes(keyword)) &&
-          (partnerId === undefined || program.partnerId === partnerId),
-      );
+import { groupBy, sortBy } from 'es-toolkit';
+
+function toHealthCheckItemOptionGroups(
+  items: IHealthCheckItem[] | undefined,
+  disabledItemIds: number[],
+): IHealthCheckItemOptionGroup[] {
+  const taken = new Set(disabledItemIds);
+  const byCategory = groupBy(
+    sortBy(items ?? [], ['categoryId', 'orderNo']),
+    (item) => item.categoryName,
+  );
+
+  return Object.entries(byCategory).map(([categoryName, categoryItems]) => ({
+    label: categoryName,
+    options: categoryItems.map((item) => ({
+      label: item.name,
+      additionalText: item.additionalText,
+      value: item.id,
+      disabled: taken.has(item.id),
+    })),
+  }));
+}
 ```
 
-`filter`를 두 번 이어 쓴다고 복잡도가 좋아지지는 않아요. 배열 길이를 n이라고 하면 둘 다 O(n)이지만, 두 번 쓰면 중간 배열을 만들고 첫 조건을 통과한 항목을 다시 순회해요. 위 코드는 그 순회와 중간 배열을 줄여요.
-
-값을 다시 할당하지 않고 최종 결과를 표현하는 방식이 읽기 편해서 쓰는 건데요. 선언적으로 적었는지와 불필요한 연산이 있는지는 같이 봐야 해요. `let` 대신 객체를 만들어 그 안의 값을 계속 바꾸는 건 크게 다르지 않다고 봐요.
-
-그룹핑이나 반복 탐색은 직접 구현하기 전에 `es-toolkit`에 있는지 확인해요. 정산의 지점별 표에서는 병원별 값을 ID로 찾으려고 `keyBy`를 썼어요.
-
-```ts
-const branchTableData = branchList.map((item) => ({
-  yearMonth: item.yearMonth,
-  ...keyBy(item.partnerData, (partner) => partner.partnerId),
-}));
-```
-
-반복문에서 객체를 채우는 코드보다 무슨 값으로 묶는지 읽기 쉬워요. 분기도 비슷하게 고르는데요. 두 값 중 하나면 삼항식, 키별로 값이 정해져 있으면 `Record`, union의 여러 상태를 빠짐없이 처리해야 하면 `ts-pattern`을 써요.
+[sortBy](https://es-toolkit.dev/reference/array/sortBy.html)에는 정렬 기준을, [groupBy](https://es-toolkit.dev/reference/array/groupBy.html)에는 묶는 기준을 적었어요. 그다음 `map`에서는 Select가 받을 옵션을 만들어요. 객체에 값을 하나씩 채우는 코드를 직접 작성하지 않아도 돼서, 검사항목을 어떤 기준으로 나누고 표시하는지 읽기 편해요.
 
 ### 같은 값을 두 번 관리하지 않기
 
