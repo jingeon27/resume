@@ -30,9 +30,9 @@
 
 ## 3. 이번 작업에서 한 일
 
-1. `resume-sionic-ai.md` 를 **실제 코드베이스와 전수 대조 검증**한 뒤 전면 재작성
-2. `resume-levit.md`, `resume-challengers.md`, `resume-dailyfunding.md` 를 같은 기준으로 재작성
-3. `resume-inflab.md` 신규 작성
+1. `resumes/sionic-ai/resume-sionic-ai.md` 를 **실제 코드베이스와 전수 대조 검증**한 뒤 전면 재작성
+2. `resumes/levit/resume-levit.md`, `resumes/challengers/resume-challengers.md`, `resumes/dailyfunding/resume-dailyfunding.md` 를 같은 기준으로 재작성
+3. `resumes/inflab/resume-inflab.md` 신규 작성
 4. `cover-letter-sionic.md` (지원동기) 신규 작성
 5. `.pdfbuild/build.mjs` 작성 → `pdf/` 에 PDF 6개 생성 (**렌더 결과 육안 확인 아직 안 함**)
 
@@ -110,11 +110,11 @@
 
 | 파일 | 회사 | 앞세운 것 |
 | --- | --- | --- |
-| `resume-sionic-ai.md` | 사이오닉에이아이 (AI 에이전트 플랫폼) | 실시간 AI 스트리밍 UI → 스키마 기반 폼 + 어댑터 계층 → 다국어 → 대규모 렌더링 → 레거시 마이그레이션. JD의 "서버 스키마와 프론트 폼 데이터 사이의 어댑터 계층"이 Transfer Layer와 1:1 |
-| `resume-levit.md` | 레브잇 (올웨이즈, 커머스) | 커머스 흐름(쿠폰·결제·정산) → 문제 발견·원인 제거 → **개발 환경·팀 생산성** → **AI 개발 툴 통제** → 0→1. 우대사항이 "자동화로 팀 생산성", "AI 개발 툴 활용능력"이라 생산성을 앞에 배치 |
-| `resume-challengers.md` | 챌린저스 (커머스/광고) | 비즈니스 지표 → 쿠폰·결제·정산 → 백오피스 → 빠른 실험. 우대사항이 "기술 그 자체의 개선보다 고객 중심 비즈니스 문제 해결"이라 테스트 개수·빌드 시간을 **맨 뒤로** |
-| `resume-dailyfunding.md` | 데일리펀딩 (P2P 금융) | 인증·정산·결제 → 사용자 경험 → 데이터 기반 개선 → 웹 플랫폼 → 0→1 → 생산성. 우대사항 "금융 프로젝트 경험" |
-| `resume-inflab.md` | 인프랩 (인프런, 교육) | 운영까지 책임 → 재발 방지 → 모노레포·빌드 → 다국어·접근성 → 문서화. 문화 항목(재발 방지, 팀 비효율 자동화, 디자인 시스템, 문서화)과 가장 잘 맞음 |
+| `resumes/sionic-ai/resume-sionic-ai.md` | 사이오닉에이아이 (AI 에이전트 플랫폼) | 실시간 AI 스트리밍 UI → 스키마 기반 폼 + 어댑터 계층 → 다국어 → 대규모 렌더링 → 레거시 마이그레이션. JD의 "서버 스키마와 프론트 폼 데이터 사이의 어댑터 계층"이 Transfer Layer와 1:1 |
+| `resumes/levit/resume-levit.md` | 레브잇 (올웨이즈, 커머스) | 커머스 흐름(쿠폰·결제·정산) → 문제 발견·원인 제거 → **개발 환경·팀 생산성** → **AI 개발 툴 통제** → 0→1. 우대사항이 "자동화로 팀 생산성", "AI 개발 툴 활용능력"이라 생산성을 앞에 배치 |
+| `resumes/challengers/resume-challengers.md` | 챌린저스 (커머스/광고) | 비즈니스 지표 → 쿠폰·결제·정산 → 백오피스 → 빠른 실험. 우대사항이 "기술 그 자체의 개선보다 고객 중심 비즈니스 문제 해결"이라 테스트 개수·빌드 시간을 **맨 뒤로** |
+| `resumes/dailyfunding/resume-dailyfunding.md` | 데일리펀딩 (P2P 금융) | 인증·정산·결제 → 사용자 경험 → 데이터 기반 개선 → 웹 플랫폼 → 0→1 → 생산성. 우대사항 "금융 프로젝트 경험" |
+| `resumes/inflab/resume-inflab.md` | 인프랩 (인프런, 교육) | 운영까지 책임 → 재발 방지 → 모노레포·빌드 → 다국어·접근성 → 문서화. 문화 항목(재발 방지, 팀 비효율 자동화, 디자인 시스템, 문서화)과 가장 잘 맞음 |
 | `cover-letter-sionic.md` | 사이오닉 지원동기 | **AI 에이전트를 실무에서 통제해 쓴 경험** 중심. STORM Code(폐쇄망 AI 코딩 에이전트)·STORM Platform(비개발자용 에이전트 빌더)·금융공기업 고객과 연결 |
 
 **모든 파일 공통:** 연차 표기 없음(본인 요청) · 병역 미기재 · TanStack/ai PR #864 미기재(본인 요청, 유쾌하지 않게 끝난 PR) · toss/slash PR #363만 유지

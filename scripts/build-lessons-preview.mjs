@@ -5,8 +5,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceName = 'resume-daangn-lessons-draft.md';
-const outputName = 'resume-daangn-lessons-preview.html';
+const sourceName = 'resumes/daangn/resume-daangn-lessons-draft.md';
+const outputName = 'resumes/daangn/resume-daangn-lessons-preview.html';
 const source = readFileSync(resolve(root, sourceName), 'utf8');
 const css = readFileSync(resolve(root, 'templates/resume-print.css'), 'utf8');
 
