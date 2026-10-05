@@ -203,15 +203,22 @@ if (keyword) result = result.filter((program) => program.name.includes(keyword))
 if (partnerId !== undefined) result = result.filter((program) => program.partnerId === partnerId);
 ```
 
-저는 보통 이렇게 이어서 작성해요.
+이 경우에는 조건을 한 번의 `filter`에서 확인하면 돼요. 조건이 없으면 원본 목록을 그대로 쓰고요.
 
 ```ts
-const result = programs
-  .filter((program) => !keyword || program.name.includes(keyword))
-  .filter((program) => partnerId === undefined || program.partnerId === partnerId);
+const result =
+  !keyword && partnerId === undefined
+    ? programs
+    : programs.filter(
+        (program) =>
+          (!keyword || program.name.includes(keyword)) &&
+          (partnerId === undefined || program.partnerId === partnerId),
+      );
 ```
 
-`result`에 어떤 조건의 목록이 들어가는지 이어서 읽을 수 있어서요. `let` 대신 객체를 만들어 그 안의 값을 계속 바꾸는 건 크게 다르지 않다고 봐요.
+`filter`를 두 번 이어 쓴다고 복잡도가 좋아지지는 않아요. 배열 길이를 n이라고 하면 둘 다 O(n)이지만, 두 번 쓰면 중간 배열을 만들고 첫 조건을 통과한 항목을 다시 순회해요. 위 코드는 그 순회와 중간 배열을 줄여요.
+
+값을 다시 할당하지 않고 최종 결과를 표현하는 방식이 읽기 편해서 쓰는 건데요. 선언적으로 적었는지와 불필요한 연산이 있는지는 같이 봐야 해요. `let` 대신 객체를 만들어 그 안의 값을 계속 바꾸는 건 크게 다르지 않다고 봐요.
 
 그룹핑이나 반복 탐색은 직접 구현하기 전에 `es-toolkit`에 있는지 확인해요. 정산의 지점별 표에서는 병원별 값을 ID로 찾으려고 `keyBy`를 썼어요.
 
