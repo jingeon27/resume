@@ -99,7 +99,7 @@
 | 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 다섯 레이어로 다시 정의하고, 옮긴 날 오후 드러난 page 간 참조 62건과 shared 패키지 통합, 정적 검사가 놓친 서버·클라이언트 경계 오류까지 시간순으로 정리. 관리자 서비스는 9월 8일 develop 병합, 복지몰은 브랜치 통합 대기로 구분 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
 | 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
-| 26 | `post-26-declarative-code.md` | 「선언적으로 코드를 쓰는 기준」. code-style·page-composition·search-filter·react-query skills를 바탕으로 추상화 수준, 데이터·동작의 맥락 분리, 고정 UI 조합, compound 검색 필터, 왓타임 DnD 사이드바의 트리 구성·담당 공고 필터·정렬, URL 상태·조회 의존성, 읽을 수 있는 테스트와 반복 판단의 skills·lint 반영을 실제 코드로 설명 |
+| 26 | `post-26-declarative-code.md` | 「선언적으로 코드를 쓰는 기준」. code-style·page-composition·search-filter·react-query skills를 바탕으로 추상화 수준, 데이터·동작의 맥락 분리, 고정 UI 조합, compound 검색 필터, ts-pattern·es-toolkit으로 쿠폰팩 표시 금액과 종류별 수량을 계산하는 방식, URL 상태·조회 의존성, 읽을 수 있는 테스트와 반복 판단의 skills·lint 반영을 실제 코드로 설명 |
 | 27 | `post-27-next-server-to-client.md` | Next.js 우회 세 가지를 해결 결과뿐 아니라 새로 생긴 비용과 철회 조건까지 포함해 정리 |
 | 28 | `post-28-error-boundary.md` | 전체 화면 장애에서 시작해 Zod 관측, 로그, 복구 단위와 철회한 componentStack 시도까지 시간순으로 재작성 |
 | 29 | `post-29-eslint-rule-fixture.md` | 리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정 |

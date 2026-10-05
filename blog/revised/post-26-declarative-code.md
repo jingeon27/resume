@@ -194,102 +194,49 @@ const SearchFilter = createSearchFilter(
 
 ## 값을 만드는 코드
 
-왓타임의 채용 관리 화면에는 공고를 폴더로 묶고 드래그해서 순서를 바꾸는 사이드바가 있었어요. 전체 공고와 내가 담당하는 공고를 따로 볼 수 있었는데요. 서버가 보내주는 공고·지원자 수·그룹 정보를 화면에서 쓸 트리로 만들어야 했어요.
+복지몰에서는 소속 인증을 마치면 발급된 쿠폰팩을 보여줘요. 위에는 ‘최대 N만원 혜택’을 표시하고, 아래에는 쿠폰 종류별 할인 조건과 보유 수량을 보여주는데요. 이때 정액 쿠폰의 할인 금액과 정률 쿠폰의 할인율을 그대로 더할 수는 없어요. 같은 종류의 쿠폰이 여러 장 발급된 경우도 구분해야 하고요.
 
-당시에는 `lodash-es`를 썼어요. 아래는 훅에서 값을 만드는 부분만 꺼낸 코드예요. `useMemo`는 생략하고, 배열을 합치는 부분은 펼침 연산자로 정리했어요.
-
-먼저 공고 정보에 지원자 수를 붙여요. 공고는 다른 공고를 자식으로 가질 수 없어서 `canHaveChildren`을 `false`로 뒀어요.
+쿠폰 한 장의 최대 할인액부터 정했어요. 정액 쿠폰은 할인 금액을 쓰고, 정률 쿠폰은 할인 상한액을 써요.
 
 ```ts
-const jobCountData = (data?.job_infos ?? []).map(({ job, ...rest }) => ({
-  ...job,
-  ...rest,
-  canHaveChildren: false,
-}));
+import { sumBy, uniqBy } from 'es-toolkit';
+import { match } from 'ts-pattern';
 
-const jobCountDataIdReplace = ({ id, ...rest }: JobCountData) => ({
-  ...rest,
-  id: `${id}`,
-  type: 'item',
-});
+const getCouponMaxDiscount = (coupon: TMemberCouponDTO) =>
+  match(coupon.discountType)
+    .with(COUPON_DISCOUNT_TYPE.Percentage, () => coupon.maxDiscountAmount)
+    .with(COUPON_DISCOUNT_TYPE.Fixed, () => coupon.discountValue)
+    .exhaustive();
 
-const getChildren = (jobGroup: JobGroup) =>
-  jobCountData
-    .filter(
-      ({ job_group_id, group_key }) =>
-        job_group_id === jobGroup.id || group_key === jobGroup.title,
-    )
-    .map(jobCountDataIdReplace);
-```
+export const getCouponPackMaxBenefitManwon = (coupons: TMemberCouponDTO[]) => {
+  const listedCoupons = uniqBy(coupons, (coupon) => coupon.couponTemplateId);
 
-`getChildren`은 그룹에 속한 공고를 고르고 트리 노드로 바꿔요. 어떤 공고를 넣을지와 어떤 모양으로 바꿀지를 나눠서 읽을 수 있어요.
-
-폴더도 같은 방식으로 만들어요. 폴더 ID에는 접두어를 붙여 공고 ID와 구분하고, 접힘 상태와 자식 목록을 함께 넣었어요.
-
-```ts
-const transformFolderFormat = ({
-  job_group,
-  count,
-}: CandidateCountResponse['job_group_infos'][number]): TreeItem<JobGroupData> => {
-  const id = `${GROUP_ID_PREFIX}${job_group.id}`;
-
-  return {
-    ...job_group,
-    id,
-    count,
-    group_id: job_group.id,
-    collapsed: collapsedList.includes(id),
-    type: 'folder',
-    canHaveChildren: ({ type }: JobGroupData) => type === 'item',
-    children: getChildren(job_group),
-  };
+  return Math.floor(sumBy(listedCoupons, getCouponMaxDiscount) / 10000);
 };
-
-const ungroupedJobs = jobCountData
-  .filter(({ job_group_id, group_key }) => isNil(job_group_id) && isNil(group_key))
-  .map(jobCountDataIdReplace);
-
-const allJobGroupData: TreeItems<JobGroupData> = sortBy(
-  [
-    ...(data?.job_group_infos ?? []).map(transformFolderFormat),
-    ...ungroupedJobs,
-  ],
-  'order',
-);
 ```
 
-폴더는 공고만 자식으로 받을 수 있어요. 이 조건을 드래그 이벤트 안에서 일일이 처리하지 않고 `canHaveChildren`으로 전달했어요. 그룹이 없는 공고는 폴더 밖에 두고, 폴더와 함께 정렬하면 전체 트리가 돼요.
+이 화면의 헤더는 쿠폰 종류별 최대 할인액을 한 번씩 합산해요. 같은 템플릿의 쿠폰은 목록에서도 한 줄로 보여주기 때문에, `uniqBy`로 한 장씩 남긴 뒤 계산했어요. 예를 들어 3만원 정액 쿠폰이 두 장 있고 다른 종류의 정률 쿠폰은 최대 2만 5천원까지 할인된다면, 헤더에는 ‘최대 5만원’을 표시해요. 쿠폰팩의 종류별 혜택을 소개하는 금액이라, 실제 결제에 적용되는 할인액과는 계산 기준이 달라요.
 
-담당 공고만 보는 경우에는 전체 트리에서 필요한 공고를 남겨요. 폴더는 유지하되, 그 안의 공고를 거른 뒤 지원자 수도 다시 합산해야 해요. 전체 공고의 지원자 수를 그대로 보여주면 지금 보이는 목록과 숫자가 달라지니까요.
+`getCouponMaxDiscount`에서는 할인 유형에 따른 규칙만 읽으면 돼요. 쿠폰팩 계산에서는 어떤 쿠폰을 합산하고 어떤 단위로 표시하는지만 보면 되고요. 정률 쿠폰의 상한액을 고르는 분기가 합산 과정에 섞이지 않도록 나눴어요. `match`는 각 경우에 사용할 값을 바로 반환하고, `.exhaustive()`로 빠진 할인 유형이 있는지도 타입 검사에서 확인해요.
+
+같은 종류의 쿠폰을 한 줄로 보여준다고 수량까지 버리는 건 아니에요. 목록에 필요한 값은 따로 만들어요.
 
 ```ts
-const filterJobCountData = ({ type, ...job }: TreeItem<JobGroupData>) =>
-  type === 'folder' || ('manager' in job && job.manager);
+import { countBy, uniqBy } from 'es-toolkit';
 
-const myJobGroupData: TreeItems<JobGroupData> = allJobGroupData
-  .filter(filterJobCountData)
-  .map((groupData) => {
-    if (groupData.type !== 'folder') return groupData;
+export const groupCouponsByTemplate = (coupons: TMemberCouponDTO[]): TCouponGroup[] => {
+  const countByTemplate = countBy(coupons, (coupon) => coupon.couponTemplateId);
 
-    const children = groupData.children?.filter(filterJobCountData);
-    const count = children?.reduce((total, job) => total + job.count, 0) ?? 0;
-
-    return { ...groupData, children, count };
-  });
+  return uniqBy(coupons, (coupon) => coupon.couponTemplateId).map((coupon) => ({
+    coupon,
+    count: countByTemplate[coupon.couponTemplateId],
+  }));
+};
 ```
 
-지원자가 없는 항목을 뒤로 보내는 정렬 기준도 값으로 표현했어요.
+`countBy`로 수량을 세고, 종류별로 남긴 쿠폰에 그 수량을 붙여요. 화면에서는 이 결과를 받아 할인 조건과 ‘2장’ 같은 수량을 그리면 돼요. JSX 안에서 다시 같은 쿠폰을 찾거나 수를 세지 않아요.
 
-```ts
-const sortedAllJobGroupData = sortBy(
-  jobGroupData.all,
-  (job) => job.count === 0 ? Number.MAX_SAFE_INTEGER : job.order,
-);
-```
-
-이 코드에서 제가 좋아하는 부분은 화면에 필요한 값이 만들어지는 순서를 따라갈 수 있다는 점이에요. 공고를 노드로 바꾸고, 폴더의 자식을 구성하고, 전체 트리에서 담당 공고를 골라요. JSX 안에서 이 조건을 다시 판단하지 않아도 되고요. 표시 규칙이 바뀌면 해당 값을 만드는 부분부터 보면 돼요.
-
-사용자가 드래그해서 바꾼 트리는 별도 state에 둬요. 서버 응답에서 처음 만든 트리와 사용자가 편집 중인 트리는 역할이 다르거든요. 값을 계산해서 만들 수 있는 부분과 사용자 입력으로 유지해야 하는 부분은 구분해서 다뤄요.
+저는 이런 계산을 읽을 때 반복문의 인덱스나 누적값보다, 무엇을 기준으로 묶고 어떤 값을 더하는지가 먼저 보였으면 해요. `uniqBy`, `countBy`, `sumBy`처럼 하는 일이 분명한 함수는 그 의도를 드러내기 좋았어요. 반복 횟수를 줄이기 위한 선택이라기보다는, 계산 규칙을 읽고 확인하기 위한 선택이에요.
 
 ### 같은 값을 두 번 관리하지 않기
 
@@ -372,4 +319,6 @@ it('켜져 있던 혜택 칩을 다시 누르면 그 파라미터만 빼야 한�
 
 - [React: Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure#avoid-redundant-state)
 - [TanStack Query: Disabling/Pausing Queries](https://tanstack.com/query/latest/docs/framework/react/guides/disabling-queries)
-- [es-toolkit: keyBy](https://es-toolkit.dev/reference/array/keyBy.html)
+- [es-toolkit: uniqBy](https://es-toolkit.dev/reference/array/uniqBy.html)
+- [es-toolkit: sumBy](https://es-toolkit.dev/reference/math/sumBy.html)
+- [ts-pattern: exhaustive](https://github.com/gvergnaud/ts-pattern#exhaustive)
