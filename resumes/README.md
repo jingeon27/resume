@@ -11,7 +11,7 @@
 | 당근 | [동네탐험가](daangn/resume-daangn-explorer.md) · [레슨/과외 초안](daangn/resume-daangn-lessons-draft.md) · [레슨/과외 HTML](daangn/resume-daangn-lessons-preview.html) · [레슨/과외](daangn/resume-daangn-lessons.md) · [모임](daangn/resume-daangn-moim.md) · [기본](daangn/resume-daangn.md) · [커머스](daangn/resume-danggn-commerce.md) |
 | 데일리펀딩 | [이력서](dailyfunding/resume-dailyfunding.md) |
 | 딥브레인AI | [이력서](deepbrain-ai/resume-deepbrain-ai.md) |
-| 엘리스 | [이력서](elice/resume-elice-frontend.md) |
+| 엘리스 | [이력서](elice/resume-elice-frontend.md) · [지원서](elice/application-elice-frontend.md) |
 | 인프랩 | [이력서](inflab/resume-inflab.md) |
 | 레브잇 | [Frontend Platform](levit/resume-levit-frontend-platform.md) · [Frontend](levit/resume-levit-swe-frontend.md) · [기본](levit/resume-levit.md) |
 | 마인드로직 | [이력서](mindlogic/resume-mindlogic.md) |
