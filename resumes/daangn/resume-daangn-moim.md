@@ -15,7 +15,7 @@ React와 TypeScript로 모바일 웹과 관리자 서비스를 개발합니다. 
 ## 기술
 
 - React, TypeScript, Next.js App Router, SSR·hydration, 모바일 웹·인앱 WebView
-- TanStack Query, React Hook Form, Zod, Radix UI, Ant Design, dnd-kit, pnpm·Turborepo
+- TanStack Query, React Hook Form, Zod 기반 스키마 모델링, Radix UI, Ant Design, dnd-kit, pnpm·Turborepo
 - Sentry, CloudWatch, Vitest, React Testing Library, MSW, Playwright, ESLint 규칙 개발
 - Claude Code, Codex, git worktree, Amplitude
 
