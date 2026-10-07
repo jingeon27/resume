@@ -6,24 +6,24 @@
 
 ## 소개
 
-2026년 1월부터 사내 유일한 프론트엔드이고, 4월부터 가입 회원 약 15만 명의 복지몰과 병원 관리자·백오피스를 혼자 맡고 있습니다. 세 제품에 걸친 건강검진 예약을 두 주 만에 배포했고, 프레임워크 코드를 읽어 당시 영향 사용자가 가장 많던 unhandled 오류(68건·53명)의 원인을 찾았습니다.
+가입 회원 약 15만 명의 복지몰과 병원 관리자·백오피스를 만드는 프론트엔드 엔지니어입니다. 2026년 1월부터 사내 유일한 프론트엔드이고, 4월부터 세 제품을 혼자 맡고 있습니다.
 
-일할 때 세 가지를 중심에 둡니다. 새 기능의 기대 동작은 테스트로 먼저 적고, 운영·QA에서 나온 오류는 테스트로 재현해 다시 막습니다. Sentry로 운영 오류를 수집·추적해 영향이 큰 오류부터 원인을 찾아 고치고, 모바일 시트 크래시는 수정 배포 뒤 18일 동안 0건이 됐습니다. 구현하면서 기획의 빈틈이나 사용성 문제를 발견하면 담당자와 논의해 보완합니다.
+기능을 만들 때 사용자가 실제로 어떻게 쓰는지부터 봅니다. 모바일 리뷰 화면을 직접 써 보다 키패드가 선택 목록을 가리는 문제를 찾아 PO에게 공유하고 개선안을 구현했습니다. 검진 항목을 정해진 수만큼 고르면 다음 그룹으로 넘기자는 요청에는, 이미 고른 항목을 고칠 때도 화면이 넘어간다는 빈틈을 짚어 남은 칩을 잠그는 방식으로 바꿨습니다. 세 제품에 걸친 건강검진 예약은 개발팀장·부팀장과 빠진 동작과 예외를 맞추며 두 주 만에 배포했습니다.
 
-구현은 AI에게 맡기지만, 작성된 코드는 전부 이해해야 한다고 생각해 코드와 테스트를 직접 읽습니다. 빠진 조건이 없는지 확인하고 화면을 띄워 동작을 확인합니다. 같은 지적이 반복되면 skills와 lint 규칙에 남깁니다.
+출시 뒤에는 사용자가 겪는 오류를 Sentry로 수집·추적해 영향이 큰 것부터 고칩니다. 모바일 시트 크래시(57명 이상, 75건)는 수정 배포 뒤 18일 동안 0건이 됐습니다. 새 기능의 기대 동작은 테스트로 먼저 적고, 운영·QA에서 나온 오류는 테스트로 재현해 다시 막습니다.
 
-AI 시대라고 손을 놓지 않고 최신 기술 흐름도 꾸준히 따라갑니다. React 19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Next.js 16의 cacheComponents, TypeScript의 `satisfies`와 7 네이티브 컴파일러, `Array.prototype.at`·`Promise.withResolvers` 같은 최신 문법을 운영 코드에 씁니다. 기술을 선택할 때는 트레이드오프를 파악하고 현재 서비스에 맞는지 판단합니다. 오류를 해결할 때는 라이브러리나 프레임워크 코드도 읽어 가며 원인을 찾습니다.
+구현은 AI에게 맡기지만, 작성된 코드는 전부 이해해야 한다고 생각해 코드와 테스트를 직접 읽고 화면을 띄워 동작을 확인합니다. AI 시대라고 손을 놓지 않고 최신 기술 흐름도 따라가며, 트레이드오프를 따져 지금 서비스에 맞는 것을 고릅니다.
 
 왓타임에서 채용 관리 서비스 RoundHR을 만들며 채용 페이지와 지원서 설정을 개발했는데, 패스오더 채용 페이지도 RoundHR로 운영되고 있어 반가웠습니다. 페이타랩 웹 파트의 FEConf 후기에서 백오피스와 패써 웹 두 모노레포를 운영하며 공용 패키지 변경을 AI 코드 리뷰로 검증하고, 매장 검색 결과의 노출을 넓히는 SEO 작업을 한다는 내용을 읽었습니다. 저도 관리자 서비스 모노레포의 공용 패키지 경계를 lint와 리뷰 에이전트로 지키고, 복지몰에서 지역·진료과 검색 주소를 색인하는 작업을 해 왔습니다. 지금은 혼자 프론트엔드를 맡고 있어, 배운 것을 나누며 함께 성장하는 웹 파트에서 일하고 싶어 지원했습니다.
 
 ## 기술
 
-- 언어·렌더링: JavaScript, TypeScript, React, Next.js App Router, SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성
+- 언어·렌더링: JavaScript(`Array.prototype.at`·`Promise.withResolvers`), TypeScript(`satisfies`, 7 네이티브 컴파일러), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성
 - 검색 노출: 메타데이터·canonical, 구조화 데이터(JSON-LD), 사이트맵
-- 상태·폼·UI: TanStack Query, Zustand, React Hook Form, Zod, Radix UI, Tailwind CSS, Ant Design, dnd-kit
-- 테스트: Vitest, React Testing Library, MSW, Playwright
-- 운영·사용자 행동: Sentry, CloudWatch, Amplitude
-- 개발 환경: pnpm, Turborepo, ESLint 규칙 개발, knip, 모바일 WebView
+- 상태·폼·UI: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), Zustand, React Hook Form(`Controller`·`useFieldArray`), Zod(응답 DTO 파생, URL 파라미터 검증), Radix UI, Tailwind CSS, Ant Design, dnd-kit
+- 테스트: Vitest·React Testing Library(단위·통합), MSW(서버 제약을 반영한 목), Playwright(dev API 서버 E2E, 앱 간 E2E)
+- 운영·사용자 행동: Sentry(브라우저·서버·Edge, release·소스맵, 민감 정보 제거), CloudWatch, Amplitude(이벤트 추가·수정)
+- 개발 환경: pnpm, Turborepo, ESLint 규칙 개발(RuleTester), knip, 모바일 WebView(앱 브릿지)
 - AI 개발 workflow: Claude Code, Codex, git worktree
 
 ## 경력
