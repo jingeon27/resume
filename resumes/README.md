@@ -17,6 +17,7 @@
 | 리멤버 | [Frontend Engineer](remember/resume-remember-frontend.md) |
 | 마인드로직 | [이력서](mindlogic/resume-mindlogic.md) |
 | 파트리지시스템즈 | [이력서](partridge-systems/resume-partridge-systems.md) |
+| 페이타랩(패스오더) | [Web Frontend](paytalab/resume-paytalab-frontend.md) |
 | 사이오닉AI | [이력서](sionic-ai/resume-sionic-ai.md) |
 | 뤼튼 | [AX Frontend](wrtn/resume-wrtn-ax-frontend.md) · [Frontend](wrtn/resume-wrtn-frontend.md) |
 | 제타 | [이력서](zeta/resume-zeta.md) |
