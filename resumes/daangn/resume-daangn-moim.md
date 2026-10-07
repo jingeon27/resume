@@ -18,14 +18,12 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 
 ## 기술
 
-- Frontend: JavaScript(History API, `sessionStorage`), React 19(`useOptimistic`, `<Activity>`), Next.js App Router(SSR·Streaming·Hydration, cacheComponents·proxy), 모바일 WebView(앱 브릿지), Tailwind CSS
-- TypeScript: 필드 경로와 값 타입을 검사하는 제네릭 폼 API(`createTypedForm<T>`), 스키마에서 파생한 필드명, 응답·폼·제출값 변환 분리, TypeScript 7 네이티브 체커
-- Zod: 값의 출처에 따른 실패 처리(응답은 불일치 기록, URL은 필드별 `.catch` 복구, 폼은 제출 차단), `discriminatedUnion` 응답 모델링, 결제 복귀 값 `safeParse` 검증
-- Library: TanStack Query, React Hook Form, Zustand, Ant Design, dnd-kit
-- Testing: Vitest·React Testing Library, MSW, Playwright(dev API 서버 E2E, 앱 간 E2E)
-- Monitoring: Sentry(브라우저·서버·Edge 오류 수집, release·브라우저 소스맵, 민감 정보 제거), Amplitude(사용자 행동 측정)
-- Tooling: pnpm, Turborepo, 자체 ESLint 규칙(RuleTester)
-- AI: Claude Code, Codex, git worktree
+- Frontend: JavaScript, React 19, Next.js App Router(SSR·Streaming·Hydration), Tailwind CSS, 모바일 WebView
+- TypeScript·Zod: 제네릭 타입 설계, 스키마 모델링과 값의 출처별 런타임 검증
+- Library: TanStack Query, React Hook Form, Zustand, Ant Design
+- Testing: Vitest·React Testing Library, MSW, Playwright
+- Monitoring: Sentry, Amplitude
+- Tooling·AI: pnpm·Turborepo, 자체 ESLint 규칙, Claude Code·Codex
 
 ## 경력
 
