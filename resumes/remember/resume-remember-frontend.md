@@ -124,7 +124,7 @@ Amplitude 도입 전, 모바일로 리뷰를 직접 써 보다 키패드가 시�
 
 **역할** 지원 여부 측정 설계부터 전환까지 단독으로 맡았습니다.
 
-전환 전 5주 동안 사용자 브라우저의 `color-mix()`·`@property` 지원 여부를 Amplitude로 기록했습니다. 하루 평균 약 1,000명 중 `color-mix()` 미지원 사용자가 하루 1명꼴(평균 0.94명)이라 철회도 검토했지만, [v4.1의 색상 fallback](https://tailwindcss.com/blog/tailwindcss-v4-1#improved-compatibility-with-older-browsers)을 확인했고 `@property` 미지원은 없어 업그레이드했습니다(현재 스테이지 반영).
+전환 전 5주 동안 사용자 브라우저의 `color-mix()`·`@property` 지원 여부를 Amplitude로 기록했습니다. 하루 평균 약 1,000명 중 `color-mix()` 미지원 사용자가 하루 1명꼴(평균 0.94명)이라 철회도 검토했지만, [v4.1의 색상 fallback](https://tailwindcss.com/blog/tailwindcss-v4-1#improved-compatibility-with-older-browsers)을 확인했고 `@property` 미지원은 없어 업그레이드했습니다.
 
 #### AI 개발 workflow | 2026.04 – 현재
 
