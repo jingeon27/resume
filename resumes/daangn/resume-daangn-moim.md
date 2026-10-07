@@ -6,23 +6,23 @@
 
 ## 소개
 
-2026년 1월부터 사내 유일한 프론트엔드이고, 4월부터 가입 회원 약 15만 명의 복지몰과 병원 관리자·백오피스를 혼자 맡고 있습니다. 세 제품에 걸친 건강검진 예약을 두 주 만에 배포했고, 프레임워크 코드를 읽어 당시 영향 사용자가 가장 많던 unhandled 오류(68건·53명)의 원인을 찾았습니다.
+가입 회원 약 15만 명의 복지몰과 병원 관리자·백오피스를 만드는 프론트엔드 엔지니어입니다. 2026년 1월부터 사내 유일한 프론트엔드이고, 4월부터 세 제품을 혼자 맡고 있습니다.
 
-일할 때 세 가지를 중심에 둡니다. 새 기능의 기대 동작은 테스트로 먼저 적고, 운영·QA에서 나온 오류는 테스트로 재현해 다시 막습니다. Sentry로 운영 오류를 수집·추적해 영향이 큰 오류부터 원인을 찾아 고치고, 모바일 시트 크래시는 수정 배포 뒤 18일 동안 0건이 됐습니다. 구현하면서 기획의 빈틈이나 사용성 문제를 발견하면 담당자와 논의해 보완합니다.
+기능을 만들 때 사용자가 실제로 어떻게 쓰는지부터 봅니다. 모바일 리뷰 화면을 직접 써 보다 키패드가 선택 목록을 가리는 문제를 찾아 PO에게 공유하고 개선안을 구현했습니다. 검진 항목을 정해진 수만큼 고르면 다음 그룹으로 넘기자는 요청에는, 이미 고른 항목을 고칠 때도 화면이 넘어간다는 빈틈을 짚어 남은 칩을 잠그는 방식으로 바꿨습니다. 세 제품에 걸친 건강검진 예약은 개발팀장·부팀장과 빠진 동작과 예외를 맞추며 두 주 만에 배포했습니다.
 
-구현은 AI에게 맡기지만, 작성된 코드는 전부 이해해야 한다고 생각해 코드와 테스트를 직접 읽습니다. 빠진 조건이 없는지 확인하고 화면을 띄워 동작을 확인합니다.
+출시 뒤에는 사용자가 겪는 오류를 Sentry로 수집·추적해 영향이 큰 것부터 고칩니다. 모바일 시트 크래시(57명 이상, 75건)는 수정 배포 뒤 18일 동안 0건이 됐습니다. 새 기능의 기대 동작은 테스트로 먼저 적고, 운영·QA에서 나온 오류는 테스트로 재현해 다시 막습니다.
 
-AI 시대라고 손을 놓지 않고 최신 기술 흐름도 꾸준히 따라갑니다. React 19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Next.js 16의 cacheComponents, TypeScript의 `satisfies`와 7 네이티브 컴파일러, `Array.prototype.at`·`Promise.withResolvers` 같은 최신 문법을 운영 코드에 씁니다. 기술을 선택할 때는 트레이드오프를 파악하고 현재 서비스에 맞는지 판단합니다. 오류를 해결할 때는 라이브러리나 프레임워크 코드도 읽어 가며 원인을 찾습니다.
+구현은 AI에게 맡기지만, 작성된 코드는 전부 이해해야 한다고 생각해 코드와 테스트를 직접 읽고 화면을 띄워 동작을 확인합니다. AI 시대라고 손을 놓지 않고 최신 기술 흐름도 따라가며, 트레이드오프를 따져 지금 서비스에 맞는 것을 고릅니다.
 
 중학교 때 게임 커뮤니티에서 만난 사람들과 정모로 직접 만나기도 했고, 그중 몇몇과는 지금까지 관계를 이어오고 있습니다. 같은 관심사로 온라인에서 시작한 인연이 오래 이어진 것은 제 인생에서 특별한 경험이었습니다. 당근 모임을 개발하며 더 많은 사람에게 이런 만남과 관계의 가치를 전하고 싶어 지원했습니다.
 
 ## 기술
 
-- 언어·렌더링: JavaScript, TypeScript, React, Next.js App Router, SSR·Streaming·Hydration
-- 데이터·UI: TanStack Query, React Hook Form, Zod, Radix UI, Ant Design, dnd-kit
-- 테스트: Vitest, React Testing Library, MSW, Playwright
-- 운영·사용자 행동: Sentry, CloudWatch, Amplitude
-- 개발 환경: pnpm, Turborepo, ESLint 규칙 개발, 모바일 WebView
+- 언어·렌더링: JavaScript(`Array.prototype.at`·`Promise.withResolvers`), TypeScript(`satisfies`, 7 네이티브 컴파일러), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration
+- 데이터·UI: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), React Hook Form(`Controller`·`useFieldArray`), Zod(응답 DTO 파생, URL 파라미터 검증), Radix UI, Ant Design, dnd-kit
+- 테스트: Vitest·React Testing Library(단위·통합), MSW(서버 제약을 반영한 목), Playwright(dev API 서버 E2E, 앱 간 E2E)
+- 운영·사용자 행동: Sentry(브라우저·서버·Edge, release·소스맵, 민감 정보 제거), CloudWatch, Amplitude(이벤트 추가·수정)
+- 개발 환경: pnpm, Turborepo, ESLint 규칙 개발(RuleTester), 모바일 WebView(앱 브릿지)
 - AI 개발 workflow: Claude Code, Codex, git worktree
 
 ## 경력
