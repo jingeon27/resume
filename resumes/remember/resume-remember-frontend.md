@@ -18,12 +18,12 @@
 
 ## 기술
 
-- 언어·렌더링: JavaScript(`Array.prototype.at`·`Promise.withResolvers`), TypeScript(`satisfies`, 7 네이티브 컴파일러), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성
-- 상태·폼·UI: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), Zustand, React Hook Form(`Controller`·`useFieldArray`), Zod(응답 DTO 파생, URL 파라미터 검증), Radix UI, Tailwind CSS, Ant Design, dnd-kit
-- 테스트: Vitest·React Testing Library(단위·통합), MSW(서버 제약을 반영한 목), Playwright(dev API 서버 E2E, 앱 간 E2E)
-- 운영·사용자 행동: Sentry(브라우저·서버·Edge, release·소스맵, 민감 정보 제거), CloudWatch, Amplitude(이벤트 추가·수정)
-- 개발 환경: pnpm, Turborepo, ESLint 규칙 개발(RuleTester)
-- AI 개발 workflow: Claude Code, Codex, git worktree
+- Frontend: JavaScript(`Array.prototype.at`·`Promise.withResolvers`), TypeScript(`satisfies`, 7 네이티브 컴파일러), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성
+- Library: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), Zustand, React Hook Form(`Controller`·`useFieldArray`), Zod(응답 DTO 파생, URL 파라미터 검증), Radix UI, Tailwind CSS, Ant Design, dnd-kit
+- Testing: Vitest·React Testing Library(단위·통합), MSW(서버 제약을 반영한 목), Playwright(dev API 서버 E2E, 앱 간 E2E)
+- Monitoring: Sentry(브라우저·서버·Edge, release·소스맵, 민감 정보 제거), CloudWatch, Amplitude(이벤트 추가·수정)
+- Tooling: pnpm, Turborepo, ESLint 규칙 개발(RuleTester)
+- AI: Claude Code, Codex, git worktree
 
 ## 경력
 
