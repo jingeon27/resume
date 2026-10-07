@@ -18,9 +18,11 @@
 
 ## 기술
 
-- Frontend: JavaScript(`Array.prototype.at`·`Promise.withResolvers`), TypeScript(`satisfies`, 7 네이티브 컴파일러), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성, 모바일 WebView(앱 브릿지)
+- Frontend: JavaScript(`AbortController` 요청 취소, SSE·fetch 스트림, `Promise.all` 병렬 처리, `IntersectionObserver`, `Promise.withResolvers`), React(19의 `useEffectEvent`·`<Activity>`·`useOptimistic`, Suspense), Next.js App Router(16의 cacheComponents·`use cache`·proxy·`generateMetadata`), SSR·Streaming·Hydration, 시맨틱 HTML·웹 접근성, 모바일 WebView(앱 브릿지)
+- TypeScript: 타입 모델링(제네릭 `createTypedForm<T>`, 판별 유니온, `keyof`·매핑 타입, 유틸리티 타입, 타입 술어 `x is T`, `satisfies`), TypeScript 7 네이티브 컴파일러
+- Zod: 스키마 모델링(응답 DTO를 `z.infer`로 파생, `discriminatedUnion`, `superRefine` 교차 필드 검증, `transform`·`z.coerce` 변환, 필드별 `.catch` 복구, `extend`·`pick` 조합, 경계의 `safeParse`)
 - SEO: 메타데이터·canonical, 구조화 데이터(JSON-LD), 사이트맵
-- Library: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), Zustand, React Hook Form(`Controller`·`useFieldArray`), Zod(응답 DTO 파생, URL 파라미터 검증), Radix UI, Tailwind CSS, Ant Design, dnd-kit
+- Library: TanStack Query(prefetch·hydration, `queryOptions`, optimistic update), Zustand, React Hook Form(`Controller`·`useFieldArray`), Radix UI, Tailwind CSS, Ant Design, dnd-kit
 - Testing: Vitest·React Testing Library(단위·통합), MSW(서버 제약을 반영한 목), Playwright(dev API 서버 E2E, 앱 간 E2E)
 - Monitoring: Sentry(브라우저·서버·Edge, release·소스맵, 민감 정보 제거), CloudWatch, Amplitude(이벤트 추가·수정)
 - Tooling: pnpm, Turborepo, ESLint 규칙 개발(RuleTester), knip
