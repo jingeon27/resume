@@ -14,6 +14,7 @@
 | 엘리스 | [이력서](elice/resume-elice-frontend.md) · [지원서](elice/application-elice-frontend.md) |
 | 인프랩 | [이력서](inflab/resume-inflab.md) |
 | 레브잇 | [Frontend Platform](levit/resume-levit-frontend-platform.md) · [Frontend](levit/resume-levit-swe-frontend.md) · [기본](levit/resume-levit.md) |
+| 리멤버 | [Frontend Engineer](remember/resume-remember-frontend.md) |
 | 마인드로직 | [이력서](mindlogic/resume-mindlogic.md) |
 | 파트리지시스템즈 | [이력서](partridge-systems/resume-partridge-systems.md) |
 | 사이오닉AI | [이력서](sionic-ai/resume-sionic-ai.md) |
