@@ -68,7 +68,7 @@ warning이 수백 개면 0개와 같아요. 규칙의 값어치는 개수가 아
 },
 ```
 
-셀렉터로 안 되는 규칙은 파일을 따로 만들었어요. 라우트에서 조회 금지, 슬라이스 Public API 강제, 미사용 재수출 검출 같은 것들인데요. 이쪽은 파일 시스템을 읽고 import 그래프를 따라가는 작은 정적 분석기가 돼요. 규칙 자체를 어떻게 테스트하고 fixture를 관리했는지는 [29번 글](https://jingeon27.tistory.com/29)에서 다뤘어요.
+셀렉터로 안 되는 규칙은 파일을 따로 만들었어요. 라우트에서 조회 금지, 슬라이스 Public API 강제, 미사용 재수출 검출 같은 것들인데요. 이쪽은 파일 시스템을 읽고 import 그래프를 따라가는 작은 정적 분석기가 돼요.
 
 ## 8월에는 error가 하나뿐이었어요
 
@@ -145,5 +145,4 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 - [typescript-eslint · tsconfigRootDir](https://typescript-eslint.io/packages/parser/#tsconfigrootdir)
 - [ESLint · no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
 - [ESLint · Ignore files](https://eslint.org/docs/latest/use/configure/ignore)
-- [리뷰 코멘트를 custom ESLint 규칙과 fixture 테스트로 옮긴 과정](https://jingeon27.tistory.com/29) — 셀렉터로 안 되는 규칙을 어떻게 만들고 테스트했는지
 - [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31) — 정적으로 판정할 수 있는 기준을 lint로 내린 이유
