@@ -1,4 +1,4 @@
-# AI가 코드를 짜도 저는 diff를 읽어요
+# 저는 코드를 읽어요
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
