@@ -59,7 +59,7 @@
 <div class="zone">렌더러가 행을 가르는 순서</div>
 <div class="stages">
   <div class="st">
-    <div class="st-d">2026-06-24 오전</div>
+    <div class="st-d">2일차 오전</div>
     <div class="st-t">쿠폰을 막 넣었을 때</div>
     <p class="st-s">한 파일 469줄에 렌더러와 하위 컴포넌트 6개 (쿠폰 전 301줄)</p>
     <div class="br">
@@ -75,7 +75,7 @@
   </div>
   <div class="arr"></div>
   <div class="st">
-    <div class="st-d">06-24 오후</div>
+    <div class="st-d">2일차 오후</div>
     <div class="st-t">파일로 나누고 match로 옮김</div>
     <p class="st-s">14:48 컴포넌트별 파일 분리, 렌더러 41줄 → 16:50 <code>ts-pattern</code>, 34줄</p>
     <div class="br">
@@ -89,7 +89,7 @@
   </div>
   <div class="arr"></div>
   <div class="st now">
-    <div class="st-d">06-25 오전 이후</div>
+    <div class="st-d">3일차 오전 이후</div>
     <div class="st-t">저장 여부로 먼저 묶음</div>
     <p class="st-s">렌더러 34줄. 그 뒤 바뀐 것은 폼 타입과 파일 위치뿐</p>
     <div class="br">
@@ -105,20 +105,20 @@
   </div>
 </div>
 
-<div class="zone" style="margin-top:16px">쿠폰을 넣으며 손댄 곳 <span class="nw" style="font-weight:500">2026-06-23 ~ 06-25</span></div>
+<div class="zone" style="margin-top:16px">쿠폰을 넣으며 손댄 곳 <span class="nw" style="font-weight:500">사흘 동안</span></div>
 <div class="tbl">
-  <div class="tr th"><div>자리</div><div>코드</div><div>바꾼 것</div><div>날짜</div></div>
+  <div class="tr th"><div>자리</div><div>코드</div><div>바꾼 것</div><div>작업일</div></div>
   <div class="tr">
     <div>결제수단</div><div class="code">PAYMENT_METHODS<br>PAYMENT_METHODS_LABEL</div>
-    <div class="what"><b>PAYMENT_COUPON</b>과 라벨 '쿠폰결제'를 더했다</div><div class="dt">06-23</div>
+    <div class="what"><b>PAYMENT_COUPON</b>과 라벨 '쿠폰결제'를 더했다</div><div class="dt">1일차</div>
   </div>
   <div class="tr">
     <div>응답 타입</div><div class="code">ITreatmentPaymentHistoryResDTO</div>
-    <div class="what">memberCouponId·couponName을 더했다. 같이 넣었던 할인액은 이튿날 <b>폼 전용 타입</b>으로 뗐다</div><div class="dt">06-23 · 06-24</div>
+    <div class="what">memberCouponId·couponName을 더했다. 같이 넣었던 할인액은 이튿날 <b>폼 전용 타입</b>으로 뗐다</div><div class="dt">1·2일차</div>
   </div>
   <div class="tr">
     <div>노출 판정</div><div class="code">isVisiblePaymentHistory</div>
-    <div class="what">미저장 쿠폰 행을 올린다. 처리 중 상태로 고르다가 <b>id 유무</b>로 바꿨다</div><div class="dt">06-24 · 06-25</div>
+    <div class="what">미저장 쿠폰 행을 올린다. 처리 중 상태로 고르다가 <b>id 유무</b>로 바꿨다</div><div class="dt">2·3일차</div>
   </div>
   <div class="tr keep">
     <div>점 색·헤더</div><div class="code">getPaymentHistoryColor<br>PaymentHistoryHeader</div>
@@ -126,19 +126,19 @@
   </div>
   <div class="tr focus">
     <div>렌더러</div><div class="code">PaymentHistoryDescriptions</div>
-    <div class="what">쿠폰 갈래를 더하고 위 세 단계를 거쳤다</div><div class="dt">06-24 · 06-25</div>
+    <div class="what">쿠폰 갈래를 더하고 위 세 단계를 거쳤다</div><div class="dt">2·3일차</div>
   </div>
   <div class="tr focus">
     <div>쿠폰 편집</div><div class="code">CouponDescriptions<br>CouponSelectModal</div>
-    <div class="what"><b>새로 만들었다</b>. 선택·해제·할인 계산이 여기에 있다</div><div class="dt">06-24 · 06-25</div>
+    <div class="what"><b>새로 만들었다</b>. 선택·해제·할인 계산이 여기에 있다</div><div class="dt">2·3일차</div>
   </div>
   <div class="tr">
     <div>완료 상세</div><div class="code">CompletedDescriptions</div>
-    <div class="what">연결된 쿠폰결제 행을 찾아 미수잔금 자리에 쿠폰 칸을 넣는다</div><div class="dt">06-24</div>
+    <div class="what">연결된 쿠폰결제 행을 찾아 미수잔금 자리에 쿠폰 칸을 넣는다</div><div class="dt">2일차</div>
   </div>
   <div class="tr">
     <div>앱 코드</div><div>병원 관리자<br>Back-Office</div>
-    <div class="what">두 앱 결제 합계에 완료된 쿠폰결제를 넣고(06-23), 병원 관리자 예약 상세에 쿠폰 행과 확정 요청을 붙이고(06-24), 확정 전 쿠폰 예약은 두 앱 정산 상세에서 입력을 막았다(06-25)</div><div class="dt">06-23~06-25</div>
+    <div class="what">두 앱 결제 합계에 완료된 쿠폰결제를 넣고(1일차), 병원 관리자 예약 상세에 쿠폰 행과 확정 요청을 붙이고(2일차), 확정 전 쿠폰 예약은 두 앱 정산 상세에서 입력을 막았다(3일차)</div><div class="dt">1~3일차</div>
   </div>
 </div>
 
