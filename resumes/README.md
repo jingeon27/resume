@@ -4,7 +4,6 @@
 
 | 회사 | 문서 |
 | --- | --- |
-| 에이블리 | [이력서](ably/resume-ably.md) |
 | 챌린저스 | [이력서](challengers/resume-challengers.md) |
 | 채널톡 | [이력서](channeltalk/resume-channeltalk.md) |
 | 코르카 | [이력서](corca/resume-corca-design-engineer.md) |
@@ -20,4 +19,3 @@
 | 페이타랩(패스오더) | [Web Frontend](paytalab/resume-paytalab-frontend.md) |
 | 사이오닉AI | [이력서](sionic-ai/resume-sionic-ai.md) |
 | 뤼튼 | [AX Frontend](wrtn/resume-wrtn-ax-frontend.md) · [Frontend](wrtn/resume-wrtn-frontend.md) |
-| 제타 | [이력서](zeta/resume-zeta.md) |
