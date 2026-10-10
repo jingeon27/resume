@@ -12,12 +12,13 @@ AI 개발 workflow를 개선하며 반복되는 판단을 skills와 lint rule에
 
 ## 기술
 
-- **Frontend:** JavaScript, TypeScript, React 18·19, Next.js App Router, SSR·Streaming·Hydration, 모바일 WebView
-- **상태·폼:** TanStack Query, React Hook Form, Zustand, Zod, Ant Design Form, 제네릭·재귀 조건부 타입
-- **UI·아키텍처:** Radix UI, shadcn/ui·Base UI, Compound Components, overlay-kit, FSD, pnpm·Turborepo
-- **테스트:** Vitest, React Testing Library, MSW, Playwright, API 계약 테스트, GitHub Actions
-- **오류·사용자 행동 측정:** Sentry, Web Vitals, CloudWatch, Amplitude
-- **개발 도구:** 자체 ESLint 규칙·RuleTester, Knip, Claude Code·Codex, skills·git worktree
+- **Frontend:** JavaScript, TypeScript, React 18·19, Next.js 16 (App Router)
+- **State & Form:** TanStack Query, Zustand, React Hook Form, Zod
+- **UI:** Radix UI, shadcn/ui (Base UI), Ant Design, Tailwind CSS, overlay-kit
+- **Testing:** Vitest, React Testing Library, MSW, Playwright
+- **Monitoring & Analytics:** Sentry, CloudWatch, Amplitude
+- **Tooling:** pnpm, Turborepo, Turbopack, ESLint, Knip, GitHub Actions
+- **AI:** Claude Code, Codex
 
 ## 경력 요약
 

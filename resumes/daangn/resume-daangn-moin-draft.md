@@ -14,11 +14,13 @@ AI 개발 workflow를 개선하며 반복해서 지적한 내용은 skills와 li
 
 ## 기술
 
-- **Frontend:** JavaScript, TypeScript, React 19, Next.js App Router, SSR·Streaming·Hydration, 모바일 WebView
-- **상태·폼:** TanStack Query, React Hook Form, Zustand, Zod, Ant Design Form
-- **UI·구조:** Radix UI, Compound Components, overlay-kit, Tailwind CSS, FSD, pnpm·Turborepo
-- **검증·운영:** Vitest, React Testing Library, MSW, Playwright, Sentry, Amplitude
-- **개발 도구:** Claude Code·Codex, git worktree, skills, 자체 ESLint 규칙·RuleTester, Knip
+- **Frontend:** JavaScript, TypeScript, React 19, Next.js 16 (App Router)
+- **State & Form:** TanStack Query, Zustand, React Hook Form, Zod
+- **UI:** Radix UI, Ant Design, Tailwind CSS, overlay-kit
+- **Testing:** Vitest, React Testing Library, MSW, Playwright
+- **Monitoring & Analytics:** Sentry, Amplitude
+- **Tooling:** pnpm, Turborepo, Turbopack, ESLint, Knip
+- **AI:** Claude Code, Codex
 
 ## 경력 요약
 
