@@ -121,7 +121,7 @@ Claude Code와 Codex로 여러 git worktree에서 기능을 개발하고 리팩�
 티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 제 diff 리뷰·로컬 화면 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청
 
 - 상태를 어디에 둘지, 어떤 경로로 import할지는 skills에 정리하고, 자동으로 검사할 수 있는 기준은 자체 ESLint 규칙으로 옮겼습니다. 슬라이스 내부 파일을 직접 import하던 경고 271건은 정리한 뒤 오류로 승격했습니다.
-- 자체 규칙이 동적 import와 `as const` 쿼리 키를 놓치는 것을 확인해 보완을 지시하고 결과를 검토했습니다. 보완 전 규칙으로 새 테스트를 돌리면 8건이 실패해, 테스트가 빈틈을 잡는 것을 확인했습니다.
+- lint rule도 RuleTester와 `__fixture__`·mock으로 테스트 환경을 만들어 검증합니다.
 - 타입 검사는 TypeScript 7 네이티브 체커를 병행해 복지몰 기준 12.5초에서 1.9초로 줄였고, 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
 관련 글: [AI 워크플로 개선](https://jingeon27.tistory.com/31)
