@@ -222,7 +222,7 @@ SDK가 수집 키를 추가하면 타입 검사가, 정책 값이나 배선이 �
 
 ## Web Vitals는 실제 Sentry envelope까지 확인했어요
 
-브라우저에서는 `browserTracingIntegration`이 LCP·CLS·TTFB·FCP를 pageload transaction의 measurement로 보내요. 프로덕션 trace는 20%를 수집하고, 트래픽이 적은 스테이지는 전부 수집해요.
+브라우저에서는 `browserTracingIntegration`이 LCP·CLS·TTFB·FCP를 pageload transaction의 measurement로 보내요. 프로덕션 trace는 20%를 수집하고, 전송을 확인하는 배포에서는 전부 수집해요.
 
 처음에는 기본 `idleTimeout` 1초를 썼는데요. 실제 수집분을 보니 LCP가 없는 pageload transaction의 지속시간 p50은 728ms였고, LCP가 실린 쪽은 2.3초였어요. transaction이 지표보다 먼저 닫히는 경우가 있다고 판단해 대기 창을 3초로 늘렸어요.
 
@@ -259,6 +259,8 @@ MSW 서비스 워커가 요청을 넘겨받으면 `page.route`가 envelope를 �
 여기에는 중요한 한계가 있었어요. 지금 SDK에서 INP는 pageload transaction의 measurement가 아니라 standalone span으로 전송돼요.
 
 사내 Sentry 환경에서는 span ingestion이 꺼져 있어 `dataset=spans`가 비어 있었어요. 그래서 INP가 저장되지 않았고, Insights의 Web Vitals 화면도 비어 보였는데요. 지금은 Discover에서 transaction dataset과 `transaction.op:pageload`를 기준으로 LCP·CLS·TTFB·FCP를 확인해요.
+
+지표를 수집하는 연결은 확인했지만, 제품별로 어떤 값부터 개선할지 판단하는 임계값과 알림 기준은 따로 정해야 해요. 수집 설정만으로 성능 개선 기준까지 마련된 것은 아니에요.
 
 이 문제는 `beforeSendSpan`을 추가하거나 SDK 옵션을 바꾼다고 풀리지 않아요. 앱은 span을 보내고 있지만 지금 서버 설정에서 저장하지 않는 상태라, 서버의 span ingestion 설정을 따로 확인해야 해요.
 
@@ -390,7 +392,7 @@ DSN이 있더라도 `NEXT_PUBLIC_SENTRY_ENABLED`가 `false`면 SDK 전체가 꺼
 export const IS_SENTRY_ENABLED = Boolean(SENTRY_DSN) && SENTRY_ENABLED !== 'false';
 ```
 
-- 실제 사용자·검증 트래픽을 봐야 하는 production·staging 배포에서는 켜요.
+- 실제 사용자 오류를 수집하거나 전송 흐름을 확인해야 하는 배포에서는 켜요.
 - 상시 수집할 가치가 적은 development 배포와 일반 로컬 실행은 기본으로 꺼요.
 - `dev`, `dev:mock`, `build:e2e`는 기본값을 `false`로 두어 테스트·개발 트래픽이 저장소를 쓰지 않게 해요.
 - Sentry 전송 자체를 확인하는 E2E나 로컬 연동 점검에서는 명시적으로 `true`를 줘서 다시 켤 수 있어요.
@@ -418,11 +420,6 @@ Sentry 워터폴을 보다가 메인 배너 링크가 뷰포트에 들어오는 
 **관측과 운영은 달라요.** 지표를 모으는 데서 끝나지 않고, 사용자 영향에 따라 레벨을 정하고 잡음을 줄여 실제로 움직일 수 있는 목록을 만들어야 했어요.
 
 Sentry를 붙인 일보다, 무엇을 보내지 않을지와 어떤 신호에 움직일지를 코드·테스트·도구로 남긴 일이 더 오래 걸렸어요.
-
-<div class="note note-limit">
-  <strong>아직 확인하지 못한 것</strong>
-  <p>사내 Sentry가 standalone span을 저장하지 않아 INP는 남지 않아요. Web Vitals를 모으지만 제품별 임계값·세그먼트·알림과 대응 책임은 아직 정하지 못했어요. `idleTimeout`을 3초로 늘린 뒤 LCP가 빠진 pageload가 얼마나 줄었는지는 이 글에서 비교하지 않았어요. 서버 소스맵은 올리지 않아 서버 쪽 스택은 minify된 채로 남아요. artifact bundle이 생긴 것까지는 확인했지만, 배포된 오류가 원본 코드로 풀리는지는 기록으로 남기지 않았어요. 사용자 정의 context에 민감 정보가 들어가지 않는 건 공용 helper와 리뷰 규칙에 기대고 있어요. envelope E2E는 Web Vitals measurement가 실리는지만 보고, 실제 envelope에서 쿼리·쿠키가 빠졌는지는 단위 테스트로만 확인해요. 두 테스트 모두 앱이 보내는 쪽까지만 보고, Sentry 서버가 저장·색인한 결과를 대신하지 못해요. Sentry E2E는 기본 E2E 실행에서 빠진 별도 레인이라 직접 돌려야 하고요. 릴리스·artifact 업로드도 토큰이 있는지가 아니라 실제 Sentry 결과로 계속 확인해야 해요.</p>
-</div>
 
 ## 참고
 

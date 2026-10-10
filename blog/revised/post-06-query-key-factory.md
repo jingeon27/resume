@@ -201,11 +201,6 @@ v5에서 같은 구조를 새로 만든다면 `queryOptions`도 대안이에요.
 
 함께 정의하고 재사용하는 것이 목적이면 기본 헬퍼로 충분할 수 있고, 여러 앱에서 같은 key 계층을 생성해야 한다면 factory가 제공하는 규칙도 비교할 수 있어요.
 
-<div class="note note-limit">
-  <strong>아직 확인하지 못한 것</strong>
-  <p>무효화 누락이나 불필요한 재조회가 줄었는지는 재지 않았어요. 위 표는 코드 구조에서 읽은 변화예요. 지금은 당시 저장소를 볼 수 없어서, 모든 호출부가 이 기준을 지켰는지도 다시 확인하지 못했어요. mutation 예제에서 `candidateId`를 변수에서 꺼낸 모양은 설명을 위해 정한 것이고, v5 예시는 당시 코드가 아니라 같은 내용을 v5 문법으로 옮겨 쓴 거예요.</p>
-</div>
-
 ## 참고
 
 - [Query Key Factory](https://github.com/lukemorales/query-key-factory) — `createQueryKeys`, `contextQueries`, `_def`·`_ctx`

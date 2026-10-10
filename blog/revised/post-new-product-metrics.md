@@ -62,11 +62,6 @@
 
 이 질문을 Amplitude에서 어떤 기능으로 확인할지는 [이벤트를 붙이는 일과 읽는 일](post-new-analytics-integrity.md)에 이어 적었어요. 차트·대시보드·코호트로 현재 흐름을 살펴보는 것과 기능 플래그·실험으로 변경을 나눠 제공하는 것을 구분했어요.
 
-<div class="note note-limit">
-  <strong>아직 확인하지 못한 것</strong>
-  <p>표의 지표는 측정 제안이지 세이프닥의 공식 지표나 이미 확인한 성과가 아니에요. 이벤트마다 실제 수집 여부와 속성, 서버 예약 상태와의 연결도 확인해야 해요. 검색 조건별 공급이나 쿠폰의 추가 예약 효과는 지금 가진 자료만으로 계산할 수 없고, 일부 인터뷰·설문 결과를 전체 사용자에게 일반화하지도 않았어요.</p>
-</div>
-
 ## 참고
 
 - [Amplitude: 퍼널 분석의 집계 방식](https://amplitude.com/docs/analytics/charts/funnel-analysis/faq)

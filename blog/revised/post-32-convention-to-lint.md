@@ -135,11 +135,6 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 
 그래서 이 작업의 결론은 "lint를 늘리자"가 아니에요. **반복되는 리뷰 코멘트를 발견하면, 그걸 사람에게 다시 말하는 대신 적어서 기계에 넘길 수 있는지 먼저 묻는 것**인데요. 넘긴 만큼 리뷰는 문법이 아니라 설계에 쓸 수 있게 돼요.
 
-<div class="note note-limit">
-  <strong>아직 확인하지 못한 것</strong>
-  <p>"같은 리뷰 코멘트가 다시 나오지 않는가"는 리뷰어가 저 혼자인 환경이라 제대로 잴 수 없었어요. 컴포넌트 named export 340건과 `let` 16건은 처음 계측한 값이고 이번에 다시 재지 않았어요. 타입 접두사 규칙은 관리자 서비스에서 아직 warning이라 새 위반이 PR 게이트에서 막히는 게 아니라 경고로만 보여요. 규칙을 켠 뒤 리뷰 코멘트나 warning 수를 시계열로 기록하지는 않았어요.</p>
-</div>
-
 ## 참고
 
 - [typescript-eslint · tsconfigRootDir](https://typescript-eslint.io/packages/parser/#tsconfigrootdir)
