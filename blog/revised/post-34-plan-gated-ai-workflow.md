@@ -159,5 +159,5 @@ Stage 배포 전에는 develop에 합쳐진 diff 전체를 다시 봐요. 이 �
 ## 참고
 
 - [Compound Engineering](https://every.to/guides/compound-engineering) — every.to 원문
-- 관련 글: [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
 - 관련 글: [FSD 폴더는 다 있었는데 새 파일을 어디에 둘지 설명하기 어려웠어요](https://jingeon27.tistory.com/23)

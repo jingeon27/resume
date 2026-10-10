@@ -137,5 +137,5 @@ AI 덕분에 빠르게 구현하면서 원하는 구조를 유지하기도 쉬�
 
 - [Every: Compound Engineering](https://every.to/guides/compound-engineering)
 - 관련 글: [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
-- 관련 글: [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
 - 관련 글: [Bottom Sheet 드래그 크래시를 고치며 놓친 것](https://jingeon27.tistory.com/33)

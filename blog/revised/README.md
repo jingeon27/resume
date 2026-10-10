@@ -9,7 +9,7 @@
 이력서의 역할·결과를 뒷받침하는 글은 다음 순서로 연결한다. 역량에 대한 자기평가보다 실제 선택, 반례, 검증 범위와 다음 작업에 남긴 기준을 보여준다.
 
 - [31번 회고](post-31-strength-and-blind-spot.md): 개별 구현에서 판단 기준과 검증 절차를 남기는 방식으로 관심이 넓어진 과정. 아래 세 글의 읽기 안내를 포함한다.
-- [25번 테스트](post-25-test-suite-rebuild.md): 제품 로직을 복제한 Harness와 서버 계약이 다른 Mock을 발견하고, 테스트 성공의 보장 범위를 다시 정한 과정.
+- [테스트 코드를 도입하면서 세운 기준](post-25-test-suite-rebuild.md): 기능 명세·회귀 테스트를 구분하고 실제 폼 제출·API 계약·E2E 검증 기준을 보완한 과정.
 - [35번 타입 경계](post-35-zod-assertion-boundaries.md): 단언 제거 중 발생한 회귀와 철회한 접근을 통해 값의 출처·실패 정책을 구분한 과정.
 - [34번 AI 워크플로](post-34-plan-gated-ai-workflow.md): 사람이 결정할 부분과 자동 검증할 부분을 나누고, 병렬 worktree의 검증 비용에 맞춰 작업 흐름을 수정한 과정.
 
@@ -98,7 +98,7 @@
 | 22 | `post-22-payment-coupon.md` | 유니언과 OCP에 관한 과장을 덜고 실제로 분기를 모은 과정에 초점을 맞춤. 없던 변환 함수·금액 하한을 지우고 확정 요청이 필드를 골라 담는 실제 방식과 helper 추출 시점을 반영. 공개일(2026-07-02) develop 기준. 그림 네 장은 `../assets/figures/payment-history/`(HTML 원본은 `src/`, `node render.cjs`로 렌더링) |
 | 23 | `post-23-fsd-2-1.md` | 모호했던 entities/features 경계를 다섯 레이어로 다시 정의하고, 옮긴 날 오후 드러난 page 간 참조 62건과 shared 패키지 통합, 정적 검사가 놓친 서버·클라이언트 경계 오류까지 시간순으로 정리. 관리자 서비스는 9월 8일 develop 병합, 복지몰은 브랜치 통합 대기로 구분 |
 | 24 | `post-24-prototype-rules.md` | 훅·프로퍼티·Suspense에 일률적으로 적용하던 규칙을 제거 |
-| 25 | `post-25-test-suite-rebuild.md` | 테스트 수 보고서 대신 삭제·재구축 과정과 거짓 성공을 발견한 사건 중심으로 전면 축약 |
+| 25 | `post-25-test-suite-rebuild.md` | 테스트를 직접 도입하고 명세·회귀 테스트, 실제 제출·API 계약·E2E 검증 기준을 보완한 과정으로 수정 |
 | 26 | `post-26-declarative-code.md` | 「선언적으로 코드를 쓰는 기준」. code-style·page-composition·search-filter·react-query skills를 바탕으로 추상화 수준, 데이터·동작의 맥락 분리, 고정 UI 조합, compound 검색 필터, ts-pattern·es-toolkit으로 쿠폰팩 표시 금액과 종류별 수량을 계산하는 방식, URL 상태·조회 의존성, 읽을 수 있는 테스트와 반복 판단의 skills·lint 반영을 실제 코드로 설명 |
 | 27 | `post-27-next-server-to-client.md` | Next.js 우회 세 가지를 해결 결과뿐 아니라 새로 생긴 비용과 철회 조건까지 포함해 정리 |
 | 28 | `post-28-error-boundary.md` | 전체 화면 장애에서 시작해 Zod 관측, 로그, 복구 단위와 철회한 componentStack 시도까지 시간순으로 재작성 |
