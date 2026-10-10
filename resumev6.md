@@ -321,7 +321,7 @@ AI 개발 workflow로 구현 속도를 높이면서, 반복되는 판단은 skil
 **스택** · Next.js 16, TypeScript 7, Turbopack, pnpm, Turborepo, Vitest, Playwright
 
 - B2B2C 앱의 타입 검사에 12.5초가 걸렸고 테스트 지원 코드가 프로덕션 번들에 유입됐습니다. 레거시 파일과 공유 코드의 의존 방향도 CI에서 강제되지 않았습니다.
-- Next.js 14→16, Node.js 20→24, ESLint 8→9와 Turbopack 마이그레이션을 단계적으로 진행했습니다. pnpm·Turborepo의 3개 앱에서는 계약이 안정된 도메인과 UI만 공유하도록 경계를 정하고, 역방향 의존성은 자체 ESLint 규칙으로 검출하며 Mock 코드 유입은 import 제한 lint 규칙으로 막았습니다.
+- Turbopack으로 로컬 개발 속도를 높이기 위해 Next.js 14→16 전환을 진행했습니다. Node.js 20→24, ESLint 8→9 마이그레이션도 단계적으로 진행했습니다. pnpm·Turborepo의 3개 앱에서는 계약이 안정된 도메인과 UI만 공유하도록 경계를 정하고, 역방향 의존성은 자체 ESLint 규칙으로 검출하며 Mock 코드 유입은 import 제한 lint 규칙으로 막았습니다.
 - Webpack을 Turbopack으로 전환하고, TypeScript 7 네이티브 체커를 통한 타입 검사를 **12.5초 → 1.9초**(복지몰 실측)로 단축하고 모노레포 패키지의 검증 스크립트에도 적용했습니다. 글로벌 앱 번들은 **2,564KB → 1,880KB**로 줄였으며, ESLint 캐시로 반복 검증을 **25초 → 7초**로 단축했습니다. 관리자 서비스 모노레포의 PR 게이트에는 Unit·Integration 테스트를 연결하고 dev API 계약 테스트와 E2E는 게이트 밖에서 운영합니다. 복지몰의 PR 게이트는 lint·tsgo·Knip까지입니다.
 
 #### 프레임워크 업그레이드와 회귀 대응
