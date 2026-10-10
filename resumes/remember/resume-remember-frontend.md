@@ -94,7 +94,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 
 관련 글: [Sentry 도입 과정](https://jingeon27.tistory.com/30) · [크래시 분석](https://jingeon27.tistory.com/33)
 
-#### 테스트 체계 재구축 | 2026.07 – 현재
+#### 테스트 도입 | 2026.07 – 현재
 
 **역할** 테스트 기준과 구조를 정하고 두 저장소에 적용했습니다.
 

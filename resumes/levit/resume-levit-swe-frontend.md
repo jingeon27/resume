@@ -125,7 +125,7 @@
 - **Monitoring** · [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://jingeon27.tistory.com/30)
 - **Commerce** · [결제내역에 쿠폰 결제를 추가하며 분기를 한곳으로 모은 과정](https://jingeon27.tistory.com/22)
 - **Reliability** · [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
-- **Testing** · [테스트 체계 재구축기 — AI 작업의 성공 조건을 코드로 관리하기](https://jingeon27.tistory.com/25)
+- **Testing** · [테스트 도입](https://jingeon27.tistory.com/25)
 - **AI-native Workflow** · [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
 - **Security** · [정산 서비스를 별도 호스트로 분리하며 도메인 간 토큰 전달을 설계한 과정](https://jingeon27.tistory.com/19)
 - **Declarative Design** · [선언적 코드는 변경을 작게 만든다 — 내가 React 코드를 구조화하는 기준](https://jingeon27.tistory.com/26)

@@ -83,7 +83,7 @@ B2C·B2B2C WebView 사용자몰, 운영 백오피스, 병원 어드민과 글로
 - **AI 개발 워크플로 (2026.04–현재)** · Jira 티켓과 Figma를 먼저 확인해 불명확한 요구사항을 조율한 뒤, 에이전트가 영향 범위와 판단 지점을 포함한 실행 계획을 제안하도록 했습니다. 계획을 검토하면 격리 worktree에서 구현·테스트·AI 리뷰를 진행하고 Critical 항목은 자동 수정한 뒤, 변경 파일의 lint·typecheck·관련 테스트를 통과해 push·PR까지 이어지도록 구성했습니다. 스테이지 배포 전에는 누적 diff 전체를 직접 읽어 리팩터링하고, 배포 후 발견한 반복 패턴은 Skill·lint·공통 구현에 반영합니다.
 - **메이저 업그레이드** · React 18→19, Next.js 14→16, TypeScript 5→6, Node.js 20→24, ESLint 8→9, Webpack→Turbopack 전환을 진행했습니다. TypeScript 네이티브 체커 `tsgo`는 기존 도구와 병행해 타입 검사에 사용했습니다.
 - **개발 성능** · TypeScript 7 네이티브 체커 병행으로 타입 검사를 **12.5초→1.9초**, 복지몰 E2E의 내비게이션 대기와 오버레이 간섭을 고쳐 콜드 실행을 **3.5분→20초**로 단축했습니다.
-- **산출물** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://jingeon27.tistory.com/31) · [Sentry 도입기](https://jingeon27.tistory.com/30) · [에러 처리 개편](https://jingeon27.tistory.com/28) · [테스트 체계 재구축기](https://jingeon27.tistory.com/25)
+- **산출물** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://jingeon27.tistory.com/31) · [Sentry 도입기](https://jingeon27.tistory.com/30) · [에러 처리 개편](https://jingeon27.tistory.com/28) · [테스트 도입](https://jingeon27.tistory.com/25)
 
 #### 프로젝트 4 · Next.js 프로덕션 회귀 분석과 내비게이션 재설계
 

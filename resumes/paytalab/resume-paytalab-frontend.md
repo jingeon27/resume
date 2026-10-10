@@ -85,7 +85,7 @@ React·TypeScript로 복지몰과 병원 관리자·백오피스를 함께 개�
 
 관련 글: [폼 필드와 변환 구조](https://jingeon27.tistory.com/18) · [FSD 구조 변경](https://jingeon27.tistory.com/23) · [예약 폼 리팩터링](https://jingeon27.tistory.com/11)
 
-#### 테스트 체계 재구축 | 2026.07 – 현재
+#### 테스트 도입 | 2026.07 – 현재
 
 7월부터 테스트를 도입하고, 실제 폼 제출과 서버 제약을 놓치던 검증을 보완했습니다. 순수 함수·스키마는 Vitest, UI·폼은 React Testing Library, 브라우저 흐름은 Playwright로 확인합니다.
 

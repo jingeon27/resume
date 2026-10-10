@@ -132,7 +132,7 @@
 구현 결과뿐 아니라 문제를 정의한 과정, 선택한 구조의 근거와 남은 한계까지 기록합니다.
 
 - **Monitoring** · [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://jingeon27.tistory.com/30)
-- **Testing** · [테스트 체계 재구축기 — AI 작업의 성공 조건을 코드로 관리하기](https://jingeon27.tistory.com/25)
+- **Testing** · [테스트 도입](https://jingeon27.tistory.com/25)
 - **AI-native Workflow** · [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
 - **Reliability** · [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
 - **Declarative Design** · [선언적 코드는 변경을 작게 만든다 — 내가 React 코드를 구조화하는 기준](https://jingeon27.tistory.com/26)
