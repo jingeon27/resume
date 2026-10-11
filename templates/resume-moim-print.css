@@ -1,0 +1,72 @@
+/* 기존 레슨/과외 미리보기에는 영향을 주지 않는 모임 이력서 스타일. */
+body { line-height: 1.55; }
+.sheet { height: 297mm; padding: 10mm 14mm 9mm; }
+.page-footer { justify-content: flex-end; margin-top: 12px; }
+.page-content { min-height: 0; }
+h2 { margin-top: 16px; margin-bottom: 8px; }
+h3 { margin-top: 12px; margin-bottom: 9px; }
+h4 { margin-top: 14px; margin-bottom: 7px; }
+p { margin-bottom: 8px; }
+.skills li { grid-template-columns: 150px 1fr; }
+.simple-list { margin-bottom: 10px; }
+.simple-list li { position: relative; padding-left: 11px; margin-bottom: 5px; }
+.simple-list li::before {
+  content: "";
+  position: absolute;
+  top: .7em;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.simple-list li:last-child { margin-bottom: 0; }
+.service-note { margin-bottom: 12px; }
+.career-table {
+  width: 100%;
+  margin: 15px 0 0;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  line-height: 1.6;
+  text-align: left;
+}
+.career-table th {
+  padding: 7px 10px;
+  background: #f4f6f7;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+.career-table td { padding: 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.career-table th:first-child, .career-table td:first-child { padding-left: 0; width: 65px; }
+.career-table th:nth-child(2), .career-table td:nth-child(2) { width: 133px; white-space: nowrap; }
+.career-table th:last-child, .career-table td:last-child { padding-right: 0; }
+.workflow {
+  margin: 12px 0;
+  padding: 10px 13px;
+  border-left: 2px solid var(--accent);
+  background: #f4f6f7;
+  font-size: 12px;
+  line-height: 1.85;
+}
+nav { gap: 18px; }
+.navigation-row nav { min-width: 0; flex: 1; }
+
+@media screen and (max-width: 840px) {
+  body { line-height: 1.7; }
+  .sheet { height: auto; padding: 28px 24px 20px; }
+  .skills li { grid-template-columns: 1fr; gap: 0; margin-bottom: 9px; }
+  .career-table { font-size: 11px; }
+  .career-table th:first-child, .career-table td:first-child { width: 52px; }
+  .career-table th:nth-child(2), .career-table td:nth-child(2) { width: 85px; white-space: normal; }
+  .career-table th, .career-table td { padding: 8px 6px; }
+  .toolbar, .navigation-row { width: calc(100% - 24px); }
+  .preview-title strong span { display: none; }
+  .toolbar { gap: 10px; }
+}
+
+@media print {
+  .sheet { height: 297mm; }
+  .career-table, .workflow { break-inside: avoid; }
+  .simple-list li { break-inside: avoid; }
+}
