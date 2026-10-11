@@ -1,15 +1,20 @@
 /* 기존 레슨/과외 미리보기에는 영향을 주지 않는 모임 이력서 스타일. */
-body { line-height: 1.55; }
+body { line-height: 1.45; }
+.sheet-cover { line-height: 1.55; }
 .sheet { height: 297mm; padding: 10mm 14mm 9mm; }
+.sheet:not(.sheet-cover) { padding-left: 12mm; padding-right: 12mm; }
 .page-footer { justify-content: flex-end; margin-top: 12px; }
 .page-content { min-height: 0; }
 h2 { margin-top: 16px; margin-bottom: 8px; }
 h3 { margin-top: 12px; margin-bottom: 9px; }
 h4 { margin-top: 14px; margin-bottom: 7px; }
-p { margin-bottom: 8px; }
+p { margin-bottom: 4px; }
+.sheet-cover p { margin-bottom: 8px; }
 .skills li { grid-template-columns: 150px 1fr; margin-bottom: 3px; }
-.simple-list { margin-bottom: 10px; }
-.simple-list li { position: relative; padding-left: 11px; margin-bottom: 5px; }
+.simple-list { margin-bottom: 8px; }
+.simple-list li { position: relative; padding-left: 11px; margin-bottom: 2px; }
+.sheet-cover .simple-list { margin-bottom: 10px; }
+.sheet-cover .simple-list li { margin-bottom: 5px; }
 .simple-list li::before {
   content: "";
   position: absolute;
@@ -22,12 +27,13 @@ p { margin-bottom: 8px; }
 }
 .simple-list li:last-child { margin-bottom: 0; }
 .service-note { margin-bottom: 12px; }
-.case { margin-top: 17px; }
+.case { margin-top: 10px; }
 .case:first-child { margin-top: 0; }
-.case .project { margin-top: 0; }
+.case .project { margin-top: 0; margin-bottom: 6px; }
 .case-primary .project { font-size: 16px; }
 .case-supporting .project { font-size: 13.5px; }
-.case-supporting { margin-top: 14px; }
+.case-supporting { margin-top: 10px; }
+.case-supporting:not(:has(.workflow)) { font-size: 12.5px; line-height: 1.46; }
 .case > p:last-child:has(a) { font-size: 11px; margin-bottom: 0; }
 .type-design {
   border-left: 2px solid var(--accent);
@@ -36,7 +42,8 @@ p { margin-bottom: 8px; }
 }
 .type-design::before { display: none; }
 .page-content > .case:first-child .project { margin-top: 0; }
-.sheet-supporting { font-size: 12.5px; line-height: 1.5; }
+.sheet-supporting { font-size: 12.5px; line-height: 1.46; }
+.sheet-supporting .case:has(.workflow) { font-size: 13px; line-height: 1.45; }
 .career-table {
   width: 100%;
   margin: 15px 0 0;
@@ -57,12 +64,12 @@ p { margin-bottom: 8px; }
 .career-table th:nth-child(2), .career-table td:nth-child(2) { width: 133px; white-space: nowrap; }
 .career-table th:last-child, .career-table td:last-child { padding-right: 0; }
 .workflow {
-  margin: 12px 0;
-  padding: 10px 13px;
+  margin: 9px 0;
+  padding: 8px 13px;
   border-left: 2px solid var(--accent);
   background: #f4f6f7;
   font-size: 12px;
-  line-height: 1.85;
+  line-height: 1.7;
 }
 nav { gap: 18px; }
 .navigation-row nav { min-width: 0; flex: 1; }
@@ -70,7 +77,9 @@ nav { gap: 18px; }
 @media screen and (max-width: 840px) {
   body { line-height: 1.7; }
   .sheet { height: auto; padding: 28px 24px 20px; }
+  .sheet:not(.sheet-cover) { padding-left: 24px; padding-right: 24px; }
   .sheet-supporting { font-size: 14px; line-height: 1.7; }
+  .sheet-cover, .case-supporting:not(:has(.workflow)), .sheet-supporting .case:has(.workflow) { font-size: 14px; line-height: 1.7; }
   .skills li { grid-template-columns: 1fr; gap: 0; margin-bottom: 9px; }
   .career-table { font-size: 11px; }
   .career-table th:first-child, .career-table td:first-child { width: 52px; }

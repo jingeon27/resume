@@ -145,12 +145,6 @@ Figma 작업은 에이전트가 `claude-in-chrome` MCP나 Chrome CDP 스크립�
   <p>요구사항과 구조는 plan 단계에서 검토해요. 완성본이 나오면 코드와 테스트를 읽고 화면을 띄워 동작을 확인해요. 여러 작업의 일관성은 배포 전 합쳐진 diff에서 다시 봐요. 반복되는 판단은 skills에, 코드로 검사할 수 있는 기준은 lint rule에 남겼어요.</p>
 </div>
 
-## 두 저장소의 규칙은 아직 같은 수준이 아니에요
-
-관리자 서비스는 위반이 0건이면 error로 올리기로 했지만, 세 앱의 레이어·Public API 규칙은 위반이 0건이 된 뒤에도 아직 warning이에요. 공유 패키지의 Public API 규칙은 어겨도 빌드를 막을 일은 아니라고 보고 warning으로 뒀어요.
-
-복지몰의 FSD 개편이 develop에 반영됐다고 해서 두 저장소의 구조와 규칙이 모두 같아졌다는 뜻은 아니에요.
-
 ## 참고
 
 - [Compound Engineering](https://every.to/guides/compound-engineering) — every.to 원문

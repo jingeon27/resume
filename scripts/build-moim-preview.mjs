@@ -52,20 +52,19 @@ const blocks = source.trim().split(/\n\s*\n/).map((raw, id) => {
 
 const plans = [
   { label: '소개 · 지원동기 · 기술 · 경력', short: '소개·경력', start: '김진건' },
-  { label: '사용자 경험 · 건강검진', short: '사용성 개선', start: '주요 프로젝트' },
-  { label: 'SSR · 타입 설계 · 구조 개선', short: 'SSR·구조', start: 'CSR·SSR 범위와 데이터 조회 설계' },
-  { label: '운영 안정성 · 테스트 · AI 개발', short: '운영·AI', start: 'Sentry 도입과 운영 오류 추적' },
-  { label: '기술 선택 · 실험 참여 · 왓타임', short: '기타 경험', start: '기술 선택과 전환', supporting: true },
+  { label: '사용자 경험 · 건강검진 · SSR', short: 'UX·SSR', start: '주요 프로젝트' },
+  { label: '타입과 구조 · 운영 · 테스트 · 기술 선택', short: '구조·운영', start: '코드 구조와 기술부채 개선' },
+  { label: 'AI 개발 · 실험 참여 · 왓타임', short: 'AI·기타 경험', start: 'AI 개발 workflow', supporting: true },
 ];
 
-// 기술 목록만 지원동기 뒤로 이동하고 프로젝트 본문 순서는 유지한다.
+// 기술 목록은 지원동기 뒤로, 기술 선택 사례는 AI 개발 사례 앞으로 이동한다.
 const technologyStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '기술');
 const educationStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '학력');
 const careerStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '경력 요약');
 if (careerStart < 0 || technologyStart <= careerStart || educationStart <= technologyStart) {
   throw new Error('소개·기술·경력 구성을 확인하세요.');
 }
-const layoutBlocks = [
+const frontLoadedBlocks = [
   ...blocks.slice(0, careerStart),
   ...blocks.slice(technologyStart, educationStart),
   ...blocks.slice(careerStart, technologyStart),
@@ -73,6 +72,22 @@ const layoutBlocks = [
 ];
 
 const titleOf = (block) => block.level === 4 ? block.text.split(' | ')[0] : block.text;
+const choicesStart = frontLoadedBlocks.findIndex((block) => block.kind === 'heading'
+  && titleOf(block) === '기술 선택과 전환');
+const choicesEnd = frontLoadedBlocks.findIndex((block, index) => index > choicesStart
+  && block.kind === 'heading' && block.level <= 4);
+const aiStart = frontLoadedBlocks.findIndex((block) => block.kind === 'heading'
+  && titleOf(block) === 'AI 개발 workflow');
+if (aiStart < 0 || choicesStart <= aiStart || choicesEnd <= choicesStart) {
+  throw new Error('기술 선택·AI 개발 사례 구성을 확인하세요.');
+}
+const layoutBlocks = [
+  ...frontLoadedBlocks.slice(0, aiStart),
+  ...frontLoadedBlocks.slice(choicesStart, choicesEnd),
+  ...frontLoadedBlocks.slice(aiStart, choicesStart),
+  ...frontLoadedBlocks.slice(choicesEnd),
+];
+
 const starts = plans.map(({ start, kind = 'heading' }) => {
   const matches = layoutBlocks.filter((block) => block.kind === kind
     && (kind !== 'heading' || titleOf(block) === start));

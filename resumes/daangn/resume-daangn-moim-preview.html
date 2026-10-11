@@ -1,436 +1,1268 @@
 <!doctype html>
 <!-- resumes/daangn/resume-daangn-moim-draft2.md에서 생성. node scripts/build-moim-preview.mjs로 갱신. -->
 <html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="description" content="김진건 프론트엔드 엔지니어 이력서. 제품 개발과 사용자 경험 개선, SSR, AI 개발 workflow, 테스트와 운영 경험.">
-  <title>김진건 | Frontend Engineer 이력서</title>
-  <style>:root {
-  color-scheme: light;
-  --ink: #27333b;
-  --heading: #142c39;
-  --accent: #355f73;
-  --muted: #64727b;
-  --rule: #d8e0e4;
-  --paper: #fff;
-}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="김진건 프론트엔드 엔지니어 이력서. 제품 개발과 사용자 경험 개선, SSR, AI 개발 workflow, 테스트와 운영 경험." />
+    <title>김진건 | Frontend Engineer 이력서</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #27333b;
+        --heading: #142c39;
+        --accent: #355f73;
+        --muted: #64727b;
+        --rule: #d8e0e4;
+        --paper: #fff;
+      }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 126px; }
-body {
-  margin: 0;
-  background: #edf0f2;
-  color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  font-size: 13px;
-  line-height: 1.58;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-  -webkit-font-smoothing: antialiased;
-}
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 126px;
+      }
+      body {
+        margin: 0;
+        background: #edf0f2;
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        font-size: 13px;
+        line-height: 1.58;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+        -webkit-font-smoothing: antialiased;
+      }
 
-a { color: var(--accent); text-decoration-color: #b8c7cf; text-underline-offset: 3px; }
-a:hover { text-decoration-color: currentColor; }
-a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-button, summary { cursor: pointer; }
-.skip-link { position: absolute; top: -60px; left: 16px; padding: 8px 12px; background: white; z-index: 5; }
-.skip-link:focus { top: 10px; }
+      a {
+        color: var(--accent);
+        text-decoration-color: #b8c7cf;
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-color: currentColor;
+      }
+      a:focus-visible,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      button,
+      summary {
+        cursor: pointer;
+      }
+      .skip-link {
+        position: absolute;
+        top: -60px;
+        left: 16px;
+        padding: 8px 12px;
+        background: white;
+        z-index: 5;
+      }
+      .skip-link:focus {
+        top: 10px;
+      }
 
-.preview-controls {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  background: #fff;
-  border-bottom: 1px solid var(--rule);
-}
-.toolbar, .navigation-row {
-  width: min(210mm, calc(100% - 36px));
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-.toolbar { min-height: 68px; }
-.preview-title strong { display: block; font-size: 14px; color: var(--heading); }
-.preview-title strong span { margin-left: 8px; font-weight: 400; color: var(--muted); }
-.preview-title small { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); }
-#print-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  border: 1px solid var(--heading);
-  border-radius: 5px;
-  background: var(--heading);
-  color: white;
-  font: inherit;
-  font-size: 12px;
-  white-space: nowrap;
-}
-#print-button:hover { background: var(--accent); }
-.navigation-row { min-height: 38px; border-top: 1px solid #edf0f2; }
-nav { display: flex; gap: 24px; }
-nav a { color: var(--muted); text-decoration: none; font-size: 11px; white-space: nowrap; }
-nav a:hover { color: var(--heading); }
-.print-help { position: relative; flex-shrink: 0; font-size: 11px; color: var(--muted); }
-.print-help p { position: absolute; right: 0; top: 20px; width: 230px; padding: 16px; background: white; border: 1px solid var(--rule); border-radius: 5px; line-height: 1.9; box-shadow: 0 6px 22px #142c3910; }
+      .preview-controls {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background: #fff;
+        border-bottom: 1px solid var(--rule);
+      }
+      .toolbar,
+      .navigation-row {
+        width: min(210mm, calc(100% - 36px));
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .toolbar {
+        min-height: 68px;
+      }
+      .preview-title strong {
+        display: block;
+        font-size: 14px;
+        color: var(--heading);
+      }
+      .preview-title strong span {
+        margin-left: 8px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+      .preview-title small {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      #print-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 14px;
+        border: 1px solid var(--heading);
+        border-radius: 5px;
+        background: var(--heading);
+        color: white;
+        font: inherit;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      #print-button:hover {
+        background: var(--accent);
+      }
+      .navigation-row {
+        min-height: 38px;
+        border-top: 1px solid #edf0f2;
+      }
+      nav {
+        display: flex;
+        gap: 24px;
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+      nav a:hover {
+        color: var(--heading);
+      }
+      .print-help {
+        position: relative;
+        flex-shrink: 0;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .print-help p {
+        position: absolute;
+        right: 0;
+        top: 20px;
+        width: 230px;
+        padding: 16px;
+        background: white;
+        border: 1px solid var(--rule);
+        border-radius: 5px;
+        line-height: 1.9;
+        box-shadow: 0 6px 22px #142c3910;
+      }
 
-main { padding: 28px 0 44px; }
-.sheet {
-  width: 210mm;
-  min-height: 297mm;
-  margin: 0 auto 26px;
-  padding: 13mm 17mm 12mm;
-  display: flex;
-  flex-direction: column;
-  background: var(--paper);
-  box-shadow: 0 2px 5px #142c3908, 0 10px 35px #142c3908;
-}
-.running-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 9px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: .015em;
-}
-.running-role { margin-left: 9px; font-size: 9px; }
-.sheet-cover .running-header { border-bottom-color: var(--accent); }
-.sheet-cover .running-header > span:first-child { font-size: 0; }
-.sheet-cover .running-role { margin: 0; font-size: 10px; color: var(--accent); font-weight: 600; }
-.page-content { flex: 1; }
-.page-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 22px;
-  padding-top: 9px;
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 9px;
-  font-variant-numeric: tabular-nums;
-}
-.page-footer > span:last-child { color: var(--heading); font-size: 11px; font-weight: 600; }
-.page-total { color: #86939b; font-weight: 400; }
+      main {
+        padding: 28px 0 44px;
+      }
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto 26px;
+        padding: 13mm 17mm 12mm;
+        display: flex;
+        flex-direction: column;
+        background: var(--paper);
+        box-shadow:
+          0 2px 5px #142c3908,
+          0 10px 35px #142c3908;
+      }
+      .running-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 9px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 0.015em;
+      }
+      .running-role {
+        margin-left: 9px;
+        font-size: 9px;
+      }
+      .sheet-cover .running-header {
+        border-bottom-color: var(--accent);
+      }
+      .sheet-cover .running-header > span:first-child {
+        font-size: 0;
+      }
+      .sheet-cover .running-role {
+        margin: 0;
+        font-size: 10px;
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .page-content {
+        flex: 1;
+      }
+      .page-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 22px;
+        padding-top: 9px;
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font-size: 9px;
+        font-variant-numeric: tabular-nums;
+      }
+      .page-footer > span:last-child {
+        color: var(--heading);
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .page-total {
+        color: #86939b;
+        font-weight: 400;
+      }
 
-h1, h2, h3, h4 { color: var(--heading); break-after: avoid; break-inside: avoid; }
-h1 { margin: 0 0 5px; font-size: 36px; line-height: 1.25; letter-spacing: -.045em; font-weight: 750; }
-h2 {
-  margin: 23px 0 10px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--rule);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: -.015em;
-}
-h3 { margin: 16px 0 12px; font-size: 18px; line-height: 1.4; }
-h4 { margin: 22px 0 9px; font-size: 15px; line-height: 1.45; font-weight: 700; letter-spacing: -.012em; }
-.page-content > h2:first-child, .page-content > h3:first-child, .page-content > h4:first-child { margin-top: 0; }
-.company { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.company-meta { color: var(--muted); font-size: 11px; font-weight: 400; white-space: nowrap; }
-.project { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.project-period { flex-shrink: 0; color: var(--muted); font-size: 11px; font-weight: 400; letter-spacing: 0; white-space: nowrap; font-variant-numeric: tabular-nums; }
-p { margin: 0 0 10px; orphans: 3; widows: 3; }
-p:last-child { margin-bottom: 0; }
-strong { font-weight: 650; color: var(--heading); }
-.contact { margin-bottom: 8px; font-size: 11px; color: var(--muted); }
-.contact a { color: var(--muted); }
-.service-note { margin: 0; color: var(--muted); font-size: 10px; }
-.role-note { padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid #edf0f2; font-size: 11px; color: var(--muted); line-height: 1.7; }
-ul { margin: 0; padding: 0; list-style: none; }
-li { orphans: 3; widows: 3; }
-.highlights li { position: relative; padding-left: 11px; margin-bottom: 10px; }
-.highlights li::before { content: ""; position: absolute; top: .67em; left: 0; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
-.highlights li:last-child { margin-bottom: 0; }
-.skills { font-size: 11.5px; }
-.skills li { display: grid; grid-template-columns: 79px 1fr; gap: 8px; margin-bottom: 6px; }
-.skills li:last-child { margin-bottom: 0; }
-.skills strong { font-size: 11px; }
-.simple-list li { margin-bottom: 5px; }
-code { padding: 1px 3px; background: #f1f4f5; color: #344f5d; border-radius: 3px; font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: .87em; }
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: var(--heading);
+        break-after: avoid;
+        break-inside: avoid;
+      }
+      h1 {
+        margin: 0 0 5px;
+        font-size: 36px;
+        line-height: 1.25;
+        letter-spacing: -0.045em;
+        font-weight: 750;
+      }
+      h2 {
+        margin: 23px 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--rule);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.4;
+        letter-spacing: -0.015em;
+      }
+      h3 {
+        margin: 16px 0 12px;
+        font-size: 18px;
+        line-height: 1.4;
+      }
+      h4 {
+        margin: 22px 0 9px;
+        font-size: 15px;
+        line-height: 1.45;
+        font-weight: 700;
+        letter-spacing: -0.012em;
+      }
+      .page-content > h2:first-child,
+      .page-content > h3:first-child,
+      .page-content > h4:first-child {
+        margin-top: 0;
+      }
+      .company {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .company-meta {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 400;
+        white-space: nowrap;
+      }
+      .project {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .project-period {
+        flex-shrink: 0;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      p {
+        margin: 0 0 10px;
+        orphans: 3;
+        widows: 3;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+      strong {
+        font-weight: 650;
+        color: var(--heading);
+      }
+      .contact {
+        margin-bottom: 8px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .contact a {
+        color: var(--muted);
+      }
+      .service-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .role-note {
+        padding-bottom: 12px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid #edf0f2;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      li {
+        orphans: 3;
+        widows: 3;
+      }
+      .highlights li {
+        position: relative;
+        padding-left: 11px;
+        margin-bottom: 10px;
+      }
+      .highlights li::before {
+        content: '';
+        position: absolute;
+        top: 0.67em;
+        left: 0;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .highlights li:last-child {
+        margin-bottom: 0;
+      }
+      .skills {
+        font-size: 11.5px;
+      }
+      .skills li {
+        display: grid;
+        grid-template-columns: 79px 1fr;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .skills li:last-child {
+        margin-bottom: 0;
+      }
+      .skills strong {
+        font-size: 11px;
+      }
+      .simple-list li {
+        margin-bottom: 5px;
+      }
+      code {
+        padding: 1px 3px;
+        background: #f1f4f5;
+        color: #344f5d;
+        border-radius: 3px;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+        font-size: 0.87em;
+      }
 
-@media screen and (max-width: 840px) {
-  html { scroll-padding-top: 126px; }
-  body { font-size: 14px; line-height: 1.7; }
-  main { padding: 16px 12px 24px; }
-  .sheet { width: 100%; min-height: auto; padding: 28px 24px 20px; margin-bottom: 16px; }
-  .running-header { margin-bottom: 24px; }
-  .page-footer { margin-top: 28px; }
-  .company, .project { flex-wrap: wrap; gap: 3px; }
-  .company-meta, .project-period { display: block; }
-  h2 { margin-top: 26px; }
-  h4 { margin-top: 25px; }
-  .contact { line-height: 1.9; }
-  .navigation-row { gap: 12px; }
-  nav { gap: 16px; overflow-x: auto; padding: 10px 0; }
-  .print-help { display: none; }
-  .running-role { display: none; }
-  .sheet-cover .running-role { display: inline; }
-  .skills { font-size: 12px; }
-  .skills li { grid-template-columns: 72px 1fr; }
-}
+      @media screen and (max-width: 840px) {
+        html {
+          scroll-padding-top: 126px;
+        }
+        body {
+          font-size: 14px;
+          line-height: 1.7;
+        }
+        main {
+          padding: 16px 12px 24px;
+        }
+        .sheet {
+          width: 100%;
+          min-height: auto;
+          padding: 28px 24px 20px;
+          margin-bottom: 16px;
+        }
+        .running-header {
+          margin-bottom: 24px;
+        }
+        .page-footer {
+          margin-top: 28px;
+        }
+        .company,
+        .project {
+          flex-wrap: wrap;
+          gap: 3px;
+        }
+        .company-meta,
+        .project-period {
+          display: block;
+        }
+        h2 {
+          margin-top: 26px;
+        }
+        h4 {
+          margin-top: 25px;
+        }
+        .contact {
+          line-height: 1.9;
+        }
+        .navigation-row {
+          gap: 12px;
+        }
+        nav {
+          gap: 16px;
+          overflow-x: auto;
+          padding: 10px 0;
+        }
+        .print-help {
+          display: none;
+        }
+        .running-role {
+          display: none;
+        }
+        .sheet-cover .running-role {
+          display: inline;
+        }
+        .skills {
+          font-size: 12px;
+        }
+        .skills li {
+          grid-template-columns: 72px 1fr;
+        }
+      }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
 
-@page { size: A4; margin: 0; }
-@media print {
-  html { scroll-behavior: auto; scroll-padding-top: 0; }
-  body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .preview-controls, .skip-link { display: none !important; }
-  main { margin: 0; padding: 0; }
-  .sheet { margin: 0; box-shadow: none; break-after: page; }
-  .sheet:last-child { break-after: auto; }
-  a { color: var(--accent); }
-  .page-footer { break-inside: avoid; }
-}
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      @media print {
+        html {
+          scroll-behavior: auto;
+          scroll-padding-top: 0;
+        }
+        body {
+          background: #fff;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .preview-controls,
+        .skip-link {
+          display: none !important;
+        }
+        main {
+          margin: 0;
+          padding: 0;
+        }
+        .sheet {
+          margin: 0;
+          box-shadow: none;
+          break-after: page;
+        }
+        .sheet:last-child {
+          break-after: auto;
+        }
+        a {
+          color: var(--accent);
+        }
+        .page-footer {
+          break-inside: avoid;
+        }
+      }
 
-/* 기존 레슨/과외 미리보기에는 영향을 주지 않는 모임 이력서 스타일. */
-body { line-height: 1.55; }
-.sheet { height: 297mm; padding: 10mm 14mm 9mm; }
-.page-footer { justify-content: flex-end; margin-top: 12px; }
-.page-content { min-height: 0; }
-h2 { margin-top: 16px; margin-bottom: 8px; }
-h3 { margin-top: 12px; margin-bottom: 9px; }
-h4 { margin-top: 14px; margin-bottom: 7px; }
-p { margin-bottom: 8px; }
-.skills li { grid-template-columns: 150px 1fr; margin-bottom: 3px; }
-.simple-list { margin-bottom: 10px; }
-.simple-list li { position: relative; padding-left: 11px; margin-bottom: 5px; }
-.simple-list li::before {
-  content: "";
-  position: absolute;
-  top: .7em;
-  left: 0;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.simple-list li:last-child { margin-bottom: 0; }
-.service-note { margin-bottom: 12px; }
-.case { margin-top: 17px; }
-.case:first-child { margin-top: 0; }
-.case .project { margin-top: 0; }
-.case-primary .project { font-size: 16px; }
-.case-supporting .project { font-size: 13.5px; }
-.case-supporting { margin-top: 14px; }
-.case > p:last-child:has(a) { font-size: 11px; margin-bottom: 0; }
-.type-design {
-  border-left: 2px solid var(--accent);
-  padding: 6px 10px !important;
-  background: #f4f6f7;
-}
-.type-design::before { display: none; }
-.page-content > .case:first-child .project { margin-top: 0; }
-.sheet-supporting { font-size: 12.5px; line-height: 1.5; }
-.career-table {
-  width: 100%;
-  margin: 15px 0 0;
-  border-collapse: collapse;
-  font-size: 11.5px;
-  line-height: 1.6;
-  text-align: left;
-}
-.career-table th {
-  padding: 7px 10px;
-  background: #f4f6f7;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
-}
-.career-table td { padding: 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
-.career-table th:first-child, .career-table td:first-child { padding-left: 10px; width: 65px; }
-.career-table th:nth-child(2), .career-table td:nth-child(2) { width: 133px; white-space: nowrap; }
-.career-table th:last-child, .career-table td:last-child { padding-right: 0; }
-.workflow {
-  margin: 12px 0;
-  padding: 10px 13px;
-  border-left: 2px solid var(--accent);
-  background: #f4f6f7;
-  font-size: 12px;
-  line-height: 1.85;
-}
-nav { gap: 18px; }
-.navigation-row nav { min-width: 0; flex: 1; }
+      /* 기존 레슨/과외 미리보기에는 영향을 주지 않는 모임 이력서 스타일. */
+      body {
+        line-height: 1.45;
+      }
+      .sheet-cover {
+        line-height: 1.55;
+      }
+      .sheet {
+        height: 297mm;
+        padding: 10mm 14mm 9mm;
+      }
+      .sheet:not(.sheet-cover) {
+        padding-left: 12mm;
+        padding-right: 12mm;
+      }
+      .page-footer {
+        justify-content: flex-end;
+        margin-top: 12px;
+      }
+      .page-content {
+        min-height: 0;
+      }
+      h2 {
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+      h3 {
+        margin-top: 12px;
+        margin-bottom: 9px;
+      }
+      h4 {
+        margin-top: 14px;
+        margin-bottom: 7px;
+      }
+      p {
+        margin-bottom: 4px;
+      }
+      .sheet-cover p {
+        margin-bottom: 8px;
+      }
+      .skills li {
+        grid-template-columns: 150px 1fr;
+        margin-bottom: 3px;
+      }
+      .simple-list {
+        margin-bottom: 8px;
+      }
+      .simple-list li {
+        position: relative;
+        padding-left: 11px;
+        margin-bottom: 2px;
+      }
+      .sheet-cover .simple-list {
+        margin-bottom: 10px;
+      }
+      .sheet-cover .simple-list li {
+        margin-bottom: 5px;
+      }
+      .simple-list li::before {
+        content: '';
+        position: absolute;
+        top: 0.7em;
+        left: 0;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .simple-list li:last-child {
+        margin-bottom: 0;
+      }
+      .service-note {
+        margin-bottom: 12px;
+      }
+      .case {
+        margin-top: 10px;
+      }
+      .case:first-child {
+        margin-top: 0;
+      }
+      .case .project {
+        margin-top: 0;
+        margin-bottom: 6px;
+      }
+      .case-primary .project {
+        font-size: 16px;
+      }
+      .case-supporting .project {
+        font-size: 13.5px;
+      }
+      .case-supporting {
+        margin-top: 10px;
+      }
+      .case-supporting:not(:has(.workflow)) {
+        font-size: 12.5px;
+        line-height: 1.46;
+      }
+      .case > p:last-child:has(a) {
+        font-size: 11px;
+        margin-bottom: 0;
+      }
+      .type-design {
+        border-left: 2px solid var(--accent);
+        padding: 6px 10px !important;
+        background: #f4f6f7;
+      }
+      .type-design::before {
+        display: none;
+      }
+      .page-content > .case:first-child .project {
+        margin-top: 0;
+      }
+      .sheet-supporting {
+        font-size: 12.5px;
+        line-height: 1.46;
+      }
+      .sheet-supporting .case:has(.workflow) {
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .career-table {
+        width: 100%;
+        margin: 15px 0 0;
+        border-collapse: collapse;
+        font-size: 11.5px;
+        line-height: 1.6;
+        text-align: left;
+      }
+      .career-table th {
+        padding: 7px 10px;
+        background: #f4f6f7;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .career-table td {
+        padding: 10px;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: top;
+      }
+      .career-table th:first-child,
+      .career-table td:first-child {
+        padding-left: 10px;
+        width: 65px;
+      }
+      .career-table th:nth-child(2),
+      .career-table td:nth-child(2) {
+        width: 133px;
+        white-space: nowrap;
+      }
+      .career-table th:last-child,
+      .career-table td:last-child {
+        padding-right: 0;
+      }
+      .workflow {
+        margin: 9px 0;
+        padding: 8px 13px;
+        border-left: 2px solid var(--accent);
+        background: #f4f6f7;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      nav {
+        gap: 18px;
+      }
+      .navigation-row nav {
+        min-width: 0;
+        flex: 1;
+      }
 
-@media screen and (max-width: 840px) {
-  body { line-height: 1.7; }
-  .sheet { height: auto; padding: 28px 24px 20px; }
-  .sheet-supporting { font-size: 14px; line-height: 1.7; }
-  .skills li { grid-template-columns: 1fr; gap: 0; margin-bottom: 9px; }
-  .career-table { font-size: 11px; }
-  .career-table th:first-child, .career-table td:first-child { width: 52px; }
-  .career-table th:nth-child(2), .career-table td:nth-child(2) { width: 85px; white-space: normal; }
-  .career-table th, .career-table td { padding: 8px 6px; }
-  .toolbar, .navigation-row { width: calc(100% - 24px); }
-  .preview-title strong span { display: none; }
-  .toolbar { gap: 10px; }
-}
+      @media screen and (max-width: 840px) {
+        body {
+          line-height: 1.7;
+        }
+        .sheet {
+          height: auto;
+          padding: 28px 24px 20px;
+        }
+        .sheet:not(.sheet-cover) {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        .sheet-supporting {
+          font-size: 14px;
+          line-height: 1.7;
+        }
+        .sheet-cover,
+        .case-supporting:not(:has(.workflow)),
+        .sheet-supporting .case:has(.workflow) {
+          font-size: 14px;
+          line-height: 1.7;
+        }
+        .skills li {
+          grid-template-columns: 1fr;
+          gap: 0;
+          margin-bottom: 9px;
+        }
+        .career-table {
+          font-size: 11px;
+        }
+        .career-table th:first-child,
+        .career-table td:first-child {
+          width: 52px;
+        }
+        .career-table th:nth-child(2),
+        .career-table td:nth-child(2) {
+          width: 85px;
+          white-space: normal;
+        }
+        .career-table th,
+        .career-table td {
+          padding: 8px 6px;
+        }
+        .toolbar,
+        .navigation-row {
+          width: calc(100% - 24px);
+        }
+        .preview-title strong span {
+          display: none;
+        }
+        .toolbar {
+          gap: 10px;
+        }
+      }
 
-@media print {
-  .sheet { height: 297mm; }
-  .career-table, .workflow { break-inside: avoid; }
-  .simple-list li { break-inside: avoid; }
-}
-</style>
-</head>
-<body>
-  <a class="skip-link" href="#resume">이력서 본문으로 이동</a>
-  <div class="preview-controls">
-    <div class="toolbar">
-      <div class="preview-title"><strong>김진건 <span>이력서 미리보기</span></strong><small>A4 · 5쪽 · 원문 전체</small></div>
-      <button type="button" id="print-button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7z"/><path d="M16 11h1"/></svg>PDF로 저장</button>
+      @media print {
+        .sheet {
+          height: 297mm;
+        }
+        .career-table,
+        .workflow {
+          break-inside: avoid;
+        }
+        .simple-list li {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#resume">이력서 본문으로 이동</a>
+    <div class="preview-controls">
+      <div class="toolbar">
+        <div class="preview-title">
+          <strong>
+            김진건
+            <span>이력서 미리보기</span>
+          </strong>
+          <small>A4 · 4쪽 · 원문 전체</small>
+        </div>
+        <button type="button" id="print-button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+            <path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7z" />
+            <path d="M16 11h1" />
+          </svg>
+          PDF로 저장
+        </button>
+      </div>
+      <div class="navigation-row">
+        <nav aria-label="이력서 페이지">
+          <a href="#page-1">소개·경력</a>
+          <a href="#page-2">UX·SSR</a>
+          <a href="#page-3">구조·운영</a>
+          <a href="#page-4">AI·기타 경험</a>
+        </nav>
+        <details class="print-help">
+          <summary>인쇄 설정</summary>
+          <p>
+            대상: PDF로 저장
+            <br />
+            용지: A4 · 배율: 100%
+            <br />
+            여백: 없음
+            <br />
+            브라우저 머리글·바닥글: 끄기
+          </p>
+        </details>
+      </div>
     </div>
-    <div class="navigation-row">
-      <nav aria-label="이력서 페이지"><a href="#page-1">소개·경력</a><a href="#page-2">사용성 개선</a><a href="#page-3">SSR·구조</a><a href="#page-4">운영·AI</a><a href="#page-5">기타 경험</a></nav>
-      <details class="print-help"><summary>인쇄 설정</summary><p>대상: PDF로 저장<br>용지: A4 · 배율: 100%<br>여백: 없음<br>브라우저 머리글·바닥글: 끄기</p></details>
-    </div>
-  </div>
-  <main id="resume"><article class="sheet sheet-cover" id="page-1" aria-label="1쪽 · 소개 · 지원동기 · 기술 · 경력">
-  <div class="page-content"><h1 data-source-block="0">김진건</h1>
-<p class="contact" data-source-block="1"><strong>Frontend Engineer</strong> · <a href="mailto:jingeon27@gmail.com">jingeon27@gmail.com</a> · <a href="https://github.com/jingeon27">GitHub</a> · <a href="https://jingeon27.tistory.com/">기술 블로그</a></p>
-<p class="service-note" data-source-block="2"><strong>병역</strong> · 산업기능요원 현역 복무 중(2025.08 –), 전직 희망</p>
-<h2 data-source-block="3">소개</h2>
-<p data-source-block="4">사용자 경험과 제품의 맥락을 살피며 기능을 개발하고, 기존 코드의 기술부채를 줄여 온 프론트엔드 엔지니어입니다. React·TypeScript·Next.js로 채용 SaaS와 의료복지 서비스를 개발·운영했습니다.</p>
-<p data-source-block="5">요구사항에서 빠진 동작은 담당자와 논의하고, 기술을 선택할 때는 이점과 전환·유지 비용을 함께 살핍니다. AI 개발 workflow로 빠르게 작업하면서 코드와 테스트를 먼저 읽고, 화면을 띄워 동작을 확인합니다. 반복되는 판단은 skills와 lint rule에 남깁니다.</p>
-<h2 data-source-block="6">지원동기</h2>
-<p data-source-block="7">중학교 때 게임 커뮤니티에서 가까운 지역에 살던 사람들을 알게 돼 정모로 만났고, 몇몇과는 지금도 연락하며 지냅니다. 같은 관심사를 가진 이웃과 오래 관계를 이어 온 경험이 특별해, 당근모임에서 더 많은 사람이 이런 만남을 시작하도록 돕고 싶습니다. 직접 모임에 참여하고 사용자 의견을 반영하는 팀에서, 제가 만든 변화가 모임 참여와 이후 활동에 미치는 영향을 동료들과 확인하고 싶습니다. 제품을 개선하면서 AI 개발 workflow와 SSR 서버 운영 경험도 넓히고 싶습니다.</p>
-<h2 data-source-block="53">기술</h2>
-<ul class="skills" data-source-block="54"><li><strong>Frontend:</strong><span>JavaScript, TypeScript, React 19, Next.js 16 (App Router), Electron</span></li>
-<li><strong>State &amp; Form:</strong><span>TanStack Query, Zustand, React Hook Form, Zod</span></li>
-<li><strong>UI:</strong><span>Radix UI, Base UI, shadcn/ui, Ant Design, Tailwind CSS, overlay-kit</span></li>
-<li><strong>Testing:</strong><span>Vitest, React Testing Library, MSW, Playwright</span></li>
-<li><strong>Monitoring &amp; Logging:</strong><span>Sentry, AWS CloudWatch</span></li>
-<li><strong>Analytics:</strong><span>Amplitude</span></li>
-<li><strong>Tooling:</strong><span>pnpm, Turborepo, Turbopack, ESLint, Knip</span></li>
-<li><strong>AI:</strong><span>Claude Code, Codex</span></li></ul>
-<h2 data-source-block="8">경력 요약</h2>
-<table class="career-table" aria-label="경력 기간과 담당 업무" data-source-block="9"><thead><tr><th scope="col">회사</th><th scope="col">기간</th><th scope="col">담당</th></tr></thead><tbody><tr><td>세이프닥</td><td>2025.05 – 현재</td><td>복지몰·병원 관리자·백오피스, 글로벌 사용자 서비스·CMS 개발 및 운영</td></tr><tr><td>왓타임</td><td>2024.01 – 2024.11</td><td>채용 SaaS RoundHR의 웹 제품과 Electron 지원자 데이터 수집 앱 개발</td></tr></tbody></table>
-<ul class="simple-list" data-source-block="10"><li><strong>프론트엔드 설계:</strong> 세이프닥 제품 전반의 아키텍처와 코드 패턴을 설계하고 라이브러리를 선택·도입했습니다. 상태 관리·폼·공통 UI·데이터 조회 기준을 정하고 기존 코드를 같은 기준으로 리팩터링하며 기술부채를 줄여 왔습니다. React Hook Form·Zod·ts-pattern을 도입하고 overlay-kit 적용 범위도 넓혔습니다.</li>
-<li><a href="https://safedoc.io/">복지몰</a>: 로그인·인증, 검색·프로그램 상세, 예약·리뷰, 건강검진·쿠폰·쿠폰팩·결제를 개발·개선했습니다. CSR·SSR 적용 범위와 데이터 조회 구조, SEO도 설계했습니다.</li>
-<li><strong>병원 관리자:</strong> 프로그램 등록·검수 요청, 예약·결제내역·정산, 병원 정보·진료시간·임시 휴무·진료일 관리 기능을 개발·개선했습니다.</li>
-<li><strong>백오피스:</strong> 프로그램 검수·승인·반려, 회원·포인트·쿠폰, 기업·대학 영업관리, 예약·결제취소·환불·정산을 개발·개선했습니다. 포인트 일괄 지급·데이터 추출을 추가하고 관리자 권한별 메뉴와 병원 알림 수신 설정을 반영했습니다.</li>
-<li><strong>글로벌 서비스·CMS:</strong> 프로토타입의 화면을 모두 구현해 두 제품을 3주 안에 PoC로 배포하고 다국어를 적용했습니다.</li>
-<li><strong>채용 SaaS:</strong> 채용·평가·온보딩 화면, 라운지·랜딩과 외부 채용 사이트의 지원자 데이터를 가져오는 Electron 앱을 개발했습니다.</li></ul>
-</div>
-  <footer class="page-footer"><span>01 <span class="page-total">/ 05</span></span></footer>
-</article>
-<article class="sheet" id="page-2" aria-label="2쪽 · 사용자 경험 · 건강검진">
-  <div class="page-content"><h2 data-source-block="11">주요 프로젝트</h2>
-<h3 data-source-block="12">세이프닥</h3>
-<p data-source-block="13">제휴 병원의 비급여 프로그램을 예약하는 B2B2C 서비스입니다. 기업 제휴와 마케팅으로 사용자가 들어오며, <a href="https://safedoc.io/">복지몰</a>의 가입 회원은 약 15만 명, 주간 활성 사용자는 약 1만 명입니다. 예약·리뷰·검색을 갖춘 MVP 출시 초기에 합류했고, 2026년 1월부터 사내 유일한 프론트엔드 개발자이며 4월부터 전사 프론트엔드 개발·운영을 단독으로 담당합니다.</p>
-<section class="case case-primary">
-<h4 class="project" data-source-block="14"><span>건강검진 서비스 내재화</span><span class="project-period">2026.09 – 현재</span></h4>
-<p data-source-block="15">건강검진은 아임웹에서 정보를 보고 전화로 문의하던 흐름이었고, 기존 서비스에서는 검진 프로그램과 예약을 관리하기 어려웠습니다. 제휴 병원의 요청으로 세 제품의 프론트엔드를 맡아 9월 9일부터 개발했고, 30일 정식 오픈했습니다.</p>
-<ul class="simple-list" data-source-block="16"><li><strong>백오피스:</strong> 검사항목·필수·선택 검사 구성, 기업지원 코드·서류 확인, 결제내역·결제취소·환불 승인을 추가했습니다.</li>
-<li><strong>병원 관리자:</strong> 검진 프로그램 조회·예약 관리를 추가했습니다. 건강검진만 운영하는 병원에는 기존 등록·검수 메뉴를 숨기고, 직접 처리할 수 없는 예약금 결제취소는 요청 접수로 안내했습니다.</li>
-<li><strong>복지몰:</strong> 프로그램 상세·예약 신청·상세에 검사 선택, 기업 검진 코드와 토스페이먼츠 예약금 결제를 연결했습니다. 사용자 부담금과 기업지원 내용을 구분해 보여줬습니다.</li>
-<li>선택을 마치면 다음 그룹으로 자동 이동하자는 요청에 대해, 기존 선택을 수정할 때도 화면이 이동하는 불편을 짚었습니다. 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화하고, 빠진 disabled 디자인도 요청해 반영했습니다.</li>
-<li>결제 입력은 <code>orderId</code>와 함께 <code>sessionStorage</code>에 저장하고, 같은 주문이며 Zod 검증을 통과한 값만 한 번 복원합니다. 결제창 실패 후 입력 복원과 승인 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다. 일괄 저장 뒤에는 서버가 발급한 ID를 폼에 반영해 중복 등록을 막았습니다.</li>
-<li>검진 구성 수정이 거절됐을 때 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값도 dev API 서버에서 확인하며 맞췄습니다.</li></ul>
-<p data-source-block="17"><a href="https://jingeon27.tistory.com/34">건강검진 개발 과정</a></p>
-</section>
-<section class="case case-primary">
-<h4 class="project" data-source-block="18"><span>모바일 리뷰 작성 개선</span><span class="project-period">2025.06 – 07</span></h4>
-<p data-source-block="19">모바일로 리뷰를 작성하다 키패드가 시술 목록을 가리고, 하나를 고르면 목록이 닫혀 복수 선택이 불편하며, 고른 항목도 잘 보이지 않는 문제를 발견했습니다. 2025년 6월 Jira에 정리해 PO에게 공유했습니다.</p>
-<p data-source-block="20">기획·디자인 담당자가 정한 복수 선택·체크·chip UI를 구현해 7월 10일 배포했습니다. 여러 시술을 한 번에 고르고 선택한 항목을 확인할 수 있도록 개선했습니다.</p>
-</section>
-</div>
-  <footer class="page-footer"><span>02 <span class="page-total">/ 05</span></span></footer>
-</article>
-<article class="sheet" id="page-3" aria-label="3쪽 · SSR · 타입 설계 · 구조 개선">
-  <div class="page-content"><section class="case case-primary">
-<h4 class="project" data-source-block="21"><span>CSR·SSR 범위와 데이터 조회 설계</span><span class="project-period">2025.05 – 현재</span></h4>
-<p data-source-block="22">입사 당시에는 서버 컴포넌트의 <code>ensureQuery</code> 결과를 render props로 전달했습니다. 화면이 Query 캐시를 구독하지 않아 무효화해도 갱신되지 않았고, 조회 조건만 바꿀 때도 서버의 렌더링 결과를 다시 받아야 했습니다.</p>
-<p data-source-block="23">2025년 5월 예약 화면부터 prefetch·hydration으로 바꾸고 다른 화면으로 확대했습니다. 초기 HTML에 필요한 데이터는 서버가 준비하고, 화면은 <code>useQuery</code>·<code>useSuspenseQuery</code>로 같은 캐시를 구독해 이후 조회·갱신·무효화를 처리하도록 나눴습니다.</p>
-<ul class="simple-list" data-source-block="24"><li>관리자 검색 오류는 localhost의 <code>dev</code>에서 나타나지 않아 <code>build</code> 후 <code>start</code>로 재현했습니다. 목록 7개 중 6개에서 확인하고 라우터 캐시 이슈까지 추적했습니다. 서버가 검색 조건을 읽지 않는 화면의 같은 경로 조건 변경은 History API로 처리해 검색을 복구하고 불필요한 RSC 재요청을 줄였습니다. 수정 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.</li>
-<li>인증 후 리다이렉트에서 앱이 멈추는 오류는 조사 당시 68건·53명에게 발생했습니다. Next.js 소스에서 <code>AppRouter</code>가 훅 호출 도중 렌더를 끝내는 경로를 확인하고, 인증 확인·리다이렉트를 React 렌더링 전 proxy로 옮겼습니다.</li>
-<li>다른 서비스와 비교해 메타데이터·JSON-LD를 설계하고 병원·시술·인근 지하철역 정보를 반영했습니다. 정해진 값이 없을 때 직접 채워도 되는지 확인한 뒤 적용했습니다. Streaming 도입에 맞춰 일부 미리보기 봇에는 메타데이터를 <code>&lt;head&gt;</code>로 보내도록 설정했습니다.</li></ul>
-<p data-source-block="25"><a href="https://jingeon27.tistory.com/27">Next.js 검색 회귀 대응</a></p>
-</section>
-<section class="case case-primary">
-<h4 class="project" data-source-block="26"><span>코드 구조와 기술부채 개선</span><span class="project-period">2025.06 – 현재</span></h4>
-<ul class="simple-list" data-source-block="27"><li><strong>예약 상태 관리:</strong> 날짜를 고른 뒤 가족을 추가하면 선택 일시가 어긋났습니다. Query 캐시·Zustand·로컬 상태에 나뉜 값의 역할을 정리해 서버 목록은 Query, 작성 중인 값은 RHF, 제출 검증은 Zod로 관리했습니다. 동기화 로직을 훅·하위 컴포넌트로 나눠 519줄이던 예약 대상 선택 컴포넌트를 55줄로 줄였습니다(2025.06).</li>
-<li><strong>공통 UI 적용:</strong> 디자인 시스템 시안에 맞춰 Bottom Sheet를 적용해 2025년 8월 7일 배포했습니다.</li>
-<li><strong>공통 UI 리팩터링:</strong> <code>header</code>·<code>content</code>·<code>button</code>을 함수 인자로 받던 Bottom Sheet를 Compound Components와 overlay-kit으로 바꿨습니다. 본문과 하단 버튼이 같은 RHF 폼을 사용하고, 시트 안에서 고른 값은 ‘확인’을 눌러야 바깥 폼에 반영되도록 했습니다(2026.04).</li>
-<li class="type-design"><strong>검색·폼 표준화:</strong> 검색 화면 27개를 <code>createSearchFilter(schema)</code>로 전환해 URL·폼·조회 조건을 같은 스키마로 다뤘습니다. 화면별 JSX 반복은 감수하고 공통 렌더러에 예외 분기가 쌓이지 않도록 했습니다. Ant Design Form에는 재귀 조건부 타입과 <code>infer</code>를 쓰는 <code>createTypedForm&lt;T&gt;</code>를 만들어 중첩 필드명·값을 컴파일 단계에서 검사합니다.</li>
-<li><strong>FSD 기준 정리:</strong> 재사용할 것 같다는 이유로 <code>entities</code>에 두던 코드를 다시 구분했습니다. 서버 모델·API는 <code>features</code>, 화면별 조합은 <code>pages</code>, 도메인과 무관한 공용 UI는 <code>shared</code>로 정했습니다. 화면끼리 직접 참조하던 62건을 정리하고 새 위반은 lint error로 막았습니다(2026.09).</li>
-<li><strong>정산 리팩터링:</strong> 엑셀 정산을 내부 예약 DB와 연결하는 기능의 초기 구현을 인수했습니다. 배포 전 요구사항을 반영하며 1,000줄이 넘는 파일의 조회·표·선택·편집·정산 처리를 나누고 타입·의존성을 정리했습니다. ref·<code>useImperativeHandle</code>로 열던 모달은 대상 데이터와 <code>open</code>·<code>onCancel</code>을 props로 받게 바꿨습니다. 낙관적 갱신의 조회 취소·rollback을 보완하고 필터 유실·다중 선택 오류를 회귀 테스트로 확인했습니다(2026.04 – 현재).</li>
-<li><strong>검증·오류 처리:</strong> 기존 API 응답의 Zod 불일치는 트래킹하며 스키마를 맞추고, 잘못된 URL 필드는 기본값으로 되돌리며 결제 복원값은 버립니다. 독립적으로 복구할 기능마다 Error Boundary를 적용하고 백오피스 라우트 30개의 조회·화면 구성을 통일했습니다. API·렌더링 오류와 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.</li></ul>
-<p data-source-block="28"><a href="https://jingeon27.tistory.com/11">예약 폼</a> · <a href="https://jingeon27.tistory.com/26">공통화 기준</a> · <a href="https://jingeon27.tistory.com/23">FSD 구조</a> · <a href="https://jingeon27.tistory.com/32">Zod 검증</a></p>
-</section>
-</div>
-  <footer class="page-footer"><span>03 <span class="page-total">/ 05</span></span></footer>
-</article>
-<article class="sheet" id="page-4" aria-label="4쪽 · 운영 안정성 · 테스트 · AI 개발">
-  <div class="page-content"><section class="case case-primary">
-<h4 class="project" data-source-block="29"><span>Sentry 도입과 운영 오류 추적</span><span class="project-period">2026.08 – 현재</span></h4>
-<p data-source-block="30">간헐적인 오류의 원인과 영향받은 사용자를 파악하려고 복지몰의 브라우저·서버·Edge에 Sentry를 도입했습니다. 8월 19일부터 구현해 27일 운영에 배포했습니다.</p>
-<ul class="simple-list" data-source-block="31"><li>오류 레벨과 의미 없는 전송을 줄이는 차단 게이트를 정하고, 중복 전송·의료·인증 정보 전송을 막았습니다. release·브라우저 소스맵·MCP를 연결하고 Web Vitals의 LCP·FCP·TTFB 전송을 E2E로 확인했습니다.</li>
-<li>Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적했습니다. 버전업에 따른 snap point 변경은 공통 Root에서 변환했습니다. 누적 75건·57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.</li>
-<li>회원 조회가 실패하면 무조건 로그아웃하던 코드를 401일 때만 끊도록 바꿨습니다. 9월 23일 배포 뒤 28일까지 관련 CS·Sentry 이슈가 없었습니다.</li></ul>
-<p data-source-block="32"><a href="https://jingeon27.tistory.com/30">Sentry 도입</a> · <a href="https://jingeon27.tistory.com/33">Bottom Sheet 크래시</a></p>
-</section>
-<section class="case case-primary">
-<h4 class="project" data-source-block="33"><span>테스트 도입</span><span class="project-period">2026.07 – 현재</span></h4>
-<p data-source-block="34">7월부터 예약·프로그램 관리·정산에 테스트를 도입하고 기능 개발·운영 오류 대응을 거치며 기준을 보완했습니다.</p>
-<ul class="simple-list" data-source-block="35"><li>함수·스키마는 Vitest, UI·폼은 React Testing Library, 브라우저 흐름은 Playwright로 확인합니다. dev API 서버를 우선하고 만들기 어려운 조건은 MSW로 재현합니다. 실제 Drawer를 열어 제출하고 기대 요청값은 제품의 변환 함수를 쓰지 않고 작성합니다.</li>
-<li>새 기능의 기대 동작은 BDD 형식의 <code>*.spec.{ts,tsx}</code>, 운영·QA 오류와 console warning은 <code>*.test.{ts,tsx}</code>로 구분합니다. 컴포넌트별 명세 누락을 검토하고, 새 패턴은 제품 코드를 일부러 깨뜨려 테스트가 실패하는지도 확인합니다.</li>
-<li>9월에는 병원 관리자 등록 → 백오피스 검수중·반려·승인을 두 앱에 걸쳐 확인하는 E2E를 추가했습니다. 기대한 최종 상태를 구현 완료의 검증 조건으로 사용합니다.</li></ul>
-<p data-source-block="36"><a href="https://jingeon27.tistory.com/25">테스트 코드를 도입하면서 세운 기준</a></p>
-</section>
-<section class="case case-supporting">
-<h4 class="project" data-source-block="37"><span>AI 개발 workflow</span><span class="project-period">2026.04 – 현재</span></h4>
-<p data-source-block="38">4월부터 Compound Engineering 방식으로 skills를 보완하고 FSD·lint rule을 저장소에 맞게 바꿨습니다. 반복해서 어긋나는 구현과 검토 기준을 남기며 에이전트에 맡기는 범위를 넓혔습니다.</p>
-<p class="workflow" data-source-block="39">티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 직접 diff 리뷰·화면을 띄워 동작 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청</p>
-<ul class="simple-list" data-source-block="40"><li>Jira·Figma에서 빠진 동작과 사용성 의견을 담당자와 맞추고, 작업별로 PR까지 한 번에 맡길지 plan·완료 결과를 확인할지 정합니다. 에이전트가 제출한 완성본의 코드·테스트를 읽고 부족하면 반려합니다. critical 자동 수정 결과도 검토하며, 문제가 나오면 앞 단계로 돌아갑니다.</li>
-<li>반복되는 판단은 skills·lint rule에 남기고 미사용 코드는 Knip으로 확인합니다. 슬라이스 내부 파일을 직접 참조하던 위반 271건을 정리했습니다. lint rule은 RuleTester·<code>__fixture__</code>·mock으로 검증합니다.</li>
-<li>병렬 worktree의 CPU 부하를 줄이려고 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행합니다. 전체 검사는 CI에서 확인합니다.</li></ul>
-<p data-source-block="41"><a href="https://jingeon27.tistory.com/31">AI 개발 workflow 개선</a></p>
-</section>
-</div>
-  <footer class="page-footer"><span>04 <span class="page-total">/ 05</span></span></footer>
-</article>
-<article class="sheet sheet-supporting" id="page-5" aria-label="5쪽 · 기술 선택 · 실험 참여 · 왓타임">
-  <div class="page-content"><section class="case case-supporting">
-<h4 class="project" data-source-block="42"><span>기술 선택과 전환</span><span class="project-period">2025.10 – 현재</span></h4>
-<ul class="simple-list" data-source-block="43"><li><strong>UI 조합:</strong> Headless UI에서 Radix UI로 옮겨 공통 UI의 조합 유연성과 접근성 primitive를 활용했습니다. 기존 props·이벤트·열림 상태를 바꾸는 비용을 감수하고 ref 전달·포커스 동작을 확인했습니다. Bottom Sheet의 기반 라이브러리는 유지했습니다.</li>
-<li><strong>개발 속도:</strong> Turbopack과 Next.js 16의 로컬 개발 속도 개선을 위해 Next.js 14→16·React 18→19로 전환했습니다. 비동기 API·캐시 변경에 대응하고 직접 진입·뒤로가기·새로고침을 확인했습니다. 별도로 TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.</li>
-<li><strong>브라우저 호환성:</strong> Tailwind v4 전환 전 2026년 8월 27일~10월 1일 Amplitude로 지원 여부를 확인했습니다. 하루 평균 약 1,000명 중 <code>color-mix()</code> 미지원은 하루 1명꼴(평균 0.94명), <code>@property</code> 미지원은 없었습니다. 전환을 보류하는 것도 검토했지만 <a href="https://tailwindcss.com/blog/tailwindcss-v4-1#improved-compatibility-with-older-browsers">v4.1의 색상 fallback</a>을 확인해 진행했습니다.</li></ul>
-</section>
-<section class="case case-supporting">
-<h4 class="project" data-source-block="44"><span>사용자 행동 측정과 실험 참여</span><span class="project-period">2025.07 – 현재</span></h4>
-<p data-source-block="45">Amplitude 기반 A/B 테스트 환경을 구축하고 검색·상세·예약·쿠폰 이벤트 140개 이상을 새로 붙이거나 고쳤습니다. 담당자가 정한 실험의 화면 구현과 진입 위치·선택·이탈 측정을 맡았습니다.</p>
-<ul class="simple-list" data-source-block="46"><li><strong>소속인증 바이패스 링크 (2025.09 – 12):</strong> 유입 사용자의 이탈을 줄이려고 로그인 전에 홈을 둘러보게 한 실험에 참여했습니다. 저는 진입·인증 처리를 개선했고 랜딩 변경·원복은 동료가 맡았습니다. 팀의 전후 비교에서 가입 전환율은 26.3%→10.6%였으며, 12월 31일 로그인 랜딩으로 돌아갔습니다.</li>
-<li><strong>전화상담 (2026.06 – 07):</strong> 플랫폼화 전 개인별 전화상담을 제공하던 방식을 복지몰에서 시도했습니다. 진입점과 클릭 위치 측정을 구현했습니다. 실험 결과가 좋지 않아 종료된 뒤 7월 27일 코드를 정리하고 채팅상담으로 되돌렸습니다.</li>
-<li><strong>룰렛 (이벤트: 2026.08.04 – 08.11):</strong> 진료과 선택·룰렛·당첨·쿠폰함·예약·공유 흐름과 이벤트 7개를 구현했습니다. 종료 후 페이지 방문 이벤트로 방문 사용자가 없다고 판단해 10월 7일 코드를 제거했습니다.</li>
-<li>가입 UTM 유실은 Amplitude의 unexpected 속성을 expected로 바꾸면 해결되는 것을 찾아 PO에게 공유했습니다. 먼저 추가했던 저장 코드는 운영 배포 전에 되돌렸습니다.</li></ul>
-</section>
-<section class="case case-supporting">
-<h4 class="project" data-source-block="47"><span>WebView와 글로벌 서비스</span></h4>
-<ul class="simple-list" data-source-block="48"><li><strong>WebView (2026.06 – 09):</strong> 열리지 않던 <code>tel:</code> 상담 버튼을 기존 네이티브 브릿지로 연결했습니다. 외부 예약 이동에서는 뒤로 가기가 WebView 전체를 닫는 문제를 배포 전에 확인해, 외부 링크 열기와 웹 내부 뒤로 가기를 구분했습니다.</li>
-<li><strong>글로벌 서비스·CMS (2026.07 – 현재):</strong> PO의 프로토타입을 모두 구현해 3주 안에 PoC로 배포했습니다. Next.js·TanStack Query·shadcn/ui·Base UI로 구성하고 영어·한국어·아랍어·RTL을 적용했습니다. 빠진 입력 유지·실패 안내·완료 후 이동도 보완했습니다.</li></ul>
-</section>
-<h3 data-source-block="49">왓타임 | 2024.01 – 2024.11</h3>
-<p data-source-block="50">채용 SaaS RoundHR이 시장성을 확인하며 기능을 늘리던 시점에 합류했습니다. 개발자·디자이너와 협업해 pnpm·Turborepo 모노레포의 채용 관리·채용 담당자용 웹, 라운지·랜딩과 Electron 앱을 개발했습니다.</p>
-<ul class="simple-list" data-source-block="51"><li>채용 페이지·지원서 설정, 메일·면접 알림 템플릿, 채용 단계 자동화, 평가 템플릿·척도를 개발했습니다. 채용 담당자용 웹에는 서류·면접 평가와 온보딩 안내를 추가했습니다.</li>
-<li>면접 입력은 시간·장소·참여자·메일의 네 단계로 나눠 <code>useFunnel</code>로 이동·검증하고, <code>sessionStorage</code>로 이탈 후에도 이어 작성하게 했습니다. 라운지·랜딩의 가이드·모바일 화면과 Notion·Strapi 콘텐츠 연동도 맡았습니다.</li>
-<li>앱별 Query key·조회 함수를 공용 패키지로 모으고 mutation마다 갱신 대상을 정했습니다. 드래그 컴포넌트는 공고 순서·중첩 필터 트리·설정 테이블에서 공유하고 클릭·드래그 충돌을 조정했습니다.</li>
-<li>채용 사이트 로그인 → 지원자 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 Electron 초기 구조를 설계하고 잡플래닛·게임잡을 연동했습니다. NestJS는 무겁다는 CTO 피드백을 받아 닷새 만에 제거하고, 모듈 구분·생성자 주입은 참고해 factory에서 조립했습니다. 이후 동료가 상당 부분을 다시 작성했으며 제 역할은 초기 구조와 사이트 연동입니다. 기존 Sentry 오류 수집의 레벨도 구분했습니다.</li></ul>
-<p data-source-block="52"><a href="https://jingeon27.tistory.com/5">Electron 구조 변경</a> · <a href="https://jingeon27.tistory.com/6">Query key 공통화</a></p>
-<h2 data-source-block="55">학력</h2>
-<ul class="simple-list" data-source-block="56"><li>대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</li></ul>
-</div>
-  <footer class="page-footer"><span>05 <span class="page-total">/ 05</span></span></footer>
-</article></main>
-  <script>document.getElementById('print-button').addEventListener('click', () => window.print());</script>
-</body>
+    <main id="resume">
+      <article class="sheet sheet-cover" id="page-1" aria-label="1쪽 · 소개 · 지원동기 · 기술 · 경력">
+        <div class="page-content">
+          <h1 data-source-block="0">김진건</h1>
+          <p class="contact" data-source-block="1">
+            <strong>Frontend Engineer</strong>
+            ·
+            <a href="mailto:jingeon27@gmail.com">jingeon27@gmail.com</a>
+            ·
+            <a href="https://github.com/jingeon27">GitHub</a>
+            ·
+            <a href="https://jingeon27.tistory.com/">기술 블로그</a>
+          </p>
+          <p class="service-note" data-source-block="2">
+            <strong>병역</strong>
+            · 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
+          </p>
+          <h2 data-source-block="3">소개</h2>
+          <p data-source-block="4">
+            사용자 경험과 제품의 맥락을 살피며 기능을 개발하고, 기존 코드의 기술부채를 줄여 온 프론트엔드 엔지니어입니다. React·TypeScript·Next.js로 채용 SaaS와 의료복지 서비스를 개발·운영했습니다.
+          </p>
+          <p data-source-block="5">
+            요구사항에서 빠진 동작은 담당자와 논의하고, 기술을 선택할 때는 이점과 전환·유지 비용을 함께 살핍니다. AI 개발 workflow로 빠르게 작업하면서 코드와 테스트를 먼저 읽고, 화면을 띄워 동작을
+            확인합니다. 반복되는 판단은 skills와 lint rule에 남깁니다.
+          </p>
+          <h2 data-source-block="6">지원동기</h2>
+          <p data-source-block="7">
+            중학교 때 게임 커뮤니티에서 가까운 지역에 살던 사람들을 알게 돼 실제로 만났고, 몇몇과는 지금도 연락하며 지냅니다. 같은 관심사를 가진 이웃과 오래 관계를 이어 온 경험이 특별해, 당근모임에서
+            더 많은 사람이 이런 만남을 시작하도록 돕고 싶습니다.
+          </p>
+          <p data-source-block="8">
+            직접 모임에 참여하고 사용자 의견을 반영하는 팀의 방식에 끌렸습니다. 리뷰·예약 흐름의 불편을 개선한 경험으로 기여하고, 많은 사용자가 이용하는 환경에서 제가 만든 변화가 모임 참여와 이후
+            활동에 미치는 영향을 지표로 확인하고 싶습니다.
+          </p>
+          <p data-source-block="9">
+            현재 여러 제품의 프론트엔드 설계부터 개발·운영까지 책임지고 있습니다. 당근에서는 전문성 있는 동료들과 기술적 판단을 나누고, SSR 서버의 성능과 안정성까지 깊이 있게 다루고 싶습니다. 또한
+            AI를 조직적으로 활용하는 환경에서 제품과 기술 양쪽에 기여하고 싶습니다.
+          </p>
+          <h2 data-source-block="53">기술</h2>
+          <ul class="skills" data-source-block="54">
+            <li>
+              <strong>Frontend:</strong>
+              <span>JavaScript, TypeScript, React, Next.js, Electron</span>
+            </li>
+            <li>
+              <strong>State &amp; Form:</strong>
+              <span>TanStack Query, Zustand, React Hook Form, Zod</span>
+            </li>
+            <li>
+              <strong>UI:</strong>
+              <span>Radix UI, Base UI, shadcn/ui, Ant Design, Tailwind CSS, overlay-kit</span>
+            </li>
+            <li>
+              <strong>Testing:</strong>
+              <span>Vitest, React Testing Library, MSW, Playwright</span>
+            </li>
+            <li>
+              <strong>Monitoring &amp; Logging:</strong>
+              <span>Sentry, AWS CloudWatch</span>
+            </li>
+            <li>
+              <strong>Analytics:</strong>
+              <span>Amplitude</span>
+            </li>
+            <li>
+              <strong>Tooling:</strong>
+              <span>pnpm, Turborepo, Turbopack, ESLint, Knip</span>
+            </li>
+            <li>
+              <strong>AI:</strong>
+              <span>Claude Code, Codex</span>
+            </li>
+          </ul>
+          <h2 data-source-block="8">경력 요약</h2>
+          <table class="career-table" aria-label="경력 기간과 담당 업무" data-source-block="9">
+            <thead>
+              <tr>
+                <th scope="col">회사</th>
+                <th scope="col">기간</th>
+                <th scope="col">담당</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>세이프닥</td>
+                <td>2025.05 – 현재</td>
+                <td>복지몰·병원 관리자·백오피스, 글로벌 사용자 서비스·CMS 개발 및 운영</td>
+              </tr>
+              <tr>
+                <td>왓타임</td>
+                <td>2024.01 – 2024.11</td>
+                <td>채용 SaaS RoundHR의 웹 제품과 Electron 지원자 데이터 수집 앱 개발</td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="simple-list" data-source-block="10">
+            <li>
+              <strong>프론트엔드 설계:</strong>
+              세이프닥 제품 전반의 아키텍처와 코드 패턴을 설계하고 라이브러리를 선택·도입했습니다. 상태 관리·폼·공통 UI·데이터 조회 기준을 정하고 기존 코드를 같은 기준으로 리팩터링하며 기술부채를 줄여
+              왔습니다.
+            </li>
+            <li>
+              <a href="https://safedoc.io/">복지몰</a>
+              : 로그인·인증, 검색·프로그램 상세, 예약·리뷰, 건강검진·쿠폰·쿠폰팩·결제를 개발·개선했습니다. CSR·SSR 적용 범위와 데이터 조회 구조, SEO도 설계했습니다.
+            </li>
+            <li>
+              <strong>병원 관리자:</strong>
+              프로그램 등록·검수 요청, 예약·결제내역·정산, 병원 정보·진료시간·임시 휴무·진료일 관리 기능을 개발·개선했습니다.
+            </li>
+            <li>
+              <strong>백오피스:</strong>
+              프로그램 검수·승인·반려, 회원·포인트·쿠폰, 기업·대학 영업관리, 예약·결제취소·환불·정산을 개발·개선했습니다. 포인트 일괄 지급·데이터 추출을 추가하고 관리자 권한별 메뉴와 병원 알림 수신
+              설정을 반영했습니다.
+            </li>
+            <li>
+              <strong>글로벌 서비스·CMS:</strong>
+              프로토타입의 화면을 모두 구현해 두 제품을 3주 안에 PoC로 배포하고 다국어를 적용했습니다.
+            </li>
+            <li>
+              <strong>채용 SaaS:</strong>
+              채용·평가·온보딩 화면, 라운지·랜딩과 외부 채용 사이트의 지원자 데이터를 가져오는 Electron 앱을 개발했습니다.
+            </li>
+          </ul>
+        </div>
+        <footer class="page-footer">
+          <span>
+            01
+            <span class="page-total">/ 04</span>
+          </span>
+        </footer>
+      </article>
+      <article class="sheet" id="page-2" aria-label="2쪽 · 사용자 경험 · 건강검진 · SSR">
+        <div class="page-content">
+          <h2 data-source-block="11">주요 프로젝트</h2>
+          <h3 data-source-block="12">세이프닥</h3>
+          <p data-source-block="13">
+            세이프닥은 기업 제휴와 마케팅을 통해 유입된 사용자에게 제휴 병원의 비급여 프로그램 검색·예약 서비스를 제공하는 B2B2C 의료복지 플랫폼입니다. 현재 복지몰의 가입 회원은 약 15만 명이며, 주간
+            활성 사용자는 약 1만 명입니다.
+          </p>
+          <p data-source-block="14">
+            예약·리뷰·검색 기능을 갖춘
+            <a href="https://safedoc.io/">복지몰</a>
+            MVP 출시 초기에 합류했습니다. 2026년 1월부터 사내 유일한 프론트엔드 개발자로 일하고 있으며, 4월부터는 전사 프론트엔드 개발·운영을 단독으로 담당하고 있습니다.
+          </p>
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="14">
+              <span>건강검진 서비스 내재화</span>
+              <span class="project-period">2026.09 – 현재</span>
+            </h4>
+            <p data-source-block="15">
+              건강검진은 아임웹에서 정보를 보고 전화로 문의하던 흐름이었고, 기존 서비스에서는 검진 프로그램과 예약을 관리하기 어려웠습니다. 제휴 병원의 요청으로 세 제품의 프론트엔드를 맡아 9월 9일부터
+              개발했고, 30일 정식 오픈했습니다.
+            </p>
+            <ul class="simple-list" data-source-block="16">
+              <li>
+                <strong>백오피스:</strong>
+                검사항목·필수·선택 검사 구성, 기업지원 코드·서류 확인, 결제내역·결제취소·환불 승인을 추가했습니다.
+              </li>
+              <li>
+                <strong>병원 관리자:</strong>
+                검진 프로그램 조회·예약 관리를 추가했습니다. 건강검진만 운영하는 병원에는 기존 등록·검수 메뉴를 숨기고, 직접 처리할 수 없는 예약금 결제취소는 요청 접수로 안내했습니다.
+              </li>
+              <li>
+                <strong>복지몰:</strong>
+                프로그램 상세·예약 신청·상세에 검사 선택, 기업 검진 코드와 토스페이먼츠 예약금 결제를 연결했습니다. 사용자 부담금과 기업지원 내용을 구분해 보여줬습니다.
+              </li>
+              <li>
+                선택을 마치면 다음 그룹으로 자동 이동하자는 요청에 대해, 기존 선택을 수정할 때도 화면이 이동하는 불편을 짚었습니다. 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화하고,
+                빠진 disabled 디자인도 요청해 반영했습니다.
+              </li>
+              <li>
+                결제 입력은
+                <code>orderId</code>
+                와 함께
+                <code>sessionStorage</code>
+                에 저장하고, 같은 주문이며 Zod 검증을 통과한 값만 한 번 복원합니다. 결제창 실패 후 입력 복원과 승인 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다. 일괄 저장 뒤에는 서버가
+                발급한 ID를 폼에 반영해 중복 등록을 막았습니다.
+              </li>
+              <li>검진 구성 수정이 거절됐을 때 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값도 dev API 서버에서 확인하며 맞췄습니다.</li>
+            </ul>
+            <p data-source-block="17"><a href="https://jingeon27.tistory.com/34">건강검진 개발 과정</a></p>
+          </section>
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="18">
+              <span>모바일 리뷰 작성 개선</span>
+              <span class="project-period">2025.06 – 07</span>
+            </h4>
+            <p data-source-block="19">
+              모바일로 리뷰를 작성하다 키패드가 시술 목록을 가리고, 하나를 고르면 목록이 닫혀 복수 선택이 불편하며, 고른 항목도 잘 보이지 않는 문제를 발견했습니다. 2025년 6월 Jira에 정리해 PO에게
+              공유했습니다.
+            </p>
+            <p data-source-block="20">기획·디자인 담당자가 정한 복수 선택·체크·chip UI를 구현해 7월 10일 배포했습니다. 여러 시술을 한 번에 고르고 선택한 항목을 확인할 수 있도록 개선했습니다.</p>
+          </section>
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="21">
+              <span>CSR·SSR 범위와 데이터 조회 설계</span>
+              <span class="project-period">2025.05 – 현재</span>
+            </h4>
+            <p data-source-block="22">
+              입사 당시에는 서버 컴포넌트의
+              <code>ensureQuery</code>
+              결과를 render props로 전달했습니다. 화면이 Query 캐시를 구독하지 않아 무효화해도 갱신되지 않았고, 조회 조건만 바꿀 때도 서버의 렌더링 결과를 다시 받아야 했습니다.
+            </p>
+            <p data-source-block="23">
+              2025년 5월 예약 화면부터 prefetch·hydration으로 바꾸고 다른 화면으로 확대했습니다. 초기 HTML에 필요한 데이터는 서버가 준비하고, 화면은
+              <code>useQuery</code>
+              ·
+              <code>useSuspenseQuery</code>
+              로 같은 캐시를 구독해 이후 조회·갱신·무효화를 처리하도록 나눴습니다.
+            </p>
+            <ul class="simple-list" data-source-block="24">
+              <li>
+                관리자 검색 오류는 localhost의
+                <code>dev</code>
+                에서 나타나지 않아
+                <code>build</code>
+                후
+                <code>start</code>
+                로 재현했습니다. 목록 7개 중 6개에서 확인하고 라우터 캐시 이슈까지 추적했습니다. 서버가 검색 조건을 읽지 않는 화면의 같은 경로 조건 변경은 History API로 처리해 검색을 복구하고 불필요한
+                RSC 재요청을 줄였습니다. 수정 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.
+              </li>
+              <li>
+                인증 후 리다이렉트에서 앱이 멈추는 오류는 조사 당시 68건·53명에게 발생했습니다. Next.js 소스에서
+                <code>AppRouter</code>
+                가 훅 호출 도중 렌더를 끝내는 경로를 확인하고, 인증 확인·리다이렉트를 React 렌더링 전 proxy로 옮겼습니다.
+              </li>
+              <li>
+                다른 서비스와 비교해 메타데이터·JSON-LD를 설계하고 병원·시술·인근 지하철역 정보를 반영했습니다. 정해진 값이 없을 때 직접 채워도 되는지 확인한 뒤 적용했습니다. Streaming 도입에 맞춰
+                일부 미리보기 봇에는 메타데이터를
+                <code>&lt;head&gt;</code>
+                로 보내도록 설정했습니다.
+              </li>
+            </ul>
+            <p data-source-block="25"><a href="https://jingeon27.tistory.com/27">Next.js 검색 회귀 대응</a></p>
+          </section>
+        </div>
+        <footer class="page-footer">
+          <span>
+            02
+            <span class="page-total">/ 04</span>
+          </span>
+        </footer>
+      </article>
+      <article class="sheet" id="page-3" aria-label="3쪽 · 타입과 구조 · 운영 · 테스트 · 기술 선택">
+        <div class="page-content">
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="26">
+              <span>코드 구조와 기술부채 개선</span>
+              <span class="project-period">2025.06 – 현재</span>
+            </h4>
+            <ul class="simple-list" data-source-block="27">
+              <li>
+                <strong>예약 상태 관리:</strong>
+                날짜를 고른 뒤 가족을 추가하면 선택 일시가 어긋났습니다. Query 캐시·Zustand·로컬 상태에 나뉜 값의 역할을 정리해 서버 목록은 Query, 작성 중인 값은 RHF, 제출 검증은 Zod로 관리했습니다.
+                동기화 로직을 훅·하위 컴포넌트로 나눠 519줄이던 예약 대상 선택 컴포넌트를 55줄로 줄였습니다(2025.06).
+              </li>
+              <li class="type-design">
+                <strong>검색·폼 표준화:</strong>
+                검색 화면 27개를
+                <code>createSearchFilter(schema)</code>
+                로 전환해 URL·폼·조회 조건을 같은 스키마로 다뤘습니다. 화면별 JSX 반복은 감수하고 공통 렌더러에 예외 분기가 쌓이지 않도록 했습니다. Ant Design Form에는 재귀 조건부 타입과
+                <code>infer</code>
+                를 쓰는
+                <code>createTypedForm&lt;T&gt;</code>
+                를 만들어 중첩 필드명·값을 컴파일 단계에서 검사합니다.
+              </li>
+              <li>
+                <strong>FSD 기준 정리:</strong>
+                재사용할 것 같다는 이유로
+                <code>entities</code>
+                에 두던 코드를 다시 구분했습니다. 서버 모델·API는
+                <code>features</code>
+                , 화면별 조합은
+                <code>pages</code>
+                , 도메인과 무관한 공용 UI는
+                <code>shared</code>
+                로 정했습니다. 화면끼리 직접 참조하던 62건을 정리하고 새 위반은 lint error로 막았습니다(2026.09).
+              </li>
+              <li>
+                <strong>정산 리팩터링:</strong>
+                엑셀 정산을 내부 예약 DB와 연결하는 기능의 초기 구현을 인수했습니다. 배포 전 요구사항을 반영하며 1,000줄이 넘는 파일의 조회·표·선택·편집·정산 처리를 나누고 타입·의존성을 정리했습니다.
+                ref·
+                <code>useImperativeHandle</code>
+                로 열던 모달은 대상 데이터와
+                <code>open</code>
+                ·
+                <code>onCancel</code>
+                을 props로 받게 바꿨습니다. 낙관적 갱신의 조회 취소·rollback을 보완하고 필터 유실·다중 선택 오류를 회귀 테스트로 확인했습니다(2026.04 – 현재).
+              </li>
+              <li>
+                <strong>검증·오류 처리:</strong>
+                기존 API 응답의 Zod 불일치는 트래킹하며 스키마를 맞추고, 잘못된 URL 필드는 기본값으로 되돌리며 결제 복원값은 버립니다. 독립적으로 복구할 기능마다 Error Boundary를 적용하고 백오피스
+                라우트 30개의 조회·화면 구성을 통일했습니다. API·렌더링 오류와 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.
+              </li>
+            </ul>
+            <p data-source-block="28">
+              <a href="https://jingeon27.tistory.com/11">예약 폼</a>
+              ·
+              <a href="https://jingeon27.tistory.com/26">공통화 기준</a>
+              ·
+              <a href="https://jingeon27.tistory.com/23">FSD 구조</a>
+              ·
+              <a href="https://jingeon27.tistory.com/32">Zod 검증</a>
+            </p>
+          </section>
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="29">
+              <span>Sentry 도입과 운영 오류 추적</span>
+              <span class="project-period">2026.08 – 현재</span>
+            </h4>
+            <p data-source-block="30">간헐적인 오류의 원인과 영향받은 사용자를 파악하려고 복지몰의 브라우저·서버·Edge에 Sentry를 도입했습니다. 8월 19일부터 구현해 27일 운영에 배포했습니다.</p>
+            <ul class="simple-list" data-source-block="31">
+              <li>
+                오류 레벨과 의미 없는 전송을 줄이는 차단 게이트를 정하고, 중복 전송·의료·인증 정보 전송을 막았습니다. release·브라우저 소스맵·MCP를 연결하고 Web Vitals의 LCP·FCP·TTFB 전송을 E2E로
+                확인했습니다.
+              </li>
+              <li>
+                Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적했습니다. 버전업에 따른 snap point 변경은 공통 Root에서 변환했습니다. 누적 75건·57명 이상이던 오류 그룹은 9월 10일 배포
+                뒤 28일까지 18일간 0건이었습니다.
+              </li>
+              <li>회원 조회가 실패하면 무조건 로그아웃하던 코드를 401일 때만 끊도록 바꿨습니다. 9월 23일 배포 뒤 28일까지 관련 CS·Sentry 이슈가 없었습니다.</li>
+            </ul>
+            <p data-source-block="32">
+              <a href="https://jingeon27.tistory.com/30">Sentry 도입</a>
+              ·
+              <a href="https://jingeon27.tistory.com/33">Bottom Sheet 크래시</a>
+            </p>
+          </section>
+          <section class="case case-primary">
+            <h4 class="project" data-source-block="33">
+              <span>테스트 도입</span>
+              <span class="project-period">2026.07 – 현재</span>
+            </h4>
+            <p data-source-block="34">7월부터 예약·프로그램 관리·정산에 테스트를 도입하고 기능 개발·운영 오류 대응을 거치며 기준을 보완했습니다.</p>
+            <ul class="simple-list" data-source-block="35">
+              <li>
+                함수·스키마는 Vitest, UI·폼은 React Testing Library, 브라우저 흐름은 Playwright로 확인합니다. dev API 서버를 우선하고 만들기 어려운 조건은 MSW로 재현합니다. 실제 Drawer를 열어 제출하고
+                기대 요청값은 제품의 변환 함수를 쓰지 않고 작성합니다.
+              </li>
+              <li>
+                새 기능의 기대 동작은 BDD 형식의
+                <code>*.spec.{ts,tsx}</code>
+                , 운영·QA 오류와 console warning은
+                <code>*.test.{ts,tsx}</code>
+                로 구분합니다. 컴포넌트별 명세 누락을 검토하고, 새 패턴은 제품 코드를 일부러 깨뜨려 테스트가 실패하는지도 확인합니다.
+              </li>
+              <li>9월에는 병원 관리자 등록 → 백오피스 검수중·반려·승인을 두 앱에 걸쳐 확인하는 E2E를 추가했습니다. 기대한 최종 상태를 구현 완료의 검증 조건으로 사용합니다.</li>
+            </ul>
+            <p data-source-block="36"><a href="https://jingeon27.tistory.com/25">테스트 코드를 도입하면서 세운 기준</a></p>
+          </section>
+          <section class="case case-supporting">
+            <h4 class="project" data-source-block="42">
+              <span>기술 선택과 전환</span>
+              <span class="project-period">2025.10 – 현재</span>
+            </h4>
+            <ul class="simple-list" data-source-block="43">
+              <li>
+                <strong>UI 조합:</strong>
+                Headless UI에서 Radix UI로 옮겨 공통 UI의 조합 유연성과 접근성 primitive를 활용했습니다. 기존 props·이벤트·열림 상태를 바꾸는 비용을 감수하고 ref 전달·포커스 동작을 확인했습니다.
+                Bottom Sheet의 기반 라이브러리는 유지했습니다.
+              </li>
+              <li>
+                <strong>개발 속도:</strong>
+                Turbopack과 Next.js 16의 로컬 개발 속도 개선을 위해 Next.js 14→16·React 18→19로 전환했습니다. 비동기 API·캐시 변경에 대응하고 직접 진입·뒤로가기·새로고침을 확인했습니다. 별도로
+                TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
+              </li>
+              <li>
+                <strong>브라우저 호환성:</strong>
+                Tailwind v4 전환 전 2026년 8월 27일~10월 1일 Amplitude로 지원 여부를 확인했습니다. 하루 평균 약 1,000명 중
+                <code>color-mix()</code>
+                미지원은 하루 1명꼴(평균 0.94명),
+                <code>@property</code>
+                미지원은 없었습니다. 전환을 보류하는 것도 검토했지만
+                <a href="https://tailwindcss.com/blog/tailwindcss-v4-1#improved-compatibility-with-older-browsers">v4.1의 색상 fallback</a>
+                을 확인해 진행했습니다.
+              </li>
+            </ul>
+          </section>
+        </div>
+        <footer class="page-footer">
+          <span>
+            03
+            <span class="page-total">/ 04</span>
+          </span>
+        </footer>
+      </article>
+      <article class="sheet sheet-supporting" id="page-4" aria-label="4쪽 · AI 개발 · 실험 참여 · 왓타임">
+        <div class="page-content">
+          <section class="case case-supporting">
+            <h4 class="project" data-source-block="37">
+              <span>AI 개발 workflow</span>
+              <span class="project-period">2026.04 – 현재</span>
+            </h4>
+            <p data-source-block="38">
+              4월부터 Compound Engineering 방식으로 skills를 보완하고 FSD·lint rule을 저장소에 맞게 바꿨습니다. 반복해서 어긋나는 구현과 검토 기준을 남기며 에이전트에 맡기는 범위를 넓혔습니다.
+            </p>
+            <p class="workflow" data-source-block="39">
+              티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 직접 diff 리뷰·화면을 띄워 동작 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청
+            </p>
+            <ul class="simple-list" data-source-block="40">
+              <li>
+                Jira·Figma에서 빠진 동작과 사용성 의견을 담당자와 맞추고, 작업별로 PR까지 한 번에 맡길지 plan·완료 결과를 확인할지 정합니다. 에이전트가 제출한 완성본의 코드·테스트를 읽고 부족하면
+                반려합니다. critical 자동 수정 결과도 검토하며, 문제가 나오면 앞 단계로 돌아갑니다.
+              </li>
+              <li>
+                반복되는 판단은 skills·lint rule에 남기고 미사용 코드는 Knip으로 확인합니다. 슬라이스 내부 파일을 직접 참조하던 위반 271건을 정리했습니다. lint rule은 RuleTester·
+                <code>__fixture__</code>
+                ·mock으로 검증합니다.
+              </li>
+              <li>병렬 worktree의 CPU 부하를 줄이려고 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행합니다. 전체 검사는 CI에서 확인합니다.</li>
+            </ul>
+            <p data-source-block="41"><a href="https://jingeon27.tistory.com/31">AI 개발 workflow 개선</a></p>
+          </section>
+          <section class="case case-supporting">
+            <h4 class="project" data-source-block="44">
+              <span>사용자 행동 측정과 실험 참여</span>
+              <span class="project-period">2025.07 – 현재</span>
+            </h4>
+            <p data-source-block="45">
+              Amplitude 기반 A/B 테스트 환경을 구축하고 검색·상세·예약·쿠폰 이벤트 140개 이상을 새로 붙이거나 고쳤습니다. 담당자가 정한 실험의 화면 구현과 진입 위치·선택·이탈 측정을 맡았습니다.
+            </p>
+            <ul class="simple-list" data-source-block="46">
+              <li>
+                <strong>소속인증 바이패스 링크 (2025.09 – 12):</strong>
+                유입 사용자의 이탈을 줄이려고 로그인 전에 홈을 둘러보게 한 실험에 참여했습니다. 저는 진입·인증 처리를 개선했고 랜딩 변경·원복은 동료가 맡았습니다. 팀의 전후 비교에서 가입 전환율은
+                26.3%→10.6%였으며, 12월 31일 로그인 랜딩으로 돌아갔습니다.
+              </li>
+              <li>
+                <strong>전화상담 (2026.06 – 07):</strong>
+                플랫폼화 전 개인별 전화상담을 제공하던 방식을 복지몰에서 시도했습니다. 진입점과 클릭 위치 측정을 구현했습니다. 실험 결과가 좋지 않아 종료된 뒤 7월 27일 코드를 정리하고 채팅상담으로
+                되돌렸습니다.
+              </li>
+              <li>
+                <strong>룰렛 (이벤트: 2026.08.04 – 08.11):</strong>
+                진료과 선택·룰렛·당첨·쿠폰함·예약·공유 흐름과 이벤트 7개를 구현했습니다. 종료 후 페이지 방문 이벤트로 방문 사용자가 없다고 판단해 10월 7일 코드를 제거했습니다.
+              </li>
+              <li>가입 UTM 유실은 Amplitude의 unexpected 속성을 expected로 바꾸면 해결되는 것을 찾아 PO에게 공유했습니다. 먼저 추가했던 저장 코드는 운영 배포 전에 되돌렸습니다.</li>
+            </ul>
+          </section>
+          <section class="case case-supporting">
+            <h4 class="project" data-source-block="47"><span>WebView와 글로벌 서비스</span></h4>
+            <ul class="simple-list" data-source-block="48">
+              <li>
+                <strong>WebView (2026.06 – 09):</strong>
+                열리지 않던
+                <code>tel:</code>
+                상담 버튼을 기존 네이티브 브릿지로 연결했습니다. 외부 예약 이동에서는 뒤로 가기가 WebView 전체를 닫는 문제를 배포 전에 확인해, 외부 링크 열기와 웹 내부 뒤로 가기를 구분했습니다.
+              </li>
+              <li>
+                <strong>글로벌 서비스·CMS (2026.07 – 현재):</strong>
+                PO의 프로토타입을 모두 구현해 3주 안에 PoC로 배포했습니다. Next.js·TanStack Query·shadcn/ui·Base UI로 구성하고 영어·한국어·아랍어·RTL을 적용했습니다. 빠진 입력 유지·실패 안내·완료 후
+                이동도 보완했습니다.
+              </li>
+            </ul>
+          </section>
+          <h3 data-source-block="49">왓타임 | 2024.01 – 2024.11</h3>
+          <p data-source-block="50">
+            채용 SaaS RoundHR이 시장성을 확인하며 기능을 늘리던 시점에 합류했습니다. 개발자·디자이너와 협업해 pnpm·Turborepo 모노레포의 채용 관리·채용 담당자용 웹, 라운지·랜딩과 Electron 앱을
+            개발했습니다.
+          </p>
+          <ul class="simple-list" data-source-block="51">
+            <li>채용 페이지·지원서 설정, 메일·면접 알림 템플릿, 채용 단계 자동화, 평가 템플릿·척도를 개발했습니다. 채용 담당자용 웹에는 서류·면접 평가와 온보딩 안내를 추가했습니다.</li>
+            <li>
+              면접 입력은 시간·장소·참여자·메일의 네 단계로 나눠
+              <code>useFunnel</code>
+              로 이동·검증하고,
+              <code>sessionStorage</code>
+              로 이탈 후에도 이어 작성하게 했습니다. 라운지·랜딩의 가이드·모바일 화면과 Notion·Strapi 콘텐츠 연동도 맡았습니다.
+            </li>
+            <li>
+              앱별 Query key·조회 함수를 공용 패키지로 모으고 mutation마다 갱신 대상을 정했습니다. 드래그 컴포넌트는 공고 순서·중첩 필터 트리·설정 테이블에서 공유하고 클릭·드래그 충돌을 조정했습니다.
+            </li>
+            <li>
+              채용 사이트 로그인 → 지원자 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 Electron 초기 구조를 설계하고 잡플래닛·게임잡을 연동했습니다. NestJS는 무겁다는 CTO 피드백을
+              받아 닷새 만에 제거하고, 모듈 구분·생성자 주입은 참고해 factory에서 조립했습니다. 이후 동료가 상당 부분을 다시 작성했으며 제 역할은 초기 구조와 사이트 연동입니다. 기존 Sentry 오류 수집의
+              레벨도 구분했습니다.
+            </li>
+          </ul>
+          <p data-source-block="52">
+            <a href="https://jingeon27.tistory.com/5">Electron 구조 변경</a>
+            ·
+            <a href="https://jingeon27.tistory.com/6">Query key 공통화</a>
+          </p>
+          <h2 data-source-block="55">학력</h2>
+          <ul class="simple-list" data-source-block="56">
+            <li>대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</li>
+          </ul>
+        </div>
+        <footer class="page-footer">
+          <span>
+            04
+            <span class="page-total">/ 04</span>
+          </span>
+        </footer>
+      </article>
+    </main>
+    <script>
+      document.getElementById('print-button').addEventListener('click', () => window.print());
+    </script>
+  </body>
 </html>
