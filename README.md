@@ -30,6 +30,6 @@ node scripts/build-lessons-preview.mjs
 node scripts/build-moim-preview.mjs
 ```
 
-[모임 초안](resumes/daangn/resume-daangn-moin-draft.md)을 읽어 [HTML 미리보기](resumes/daangn/resume-daangn-moim-preview.html)를 만듭니다. 원문의 내용과 순서를 유지하고 A4 페이지로 나눕니다. 공통 인쇄 스타일은 `templates/resume-print.css`, 모임 전용 스타일은 `templates/resume-moim-print.css`에서 관리합니다.
+[모임 초안2](resumes/daangn/resume-daangn-moim-draft2.md)를 읽어 [HTML 미리보기](resumes/daangn/resume-daangn-moim-preview.html)를 만듭니다. 본문은 보존하고 기술 목록을 지원동기 뒤로 옮겨 A4 페이지로 나눕니다. 공통 인쇄 스타일은 `templates/resume-print.css`, 모임 전용 스타일은 `templates/resume-moim-print.css`에서 관리합니다.
 
-소개 바로 뒤에 지원동기를 배치한 6쪽 미리보기입니다. HTML의 `PDF로 저장` 버튼을 누르고 A4·배율 100%·여백 없음으로 저장합니다. 브라우저 머리글과 바닥글은 끕니다. 초안을 수정했다면 위 명령으로 HTML도 다시 생성합니다.
+소개·지원동기·기술·경력 순으로 시작하는 5쪽 미리보기입니다. 사용자 경험·건강검진·SSR·타입 설계·운영 안정성 사례는 더 눈에 띄게 배치했습니다. HTML의 `PDF로 저장` 버튼을 누르고 A4·배율 100%·여백 없음으로 저장합니다. 브라우저 머리글과 바닥글은 끕니다. 초안2를 수정했다면 위 명령으로 HTML도 다시 생성합니다.

@@ -22,6 +22,21 @@ p { margin-bottom: 8px; }
 }
 .simple-list li:last-child { margin-bottom: 0; }
 .service-note { margin-bottom: 12px; }
+.case { margin-top: 17px; }
+.case:first-child { margin-top: 0; }
+.case .project { margin-top: 0; }
+.case-primary .project { font-size: 16px; }
+.case-supporting .project { font-size: 13.5px; }
+.case-supporting { margin-top: 14px; }
+.case > p:last-child:has(a) { font-size: 11px; margin-bottom: 0; }
+.type-design {
+  border-left: 2px solid var(--accent);
+  padding: 6px 10px !important;
+  background: #f4f6f7;
+}
+.type-design::before { display: none; }
+.page-content > .case:first-child .project { margin-top: 0; }
+.sheet-supporting { font-size: 12.5px; line-height: 1.5; }
 .career-table {
   width: 100%;
   margin: 15px 0 0;
@@ -55,6 +70,7 @@ nav { gap: 18px; }
 @media screen and (max-width: 840px) {
   body { line-height: 1.7; }
   .sheet { height: auto; padding: 28px 24px 20px; }
+  .sheet-supporting { font-size: 14px; line-height: 1.7; }
   .skills li { grid-template-columns: 1fr; gap: 0; margin-bottom: 9px; }
   .career-table { font-size: 11px; }
   .career-table th:first-child, .career-table td:first-child { width: 52px; }

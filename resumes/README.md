@@ -7,7 +7,7 @@
 | 챌린저스 | [이력서](challengers/resume-challengers.md) |
 | 채널톡 | [이력서](channeltalk/resume-channeltalk.md) |
 | 코르카 | [이력서](corca/resume-corca-design-engineer.md) |
-| 당근 | [동네탐험가](daangn/resume-daangn-explorer.md) · [레슨/과외 초안](daangn/resume-daangn-lessons-draft.md) · [레슨/과외 HTML](daangn/resume-daangn-lessons-preview.html) · [레슨/과외](daangn/resume-daangn-lessons.md) · [모임](daangn/resume-daangn-moim.md) · [모임 plan 적용 초안](daangn/resume-daangn-moin-draft.md) · [모임 HTML](daangn/resume-daangn-moim-preview.html) · [모임 커버레터](daangn/cover-letter-daangn-moim.md) · [기본](daangn/resume-daangn.md) · [커머스](daangn/resume-danggn-commerce.md) |
+| 당근 | [동네탐험가](daangn/resume-daangn-explorer.md) · [레슨/과외 초안](daangn/resume-daangn-lessons-draft.md) · [레슨/과외 HTML](daangn/resume-daangn-lessons-preview.html) · [레슨/과외](daangn/resume-daangn-lessons.md) · [모임](daangn/resume-daangn-moim.md) · [모임 plan 적용 초안](daangn/resume-daangn-moin-draft.md) · [모임 초안2](daangn/resume-daangn-moim-draft2.md) · [모임 HTML](daangn/resume-daangn-moim-preview.html) · [모임 커버레터](daangn/cover-letter-daangn-moim.md) · [기본](daangn/resume-daangn.md) · [커머스](daangn/resume-danggn-commerce.md) |
 | 데일리펀딩 | [이력서](dailyfunding/resume-dailyfunding.md) |
 | 딥브레인AI | [이력서](deepbrain-ai/resume-deepbrain-ai.md) |
 | 엘리스 | [이력서](elice/resume-elice-frontend.md) · [지원서](elice/application-elice-frontend.md) |

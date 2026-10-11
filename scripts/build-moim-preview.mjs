@@ -1,11 +1,11 @@
 // 사용: node scripts/build-moim-preview.mjs
-// 모임 지원 이력서의 내용과 순서를 유지하는 A4 HTML 미리보기.
+// 모임 지원 이력서 초안2의 본문을 보존하는 A4 HTML 미리보기.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceName = 'resumes/daangn/resume-daangn-moin-draft.md';
+const sourceName = 'resumes/daangn/resume-daangn-moim-draft2.md';
 const outputName = 'resumes/daangn/resume-daangn-moim-preview.html';
 const source = readFileSync(resolve(root, sourceName), 'utf8');
 const css = ['templates/resume-print.css', 'templates/resume-moim-print.css']
@@ -51,24 +51,42 @@ const blocks = source.trim().split(/\n\s*\n/).map((raw, id) => {
 });
 
 const plans = [
-  { label: '소개와 지원동기', short: '소개·지원동기', start: '김진건' },
-  { label: '세이프닥 · 건강검진과 사용자 경험', short: '사용성 개선', start: '주요 프로젝트' },
-  { label: '세이프닥 · 실험과 SSR', short: '실험·SSR', start: 'A/B 테스트 환경 구축과 실험 참여' },
-  { label: '세이프닥 · 상태 관리와 구조 개선', short: '구조 개선', start: '예약 폼의 상태 관리 개선' },
-  { label: '세이프닥 · 운영·테스트·AI 개발', short: '운영·AI 개발', start: 'Sentry 도입과 운영 오류 추적' },
-  { label: '기술 선택 · 왓타임 · 기술', short: '기술·왓타임', start: 'UI 기술 선택과 전환' },
+  { label: '소개 · 지원동기 · 기술 · 경력', short: '소개·경력', start: '김진건' },
+  { label: '사용자 경험 · 건강검진', short: '사용성 개선', start: '주요 프로젝트' },
+  { label: 'SSR · 타입 설계 · 구조 개선', short: 'SSR·구조', start: 'CSR·SSR 범위와 데이터 조회 설계' },
+  { label: '운영 안정성 · 테스트 · AI 개발', short: '운영·AI', start: 'Sentry 도입과 운영 오류 추적' },
+  { label: '기술 선택 · 실험 참여 · 왓타임', short: '기타 경험', start: '기술 선택과 전환', supporting: true },
+];
+
+// 기술 목록만 지원동기 뒤로 이동하고 프로젝트 본문 순서는 유지한다.
+const technologyStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '기술');
+const educationStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '학력');
+const careerStart = blocks.findIndex((block) => block.kind === 'heading' && block.text === '경력 요약');
+if (careerStart < 0 || technologyStart <= careerStart || educationStart <= technologyStart) {
+  throw new Error('소개·기술·경력 구성을 확인하세요.');
+}
+const layoutBlocks = [
+  ...blocks.slice(0, careerStart),
+  ...blocks.slice(technologyStart, educationStart),
+  ...blocks.slice(careerStart, technologyStart),
+  ...blocks.slice(educationStart),
 ];
 
 const titleOf = (block) => block.level === 4 ? block.text.split(' | ')[0] : block.text;
 const starts = plans.map(({ start, kind = 'heading' }) => {
-  const matches = blocks.filter((block) => block.kind === kind
+  const matches = layoutBlocks.filter((block) => block.kind === kind
     && (kind !== 'heading' || titleOf(block) === start));
   if (matches.length !== 1) throw new Error(`페이지 시작 제목을 확인하세요: ${start}`);
-  return matches[0].id;
+  return layoutBlocks.indexOf(matches[0]);
 });
 if (starts[0] !== 0 || starts.some((start, index) => index > 0 && start <= starts[index - 1])) {
   throw new Error('페이지 구성이 원문의 순서와 다릅니다.');
 }
+
+const primaryCases = new Set([
+  '모바일 리뷰 작성 개선', '건강검진 서비스 내재화', 'CSR·SSR 범위와 데이터 조회 설계',
+  '코드 구조와 기술부채 개선', 'Sentry 도입과 운영 오류 추적', '테스트 도입',
+]);
 
 function renderBlock(block, section) {
   const attr = `data-source-block="${block.id}"`;
@@ -89,7 +107,8 @@ function renderBlock(block, section) {
         const match = item.match(/^\*\*([^*]+)\*\* (.+)$/);
         if (match) return `<li><strong>${escape(match[1])}</strong><span>${inline(match[2])}</span></li>`;
       }
-      return `<li>${inline(item)}</li>`;
+      const emphasis = item.includes('createTypedForm<T>') ? ' class="type-design"' : '';
+      return `<li${emphasis}>${inline(item)}</li>`;
     });
     return `<ul class="${className}" ${attr}>${items.join('\n')}</ul>`;
   }
@@ -100,12 +119,23 @@ function renderBlock(block, section) {
 
 let currentSection = '';
 const sheets = plans.map((plan, index) => {
-  const contents = blocks.slice(starts[index], starts[index + 1] ?? blocks.length).map((block) => {
+  let caseOpen = false;
+  let contents = '';
+  for (const block of layoutBlocks.slice(starts[index], starts[index + 1] ?? layoutBlocks.length)) {
+    if (block.kind === 'heading' && block.level <= 4 && caseOpen) {
+      contents += '</section>\n';
+      caseOpen = false;
+    }
     if (block.kind === 'heading' && block.level === 2) currentSection = block.text;
-    return renderBlock(block, currentSection);
-  }).join('\n');
+    if (block.kind === 'heading' && block.level === 4) {
+      contents += `<section class="case ${primaryCases.has(titleOf(block)) ? 'case-primary' : 'case-supporting'}">\n`;
+      caseOpen = true;
+    }
+    contents += `${renderBlock(block, currentSection)}\n`;
+  }
+  if (caseOpen) contents += '</section>\n';
   const number = String(index + 1).padStart(2, '0');
-  return `<article class="sheet${index === 0 ? ' sheet-cover' : ''}" id="page-${index + 1}" aria-label="${index + 1}쪽 · ${plan.label}">
+  return `<article class="sheet${index === 0 ? ' sheet-cover' : ''}${plan.supporting ? ' sheet-supporting' : ''}" id="page-${index + 1}" aria-label="${index + 1}쪽 · ${plan.label}">
   <div class="page-content">${contents}</div>
   <footer class="page-footer"><span>${number} <span class="page-total">/ ${String(plans.length).padStart(2, '0')}</span></span></footer>
 </article>`;
@@ -141,8 +171,10 @@ const html = `<!doctype html>
 `;
 
 const renderedBlockIds = [...html.matchAll(/data-source-block="(\d+)"/g)].map((match) => Number(match[1]));
-if (renderedBlockIds.length !== blocks.length || renderedBlockIds.some((id, index) => id !== index)) {
-  throw new Error('원문에서 빠졌거나 순서가 바뀐 블록이 있습니다.');
+if (renderedBlockIds.length !== blocks.length
+  || renderedBlockIds.some((id, index) => id !== layoutBlocks[index].id)
+  || new Set(renderedBlockIds).size !== blocks.length) {
+  throw new Error('원문에서 빠졌거나 중복된 블록이 있습니다.');
 }
 const sourceLinks = [...source.matchAll(/\[[^\]]+\]\((https?:\/\/[^\s)]+)\)/g)].map((match) => match[1]);
 for (const link of sourceLinks) {
