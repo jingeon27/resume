@@ -247,7 +247,7 @@ p { margin-bottom: 8px; }
   font-weight: 600;
 }
 .career-table td { padding: 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
-.career-table th:first-child, .career-table td:first-child { padding-left: 0; width: 65px; }
+.career-table th:first-child, .career-table td:first-child { padding-left: 10px; width: 65px; }
 .career-table th:nth-child(2), .career-table td:nth-child(2) { width: 133px; white-space: nowrap; }
 .career-table th:last-child, .career-table td:last-child { padding-right: 0; }
 .workflow {
@@ -303,8 +303,8 @@ nav { gap: 18px; }
 <p data-source-block="5">요구사항에서 빠진 동작은 담당자와 논의하고, 기술을 선택할 때는 이점과 전환·유지 비용을 함께 살핍니다. AI 개발 workflow로 빠르게 작업하면서 코드와 테스트를 먼저 읽고, 화면을 띄워 동작을 확인합니다. 반복되는 판단은 skills와 lint rule에 남깁니다.</p>
 <h2 data-source-block="6">지원동기</h2>
 <p data-source-block="7">중학교 때 게임 커뮤니티에서 가까운 지역에 살던 사람들을 알게 돼 정모로 만났고, 몇몇과는 지금도 연락하며 지냅니다. 같은 관심사를 가진 이웃과 오래 관계를 이어 온 경험이 특별해, 당근모임에서 더 많은 사람이 이런 만남을 시작하도록 돕고 싶습니다. 직접 모임에 참여하고 사용자 의견을 반영하는 팀에서, 제가 만든 변화가 모임 참여와 이후 활동에 미치는 영향을 동료들과 확인하고 싶습니다. 제품을 개선하면서 AI 개발 workflow와 SSR 서버 운영 경험도 넓히고 싶습니다.</p>
-<h2 data-source-block="52">기술</h2>
-<ul class="skills" data-source-block="53"><li><strong>Frontend:</strong><span>JavaScript, TypeScript, React 19, Next.js 16 (App Router), Electron</span></li>
+<h2 data-source-block="53">기술</h2>
+<ul class="skills" data-source-block="54"><li><strong>Frontend:</strong><span>JavaScript, TypeScript, React 19, Next.js 16 (App Router), Electron</span></li>
 <li><strong>State &amp; Form:</strong><span>TanStack Query, Zustand, React Hook Form, Zod</span></li>
 <li><strong>UI:</strong><span>Radix UI, Base UI, shadcn/ui, Ant Design, Tailwind CSS, overlay-kit</span></li>
 <li><strong>Testing:</strong><span>Vitest, React Testing Library, MSW, Playwright</span></li>
@@ -328,105 +328,106 @@ nav { gap: 18px; }
 <h3 data-source-block="12">세이프닥</h3>
 <p data-source-block="13">제휴 병원의 비급여 프로그램을 예약하는 B2B2C 서비스입니다. 기업 제휴와 마케팅으로 사용자가 들어오며, <a href="https://safedoc.io/">복지몰</a>의 가입 회원은 약 15만 명, 주간 활성 사용자는 약 1만 명입니다. 예약·리뷰·검색을 갖춘 MVP 출시 초기에 합류했고, 2026년 1월부터 사내 유일한 프론트엔드 개발자이며 4월부터 전사 프론트엔드 개발·운영을 단독으로 담당합니다.</p>
 <section class="case case-primary">
-<h4 class="project" data-source-block="14"><span>모바일 리뷰 작성 UX 의견</span><span class="project-period">2025.06</span></h4>
-<p data-source-block="15">모바일로 리뷰를 작성하다 키패드가 시술 목록을 가리고, 하나를 고르면 목록이 닫혀 복수 선택이 불편하며, 고른 항목도 잘 보이지 않는 문제를 발견했습니다. 2025년 6월 Jira에 정리해 PO에게 공유했습니다.</p>
-</section>
-<section class="case case-primary">
-<h4 class="project" data-source-block="16"><span>건강검진 서비스 내재화</span><span class="project-period">2026.09 – 현재</span></h4>
-<p data-source-block="17">건강검진은 아임웹에서 정보를 보고 전화로 문의하던 흐름이었고, 기존 서비스에서는 검진 프로그램과 예약을 관리하기 어려웠습니다. 제휴 병원의 요청으로 세 제품의 프론트엔드를 맡아 9월 9일부터 개발했고, 30일 정식 오픈했습니다.</p>
-<ul class="simple-list" data-source-block="18"><li><strong>백오피스:</strong> 검사항목·필수·선택 검사 구성, 기업지원 코드·서류 확인, 결제내역·결제취소·환불 승인을 추가했습니다.</li>
+<h4 class="project" data-source-block="14"><span>건강검진 서비스 내재화</span><span class="project-period">2026.09 – 현재</span></h4>
+<p data-source-block="15">건강검진은 아임웹에서 정보를 보고 전화로 문의하던 흐름이었고, 기존 서비스에서는 검진 프로그램과 예약을 관리하기 어려웠습니다. 제휴 병원의 요청으로 세 제품의 프론트엔드를 맡아 9월 9일부터 개발했고, 30일 정식 오픈했습니다.</p>
+<ul class="simple-list" data-source-block="16"><li><strong>백오피스:</strong> 검사항목·필수·선택 검사 구성, 기업지원 코드·서류 확인, 결제내역·결제취소·환불 승인을 추가했습니다.</li>
 <li><strong>병원 관리자:</strong> 검진 프로그램 조회·예약 관리를 추가했습니다. 건강검진만 운영하는 병원에는 기존 등록·검수 메뉴를 숨기고, 직접 처리할 수 없는 예약금 결제취소는 요청 접수로 안내했습니다.</li>
 <li><strong>복지몰:</strong> 프로그램 상세·예약 신청·상세에 검사 선택, 기업 검진 코드와 토스페이먼츠 예약금 결제를 연결했습니다. 사용자 부담금과 기업지원 내용을 구분해 보여줬습니다.</li>
 <li>선택을 마치면 다음 그룹으로 자동 이동하자는 요청에 대해, 기존 선택을 수정할 때도 화면이 이동하는 불편을 짚었습니다. 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화하고, 빠진 disabled 디자인도 요청해 반영했습니다.</li>
 <li>결제 입력은 <code>orderId</code>와 함께 <code>sessionStorage</code>에 저장하고, 같은 주문이며 Zod 검증을 통과한 값만 한 번 복원합니다. 결제창 실패 후 입력 복원과 승인 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다. 일괄 저장 뒤에는 서버가 발급한 ID를 폼에 반영해 중복 등록을 막았습니다.</li>
 <li>검진 구성 수정이 거절됐을 때 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값도 dev API 서버에서 확인하며 맞췄습니다.</li></ul>
-<p data-source-block="19"><a href="https://jingeon27.tistory.com/34">건강검진 개발 과정</a></p>
+<p data-source-block="17"><a href="https://jingeon27.tistory.com/34">건강검진 개발 과정</a></p>
+</section>
+<section class="case case-primary">
+<h4 class="project" data-source-block="18"><span>모바일 리뷰 작성 개선</span><span class="project-period">2025.06 – 07</span></h4>
+<p data-source-block="19">모바일로 리뷰를 작성하다 키패드가 시술 목록을 가리고, 하나를 고르면 목록이 닫혀 복수 선택이 불편하며, 고른 항목도 잘 보이지 않는 문제를 발견했습니다. 2025년 6월 Jira에 정리해 PO에게 공유했습니다.</p>
+<p data-source-block="20">기획·디자인 담당자가 정한 복수 선택·체크·chip UI를 구현해 7월 10일 배포했습니다. 여러 시술을 한 번에 고르고 선택한 항목을 확인할 수 있도록 개선했습니다.</p>
 </section>
 </div>
   <footer class="page-footer"><span>02 <span class="page-total">/ 05</span></span></footer>
 </article>
 <article class="sheet" id="page-3" aria-label="3쪽 · SSR · 타입 설계 · 구조 개선">
   <div class="page-content"><section class="case case-primary">
-<h4 class="project" data-source-block="20"><span>CSR·SSR 범위와 데이터 조회 설계</span><span class="project-period">2025.05 – 현재</span></h4>
-<p data-source-block="21">입사 당시에는 서버 컴포넌트의 <code>ensureQuery</code> 결과를 render props로 전달했습니다. 화면이 Query 캐시를 구독하지 않아 무효화해도 갱신되지 않았고, 조회 조건만 바꿀 때도 서버의 렌더링 결과를 다시 받아야 했습니다.</p>
-<p data-source-block="22">2025년 5월 예약 화면부터 prefetch·hydration으로 바꾸고 다른 화면으로 확대했습니다. 초기 HTML에 필요한 데이터는 서버가 준비하고, 화면은 <code>useQuery</code>·<code>useSuspenseQuery</code>로 같은 캐시를 구독해 이후 조회·갱신·무효화를 처리하도록 나눴습니다.</p>
-<ul class="simple-list" data-source-block="23"><li>관리자 검색 오류는 localhost의 <code>dev</code>에서 나타나지 않아 <code>build</code> 후 <code>start</code>로 재현했습니다. 목록 7개 중 6개에서 확인하고 라우터 캐시 이슈까지 추적했습니다. 서버가 검색 조건을 읽지 않는 화면의 같은 경로 조건 변경은 History API로 처리해 검색을 복구하고 불필요한 RSC 재요청을 줄였습니다. 수정 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.</li>
+<h4 class="project" data-source-block="21"><span>CSR·SSR 범위와 데이터 조회 설계</span><span class="project-period">2025.05 – 현재</span></h4>
+<p data-source-block="22">입사 당시에는 서버 컴포넌트의 <code>ensureQuery</code> 결과를 render props로 전달했습니다. 화면이 Query 캐시를 구독하지 않아 무효화해도 갱신되지 않았고, 조회 조건만 바꿀 때도 서버의 렌더링 결과를 다시 받아야 했습니다.</p>
+<p data-source-block="23">2025년 5월 예약 화면부터 prefetch·hydration으로 바꾸고 다른 화면으로 확대했습니다. 초기 HTML에 필요한 데이터는 서버가 준비하고, 화면은 <code>useQuery</code>·<code>useSuspenseQuery</code>로 같은 캐시를 구독해 이후 조회·갱신·무효화를 처리하도록 나눴습니다.</p>
+<ul class="simple-list" data-source-block="24"><li>관리자 검색 오류는 localhost의 <code>dev</code>에서 나타나지 않아 <code>build</code> 후 <code>start</code>로 재현했습니다. 목록 7개 중 6개에서 확인하고 라우터 캐시 이슈까지 추적했습니다. 서버가 검색 조건을 읽지 않는 화면의 같은 경로 조건 변경은 History API로 처리해 검색을 복구하고 불필요한 RSC 재요청을 줄였습니다. 수정 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.</li>
 <li>인증 후 리다이렉트에서 앱이 멈추는 오류는 조사 당시 68건·53명에게 발생했습니다. Next.js 소스에서 <code>AppRouter</code>가 훅 호출 도중 렌더를 끝내는 경로를 확인하고, 인증 확인·리다이렉트를 React 렌더링 전 proxy로 옮겼습니다.</li>
 <li>다른 서비스와 비교해 메타데이터·JSON-LD를 설계하고 병원·시술·인근 지하철역 정보를 반영했습니다. 정해진 값이 없을 때 직접 채워도 되는지 확인한 뒤 적용했습니다. Streaming 도입에 맞춰 일부 미리보기 봇에는 메타데이터를 <code>&lt;head&gt;</code>로 보내도록 설정했습니다.</li></ul>
-<p data-source-block="24"><a href="https://jingeon27.tistory.com/27">Next.js 검색 회귀 대응</a></p>
+<p data-source-block="25"><a href="https://jingeon27.tistory.com/27">Next.js 검색 회귀 대응</a></p>
 </section>
 <section class="case case-primary">
-<h4 class="project" data-source-block="25"><span>코드 구조와 기술부채 개선</span><span class="project-period">2025.06 – 현재</span></h4>
-<ul class="simple-list" data-source-block="26"><li><strong>예약 상태 관리:</strong> 날짜를 고른 뒤 가족을 추가하면 선택 일시가 어긋났습니다. Query 캐시·Zustand·로컬 상태에 나뉜 값의 역할을 정리해 서버 목록은 Query, 작성 중인 값은 RHF, 제출 검증은 Zod로 관리했습니다. 동기화 로직을 훅·하위 컴포넌트로 나눠 519줄이던 예약 대상 선택 컴포넌트를 55줄로 줄였습니다(2025.06).</li>
-<li><strong>선택 UI 구현:</strong> 기획·디자인 담당자가 정한 복수 선택·체크·chip UI를 구현해 2025년 7월 10일 배포했습니다. 이후 디자인 시스템 시안에 맞춰 Bottom Sheet를 적용하고 8월 7일 배포했습니다.</li>
+<h4 class="project" data-source-block="26"><span>코드 구조와 기술부채 개선</span><span class="project-period">2025.06 – 현재</span></h4>
+<ul class="simple-list" data-source-block="27"><li><strong>예약 상태 관리:</strong> 날짜를 고른 뒤 가족을 추가하면 선택 일시가 어긋났습니다. Query 캐시·Zustand·로컬 상태에 나뉜 값의 역할을 정리해 서버 목록은 Query, 작성 중인 값은 RHF, 제출 검증은 Zod로 관리했습니다. 동기화 로직을 훅·하위 컴포넌트로 나눠 519줄이던 예약 대상 선택 컴포넌트를 55줄로 줄였습니다(2025.06).</li>
+<li><strong>공통 UI 적용:</strong> 디자인 시스템 시안에 맞춰 Bottom Sheet를 적용해 2025년 8월 7일 배포했습니다.</li>
 <li><strong>공통 UI 리팩터링:</strong> <code>header</code>·<code>content</code>·<code>button</code>을 함수 인자로 받던 Bottom Sheet를 Compound Components와 overlay-kit으로 바꿨습니다. 본문과 하단 버튼이 같은 RHF 폼을 사용하고, 시트 안에서 고른 값은 ‘확인’을 눌러야 바깥 폼에 반영되도록 했습니다(2026.04).</li>
 <li class="type-design"><strong>검색·폼 표준화:</strong> 검색 화면 27개를 <code>createSearchFilter(schema)</code>로 전환해 URL·폼·조회 조건을 같은 스키마로 다뤘습니다. 화면별 JSX 반복은 감수하고 공통 렌더러에 예외 분기가 쌓이지 않도록 했습니다. Ant Design Form에는 재귀 조건부 타입과 <code>infer</code>를 쓰는 <code>createTypedForm&lt;T&gt;</code>를 만들어 중첩 필드명·값을 컴파일 단계에서 검사합니다.</li>
 <li><strong>FSD 기준 정리:</strong> 재사용할 것 같다는 이유로 <code>entities</code>에 두던 코드를 다시 구분했습니다. 서버 모델·API는 <code>features</code>, 화면별 조합은 <code>pages</code>, 도메인과 무관한 공용 UI는 <code>shared</code>로 정했습니다. 화면끼리 직접 참조하던 62건을 정리하고 새 위반은 lint error로 막았습니다(2026.09).</li>
 <li><strong>정산 리팩터링:</strong> 엑셀 정산을 내부 예약 DB와 연결하는 기능의 초기 구현을 인수했습니다. 배포 전 요구사항을 반영하며 1,000줄이 넘는 파일의 조회·표·선택·편집·정산 처리를 나누고 타입·의존성을 정리했습니다. ref·<code>useImperativeHandle</code>로 열던 모달은 대상 데이터와 <code>open</code>·<code>onCancel</code>을 props로 받게 바꿨습니다. 낙관적 갱신의 조회 취소·rollback을 보완하고 필터 유실·다중 선택 오류를 회귀 테스트로 확인했습니다(2026.04 – 현재).</li>
 <li><strong>검증·오류 처리:</strong> 기존 API 응답의 Zod 불일치는 트래킹하며 스키마를 맞추고, 잘못된 URL 필드는 기본값으로 되돌리며 결제 복원값은 버립니다. 독립적으로 복구할 기능마다 Error Boundary를 적용하고 백오피스 라우트 30개의 조회·화면 구성을 통일했습니다. API·렌더링 오류와 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.</li></ul>
-<p data-source-block="27"><a href="https://jingeon27.tistory.com/11">예약 폼</a> · <a href="https://jingeon27.tistory.com/26">공통화 기준</a> · <a href="https://jingeon27.tistory.com/23">FSD 구조</a> · <a href="https://jingeon27.tistory.com/32">Zod 검증</a></p>
+<p data-source-block="28"><a href="https://jingeon27.tistory.com/11">예약 폼</a> · <a href="https://jingeon27.tistory.com/26">공통화 기준</a> · <a href="https://jingeon27.tistory.com/23">FSD 구조</a> · <a href="https://jingeon27.tistory.com/32">Zod 검증</a></p>
 </section>
 </div>
   <footer class="page-footer"><span>03 <span class="page-total">/ 05</span></span></footer>
 </article>
 <article class="sheet" id="page-4" aria-label="4쪽 · 운영 안정성 · 테스트 · AI 개발">
   <div class="page-content"><section class="case case-primary">
-<h4 class="project" data-source-block="28"><span>Sentry 도입과 운영 오류 추적</span><span class="project-period">2026.08 – 현재</span></h4>
-<p data-source-block="29">간헐적인 오류의 원인과 영향받은 사용자를 파악하려고 복지몰의 브라우저·서버·Edge에 Sentry를 도입했습니다. 8월 19일부터 구현해 27일 운영에 배포했습니다.</p>
-<ul class="simple-list" data-source-block="30"><li>오류 레벨과 의미 없는 전송을 줄이는 차단 게이트를 정하고, 중복 전송·의료·인증 정보 전송을 막았습니다. release·브라우저 소스맵·MCP를 연결하고 Web Vitals의 LCP·FCP·TTFB 전송을 E2E로 확인했습니다.</li>
+<h4 class="project" data-source-block="29"><span>Sentry 도입과 운영 오류 추적</span><span class="project-period">2026.08 – 현재</span></h4>
+<p data-source-block="30">간헐적인 오류의 원인과 영향받은 사용자를 파악하려고 복지몰의 브라우저·서버·Edge에 Sentry를 도입했습니다. 8월 19일부터 구현해 27일 운영에 배포했습니다.</p>
+<ul class="simple-list" data-source-block="31"><li>오류 레벨과 의미 없는 전송을 줄이는 차단 게이트를 정하고, 중복 전송·의료·인증 정보 전송을 막았습니다. release·브라우저 소스맵·MCP를 연결하고 Web Vitals의 LCP·FCP·TTFB 전송을 E2E로 확인했습니다.</li>
 <li>Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적했습니다. 버전업에 따른 snap point 변경은 공통 Root에서 변환했습니다. 누적 75건·57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.</li>
 <li>회원 조회가 실패하면 무조건 로그아웃하던 코드를 401일 때만 끊도록 바꿨습니다. 9월 23일 배포 뒤 28일까지 관련 CS·Sentry 이슈가 없었습니다.</li></ul>
-<p data-source-block="31"><a href="https://jingeon27.tistory.com/30">Sentry 도입</a> · <a href="https://jingeon27.tistory.com/33">Bottom Sheet 크래시</a></p>
+<p data-source-block="32"><a href="https://jingeon27.tistory.com/30">Sentry 도입</a> · <a href="https://jingeon27.tistory.com/33">Bottom Sheet 크래시</a></p>
 </section>
 <section class="case case-primary">
-<h4 class="project" data-source-block="32"><span>테스트 도입</span><span class="project-period">2026.07 – 현재</span></h4>
-<p data-source-block="33">7월부터 예약·프로그램 관리·정산에 테스트를 도입하고 기능 개발·운영 오류 대응을 거치며 기준을 보완했습니다.</p>
-<ul class="simple-list" data-source-block="34"><li>함수·스키마는 Vitest, UI·폼은 React Testing Library, 브라우저 흐름은 Playwright로 확인합니다. dev API 서버를 우선하고 만들기 어려운 조건은 MSW로 재현합니다. 실제 Drawer를 열어 제출하고 기대 요청값은 제품의 변환 함수를 쓰지 않고 작성합니다.</li>
+<h4 class="project" data-source-block="33"><span>테스트 도입</span><span class="project-period">2026.07 – 현재</span></h4>
+<p data-source-block="34">7월부터 예약·프로그램 관리·정산에 테스트를 도입하고 기능 개발·운영 오류 대응을 거치며 기준을 보완했습니다.</p>
+<ul class="simple-list" data-source-block="35"><li>함수·스키마는 Vitest, UI·폼은 React Testing Library, 브라우저 흐름은 Playwright로 확인합니다. dev API 서버를 우선하고 만들기 어려운 조건은 MSW로 재현합니다. 실제 Drawer를 열어 제출하고 기대 요청값은 제품의 변환 함수를 쓰지 않고 작성합니다.</li>
 <li>새 기능의 기대 동작은 BDD 형식의 <code>*.spec.{ts,tsx}</code>, 운영·QA 오류와 console warning은 <code>*.test.{ts,tsx}</code>로 구분합니다. 컴포넌트별 명세 누락을 검토하고, 새 패턴은 제품 코드를 일부러 깨뜨려 테스트가 실패하는지도 확인합니다.</li>
 <li>9월에는 병원 관리자 등록 → 백오피스 검수중·반려·승인을 두 앱에 걸쳐 확인하는 E2E를 추가했습니다. 기대한 최종 상태를 구현 완료의 검증 조건으로 사용합니다.</li></ul>
-<p data-source-block="35"><a href="https://jingeon27.tistory.com/25">테스트 코드를 도입하면서 세운 기준</a></p>
+<p data-source-block="36"><a href="https://jingeon27.tistory.com/25">테스트 코드를 도입하면서 세운 기준</a></p>
 </section>
 <section class="case case-supporting">
-<h4 class="project" data-source-block="36"><span>AI 개발 workflow</span><span class="project-period">2026.04 – 현재</span></h4>
-<p data-source-block="37">4월부터 Compound Engineering 방식으로 skills를 보완하고 FSD·lint rule을 저장소에 맞게 바꿨습니다. 반복해서 어긋나는 구현과 검토 기준을 남기며 에이전트에 맡기는 범위를 넓혔습니다.</p>
-<p class="workflow" data-source-block="38">티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 직접 diff 리뷰·화면을 띄워 동작 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청</p>
-<ul class="simple-list" data-source-block="39"><li>Jira·Figma에서 빠진 동작과 사용성 의견을 담당자와 맞추고, 작업별로 PR까지 한 번에 맡길지 plan·완료 결과를 확인할지 정합니다. 에이전트가 제출한 완성본의 코드·테스트를 읽고 부족하면 반려합니다. critical 자동 수정 결과도 검토하며, 문제가 나오면 앞 단계로 돌아갑니다.</li>
+<h4 class="project" data-source-block="37"><span>AI 개발 workflow</span><span class="project-period">2026.04 – 현재</span></h4>
+<p data-source-block="38">4월부터 Compound Engineering 방식으로 skills를 보완하고 FSD·lint rule을 저장소에 맞게 바꿨습니다. 반복해서 어긋나는 구현과 검토 기준을 남기며 에이전트에 맡기는 범위를 넓혔습니다.</p>
+<p class="workflow" data-source-block="39">티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 직접 diff 리뷰·화면을 띄워 동작 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청</p>
+<ul class="simple-list" data-source-block="40"><li>Jira·Figma에서 빠진 동작과 사용성 의견을 담당자와 맞추고, 작업별로 PR까지 한 번에 맡길지 plan·완료 결과를 확인할지 정합니다. 에이전트가 제출한 완성본의 코드·테스트를 읽고 부족하면 반려합니다. critical 자동 수정 결과도 검토하며, 문제가 나오면 앞 단계로 돌아갑니다.</li>
 <li>반복되는 판단은 skills·lint rule에 남기고 미사용 코드는 Knip으로 확인합니다. 슬라이스 내부 파일을 직접 참조하던 위반 271건을 정리했습니다. lint rule은 RuleTester·<code>__fixture__</code>·mock으로 검증합니다.</li>
 <li>병렬 worktree의 CPU 부하를 줄이려고 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행합니다. 전체 검사는 CI에서 확인합니다.</li></ul>
-<p data-source-block="40"><a href="https://jingeon27.tistory.com/31">AI 개발 workflow 개선</a></p>
+<p data-source-block="41"><a href="https://jingeon27.tistory.com/31">AI 개발 workflow 개선</a></p>
 </section>
 </div>
   <footer class="page-footer"><span>04 <span class="page-total">/ 05</span></span></footer>
 </article>
 <article class="sheet sheet-supporting" id="page-5" aria-label="5쪽 · 기술 선택 · 실험 참여 · 왓타임">
   <div class="page-content"><section class="case case-supporting">
-<h4 class="project" data-source-block="41"><span>기술 선택과 전환</span><span class="project-period">2025.10 – 현재</span></h4>
-<ul class="simple-list" data-source-block="42"><li><strong>UI 조합:</strong> Headless UI에서 Radix UI로 옮겨 공통 UI의 조합 유연성과 접근성 primitive를 활용했습니다. 기존 props·이벤트·열림 상태를 바꾸는 비용을 감수하고 ref 전달·포커스 동작을 확인했습니다. Bottom Sheet의 기반 라이브러리는 유지했습니다.</li>
+<h4 class="project" data-source-block="42"><span>기술 선택과 전환</span><span class="project-period">2025.10 – 현재</span></h4>
+<ul class="simple-list" data-source-block="43"><li><strong>UI 조합:</strong> Headless UI에서 Radix UI로 옮겨 공통 UI의 조합 유연성과 접근성 primitive를 활용했습니다. 기존 props·이벤트·열림 상태를 바꾸는 비용을 감수하고 ref 전달·포커스 동작을 확인했습니다. Bottom Sheet의 기반 라이브러리는 유지했습니다.</li>
 <li><strong>개발 속도:</strong> Turbopack과 Next.js 16의 로컬 개발 속도 개선을 위해 Next.js 14→16·React 18→19로 전환했습니다. 비동기 API·캐시 변경에 대응하고 직접 진입·뒤로가기·새로고침을 확인했습니다. 별도로 TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.</li>
 <li><strong>브라우저 호환성:</strong> Tailwind v4 전환 전 2026년 8월 27일~10월 1일 Amplitude로 지원 여부를 확인했습니다. 하루 평균 약 1,000명 중 <code>color-mix()</code> 미지원은 하루 1명꼴(평균 0.94명), <code>@property</code> 미지원은 없었습니다. 전환을 보류하는 것도 검토했지만 <a href="https://tailwindcss.com/blog/tailwindcss-v4-1#improved-compatibility-with-older-browsers">v4.1의 색상 fallback</a>을 확인해 진행했습니다.</li></ul>
 </section>
 <section class="case case-supporting">
-<h4 class="project" data-source-block="43"><span>사용자 행동 측정과 실험 참여</span><span class="project-period">2025.07 – 현재</span></h4>
-<p data-source-block="44">Amplitude 기반 A/B 테스트 환경을 구축하고 검색·상세·예약·쿠폰 이벤트 140개 이상을 새로 붙이거나 고쳤습니다. 담당자가 정한 실험의 화면 구현과 진입 위치·선택·이탈 측정을 맡았습니다.</p>
-<ul class="simple-list" data-source-block="45"><li><strong>소속인증 바이패스 링크 (2025.09 – 12):</strong> 유입 사용자의 이탈을 줄이려고 로그인 전에 홈을 둘러보게 한 실험에 참여했습니다. 저는 진입·인증 처리를 개선했고 랜딩 변경·원복은 동료가 맡았습니다. 팀의 전후 비교에서 가입 전환율은 26.3%→10.6%였으며, 12월 31일 로그인 랜딩으로 돌아갔습니다.</li>
+<h4 class="project" data-source-block="44"><span>사용자 행동 측정과 실험 참여</span><span class="project-period">2025.07 – 현재</span></h4>
+<p data-source-block="45">Amplitude 기반 A/B 테스트 환경을 구축하고 검색·상세·예약·쿠폰 이벤트 140개 이상을 새로 붙이거나 고쳤습니다. 담당자가 정한 실험의 화면 구현과 진입 위치·선택·이탈 측정을 맡았습니다.</p>
+<ul class="simple-list" data-source-block="46"><li><strong>소속인증 바이패스 링크 (2025.09 – 12):</strong> 유입 사용자의 이탈을 줄이려고 로그인 전에 홈을 둘러보게 한 실험에 참여했습니다. 저는 진입·인증 처리를 개선했고 랜딩 변경·원복은 동료가 맡았습니다. 팀의 전후 비교에서 가입 전환율은 26.3%→10.6%였으며, 12월 31일 로그인 랜딩으로 돌아갔습니다.</li>
 <li><strong>전화상담 (2026.06 – 07):</strong> 플랫폼화 전 개인별 전화상담을 제공하던 방식을 복지몰에서 시도했습니다. 진입점과 클릭 위치 측정을 구현했습니다. 실험 결과가 좋지 않아 종료된 뒤 7월 27일 코드를 정리하고 채팅상담으로 되돌렸습니다.</li>
 <li><strong>룰렛 (이벤트: 2026.08.04 – 08.11):</strong> 진료과 선택·룰렛·당첨·쿠폰함·예약·공유 흐름과 이벤트 7개를 구현했습니다. 종료 후 페이지 방문 이벤트로 방문 사용자가 없다고 판단해 10월 7일 코드를 제거했습니다.</li>
 <li>가입 UTM 유실은 Amplitude의 unexpected 속성을 expected로 바꾸면 해결되는 것을 찾아 PO에게 공유했습니다. 먼저 추가했던 저장 코드는 운영 배포 전에 되돌렸습니다.</li></ul>
 </section>
 <section class="case case-supporting">
-<h4 class="project" data-source-block="46"><span>WebView와 글로벌 서비스</span></h4>
-<ul class="simple-list" data-source-block="47"><li><strong>WebView (2026.06 – 09):</strong> 열리지 않던 <code>tel:</code> 상담 버튼을 기존 네이티브 브릿지로 연결했습니다. 외부 예약 이동에서는 뒤로 가기가 WebView 전체를 닫는 문제를 배포 전에 확인해, 외부 링크 열기와 웹 내부 뒤로 가기를 구분했습니다.</li>
+<h4 class="project" data-source-block="47"><span>WebView와 글로벌 서비스</span></h4>
+<ul class="simple-list" data-source-block="48"><li><strong>WebView (2026.06 – 09):</strong> 열리지 않던 <code>tel:</code> 상담 버튼을 기존 네이티브 브릿지로 연결했습니다. 외부 예약 이동에서는 뒤로 가기가 WebView 전체를 닫는 문제를 배포 전에 확인해, 외부 링크 열기와 웹 내부 뒤로 가기를 구분했습니다.</li>
 <li><strong>글로벌 서비스·CMS (2026.07 – 현재):</strong> PO의 프로토타입을 모두 구현해 3주 안에 PoC로 배포했습니다. Next.js·TanStack Query·shadcn/ui·Base UI로 구성하고 영어·한국어·아랍어·RTL을 적용했습니다. 빠진 입력 유지·실패 안내·완료 후 이동도 보완했습니다.</li></ul>
 </section>
-<h3 data-source-block="48">왓타임 | 2024.01 – 2024.11</h3>
-<p data-source-block="49">채용 SaaS RoundHR이 시장성을 확인하며 기능을 늘리던 시점에 합류했습니다. 개발자·디자이너와 협업해 pnpm·Turborepo 모노레포의 채용 관리·채용 담당자용 웹, 라운지·랜딩과 Electron 앱을 개발했습니다.</p>
-<ul class="simple-list" data-source-block="50"><li>채용 페이지·지원서 설정, 메일·면접 알림 템플릿, 채용 단계 자동화, 평가 템플릿·척도를 개발했습니다. 채용 담당자용 웹에는 서류·면접 평가와 온보딩 안내를 추가했습니다.</li>
+<h3 data-source-block="49">왓타임 | 2024.01 – 2024.11</h3>
+<p data-source-block="50">채용 SaaS RoundHR이 시장성을 확인하며 기능을 늘리던 시점에 합류했습니다. 개발자·디자이너와 협업해 pnpm·Turborepo 모노레포의 채용 관리·채용 담당자용 웹, 라운지·랜딩과 Electron 앱을 개발했습니다.</p>
+<ul class="simple-list" data-source-block="51"><li>채용 페이지·지원서 설정, 메일·면접 알림 템플릿, 채용 단계 자동화, 평가 템플릿·척도를 개발했습니다. 채용 담당자용 웹에는 서류·면접 평가와 온보딩 안내를 추가했습니다.</li>
 <li>면접 입력은 시간·장소·참여자·메일의 네 단계로 나눠 <code>useFunnel</code>로 이동·검증하고, <code>sessionStorage</code>로 이탈 후에도 이어 작성하게 했습니다. 라운지·랜딩의 가이드·모바일 화면과 Notion·Strapi 콘텐츠 연동도 맡았습니다.</li>
 <li>앱별 Query key·조회 함수를 공용 패키지로 모으고 mutation마다 갱신 대상을 정했습니다. 드래그 컴포넌트는 공고 순서·중첩 필터 트리·설정 테이블에서 공유하고 클릭·드래그 충돌을 조정했습니다.</li>
 <li>채용 사이트 로그인 → 지원자 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 Electron 초기 구조를 설계하고 잡플래닛·게임잡을 연동했습니다. NestJS는 무겁다는 CTO 피드백을 받아 닷새 만에 제거하고, 모듈 구분·생성자 주입은 참고해 factory에서 조립했습니다. 이후 동료가 상당 부분을 다시 작성했으며 제 역할은 초기 구조와 사이트 연동입니다. 기존 Sentry 오류 수집의 레벨도 구분했습니다.</li></ul>
-<p data-source-block="51"><a href="https://jingeon27.tistory.com/5">Electron 구조 변경</a> · <a href="https://jingeon27.tistory.com/6">Query key 공통화</a></p>
-<h2 data-source-block="54">학력</h2>
-<ul class="simple-list" data-source-block="55"><li>대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</li></ul>
+<p data-source-block="52"><a href="https://jingeon27.tistory.com/5">Electron 구조 변경</a> · <a href="https://jingeon27.tistory.com/6">Query key 공통화</a></p>
+<h2 data-source-block="55">학력</h2>
+<ul class="simple-list" data-source-block="56"><li>대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</li></ul>
 </div>
   <footer class="page-footer"><span>05 <span class="page-total">/ 05</span></span></footer>
 </article></main>

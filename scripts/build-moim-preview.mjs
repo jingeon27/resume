@@ -84,7 +84,7 @@ if (starts[0] !== 0 || starts.some((start, index) => index > 0 && start <= start
 }
 
 const primaryCases = new Set([
-  '모바일 리뷰 작성 UX 의견', '건강검진 서비스 내재화', 'CSR·SSR 범위와 데이터 조회 설계',
+  '모바일 리뷰 작성 개선', '건강검진 서비스 내재화', 'CSR·SSR 범위와 데이터 조회 설계',
   '코드 구조와 기술부채 개선', 'Sentry 도입과 운영 오류 추적', '테스트 도입',
 ]);
 
