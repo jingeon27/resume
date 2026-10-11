@@ -7,7 +7,7 @@ h2 { margin-top: 16px; margin-bottom: 8px; }
 h3 { margin-top: 12px; margin-bottom: 9px; }
 h4 { margin-top: 14px; margin-bottom: 7px; }
 p { margin-bottom: 8px; }
-.skills li { grid-template-columns: 150px 1fr; }
+.skills li { grid-template-columns: 150px 1fr; margin-bottom: 3px; }
 .simple-list { margin-bottom: 10px; }
 .simple-list li { position: relative; padding-left: 11px; margin-bottom: 5px; }
 .simple-list li::before {

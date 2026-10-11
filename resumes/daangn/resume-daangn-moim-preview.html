@@ -201,7 +201,7 @@ h2 { margin-top: 16px; margin-bottom: 8px; }
 h3 { margin-top: 12px; margin-bottom: 9px; }
 h4 { margin-top: 14px; margin-bottom: 7px; }
 p { margin-bottom: 8px; }
-.skills li { grid-template-columns: 150px 1fr; }
+.skills li { grid-template-columns: 150px 1fr; margin-bottom: 3px; }
 .simple-list { margin-bottom: 10px; }
 .simple-list li { position: relative; padding-left: 11px; margin-bottom: 5px; }
 .simple-list li::before {
@@ -356,7 +356,7 @@ nav { gap: 18px; }
 <ul class="simple-list" data-source-block="47"><li>검색 화면 27개를 <code>createSearchFilter(schema)</code>로 바꿨습니다. JSX가 일부 반복되더라도 화면별 예외를 공통 컴포넌트에 넣지 않고 필요한 필터를 조합합니다. URL·폼·API 조회 조건은 같은 Zod 스키마를 사용하고 타입은 <code>z.infer</code>로 만듭니다.</li>
 <li>Ant Design Form의 중첩 필드명을 검사하는 <code>createTypedForm&lt;T&gt;</code>를 만들었습니다. 재귀 조건부 타입과 <code>infer</code>로 유효한 경로·값을 계산해 <code>name</code>·<code>getFieldValue</code>·<code>setFieldValue</code>·<code>useWatch</code>에 적용했습니다. 잘못된 대입은 컴파일 단계에서 막고 조회·구독 값은 경로에 맞게 추론합니다. 단언은 래퍼 내부에만 뒀습니다.</li>
 <li>Zod 실패는 출처별로 처리합니다. 기존 API 응답은 불일치를 Sentry로 트래킹하고 원본을 통과시키며 스키마를 맞춥니다. URL은 잘못된 필드만 기본값으로 되돌리고, 결제 복원값은 검증에 실패하면 버립니다. 운영에서만 나온 null 응답도 추적해 스키마를 고쳤습니다.</li>
-<li>독립적으로 복구할 수 있는 기능마다 Error Boundary를 적용했습니다. 백오피스 라우트 30개의 조회·화면 구성을 같은 패턴으로 맞추고 재시도를 테스트했습니다.</li></ul>
+<li>독립적으로 복구할 수 있는 기능마다 Error Boundary를 적용했습니다. 백오피스 라우트 30개의 조회·화면 구성을 같은 패턴으로 맞추고 재시도를 테스트했습니다. API·렌더링 오류와 Zod 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.</li></ul>
 <p data-source-block="48"><a href="https://jingeon27.tistory.com/26">공통화 기준</a> · <a href="https://jingeon27.tistory.com/32">Zod 검증 경계</a></p>
 <h4 class="project" data-source-block="49"><span>복지몰·관리자 서비스의 FSD 구조 정리</span><span class="project-period">2026.09</span></h4>
 <p data-source-block="50">여러 기능에서 재사용할 것 같다는 이유로 <code>entities</code>에 코드를 두다 보니 <code>features</code>와의 구분이 모호했습니다. 서버 모델·API와 연결된 코드는 <code>features</code>, 화면별 조합은 <code>pages</code>, 도메인과 무관한 공용 UI는 <code>shared</code>로 기준을 다시 정했습니다. 복지몰에서 화면끼리 직접 참조하던 62건을 정리하고 새 위반은 lint error로 막았습니다. 파일을 옮기는 작업과 함께 의존 방향을 검사해 같은 구조가 다시 생기지 않도록 했습니다.</p>
@@ -416,7 +416,8 @@ nav { gap: 18px; }
 <li><strong>State &amp; Form:</strong><span>TanStack Query, Zustand, React Hook Form, Zod</span></li>
 <li><strong>UI:</strong><span>Radix UI, Base UI, shadcn/ui, Ant Design, Tailwind CSS, overlay-kit</span></li>
 <li><strong>Testing:</strong><span>Vitest, React Testing Library, MSW, Playwright</span></li>
-<li><strong>Monitoring &amp; Analytics:</strong><span>Sentry, Amplitude</span></li>
+<li><strong>Monitoring &amp; Logging:</strong><span>Sentry, AWS CloudWatch</span></li>
+<li><strong>Analytics:</strong><span>Amplitude</span></li>
 <li><strong>Tooling:</strong><span>pnpm, Turborepo, Turbopack, ESLint, Knip</span></li>
 <li><strong>AI:</strong><span>Claude Code, Codex</span></li></ul>
 <h2 data-source-block="84">학력</h2>

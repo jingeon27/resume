@@ -116,7 +116,7 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - 검색 화면 27개를 `createSearchFilter(schema)`로 바꿨습니다. JSX가 일부 반복되더라도 화면별 예외를 공통 컴포넌트에 넣지 않고 필요한 필터를 조합합니다. URL·폼·API 조회 조건은 같은 Zod 스키마를 사용하고 타입은 `z.infer`로 만듭니다.
 - Ant Design Form의 중첩 필드명을 검사하는 `createTypedForm<T>`를 만들었습니다. 재귀 조건부 타입과 `infer`로 유효한 경로·값을 계산해 `name`·`getFieldValue`·`setFieldValue`·`useWatch`에 적용했습니다. 잘못된 대입은 컴파일 단계에서 막고 조회·구독 값은 경로에 맞게 추론합니다. 단언은 래퍼 내부에만 뒀습니다.
 - Zod 실패는 출처별로 처리합니다. 기존 API 응답은 불일치를 Sentry로 트래킹하고 원본을 통과시키며 스키마를 맞춥니다. URL은 잘못된 필드만 기본값으로 되돌리고, 결제 복원값은 검증에 실패하면 버립니다. 운영에서만 나온 null 응답도 추적해 스키마를 고쳤습니다.
-- 독립적으로 복구할 수 있는 기능마다 Error Boundary를 적용했습니다. 백오피스 라우트 30개의 조회·화면 구성을 같은 패턴으로 맞추고 재시도를 테스트했습니다.
+- 독립적으로 복구할 수 있는 기능마다 Error Boundary를 적용했습니다. 백오피스 라우트 30개의 조회·화면 구성을 같은 패턴으로 맞추고 재시도를 테스트했습니다. API·렌더링 오류와 Zod 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.
 
 [공통화 기준](https://jingeon27.tistory.com/26) · [Zod 검증 경계](https://jingeon27.tistory.com/32)
 
@@ -206,7 +206,8 @@ NestJS는 Electron main 프로세스에 무겁다는 CTO 피드백을 받아 닷
 - **State & Form:** TanStack Query, Zustand, React Hook Form, Zod
 - **UI:** Radix UI, Base UI, shadcn/ui, Ant Design, Tailwind CSS, overlay-kit
 - **Testing:** Vitest, React Testing Library, MSW, Playwright
-- **Monitoring & Analytics:** Sentry, Amplitude
+- **Monitoring & Logging:** Sentry, AWS CloudWatch
+- **Analytics:** Amplitude
 - **Tooling:** pnpm, Turborepo, Turbopack, ESLint, Knip
 - **AI:** Claude Code, Codex
 
