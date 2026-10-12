@@ -108,15 +108,15 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 
 [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
 
-#### AI 개발 workflow와 기술 선택 | 2026.04 – 현재
+#### AI 개발 workflow와 개발 환경 개선
 
-에이전트가 의도와 다르게 구현하면 코드만 고치지 않고 skills와 lint rule에 기준을 남겼습니다. 반복되는 검토 내용을 반영하며 파일 배치·상태 관리·공통 코드 사용과 테스트 방식을 계속 보완했습니다.
+2026년 4월부터 에이전트로 구현하며, 의도와 어긋난 부분은 코드만 고치지 않고 skills와 lint rule에 기준을 남겼습니다. 반복되는 검토 내용을 반영하며 파일 배치·상태 관리·공통 코드 사용과 테스트 방식을 계속 보완했습니다.
 
 티켓·plan 검토 → 테스트 작성 → 에이전트 구현·에이전트 코드 리뷰 → 변경분 테스트·lint·typecheck → 직접 diff 리뷰·화면을 띄워 동작 확인 → 전체 CI(테스트·knip·lint) → QA 더블 체크 요청
 
 - 완성본의 코드와 테스트를 읽고 부족한 부분은 반려한 뒤 수정본을 확인합니다. critical 자동 수정 결과도 검토하며, 문제가 나오면 앞 단계로 돌아갑니다. lint rule은 RuleTester·`__fixture__`·mock으로 검증하고 Knip으로 미사용 코드를 검사합니다.
 - 병렬 worktree의 CPU 부하 때문에 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행하고, 전체 검사는 CI에서 확인합니다. 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
-- 별도로 TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 **12.5초에서 1.9초**로 줄였습니다. Next.js 14→16·React 18→19 전환은 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 고려해 진행하고, 비동기 API·캐시 변경과 직접 진입·뒤로가기·새로고침을 확인했습니다.
+- 별도로 TypeScript 7 네이티브 체커를 병행해 복지몰의 타입 검사 시간을 **12.5초에서 1.9초**로 줄였습니다. Next.js 14→16·React 18→19 전환은 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 고려해 진행했습니다. 비동기 API·캐시 변경에 맞춰 코드를 수정하고 직접 진입·뒤로가기·새로고침을 확인했습니다.
 
 [AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
 
