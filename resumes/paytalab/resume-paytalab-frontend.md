@@ -56,7 +56,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 
 채용 SaaS RoundHR에서 프론트엔드·백엔드 개발자, 디자이너와 협업했습니다. pnpm·Turborepo 모노레포의 채용 관리 웹·채용 담당자용 웹·랜딩과 Electron 수집 앱을 개발했습니다.
 
-- 채용 페이지·지원서 설정, 알림 템플릿, 채용 단계 자동화·평가·온보딩 기능을 개발했습니다. 면접 템플릿은 `useFunnel`로 단계별 이동·검증하고 작성 내용을 복원했습니다. 랜딩·모바일 화면과 Notion·Strapi 콘텐츠 연동도 맡았습니다.
+- 채용 페이지·지원서 설정, 알림 템플릿, 채용 단계 자동화·평가·온보딩 기능을 개발했습니다. 랜딩·모바일 화면과 Notion·Strapi 콘텐츠 연동도 맡았습니다.
 - 앱별 Query key·조회 함수를 공용 패키지로 모으고, dnd-kit 공통 컴포넌트를 채용 공고·중첩 필터 트리·설정 테이블에 적용했습니다. Electron 수집 앱의 공통 단계·사이트별 adapter 초기 구조를 설계하고 잡플래닛·게임잡을 연동했습니다.
 
 ## 기술
