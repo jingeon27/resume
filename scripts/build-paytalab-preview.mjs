@@ -1,4 +1,4 @@
-// 사용: node scripts/build-paytalab-preview.mjs [resume|career] [--pdf]
+// 사용: node scripts/build-paytalab-preview.mjs [--pdf]
 // 회사별 Markdown의 본문·링크를 보존해 A4 HTML과 제출용 PDF를 생성한다.
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -8,27 +8,17 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const folder = 'resumes/paytalab';
-const documents = [
-  {
-    id: 'resume', name: '이력서', source: 'resume-paytalab-frontend.md', output: 'resume-paytalab-preview.html',
-    pdf: '김진건_페이타랩_이력서.pdf',
-    plans: [
-      { start: '김진건', label: '소개 · 제품 개발', short: '소개·제품 개발' },
-      { start: '조회 구조·성능·운영 오류 대응', label: '기술 · 협업 · 지원동기', short: '기술·지원동기' },
-    ],
-  },
-  {
-    id: 'career', name: '경력기술서', source: 'career-paytalab-frontend.md', output: 'career-paytalab-preview.html',
-    pdf: '김진건_페이타랩_경력기술서.pdf',
-    plans: [
-      { start: '김진건 경력기술서', label: '제품 흐름 · 모바일 · 백오피스', short: '제품·모바일·운영' },
-      { start: '데이터 조회 전환과 네트워크 요청', label: '조회 · 운영 오류 · 웹 성능', short: '조회·오류·성능' },
-      { start: '테스트 도입과 AI 개발 workflow', label: '테스트 · 공통 코드 · 왓타임', short: '테스트·공통 코드' },
-    ],
-  },
-];
-const selected = process.argv.slice(2).find((arg) => !arg.startsWith('--'));
-if (selected && !documents.some((doc) => doc.id === selected)) throw new Error('문서는 resume 또는 career입니다.');
+const document = {
+  id: 'resume', name: '이력서', source: 'resume-paytalab-frontend.md', output: 'resume-paytalab-preview.html',
+  pdf: '김진건_페이타랩_이력서.pdf',
+  plans: [
+    { start: '김진건', label: '소개 · 제품 흐름 · 모바일 · 백오피스', short: '소개·제품 개발' },
+    { start: '데이터 조회 전환과 검색 회귀 대응', label: '조회 · 운영 오류 · 성능 · 공통 코드', short: '조회·오류·성능' },
+    { start: '테스트 도입과 AI 개발 workflow', label: '테스트 · 협업 · 기술 · 지원동기', short: '테스트·협업' },
+  ],
+};
+const unknown = process.argv.slice(2).filter((arg) => !['resume', '--pdf'].includes(arg));
+if (unknown.length) throw new Error(`지원하지 않는 인자: ${unknown.join(', ')}`);
 const css = ['templates/resume-print.css', 'templates/resume-paytalab-print.css']
   .map((file) => readFileSync(resolve(root, file), 'utf8')).join('\n');
 const escape = (text) => text.replace(/[&<>"']/g, (character) => ({
@@ -117,7 +107,7 @@ function build(doc) {
 <title>김진건 | 페이타랩 ${doc.name}</title><style>${css}</style></head><body>
 <a class="skip-link" href="#resume">본문으로 이동</a>
 <div class="preview-controls"><div class="toolbar"><div class="preview-title"><strong>김진건 <span>${doc.name} 미리보기</span></strong><small>A4 · ${doc.plans.length}쪽</small></div>
-<div class="document-links">${documents.filter((other) => other.id !== doc.id).map((other) => `<a href="${other.output}">${other.name}</a>`).join('')}<button type="button" id="print-button">PDF로 저장</button></div></div>
+<button type="button" id="print-button">PDF로 저장</button></div>
 <div class="navigation-row"><nav aria-label="문서 페이지">${doc.plans.map((plan, index) => `<a href="#page-${index + 1}">${plan.short}</a>`).join('')}</nav>
 <details class="print-help"><summary>인쇄 설정</summary><p>대상: PDF로 저장<br>용지: A4 · 배율: 100%<br>여백: 없음<br>머리글·바닥글: 끄기</p></details></div></div>
 <main id="resume">${sheets.join('\n')}</main><script>document.getElementById('print-button').addEventListener('click', () => window.print());</script></body></html>\n`;
@@ -138,4 +128,4 @@ function build(doc) {
     } finally { rmSync(profile, { recursive: true, force: true }); }
   }
 }
-for (const doc of documents.filter((doc) => !selected || doc.id === selected)) build(doc);
+build(document);
