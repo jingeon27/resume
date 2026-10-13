@@ -4,10 +4,9 @@
 
 ## 제출 파일
 
-- [이력서 PDF](김진건_페이타랩_이력서.pdf): 2쪽. 담당 제품·역할과 대표 경험, 기술, 지원동기.
-- [경력기술서 PDF](김진건_페이타랩_경력기술서.pdf): 3쪽. 실제 문제, 본인 판단·구현, 협업, 검증 결과.
+- [이력서 PDF](김진건_페이타랩_이력서.pdf): 3쪽. 소개·담당 제품·역할, 경력 상세와 기술적 판단·협업·검증 결과, 기술·지원동기·학력을 한 문서에 담았습니다.
 
-원문은 [이력서](resume-paytalab-frontend.md)와 [경력기술서](career-paytalab-frontend.md)입니다. [이력서 HTML](resume-paytalab-preview.html)과 [경력기술서 HTML](career-paytalab-preview.html)에서도 확인할 수 있습니다.
+원문은 [이력서](resume-paytalab-frontend.md)이며, [HTML 미리보기](resume-paytalab-preview.html)에서도 확인할 수 있습니다. 경력기술서로 분리했던 상세 내용을 이력서 본문에 통합했습니다.
 
 ## 공고와 연결한 경험
 
@@ -41,6 +40,6 @@ node scripts/build-paytalab-preview.mjs
 node scripts/build-paytalab-preview.mjs --pdf
 ```
 
-문서를 하나만 갱신하려면 `resume` 또는 `career`를 지정합니다. PDF 생성은 기본적으로 macOS Google Chrome을 사용하며, 다른 환경은 `CHROME_BIN`으로 경로를 지정합니다. PDF는 기존 저장소 정책에 따라 Git에서 제외되므로 원문·HTML·생성 스크립트를 관리합니다.
+PDF 생성은 기본적으로 macOS Google Chrome을 사용하며, 다른 환경은 `CHROME_BIN`으로 경로를 지정합니다. PDF는 기존 저장소 정책에 따라 Git에서 제외되므로 원문·HTML·생성 스크립트를 관리합니다.
 
-A4·10pt로 이력서 2쪽과 경력기술서 3쪽을 확인했습니다. Markdown의 모든 본문 블록이 PDF에도 존재하는지 대조했고, 링크·쪽 수·인쇄 영역과 모바일 HTML의 가로 폭을 점검했습니다.
+A4·10pt로 이력서 3쪽을 확인했습니다. Markdown의 본문 블록 54개와 외부 링크 16개·이메일 링크가 PDF에 모두 존재하는지 대조했고, 본문·쪽 번호가 겹치지 않는지와 모바일 HTML의 가로 폭을 점검했습니다.
