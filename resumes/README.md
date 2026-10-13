@@ -16,6 +16,6 @@
 | 리멤버 | [Frontend Engineer](remember/resume-remember-frontend.md) |
 | 마인드로직 | [이력서](mindlogic/resume-mindlogic.md) |
 | 파트리지시스템즈 | [이력서](partridge-systems/resume-partridge-systems.md) |
-| 페이타랩(패스오더) | [Web Frontend](paytalab/resume-paytalab-frontend.md) · [Web Frontend HTML](paytalab/resume-paytalab-preview.html) |
+| 페이타랩(패스오더) | [제출 안내](paytalab/README.md) · [이력서](paytalab/resume-paytalab-frontend.md) · [이력서 HTML](paytalab/resume-paytalab-preview.html) · [경력기술서](paytalab/career-paytalab-frontend.md) · [경력기술서 HTML](paytalab/career-paytalab-preview.html) |
 | 사이오닉AI | [이력서](sionic-ai/resume-sionic-ai.md) |
 | 뤼튼 | [AX Frontend](wrtn/resume-wrtn-ax-frontend.md) · [Frontend](wrtn/resume-wrtn-frontend.md) |
