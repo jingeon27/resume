@@ -1,0 +1,52 @@
+/* 페이타랩 문서 전용. 공통 및 다른 회사의 미리보기 스타일은 유지한다. */
+body { font-size: 12.5px; line-height: 1.48; }
+.sheet { height: 297mm; min-height: 297mm; padding: 11mm 14mm 10mm; }
+.page-content { min-height: 0; }
+h1 { font-size: 31px; margin-bottom: 5px; }
+h2 { margin: 17px 0 8px; font-size: 14px; }
+h3 { margin: 15px 0 7px; font-size: 16px; }
+h4 { margin: 0 0 6px; font-size: 14px; }
+p { margin-bottom: 7px; }
+.contact { font-size: 10.5px; margin-bottom: 6px; }
+.role-note { padding-bottom: 10px; margin-bottom: 12px; font-size: 10.5px; }
+.case { margin-top: 13px; }
+.case:first-child { margin-top: 0; }
+.case > p:last-child:has(a) { font-size: 10.5px; margin-bottom: 0; }
+.project { gap: 9px; }
+.project-period { font-size: 10px; }
+.simple-list { margin-bottom: 7px; }
+.simple-list li { position: relative; padding-left: 10px; margin-bottom: 4px; }
+.simple-list li::before { content: ''; position: absolute; top: .65em; left: 0; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
+.highlights { padding: 10px 12px; margin-bottom: 12px; background: #f5f8fa; border-left: 2px solid var(--accent); }
+.highlights li { margin-bottom: 5px; }
+.highlights li:last-child { margin-bottom: 0; }
+.skills { font-size: 10.5px; }
+.skills li { grid-template-columns: 141px 1fr; gap: 6px; margin-bottom: 2px; }
+.skills strong { font-size: 10px; }
+.workflow { margin: 7px 0; padding: 7px 10px; background: #f5f8fa; border-left: 2px solid var(--accent); font-size: 11px; line-height: 1.6; }
+.page-footer { margin-top: 12px; font-size: 9px; }
+.page-footer > span:last-child { font-size: 10px; }
+.sheet-career h1 { font-size: 27px; }
+.navigation-row nav { min-width: 0; flex: 1; gap: 20px; }
+.document-links { display: flex; align-items: center; gap: 10px; font-size: 11px; }
+.document-links a { text-decoration: none; }
+
+@media screen and (max-width: 840px) {
+  body { font-size: 14px; line-height: 1.7; }
+  .sheet { height: auto; min-height: 0; padding: 28px 23px 20px; }
+  .project { flex-wrap: wrap; gap: 3px; }
+  .skills { font-size: 12px; }
+  .skills li { grid-template-columns: 1fr; gap: 0; margin-bottom: 6px; }
+  .skills strong { font-size: 11px; }
+  .toolbar { gap: 10px; flex-wrap: wrap; padding: 12px 0; }
+  .preview-title strong span { display: none; }
+  .document-links { gap: 8px; }
+  .workflow { font-size: 12px; }
+}
+
+@media print {
+  .sheet { height: 297mm; min-height: 297mm; }
+  .case { break-inside: avoid; }
+  .workflow { break-inside: avoid; }
+  .simple-list li, .highlights li { break-inside: avoid; }
+}
