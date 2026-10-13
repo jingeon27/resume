@@ -26,10 +26,7 @@ p { margin-bottom: 7px; }
 .workflow { margin: 7px 0; padding: 7px 10px; background: #f5f8fa; border-left: 2px solid var(--accent); font-size: 11px; line-height: 1.6; }
 .page-footer { margin-top: 12px; font-size: 9px; }
 .page-footer > span:last-child { font-size: 10px; }
-.sheet-career h1 { font-size: 27px; }
 .navigation-row nav { min-width: 0; flex: 1; gap: 20px; }
-.document-links { display: flex; align-items: center; gap: 10px; font-size: 11px; }
-.document-links a { text-decoration: none; }
 
 @media screen and (max-width: 840px) {
   body { font-size: 14px; line-height: 1.7; }
@@ -40,7 +37,6 @@ p { margin-bottom: 7px; }
   .skills strong { font-size: 11px; }
   .toolbar { gap: 10px; flex-wrap: wrap; padding: 12px 0; }
   .preview-title strong span { display: none; }
-  .document-links { gap: 8px; }
   .workflow { font-size: 12px; }
 }
 
