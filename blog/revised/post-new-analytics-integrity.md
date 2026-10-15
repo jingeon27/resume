@@ -2,7 +2,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>복지몰에서 UTM이 남지 않거나 클릭이 겹쳐 기록되는 문제를 고쳤어요. 계측을 바로잡은 경험과 퍼널을 직접 열어 본 경험에서 출발해, Amplitude 생성 메뉴의 차트·대시보드·코호트·기능 플래그·실험이 각각 어디에 쓰이는지 정리했어요. 제품 실험의 가설과 판단은 디자인팀·PM·PO가 맡았고, 저는 구현과 계측에 참여했어요. 뒤의 메뉴 설명과 실험 예시는 공식 문서를 바탕으로 정리한 내용이며, 모두 직접 운영했다는 뜻은 아니에요. 코드의 컴포넌트·쿠키·클릭 이벤트 이름은 공개용 가명이에요.</p>
+  <p>복지몰에서 UTM이 남지 않거나 클릭이 겹쳐 기록되는 문제를 고쳤어요. 계측을 바로잡은 경험과 퍼널을 직접 열어 본 경험에서 출발해, Amplitude 생성 메뉴의 차트, 대시보드, 코호트, 기능 플래그, 실험이 각각 어디에 쓰이는지 정리했어요. 제품 실험의 가설과 판단은 디자인팀, PM, PO가 맡았고, 저는 구현과 계측에 참여했어요. 뒤의 메뉴 설명과 실험 예시는 공식 문서를 바탕으로 정리한 내용이며, 모두 직접 운영했다는 뜻은 아니에요. 코드의 컴포넌트, 쿠키, 클릭 이벤트 이름은 공개용 가명이에요.</p>
 </div>
 
 행동 이벤트를 붙이는 코드는 대개 한 줄이에요. 클릭 핸들러 옆에서 전송 함수를 하나 더 부르면 되니까요. 그래서 이벤트가 틀리게 찍혀도 코드만 봐서는 잘 드러나지 않았어요.
@@ -30,7 +30,7 @@
 
 ## 버튼을 되살리다 카드 클릭까지 함께 찍었어요
 
-앞서 운영에 나간 상세 개편에서, 파트너 상세 화면의 프로그램 카드에 있던 예약·상담 버튼이 빠졌어요. 그 뒤 PO 결정으로 이 버튼을 다시 넣었는데요. 카드에는 이미 카드 클릭 이벤트가 붙어 있었어요.
+앞서 운영에 나간 상세 개편에서, 파트너 상세 화면의 프로그램 카드에 있던 예약과 상담 버튼이 빠졌어요. 그 뒤 PO 결정으로 이 버튼을 다시 넣었는데요. 카드에는 이미 카드 클릭 이벤트가 붙어 있었어요.
 
 이 카드의 클릭 계측 래퍼는 Radix `Slot`으로 만든 컴포넌트예요. 감싸는 요소를 새로 만들지 않고, 자식 요소의 `onClick`에 전송 핸들러를 병합해요. 그러니 카드 안 버튼의 클릭이 카드 요소까지 버블링되면 카드 클릭 이벤트도 찍혀요.
 
@@ -103,7 +103,7 @@ useEffect(() => {
 }, [isInitialized, userInfo, loginDoneCookie]);
 ```
 
-순서에는 이유가 있어요. 초기화 전에 쿠키를 지우면 이벤트는 나가지 못하고 표식만 사라져요. 회원 정보까지 기다리는 건 이벤트에 회원 id를 싣기 위해서예요. 쿠키는 클라이언트가 읽고 지워야 해서 httpOnly를 붙이지 않았고, SDK를 켜지 않는 로컬·개발 환경에서는 아무도 지우지 않으니 5분 뒤 저절로 사라지게 했어요.
+순서에는 이유가 있어요. 초기화 전에 쿠키를 지우면 이벤트는 나가지 못하고 표식만 사라져요. 회원 정보까지 기다리는 건 이벤트에 회원 id를 싣기 위해서예요. 쿠키는 클라이언트가 읽고 지워야 해서 httpOnly를 붙이지 않았고, SDK를 켜지 않는 로컬과 개발 환경에서는 아무도 지우지 않으니 5분 뒤 저절로 사라지게 했어요.
 
 <div class="note note-decision">
   <strong>최종 결정</strong>
@@ -129,13 +129,13 @@ useEffect(() => {
 | 신규 가입자 UTM 유실 | 분석 도구에서 `initial_utm_source`가 `unexpected` 상태 | 속성을 추적 계획에 추가해 `live`로, 먼저 넣은 프론트 저장 코드는 제거 | 테스트 가입자에게 처음 UTM이 기록되고 다른 UTM으로 다시 들어와도 유지됨. 저장 코드는 운영에 나가지 않음(이후 첫 운영 배포에 없음) |
 | 버튼 클릭이 카드 클릭으로도 기록 | 핸들러를 다시 쓰며 전파 차단 누락 | 버튼에서 전파 차단, 버튼 이벤트는 버튼 요소에 병합 | 중복 코드는 운영에 나가지 않음(운영 배포 전 수정). 수정 뒤 이벤트 건수를 잰 기록은 없음 |
 | ↳ 같은 구조의 되풀이: 앵커 클릭에서 카드 이벤트 누락 (운영 미반영) | 앵커의 전파 차단이 카드에 병합된 전송까지 차단 | 전파는 두고 카드 핸들러가 이동만 건너뜀 | 같은 PR 안에서 고쳐 누락 코드는 배포되지 않음 |
-| 소셜 로그인 완료가 SDK 초기화 전에 전송되는 구조 | 전체 로드 뒤 초기화 전에 전송하고 보낸 것으로 기록, 재시도 없음 | 콜백의 일회성 쿠키를 초기화·회원 정보 뒤 한 번 소비 | 목 서버 E2E에서 로그인 1회에 1건, 새로고침·기존 로그인 회원 0건. 운영 반영, 운영 건수 전후 대조는 하지 않음 |
+| 소셜 로그인 완료가 SDK 초기화 전에 전송되는 구조 | 전체 로드 뒤 초기화 전에 전송하고 보낸 것으로 기록, 재시도 없음 | 콜백의 일회성 쿠키를 초기화와 회원 정보 뒤 한 번 소비 | 목 서버 E2E에서 로그인 1회에 1건, 새로고침과 기존 로그인 회원 0건. 운영 반영, 운영 건수 전후 대조는 하지 않음 |
 
 세 문제 모두 전송하는 한 줄이 아니라, 값이 어디서 생기고 사라지는지를 그 바깥(분석 도구 설정, DOM 전파, 문서 로드 순서)까지 따라가야 드러났어요.
 
 ## 퍼널을 열어 보고 배운 것
 
-이벤트가 일어난 일만 기록하게 된 뒤에도 남는 질문이 있었어요. 그 이벤트로 무엇을 비교할지예요. 버튼 복원을 배포한 뒤, 비즈니스 맥락을 파악하려고 상세 개편 구간(기존 사용자 기준)의 퍼널을 직접 열어 봤어요. 개편의 가설과 판단은 디자인팀·PM·PO의 몫이었고, 저는 그 화면에 이벤트를 붙인 사람으로서 흐름을 이해하고 싶었어요.
+이벤트가 일어난 일만 기록하게 된 뒤에도 남는 질문이 있었어요. 그 이벤트로 무엇을 비교할지예요. 버튼 복원을 배포한 뒤, 비즈니스 맥락을 파악하려고 상세 개편 구간(기존 사용자 기준)의 퍼널을 직접 열어 봤어요. 개편의 가설과 판단은 디자인팀, PM, PO의 몫이었고, 저는 그 화면에 이벤트를 붙인 사람으로서 흐름을 이해하고 싶었어요.
 
 같은 배포에 메인 화면 개편이 섞여 있었고, 트래픽도 A/B 비교를 할 만큼 충분하지 않았어요. 그 수치만으로는 상세 개편의 효과를 읽을 수 없었어요.
 
@@ -199,7 +199,7 @@ useEffect(() => {
 
 이 집단에서 인증을 마치지 못한 사람이 많은지, 검색 결과가 없었던 사람이 많은지 살펴볼 수 있겠어요. 그래도 상세만 보고 끝난 이유가 화면 때문이라는 결론이 바로 나오지는 않아요. 원하는 지역에 예약 가능한 병원이 없었을 수도 있으니까요.
 
-코호트의 조건과 기준 기간도 남겨야 해요. '최근 7일' 조건의 동적 코호트는 시간이 지나면 포함된 사람이 달라질 수 있어요. 반면 특정 시점의 명단을 고정한 정적 코호트는 그때의 집단을 유지해요. 같은 이름의 코호트를 골랐다고 항상 같은 사람들을 비교하는 것은 아니에요. [동적·정적 코호트의 차이](https://amplitude.com/docs/analytics/track-cohort-changes)
+코호트의 조건과 기준 기간도 남겨야 해요. '최근 7일' 조건의 동적 코호트는 시간이 지나면 포함된 사람이 달라질 수 있어요. 반면 특정 시점의 명단을 고정한 정적 코호트는 그때의 집단을 유지해요. 같은 이름의 코호트를 골랐다고 항상 같은 사람들을 비교하는 것은 아니에요. [동적과 정적 코호트의 차이](https://amplitude.com/docs/analytics/track-cohort-changes)
 
 그리고 **코호트를 둘로 나누는 것과 A/B 실험군을 나누는 것은 달라요.** 쿠폰을 쓴 사람과 안 쓴 사람은 구매 의향부터 다를 수 있어요. 두 집단의 예약률 차이는 관찰할 수 있지만, 그 차이를 쿠폰의 효과라고 바로 말할 수는 없어요. 코호트는 살펴볼 집단을 정하는 데 쓰고, 변경의 효과를 비교하려면 실험 대상과 배정 방식을 별도로 정해야 해요.
 
@@ -231,7 +231,7 @@ useEffect(() => {
 판단: 필요한 표본과 관찰 기간, 중단·확대 조건을 시작 전에 합의
 ```
 
-실험 대상의 조건을 정하는 것과 그 안에서 비교 버전을 배정하는 것도 구분해야 해요. 먼저 예약 가능한 프로그램을 보는 사람을 대상으로 정하고, 그 안에서 무작위로 기존·새 버전을 나누는 식이에요. 서로 다른 유입 집단을 그대로 기존·새 버전으로 삼으면 화면의 차이와 사용자의 차이가 섞여요. [Amplitude의 무작위 배정 방식](https://amplitude.com/docs/feature-experiment/under-the-hood/experiment-randomization)
+실험 대상의 조건을 정하는 것과 그 안에서 비교 버전을 배정하는 것도 구분해야 해요. 먼저 예약 가능한 프로그램을 보는 사람을 대상으로 정하고, 그 안에서 무작위로 기존과 새 버전을 나누는 식이에요. 서로 다른 유입 집단을 그대로 기존과 새 버전으로 삼으면 화면의 차이와 사용자의 차이가 섞여요. [Amplitude의 무작위 배정 방식](https://amplitude.com/docs/feature-experiment/under-the-hood/experiment-randomization)
 
 주 지표는 바꾼 부분과 연결이 가까워야 해요. 버튼 위치를 바꾸는데 매출만 보면 영향이 여러 단계 뒤에 있어 원인을 읽기 어려워요. 그렇다고 버튼 클릭만 늘면 성공이라고 보기도 어려우니, 접수까지 이어지는지와 실패가 늘지 않는지도 함께 봐야겠어요. Amplitude도 성공 지표와 나빠지면 안 되는 가드레일을 구분하고, 표본과 기간을 추정할 수 있는 기능을 제공해요. [실험 지표 설정 안내](https://amplitude.com/docs/feature-experiment/workflow/define-goals)
 
@@ -245,24 +245,24 @@ useEffect(() => {
 
 복지몰에서는 병원과 기업 제휴, 마케팅 유입도 예약에 영향을 줘요. 프로그램 정보가 좋아져도 원하는 지역에 예약 가능한 병원이 없으면 예약으로 이어지기 어렵고요. 그래서 전체 예약 건수 하나만 보기보다, 그 화면을 이용할 조건이 갖춰진 사용자가 어디서 멈추는지부터 보고 싶어요. 기능별로 생각한 지표는 [별도 메모](post-new-product-metrics.md)에 정리했어요.
 
-지금까지 제가 주로 맡은 것은 이벤트를 붙이고 누락·중복을 고치는 일이었어요. 그 경험으로 분명해진 건, 계측을 구현할 때도 숫자를 어떻게 읽을지 알아야 한다는 점이에요. 앞으로는 이벤트 요청을 받으면 '어디서 보내야 하나'와 함께 '누구를 분모로 무엇을 확인하려 하나'를 묻고 싶어요. 그 질문이 정해져야 클릭과 접수를 구분하고, 필요한 속성과 노출 시점도 맞출 수 있으니까요.
+지금까지 제가 주로 맡은 것은 이벤트를 붙이고 누락과 중복을 고치는 일이었어요. 그 경험으로 분명해진 건, 계측을 구현할 때도 숫자를 어떻게 읽을지 알아야 한다는 점이에요. 앞으로는 이벤트 요청을 받으면 '어디서 보내야 하나'와 함께 '누구를 분모로 무엇을 확인하려 하나'를 묻고 싶어요. 그 질문이 정해져야 클릭과 접수를 구분하고, 필요한 속성과 노출 시점도 맞출 수 있으니까요.
 
 ## 참고
 
 - [React — 이벤트 전파 멈추기](https://react.dev/learn/responding-to-events#stopping-propagation)
 - [Radix UI — Slot](https://www.radix-ui.com/primitives/docs/utilities/slot) — 자식 요소에 props와 이벤트 핸들러를 병합하는 방식
 - [Amplitude — Browser SDK 2](https://amplitude.com/docs/sdks/analytics/browser/browser-sdk-2) — `setUserId`, 마케팅 어트리뷰션과 `initial_` 속성
-- [Amplitude — Amplitude Data 설정](https://amplitude.com/docs/data/amplitude-data-settings) — 추적 계획 밖(unexpected) 이벤트·속성을 다루는 스키마 설정
+- [Amplitude — Amplitude Data 설정](https://amplitude.com/docs/data/amplitude-data-settings) — 추적 계획 밖(unexpected) 이벤트와 속성을 다루는 스키마 설정
 - [Amplitude — HTTP V2 API](https://amplitude.com/docs/apis/analytics/http-v2) — `insert_id`로 같은 이벤트를 한 번만 받는 중복 제거
 - [Amplitude: 차트 생성](https://amplitude.com/docs/get-started/create-a-chart)
 - [Amplitude: 이벤트 집계 방식](https://amplitude.com/docs/analytics/charts/event-segmentation/event-segmentation-choose-measurement)
-- [Amplitude: 퍼널 집계 방식](https://amplitude.com/docs/analytics/charts/funnel-analysis/faq) · [같은 속성을 유지하는 퍼널](https://amplitude.com/docs/analytics/charts/funnel-analysis/funnel-analysis-hold-properties-constant)
+- [Amplitude: 퍼널 집계 방식](https://amplitude.com/docs/analytics/charts/funnel-analysis/faq) | [같은 속성을 유지하는 퍼널](https://amplitude.com/docs/analytics/charts/funnel-analysis/funnel-analysis-hold-properties-constant)
 - [Amplitude: 리텐션 차트](https://amplitude.com/docs/analytics/charts/retention-analysis/retention-analysis-build)
 - [Amplitude: 대시보드 생성](https://amplitude.com/docs/analytics/dashboard-create)
-- [Amplitude: 코호트 생성](https://amplitude.com/docs/quick-guides/build-your-first-cohort) · [코호트 집단의 변화](https://amplitude.com/docs/analytics/track-cohort-changes)
-- [Amplitude: 기능 플래그와 실험 시작](https://amplitude.com/docs/feature-experiment/experiment-quick-start) · [Feature Experiment와 Web Experiment](https://amplitude.com/docs/feature-experiment/overview)
-- [Amplitude: 실험 지표 설정](https://amplitude.com/docs/feature-experiment/workflow/define-goals) · [노출 기록](https://amplitude.com/docs/feature-experiment/track-exposure)
+- [Amplitude: 코호트 생성](https://amplitude.com/docs/quick-guides/build-your-first-cohort) | [코호트 집단의 변화](https://amplitude.com/docs/analytics/track-cohort-changes)
+- [Amplitude: 기능 플래그와 실험 시작](https://amplitude.com/docs/feature-experiment/experiment-quick-start) | [Feature Experiment와 Web Experiment](https://amplitude.com/docs/feature-experiment/overview)
+- [Amplitude: 실험 지표 설정](https://amplitude.com/docs/feature-experiment/workflow/define-goals) | [노출 기록](https://amplitude.com/docs/feature-experiment/track-exposure)
 - [Amplitude: 무작위 배정 방식](https://amplitude.com/docs/feature-experiment/under-the-hood/experiment-randomization)
 - [Next.js — `NextResponse` cookies](https://nextjs.org/docs/app/api-reference/functions/next-response#cookies)
 - [MDN — Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) — `Max-Age`, `HttpOnly`
-- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25) · [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25) | [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
