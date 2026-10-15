@@ -14,7 +14,7 @@
 폼을 하나로 합치면 될 것 같았지만, 그렇게 단순한 문제는 아니었어요. Back-Office에는 운영 메모와 노출 설정이 있고, 병원 관리자에는 요청자와 검수 요청 종류가 있어요. API 응답을 입력칸에 옮기는 일과, 수정한 값을 요청 본문으로 만드는 일도 별도였어요.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/01-form-anatomy.png" alt="프로그램 폼의 기본 정보, 상세 이미지와 건강검진 구성. 공통 필드와 Back-Office·병원 관리자 전용 필드를 구분한 그림" />
+  <img src="../assets/figures/program-form/01-form-anatomy.png" alt="프로그램 폼의 기본 정보, 상세 이미지와 건강검진 구성. 공통 필드와 Back-Office 및 병원 관리자 전용 필드를 구분한 그림" />
   <figcaption>같은 프로그램을 다뤄도 두 앱에 필요한 값은 조금씩 달라요. 그림의 입력값은 예시예요.</figcaption>
 </figure>
 
@@ -176,11 +176,11 @@ function convertCommonAssetToUploadFile<T extends TImageFileInfo>(
 - 응답은 `orderNo`로 정렬하고, 폼에서는 배열 순서로 편집해요.
 - 제출할 때 제목만 사용하는 섹션은 빈 줄을 거른 뒤 순번을 다시 매겨요. 이미지가 있는 섹션은 같은 필터를 적용하지 않아요.
 - 시술 전후 사진은 배열 인덱스가 아니라 `orderNo`로 짝을 찾아 한 행으로 합쳐요. 요청할 때는 같은 순번의 두 배열로 나눠요.
-- `null`·`undefined`와 빈 배열은 구분해요. 응답에 섹션이 없으면 토글을 끄고, 빈 배열이면 토글은 켠 채 초기 입력 행을 보여줘요.
-- 임시저장과 최종 요청에서 빈 섹션을 보내는 방식은 달라요. 임시저장은 편집 중인 빈 배열을 보낼 수 있고, 검수·등록 요청은 비어 있는 섹션을 제외해요.
+- `null`이나 `undefined`와 빈 배열은 구분해요. 응답에 섹션이 없으면 토글을 끄고, 빈 배열이면 토글은 켠 채 초기 입력 행을 보여줘요.
+- 임시저장과 최종 요청에서 빈 섹션을 보내는 방식은 달라요. 임시저장은 편집 중인 빈 배열을 보낼 수 있고, 검수와 등록 요청은 비어 있는 섹션을 제외해요.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/03-transfer-layer.png" alt="서버 응답과 폼 값, 요청 본문의 이미지·순번·토글·폼 전용 필드 변환 규칙" />
+  <img src="../assets/figures/program-form/03-transfer-layer.png" alt="서버 응답과 폼 값 및 요청 본문의 이미지, 순번, 토글, 폼 전용 필드 변환 규칙" />
   <figcaption>공유할 입력의 모양과, 각 요청에서 보내야 하는 모양을 구분했어요.</figcaption>
 </figure>
 
@@ -228,7 +228,7 @@ useEffect(() => {
 기본 템플릿에서 가져오는 값은 다섯 섹션으로 한정했어요. 직접 입력하는 추가 혜택과 시술 전후 사진은 이 동기화에서 바꾸지 않아요. 조회 응답을 폼 값으로 바꾸는 일도 이 컴포넌트 안에서 처리해요. 입력 컴포넌트마다 조회와 값 갱신을 반복하지 않도록 한 거예요.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/04-treatment-sync.png" alt="시술·하위 시술 ID와 touched 상태를 확인하고, 조회 응답을 프로그램 폼의 다섯 템플릿 필드에 적용하는 흐름" />
+  <img src="../assets/figures/program-form/04-treatment-sync.png" alt="시술, 하위 시술 ID와 touched 상태를 확인하고, 조회 응답을 프로그램 폼의 다섯 템플릿 필드에 적용하는 흐름" />
   <figcaption>조회 조건, 적용 조건, 갱신할 필드를 한곳에서 확인할 수 있도록 했어요.</figcaption>
 </figure>
 
@@ -266,7 +266,7 @@ it('빈 제목을 거른 뒤 남은 순서대로 순번을 매긴다', () => {
 폼에서 typed API로 접근하는 이름과 값은 타입 검사로 확인하고, API에 어떤 모양으로 보내는지는 변환 테스트로 확인해요. 타입이 맞는 것과 요청 내용이 맞는 것을 같은 검증으로 취급하지 않았어요.
 
 <figure class="figure-wide">
-  <img src="../assets/figures/program-form/06-formitem-design.png" alt="같은 Form 인스턴스에서 공통·앱 전용 입력을 조립하고, typed API·공유 템플릿 입력·변환 테스트의 책임을 구분한 구조" />
+  <img src="../assets/figures/program-form/06-formitem-design.png" alt="같은 Form 인스턴스에서 공통 입력과 앱 전용 입력을 조립하고, typed API, 공유 템플릿 입력, 변환 테스트의 책임을 구분한 구조" />
   <figcaption>입력은 같은 인스턴스를 사용해요. 필드 접근과 제출 데이터의 검증은 각각 다른 곳에서 맡아요.</figcaption>
 </figure>
 
@@ -276,7 +276,7 @@ it('빈 제목을 거른 뒤 남은 순서대로 순번을 매긴다', () => {
 
 제가 원했던 건 큰 폼을 짧게 만드는 것만은 아니었어요. 값을 읽는 코드에서 어떤 타입인지 알 수 있고, 입력을 재사용해도 다른 화면의 제출 흐름까지 따라오지 않으며, 변환 규칙을 바꿀 때 무엇을 확인해야 하는지 보이는 구조였어요.
 
-필드 경로와 값 타입은 typed form으로, 요청·응답의 변환 규칙은 테스트로 확인해요. 조회한 값을 편집하고 제출하는 화면 동작도 별도로 확인해요.
+필드 경로와 값 타입은 typed form으로, 요청과 응답의 변환 규칙은 테스트로 확인해요. 조회한 값을 편집하고 제출하는 화면 동작도 별도로 확인해요.
 
 ## 참고
 
