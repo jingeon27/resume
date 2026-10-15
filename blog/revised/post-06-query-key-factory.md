@@ -2,7 +2,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>후보자 메모를 고친 뒤 어떤 쿼리를 무효화해야 하는지 문자열 검색으로 찾던 상황에서 시작해요. query key와 `queryFn`을 함께 정의하고 무효화 범위를 드러낸 과정, 직접 만드는 팩토리라는 대안과 라이브러리 의존 비용을 적어요. 상세 아래 쿼리를 묶었을 때 갱신 범위가 넓어지는 점과, factory로 해결되지 않는 판단도 다뤄요.</p>
+  <p>후보자 메모를 고친 뒤 어떤 쿼리를 무효화해야 하는지 문자열 검색으로 찾던 상황에서 시작해요. query key와 `queryFn`을 함께 정의해 무효화 범위가 드러나게 한 과정을 적고, 팩토리를 직접 만드는 대안과 라이브러리에 기대는 비용도 견줘 봐요. 상세 아래 쿼리를 묶으면 갱신 범위가 넓어진다는 점과, factory가 대신 해 주지 않는 판단도 다뤄요.</p>
 </div>
 
 후보자 메모를 수정한 뒤 어떤 쿼리를 무효화(invalidate)해야 하는지 찾으려고 저장소 전체에서 문자열을 검색한 적이 있어요. query key의 첫 값만 enum이었고, 뒤쪽 계층은 호출부마다 직접 붙이고 있었거든요.
@@ -22,11 +22,11 @@ useQuery([CandidateQueryKey.Detail, 'detail', candidateId, 'memos'], fetchMemos)
 - API 파라미터가 바뀌면 query key와 `queryFn`을 따로 고쳐야 했어요.
 - mutation은 API 함수를 lambda로 한 번 더 감싸면서 인자 타입을 다시 적고 있어서, 같은 함수 시그니처가 두 곳에 있었어요.
 
-> 코드는 TanStack Query v4와 `@lukemorales/query-key-factory` 1.3.x 기준이에요. 본문 코드는 실제 코드에서 이름을 바꾸고 줄인 예제예요. v5는 `useMutation`만이 아니라 `useQuery`, `invalidateQueries`를 포함한 대부분의 API에서 key나 함수를 위치 인자로 받던 overload를 없애고 객체 형식만 받아요. 그래서 본문의 `invalidateQueries(queryKey)` 호출은 v4 문법이고, v5에서는 `{ queryKey }`로 감싸야 해요. v5 예시는 mutation 절에 v4 코드와 나란히 적었어요.
+> 코드는 TanStack Query v4와 `@lukemorales/query-key-factory` 1.3.x 기준이에요. 본문 코드는 실제 코드에서 이름을 바꾸고 줄인 예제예요. v5는 `useMutation`, `useQuery`, `invalidateQueries`를 비롯한 대부분의 API에서 key나 함수를 위치 인자로 받던 overload를 없애고 객체 형식만 받아요. 그래서 본문의 `invalidateQueries(queryKey)` 호출은 v4 문법이고, v5에서는 `{ queryKey }`로 감싸야 해요. v5 예시는 mutation 절에 v4 코드와 나란히 적었어요.
 
 ## enum 뒤의 계층을 호출부마다 정하고 있었어요
 
-enum을 쓴 것 자체보다, enum 뒤에 붙는 계층과 파라미터를 호출부마다 정하던 게 문제였어요. 그러면 query key를 만드는 자리를 한곳에 모아야 하는데, 여기에 라이브러리가 꼭 필요한 건 아니에요. 직접 만든 함수가 배열과 `queryFn`을 함께 반환해도 호출부의 문자열 조합을 줄일 수 있어요.
+enum을 쓴 건 괜찮았어요. 그 뒤에 붙는 계층과 파라미터가 호출부마다 정해지니, query key를 만드는 자리를 한곳에 모아야 했어요. 여기에 라이브러리가 꼭 필요한 건 아니에요. 직접 만든 함수가 배열과 `queryFn`을 함께 반환하게 해도 호출부에서 문자열을 조합하는 일은 줄일 수 있어요.
 
 채택한 구조를 다른 방법과 나란히 놓으면 이래요.
 
@@ -38,7 +38,7 @@ enum을 쓴 것 자체보다, enum 뒤에 붙는 계층과 파라미터를 호�
 
 ## Query Key Factory로 key와 `queryFn`을 한곳에서 정의했어요
 
-이 작업에서는 Query Key Factory의 계층 생성 방식을 사용했어요. query key와 조회 함수를 공용 패키지에서 함께 정의하고 여러 앱이 가져다 쓰도록 옮겼어요. 호출부마다 조합하던 기준은 줄었지만, 이제 그 호출부가 factory의 반환 구조를 알아야 하는 비용은 생겼어요. 쿼리가 적고 무효화 범위도 단순한 제품이라면 직접 만든 함수로 같은 목적을 달성할 수 있어요.
+이 작업에서는 Query Key Factory의 계층 생성 방식을 사용했어요. query key와 조회 함수를 공용 패키지에서 함께 정의하고 여러 앱이 가져다 쓰도록 옮겼어요. 호출부마다 조합하던 기준은 줄었지만, 이제 그 호출부가 factory의 반환 구조를 알아야 해요. 쿼리가 적고 무효화 범위도 단순한 제품이라면 직접 만든 함수로도 충분해요.
 
 ```ts
 import { createQueryKeys } from '@lukemorales/query-key-factory';
@@ -114,7 +114,7 @@ queryClient.invalidateQueries(detail._ctx.memos.queryKey); // 메모만
 
 두 호출의 범위는 겹쳐요. `detail.queryKey`는 `['CandidateDetail', 'detail', candidateId]`이고, `_ctx.memos.queryKey`는 그 뒤에 `'memos'`를 붙인 `['CandidateDetail', 'detail', candidateId, 'memos']`예요. `invalidateQueries`는 기본적으로 앞부분이 일치하는 쿼리를 모두 무효화하기 때문에, 상세를 무효화하면 메모와 이력도 함께 무효화돼요. 메모만 무효화하려면 `_ctx.memos.queryKey`를 넘겨요.
 
-같은 원리로 `_def`를 쓰면 특정 ID 하나가 아니라 `list` 아래의 쿼리 전체를 무효화할 수 있어요.
+같은 원리로 `_def`를 쓰면 특정 ID 하나 대신 `list` 아래 쿼리를 통째로 무효화할 수 있어요.
 
 ```ts
 queryClient.invalidateQueries(candidateCollectionKeys.list._def);
@@ -134,7 +134,7 @@ queryClient.invalidateQueries({
 });
 ```
 
-넓게 무효화하면 연관 데이터 갱신을 빠뜨릴 여지는 줄지만 재조회 범위가 커져요. 좁히면 재조회 범위를 줄일 수 있지만, 수정 결과에 영향을 받는 데이터를 직접 판단해야 해요. `contextQueries`는 key를 만드는 계층을 제공할 뿐, 메모 수정이 상세 요약이나 목록까지 바꾸는지 알아서 결정하지 않아요. 이 때문에 무효화 범위는 mutation 가까이에 남겼어요.
+넓게 무효화하면 연관 데이터 갱신을 빠뜨릴 여지는 줄지만 재조회 범위가 커져요. 좁히면 재조회 범위를 줄일 수 있지만, 수정 결과에 영향을 받는 데이터를 직접 판단해야 해요. `contextQueries`는 key를 만드는 계층을 제공할 뿐, 메모 수정이 상세 요약이나 목록까지 바꾸는지 알아서 결정하지 않아요. 그래서 무효화 범위는 mutation 가까이에 남겼어요.
 
 ## mutation에는 API 함수를 그대로 넘겼어요
 
@@ -165,18 +165,18 @@ const createReview = useMutation({
 });
 ```
 
-API 함수를 감싼 코드 몇 줄을 줄이려던 건 아니었어요. 두 곳에 있던 함수 시그니처를 하나로 줄이려는 거였어요. lambda가 있으면 mutation의 변수 타입은 API 함수가 아니라 lambda에 적은 타입에서 정해져요. API 함수를 그대로 넘기면 변수 타입이 API 함수에서 추론되고, `onSuccess`에서 꺼낸 `candidateId`도 같은 타입에서 나와요. 그래서 API 파라미터가 바뀌면 맞지 않는 `mutate()` 호출부에 바로 타입 오류가 나요. 여기서도 `candidateReviewApi.create`가 `this` 바인딩 없이 동작한다는 전제는 필요해요.
+목적은 두 곳에 있던 함수 시그니처를 하나로 줄이는 거였어요. lambda가 있으면 mutation의 변수 타입은 lambda에 적은 타입을 따라가요. API 함수를 그대로 넘기면 변수 타입이 API 함수에서 추론되고, `onSuccess`에서 꺼낸 `candidateId`도 같은 타입에서 나와요. 그래서 API 파라미터가 바뀌면 맞지 않는 `mutate()` 호출부에 바로 타입 오류가 나요. 여기서도 `candidateReviewApi.create`가 `this` 바인딩 없이 동작한다는 전제는 필요해요.
 
 <div class="note note-decision">
   <strong>핵심 결정</strong>
-  <p>조회의 key 계층과 함수는 라이브러리로 한곳에 모았어요. 대신 호출부가 `_def`, `_ctx`를 알아야 해요. mutation은 factory에 넣지 않고 무효화 범위를 가까이에 적었어요. 계층 생성은 공통화하되, 어느 데이터가 함께 바뀌는지 판단하는 책임은 mutation에 남겼어요.</p>
+  <p>조회의 key 계층과 함수는 라이브러리로 한곳에 모았어요. 대신 호출부가 `_def`, `_ctx`를 알아야 해요. mutation은 factory에 넣지 않았어요. 어느 데이터가 함께 바뀌는지는 mutation이 판단하도록 무효화 범위를 그 곁에 적었어요.</p>
 </div>
 
 ## 옮기면서 정한 기준과 factory가 보장하지 않는 것
 
 - query key만 필요한 곳에서도 factory의 `queryKey`나 `_def`를 쓰고, 호출부에서 배열을 직접 만들지 않기로 했어요.
 - 파라미터 객체는 직렬화할 수 있는 값으로 만들어 query key에 넣기로 했어요.
-- 옮긴 정도는 파일 수나 변경 줄 수가 아니라, 같은 리소스의 query key 모양이 한곳에서 정해지는지로 봤어요.
+- 얼마나 옮겼는지는 같은 리소스의 query key 모양이 한곳에서 정해지는지로 봤어요. 파일 수나 변경 줄 수는 기준으로 삼지 않았어요.
 
 factory가 반환 타입을 만들어 줘도 요청 결과를 바꾸는 변수가 key에서 빠졌는지까지 보장하지는 않아요. 예를 들어 `queryFn`이 새 정렬 조건을 쓰는데 key에는 그 조건이 없다면 다른 결과가 같은 캐시를 사용하게 돼요. 조회에 영향을 주는 변수와 key가 함께 바뀌는지는 정의를 수정할 때 확인해야 해요. [TanStack Query의 query key 기준](https://tanstack.com/query/v4/docs/framework/react/guides/query-keys)
 
@@ -193,20 +193,20 @@ factory가 반환 타입을 만들어 줘도 요청 결과를 바꾸는 변수�
 | API 파라미터가 바뀌면 query key와 `queryFn`을 따로 고침 | 한 정의에서 query key와 `queryFn`을 함께 만듦 | 고칠 곳이 정의 하나로 줄어듦 |
 | mutation lambda가 API 인자 타입을 다시 선언함 | API 함수를 그대로 넘김 | API 파라미터가 바뀌면 `mutate()` 호출부에 타입 오류가 남 |
 
-호출부 코드가 짧아진 건 별로 중요하지 않았어요. 위 예제에서 메모의 query key 배열은 옮기기 전과 원소 하나까지 같아요. 달라진 건 그 배열을 factory가 만든다는 점이었어요. 문자열을 검색하지 않고도 조회 함수와 무효화 범위를 같은 계층에서 찾을 수 있게 된 게 실제 이득이었어요.
+위 예제에서 메모의 query key 배열은 옮기기 전과 원소 하나까지 같아요. 바뀐 건 그 배열을 factory가 만든다는 점이고, 덕분에 문자열을 검색하지 않고도 조회 함수와 무효화 범위를 같은 계층에서 찾을 수 있게 됐어요.
 
 ## v5에서는 기본 헬퍼도 비교할 수 있어요
 
 v5에서 같은 구조를 새로 만든다면 `queryOptions`도 대안이에요. query key와 `queryFn`을 함께 정의해 여러 호출부에서 재사용하고 타입을 추론할 수 있어요. 별도 key factory 의존성은 줄지만, key 배열과 무효화용 prefix는 직접 설계해야 해요. `queryOptions`가 `_def`, `_ctx` 같은 계층을 자동으로 만들어 주지는 않거든요. [TanStack Query의 Query Options](https://tanstack.com/query/latest/docs/framework/react/guides/query-options)
 
-함께 정의하고 재사용하는 것이 목적이면 기본 헬퍼로 충분할 수 있고, 여러 앱에서 같은 key 계층을 생성해야 한다면 factory가 제공하는 규칙도 비교할 수 있어요.
+함께 정의하고 재사용하는 게 목적이라면 기본 헬퍼로 충분할 수 있어요. 여러 앱에서 같은 key 계층을 만들어야 한다면 factory의 규칙도 견줘 볼 만해요.
 
 ## 참고
 
-- [Query Key Factory](https://github.com/lukemorales/query-key-factory) — `createQueryKeys`, `contextQueries`, `_def`, `_ctx`
+- [Query Key Factory](https://github.com/lukemorales/query-key-factory): `createQueryKeys`, `contextQueries`, `_def`, `_ctx`
 - [TanStack Query: Query Keys](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)
-- [TanStack Query: Query Invalidation](https://tanstack.com/query/latest/docs/framework/react/guides/query-invalidation) — 앞부분이 일치하는 쿼리를 함께 무효화하는 기본 동작
-- [TanStack Query: Query Options](https://tanstack.com/query/latest/docs/framework/react/guides/query-options) — v5에서 query key, 조회 함수, 옵션을 함께 정의하는 대안
-- [TanStack Query: Migrating to TanStack Query v5](https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5) — 위치 인자 overload 제거, 객체 형식으로 통일
+- [TanStack Query: Query Invalidation](https://tanstack.com/query/latest/docs/framework/react/guides/query-invalidation): 앞부분이 일치하는 쿼리를 함께 무효화하는 기본 동작
+- [TanStack Query: Query Options](https://tanstack.com/query/latest/docs/framework/react/guides/query-options): v5에서 query key, 조회 함수, 옵션을 함께 정의하는 대안
+- [TanStack Query: Migrating to TanStack Query v5](https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5): 위치 인자 overload 제거, 객체 형식으로 통일
 - 관련 글: [같은 회사에서 Electron 수집 앱의 구조를 나눈 과정](https://jingeon27.tistory.com/5)
-- 관련 글: [Next.js App Router에서 서버와 브라우저의 QueryClient를 나눈 이유](https://jingeon27.tistory.com/8) — 다음 회사에서 v5 `queryOptions`로 query key와 `queryFn`을 묶어 쓴 절이 있어요
+- 관련 글: [Next.js App Router에서 서버와 브라우저의 QueryClient를 나눈 이유](https://jingeon27.tistory.com/8) (다음 회사에서 v5 `queryOptions`로 query key와 `queryFn`을 묶어 쓴 절이 있어요)
