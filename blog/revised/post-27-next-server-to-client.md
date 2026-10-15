@@ -7,7 +7,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>Next.js를 쓰면서 만난 세 문제의 원인과 대응을 적어요. 프로덕션 빌드에서만 나는 라우터 캐시 회귀, 16.3의 `crossorigin` 변경과 겹친 프록시 matcher의 범위 오류, 배포 뒤 오래 열린 탭에서 실패하는 서버 액션이에요. 라우터 캐시와 서버 액션은 프레임워크가 맡던 동작을 클라이언트로 옮겨 풀었고, 프록시는 matcher 범위를 고치고 버전을 묶었어요. 옮기면서 토큰과 폼 쪽에 남은 비용, 반대로 프레임워크가 상태를 대신 들고 있어 생긴 폼 문제, 우회를 걷어낼 조건까지 함께 정리해요.</p>
+  <p>Next.js를 쓰면서 만난 세 문제의 원인과 대응을 적어요. 프로덕션 빌드에서만 나는 라우터 캐시 회귀, 16.3의 `crossorigin` 변경과 겹친 프록시 matcher의 범위 오류, 배포 뒤 오래 열린 탭에서 실패하는 서버 액션이에요. 프레임워크가 맡던 동작을 클라이언트로 옮기면서 토큰과 폼 쪽에 남은 비용, 반대로 프레임워크가 상태를 대신 들고 있어 생긴 폼 문제, 우회를 걷어낼 조건도 함께 적었어요.</p>
 </div>
 
 Next.js를 쓰면서 문제를 세 번 만났어요. Back-Office 목록에서는 검색을 눌러도 주소가 바뀌지 않았어요. 버전을 올리자 병원 관리자의 JS 번들이 CORS로 막혔고, 배포가 지나간 뒤에도 탭을 열어 둔 사용자는 업데이트 공지를 닫지 못했어요. 라우터 캐시, 프록시, 서버 액션에서 하나씩이었는데 원인은 제각각이었어요. 라우터 캐시와 서버 액션은 서버나 프레임워크에 맡기던 동작을 클라이언트로 옮겨 풀었고, 프록시는 matcher 범위를 고치고 버전을 묶었어요.
@@ -58,7 +58,7 @@ export function pushUrl(url: string) {
 
 ### 이 해법은 목록을 클라이언트가 조회해서 성립해요
 
-이 화면들은 클라이언트 컴포넌트가 주소를 읽어 조회 조건을 만들고, 그 조건으로 `useQuery`를 불러요. 주소가 바뀌면 쿼리 키가 바뀌고 **클라이언트가 스스로 다시 조회해요.** 그래서 "서버에 다시 묻지 않고 주소만 바꾼다"는 선택지가 열려 있었어요.
+이 화면들은 클라이언트 컴포넌트가 주소를 읽어 조회 조건을 만들고, 그 조건으로 `useQuery`를 불러요. 주소가 바뀌면 쿼리 키가 바뀌고 클라이언트가 스스로 다시 조회해요. 그래서 "서버에 다시 묻지 않고 주소만 바꾼다"는 선택지가 열려 있었어요.
 
 서버가 조회한 결과를 props로 내려 그리는 구조였다면 이 해법은 성립하지 않아요. 쿼리를 읽어 다시 조회하는 주체가 서버뿐이라, 목록을 새로 받으려면 서버 내비게이션을 시작하는 수밖에 없거든요. `replaceState`를 불러도 주소만 바뀌고 목록은 그대로예요.
 
@@ -66,7 +66,7 @@ export function pushUrl(url: string) {
 
 버전이 올라가 라우터 캐시 버그가 고쳐지면 `router.replace`는 "동작은 해요". 그래도 돌아갈 이유가 없어요.
 
-같은 경로에서 쿼리만 바꾸는데 라우터 내비게이션을 태우면, 캐시가 맞지 않는 순간 **서버가 RSC 페이로드를 다시 만들어 보내요.** 화면에서 실제로 바뀌는 건 목록 한 덩어리인데 사용자는 네트워크와 파싱 비용을, 서버는 렌더 비용을 다시 치러요. 검색, 필터, 탭처럼 연달아 누르는 자리에서는 이 왕복이 그대로 반복되고요.
+같은 경로에서 쿼리만 바꾸는데 라우터 내비게이션을 태우면, 캐시가 맞지 않는 순간 서버가 RSC 페이로드를 다시 만들어 보내요. 화면에서 실제로 바뀌는 건 목록 한 덩어리인데 사용자는 네트워크와 파싱 비용을, 서버는 렌더 비용을 다시 치러요. 검색, 필터, 탭처럼 연달아 누르는 자리에서는 이 왕복이 그대로 반복되고요.
 
 History API는 그 왕복을 만들지 않아요. 주소만 바꾸고, 주소를 구독하는 쿼리가 필요한 데이터만 새로 받아요.
 
@@ -81,7 +81,7 @@ History API는 그 왕복을 만들지 않아요. 주소만 바꾸고, 주소를
 
 버전만 올리면 될 것 같았는데, 16.3에는 저희를 16.2.x로 내려오게 만든 문제가 있었어요. 관리자 서비스 모노레포는 14.2에서 16.3으로 올렸다가 이틀 뒤 16.2.12로 내렸거든요.
 
-16.3.0부터 Turbopack이 client reference manifest의 `moduleLoading.crossOrigin`을 `null`이 아니라 문자열 `"none"`으로 직렬화해요. 옵션 타입이 열거형으로 바뀌면서 기본값 `None`이 그대로 문자열이 돼서 나갔어요.
+16.3.0부터 Turbopack이 client reference manifest의 `moduleLoading.crossOrigin`을 `null` 대신 문자열 `"none"`으로 직렬화해요. 옵션 타입이 열거형으로 바뀌면서 기본값 `None`이 그대로 문자열이 돼서 나갔어요.
 
 ```text
 16.2.12  "moduleLoading":{"prefix":"","crossOrigin":null}
@@ -93,7 +93,7 @@ React Flight는 이 값이 `use-credentials`가 아닌 문자열이면 전부 `"
 - 이슈: [#96831](https://github.com/vercel/next.js/issues/96831)
 - 수정: [#97164](https://github.com/vercel/next.js/pull/97164)
 
-수정은 `null`로 되돌리는 게 아니라 `CrossOrigin::None`일 때 필드를 아예 직렬화하지 않는 방식이에요. canary에 머지돼 `v16.3.1-canary.14`에 들어갔는데요. 제가 확인한 안정 릴리스 `v16.3.1`까지는 들어 있지 않았어요. 그 태그의 매니페스트 소스를 열어 보면 생략 옵션이 붙어 있지 않아요. 16.3.0부터 16.3.1까지는 같은 증상을 그대로 안고 있는 셈이에요.
+수정은 `null`로 되돌리지 않고, `CrossOrigin::None`일 때 필드를 아예 직렬화하지 않는 방식이에요. canary에 머지돼 `v16.3.1-canary.14`에 들어갔는데요. 제가 확인한 안정 릴리스 `v16.3.1`까지는 들어 있지 않았어요. 그 태그의 매니페스트 소스를 열어 보면 생략 옵션이 붙어 있지 않아요. 16.3.0부터 16.3.1까지는 같은 증상을 그대로 안고 있는 셈이에요.
 
 구분해야 할 게 하나 있어요. 업스트림 이슈가 다루는 상황은 cross-origin `assetPrefix`로 CDN을 쓰는 경우예요. 저희는 `assetPrefix`를 쓰지 않아요. cross-origin을 만든 건 프록시였어요.
 
@@ -121,7 +121,7 @@ Next.js에 대응이 없는 건 아니에요. `deploymentId`를 설정해 두면
 
 다른 하나는 클라이언트가 직접 읽고 쓰는 거예요. 쿠키에서 httpOnly를 벗겨요.
 
-두 번째를 택했는데, 이유는 공지 쿠키가 아니라 토큰 쪽에 있었어요. 이틀 전에 액세스 토큰 쿠키를 이미 클라이언트로 내려 둔 상태였거든요. 요청 인터셉터가 모든 요청에서 이 토큰을 읽는데, 그때마다 서버 액션을 왕복하고 싶지 않았어요. 공지 쿠키도 같은 방식으로 맞췄어요. 아래에서는 두 토큰 쿠키를 공개용 가명인 `sessionToken`(액세스 토큰)과 `renewalToken`(리프레시 토큰)으로 불러요.
+두 번째를 택한 이유는 토큰 쪽에 있었어요. 이틀 전에 액세스 토큰 쿠키를 이미 클라이언트로 내려 둔 상태였거든요. 요청 인터셉터가 모든 요청에서 이 토큰을 읽는데, 그때마다 서버 액션을 왕복하고 싶지 않았어요. 공지 쿠키도 같은 방식으로 맞췄어요. 아래에서는 두 토큰 쿠키를 공개용 가명인 `sessionToken`(액세스 토큰)과 `renewalToken`(리프레시 토큰)으로 불러요.
 
 공지 쿠키만 떼어 놓고 보면 이 이유는 성립하지 않아요. 공지를 띄울지 말지는 요청마다 읽는 값이 아니니까요. Route Handler로 옮겼으면 httpOnly를 유지한 채 404만 없앨 수 있었어요. 두 쿠키를 같은 방식으로 다루려다 안 해도 될 노출을 같이 만들었어요. 부채로 적어 둬요.
 
@@ -143,7 +143,7 @@ Next.js에 대응이 없는 건 아니에요. `deploymentId`를 설정해 두면
 
 `sessionToken`을 JS가 읽을 수 있게 한 이상, 반출 조건은 "XSS가 나면"보다 넓어요. 페이지에서 도는 스크립트는 다 읽을 수 있어요. 서드파티 태그, 콘텐츠 스크립트를 가진 브라우저 확장, 번들에 딸려 들어온 의존성까지 전부요. 취약점이 하나도 없어도 클라이언트 관측 도구가 쿠키나 요청 헤더를 자동으로 수집하면 토큰이 제3자 서버로 나가요.
 
-토큰 만료를 줄이는 건 차단이 아니라 노출되는 시간을 줄이는 완화예요. 그마저도 기대만큼 듣지 않아요. 재발급 경로를 페이지에서 부를 수 있는 이상 공격자도 같은 경로로 갱신하면 되니까요. 실제 노출 창은 `sessionToken` 수명이 아니라 `renewalToken` 수명에 가까워요.
+토큰 만료를 줄이면 노출되는 시간이 줄 뿐, 반출 자체를 막지는 못해요. 그마저도 기대만큼 듣지 않아요. 재발급 경로를 페이지에서 부를 수 있는 이상 공격자도 같은 경로로 갱신하면 되니까요. 실제 노출 창은 `sessionToken`보다 `renewalToken` 수명에 가까워요.
 
 "`renewalToken`은 httpOnly니까 안전하다"고 보기도 어려워요. 브라우저가 쿠키를 알아서 실어 보내니까 페이지에서 도는 코드는 재발급 경로를 호출하기만 하면 돼요. 값 자체가 페이지로 새어 나오지 않는지도 httpOnly 플래그만 보고는 답할 수 없어요. 서버 쪽에 그 쿠키 값을 읽어 돌려주는 경로가 없는지까지 봐야 해요.
 
@@ -207,7 +207,7 @@ cleanup 함수로 `reset`을 그대로 넘겼어요. Activity가 컴포넌트를
 
 layout effect로 붙인 건 타이밍 때문이에요. 다시 보이는 시점에 되돌리면 이전 입력이 한 프레임 보였다가 사라져요. 처음 방식에서 실제로 겪은 일이에요. `useIsomorphicLayoutEffect`는 브라우저에서는 `useLayoutEffect`로 동작하는 react-use 훅이에요.
 
-되돌아갈 곳은 빈 폼이 아니라 마운트 시점의 `defaultValues`예요. 들어올 때 자동으로 정해지는 값이 있어서인데요. 예약 신청 화면은 진입하면 혜택이 가장 큰 쿠폰을 미리 골라 두는데, 초기화가 빈 폼으로 떨어지면 이 값까지 지워져요. 그래서 초기값을 서버 데이터에서 받는 폼은 데이터가 확정된 다음에 마운트해야 해요. 조회가 끝나기 전에는 화면을 그리지 않아요.
+되돌아갈 곳은 마운트 시점의 `defaultValues`예요. 빈 폼으로 돌리지 않는 건 들어올 때 자동으로 정해지는 값이 있어서인데요. 예약 신청 화면은 진입하면 혜택이 가장 큰 쿠폰을 미리 골라 두는데, 초기화가 빈 폼으로 떨어지면 이 값까지 지워져요. 그래서 초기값을 서버 데이터에서 받는 폼은 데이터가 확정된 다음에 마운트해야 해요. 조회가 끝나기 전에는 화면을 그리지 않아요.
 
 훅 단위 테스트로 고정해 둔 건 이래요.
 
@@ -233,20 +233,20 @@ layout effect로 붙인 건 타이밍 때문이에요. 다시 보이는 시점�
 - 폼을 되돌리는 트리거를 폼이 소유한 키로 좁혀요.
 - 공지 쿠키는 Route Handler로 옮겨 httpOnly를 되찾아요.
 
-History API는 이 목록에 없어요. 라우터 캐시 버그 때문에 시작했지만, 같은 경로에서 서버가 읽지 않는 쿼리를 바꾸는 데 서버 왕복을 붙이지 않는다는 건 버그와 무관하게 맞는 선택이었어요. **되돌릴 항목이 아니라 유지할 결정이에요.** 라우터가 조회 조건 변경을 알아야 하는 기능이 생기면 그때 다시 봐요. 그건 버전 문제가 아니라 요구사항 문제예요.
+History API는 이 목록에 없어요. 라우터 캐시 버그 때문에 시작했지만, 같은 경로에서 서버가 읽지 않는 쿼리를 바꾸는 데 서버 왕복을 붙이지 않는 건 버그가 고쳐져도 그대로 둘 결정이에요. 라우터가 조회 조건 변경을 알아야 하는 기능이 생기면 그때 다시 볼 거고, 그건 버전보다 요구사항이 정할 문제예요.
 
-CORS도 폼 초기화도 결정 하나가 잘못돼서가 아니라, 각각 맞는 결정 둘이 만나는 자리에서 어긋났어요. 이 작업으로 프레임워크 의존이 없어진 건 아니에요. 대신 어디까지가 프레임워크 몫이고 어디부터가 제 몫인지는 전보다 분명해졌어요.
+CORS와 폼 초기화는 둘 다, 따로 보면 맞는 결정 두 개가 만나는 자리에서 어긋났어요. 프레임워크에 기대는 부분은 여전히 많지만, 어디까지가 프레임워크 몫이고 어디부터가 제 몫인지는 전보다 잘 보여요.
 
 ## 참고
 
-- [vercel/next.js #92187](https://github.com/vercel/next.js/issues/92187), [#91658](https://github.com/vercel/next.js/issues/91658) — 검색 파라미터가 라우터 캐시에 잘못 저장되는 증상
-- [vercel/next.js PR #94144](https://github.com/vercel/next.js/pull/94144) — 캐시 키를 요청 URL의 검색 문자열로 바꾼 수정(16.3.0)
-- [vercel/next.js #96831](https://github.com/vercel/next.js/issues/96831), [PR #97164](https://github.com/vercel/next.js/pull/97164) — client reference manifest의 `crossOrigin` 직렬화
+- [vercel/next.js #92187](https://github.com/vercel/next.js/issues/92187), [#91658](https://github.com/vercel/next.js/issues/91658): 검색 파라미터가 라우터 캐시에 잘못 저장되는 증상
+- [vercel/next.js PR #94144](https://github.com/vercel/next.js/pull/94144): 캐시 키를 요청 URL의 검색 문자열로 바꾼 수정(16.3.0)
+- [vercel/next.js #96831](https://github.com/vercel/next.js/issues/96831), [PR #97164](https://github.com/vercel/next.js/pull/97164): client reference manifest의 `crossOrigin` 직렬화
 - [Next.js 문서: Linking and Navigating의 `window.history.pushState`](https://nextjs.org/docs/app/getting-started/linking-and-navigating#windowhistorypushstate)
 - [Next.js 문서: Server Actions의 Deployment considerations](https://nextjs.org/docs/app/guides/server-actions#deployment-considerations)
 - [Next.js 문서: Self-hosting의 Version Skew(`deploymentId`)](https://nextjs.org/docs/app/guides/self-hosting#version-skew)
 - [Next.js 문서: Preserving UI state](https://nextjs.org/docs/app/guides/preserving-ui-state)
 - [Next.js 문서: `useRouter`의 `bfcacheId`](https://nextjs.org/docs/app/api-reference/functions/use-router#bfcacheid)
-- 관련 글: [예약 폼의 작성 상태를 Zustand에서 React Hook Form으로 옮긴 과정](https://jingeon27.tistory.com/11) — 공용 폼 훅을 쓰는 예약 폼
-- 관련 글: [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://jingeon27.tistory.com/21) — Cache Components를 켠 계기
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28) — 주소로 여는 Drawer와 Error Boundary
+- 관련 글: [예약 폼의 작성 상태를 Zustand에서 React Hook Form으로 옮긴 과정](https://jingeon27.tistory.com/11): 공용 폼 훅을 쓰는 예약 폼
+- 관련 글: [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://jingeon27.tistory.com/21): Cache Components를 켠 계기
+- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28): 주소로 여는 Drawer와 Error Boundary
