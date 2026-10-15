@@ -1,25 +1,21 @@
 # 정산 도메인을 별도 호스트로 분리하면서 크로스 도메인 토큰 위임을 설계한 과정
 
-> 단일 Next.js 코드베이스를 유지한 채 정산만 다른 호스트(메인 호스트 → 정산 호스트)로 분리하면서,
-> 토큰을 어떻게 넘기고 어떻게 "구독"하게 만들지 고민한 기록. URL 쿼리스트링에서 시작해 form POST BFF, BFF 보안 가드,
-> handoff 라우트 분리, CSP 강화까지 5단계로 다듬은 과정을 정리한다.
+Next.js 코드베이스 하나를 그대로 둔 채 정산만 다른 호스트(메인 호스트 → 정산 호스트)로 떼어냈다. 이 글은 그때 토큰을 어떻게 넘기고, 넘어간 토큰을 어떻게 "구독"하게 할지 고민한 기록이다. URL 쿼리스트링으로 시작해 form POST BFF, BFF 보안 가드, handoff 라우트 분리, CSP 강화까지 5단계를 거쳤다.
 
 ---
 
 ## 배경: 왜 정산만 다른 호스트인가
 
-세이프닥 병원 관리자(`safedoc-hospital-admin`)는 병원정보, 프로그램, 예약, 정산을 한 앱에서 다룬다.
-이 중 **정산 도메인**은 권한 체계와 감사(audit) 요구가 나머지 기능과 달라서, 운영상 **별도 호스트**로 떼어내야 했다.
+세이프닥 병원 관리자(`safedoc-hospital-admin`)는 병원정보, 프로그램, 예약, 정산을 한 앱에서 다룬다. 그런데 정산은 권한 체계와 감사(audit) 요구가 나머지 기능과 달라서 운영상 별도 호스트로 떼어내야 했다.
 
 - 메인 앱: `app.example.com` (이하 *메인 호스트*)
 - 정산 앱: `settle.example.io` (이하 *정산 호스트*)
 
-> 실제 운영 도메인은 가렸다. 두 호스트의 **registrable domain이 서로 다르다**는 점만 기억하면 된다 — 이게 이 글의 모든 문제의 출발점이다.
+실제 운영 도메인은 가렸다. 두 호스트의 **registrable domain이 서로 다르다**는 점만 기억하면 된다. 이 글에 나오는 문제는 전부 여기서 시작한다.
 
-문제는, 호스트만 분리하고 **코드베이스는 단일 레포로 유지**하고 싶었다는 점이다.
-서로 다른 두 앱으로 쪼개면 공통 entities/UI/유틸을 두 벌 관리해야 하고, 정산 자체가 외부업체에서 인수한 코드라 분기 비용이 더 커진다.
+다만 호스트만 나누고 코드베이스는 레포 하나로 유지하고 싶었다. 앱을 둘로 쪼개면 공통 entities, UI, 유틸을 두 벌 관리해야 한다. 게다가 정산은 외부업체에서 인수한 코드라 갈라지면 비용이 더 커진다.
 
-그래서 택한 구조가 **Next.js Route Group + Middleware**다.
+그래서 Next.js Route Group과 Middleware로 구조를 잡았다.
 
 ```text
 app/
@@ -29,8 +25,7 @@ app/
 └── api/                        # API Routes (BFF)
 ```
 
-`(altLayout)` 라우트 그룹으로 정산만 별도 레이아웃을 입히고, `middleware.ts`가 **경로 기준으로 호스트를 강제**한다.
-`/settlement/*` 요청이 메인 호스트로 들어오면 정산 호스트로, 반대로 정산 호스트로 들어온 비-정산 경로는 메인 호스트로 redirect 한다.
+`(altLayout)` 라우트 그룹으로 정산에만 별도 레이아웃을 입히고, 호스트는 `middleware.ts`가 경로를 보고 강제한다. `/settlement/*` 요청이 메인 호스트로 들어오면 정산 호스트로 보내고, 정산 호스트로 들어온 정산 외 경로는 메인 호스트로 redirect 한다.
 
 ```ts
 // middleware.ts (현재)
@@ -50,13 +45,13 @@ export function middleware(request: NextRequest) {
 }
 ```
 
-여기까지는 라우팅 문제다. 진짜 어려운 부분은 그다음이다.
+여기까지는 라우팅 문제다. 어려운 건 그다음이었다.
 
 ---
 
-## 진짜 문제: 두 호스트는 쿠키를 공유하지 못한다
+## 두 호스트는 쿠키를 공유하지 못한다
 
-세이프닥은 토큰을 **HttpOnly 쿠키**로 들고 있다. `accessToken` / `refreshToken`을 서버 쿠키로 심고, axios interceptor가 매 요청에 `Authorization` 헤더로 실어 보낸다.
+세이프닥은 토큰을 HttpOnly 쿠키로 들고 있다. `accessToken`과 `refreshToken`을 서버 쿠키로 심고, axios interceptor가 요청마다 `Authorization` 헤더에 실어 보낸다.
 
 ```ts
 // packages/shared/utils/cookie/cookie.ts
@@ -66,23 +61,18 @@ export const DEFAULT_COOKIE_OPTIONS: CookieOptions = {
 };
 ```
 
-문제는 메인 호스트와 정산 호스트의 **registrable domain이 다르다**는 것. 같은 회사 서비스지만 브라우저 입장에서는 완전히 남남이라 쿠키가 공유되지 않는다.
-즉, 메인 호스트에서 로그인해 토큰을 들고 있어도, 정산 호스트로 넘어가는 순간 그 호스트에는 토큰이 **없다**.
+그런데 메인 호스트와 정산 호스트는 registrable domain이 다르다. 같은 회사 서비스라도 브라우저가 보기에는 남남이라 쿠키가 공유되지 않는다. 메인 호스트에서 로그인해 토큰을 갖고 있어도, 정산 호스트로 넘어가는 순간 그 호스트에는 토큰이 없다.
 
-> 정산 메뉴를 클릭한 사용자를, 이미 로그인된 상태 그대로 정산 호스트에 "다시 로그인된 것처럼" 보내려면
-> 토큰을 한 번은 **명시적으로 건네줘야(handoff)** 한다.
-
-이 "어떻게 건네줄 것인가"가 이 글의 전부다. 결론부터 말하면 4번의 리팩토링을 거쳤다.
+정산 메뉴를 누른 사용자를 로그인된 상태 그대로 정산 호스트에 보내려면, 토큰을 한 번은 직접 건네줘야(handoff) 한다. 이 글은 결국 그걸 어떻게 건네줄지에 관한 이야기이고, 그 방식을 네 번 리팩토링했다.
 
 ---
 
 ## 1단계: URL 쿼리스트링 토큰 전달 (처음 제안받은 방식)
 
-처음 **제안받은 방식**은 토큰을 **URL `searchParams`에 주입**해 넘기는 것이었다.
-구조는 **미들웨어 2-hop redirect + URL 쿼리스트링**이다.
+처음 제안받은 방식은 토큰을 URL `searchParams`에 넣어 넘기는 것이었다. 미들웨어가 redirect를 두 번(2-hop) 하면서 토큰을 쿼리스트링에 싣는 구조다.
 
-1. 메인 호스트에서 `/settlement/*` 진입 → 미들웨어가 토큰을 쿠키에서 읽어 **쿼리스트링에 실어** 정산 호스트로 redirect
-2. 정산 호스트의 미들웨어가 쿼리스트링에서 토큰을 꺼내 **쿠키로 set** 한 뒤, 토큰을 뗀 깨끗한 URL로 다시 redirect
+1. 메인 호스트에서 `/settlement/*`로 들어오면, 미들웨어가 쿠키에서 토큰을 읽어 쿼리스트링에 싣고 정산 호스트로 redirect 한다.
+2. 정산 호스트의 미들웨어는 쿼리스트링에서 토큰을 꺼내 쿠키로 set 한 뒤, 토큰을 뗀 깨끗한 URL로 다시 redirect 한다.
 
 ```ts
 // middleware.ts (1단계 — 지금은 제거된 버전)
@@ -115,31 +105,23 @@ if (request.nextUrl.pathname.startsWith('/settlement')) {
 }
 ```
 
-**동작은 한다.** 한 가지 짚고 넘어갈 건, 흔히 걱정하는 **브라우저 history는 실제 문제가 아니었다**는 점이다.
-토큰이 실린 URL은 사용자가 주소창에 직접 친 주소가 아니라 **미들웨어가 서버 단에서 만든 redirect hop**이다.
-브라우저는 redirect를 따라갈 때 그 중간 URL을 뒤로가기로 돌아갈 수 있는 history 엔트리로 쌓지 않는다.
-게다가 정산 호스트 미들웨어가 토큰을 쿠키로 옮긴 뒤 곧바로 **토큰을 뗀 깨끗한 URL로 다시 redirect**하므로, 주소창에 토큰이 남지도 않는다.
+동작은 한다. 흔히 걱정하는 브라우저 history는 실제로 문제가 되지 않았다. 토큰이 실린 URL은 미들웨어가 서버에서 만든 redirect 중간 주소이고, 사용자가 주소창에 친 주소가 아니다. 브라우저는 redirect를 따라가면서 거쳐 간 URL을 뒤로가기용 history 엔트리로 쌓지 않는다. 게다가 정산 호스트 미들웨어가 토큰을 쿠키로 옮기자마자 토큰을 뗀 URL로 다시 redirect 하니 주소창에도 토큰이 남지 않는다.
 
-그럼에도 URL 전달을 버린 이유는 **history가 아니라 서버 쪽 로그**다.
+그런데도 URL 전달을 버린 건 서버 쪽 로그 때문이다. 리버스 프록시, CDN, 웹서버의 access log에는 풀 URL(`?accessToken=...&refreshToken=...`)이 평문 그대로 쌓인다. 이게 가장 큰 문제였다. redirect 체인 중간에 Referer 헤더로 토큰이 샐 여지도 있었다.
 
-- 리버스 프록시 / CDN / 웹서버 **access log**에 풀 URL(`?accessToken=...&refreshToken=...`)이 **평문으로 그대로 적재**된다 — 이게 가장 큰 문제였다
-- redirect 체인 중간에 **Referer 헤더**로 토큰이 새어 나갈 여지도 있다
-
-브라우저 단에서는 미들웨어 처리로 막혔지만, **네트워크 경로의 로그**까지는 URL 방식으로 막을 수 없었다.
-그래서 전달 채널 자체를 URL에서 떼어내야 했다.
+브라우저 쪽은 미들웨어 처리로 막았지만, 네트워크 경로에 남는 로그는 URL 방식으로는 막을 수 없었다. 전달 채널 자체를 URL에서 떼어내야 했다.
 
 ---
 
 ## 2단계: form POST BFF로 전환 (토큰을 body로)
 
-핵심 아이디어는 **토큰을 URL 쿼리가 아니라 POST body로 옮기는 것**이다.
-GET redirect로는 body를 못 실으니, **auto-submit HTML form**을 끼워 넣는다.
+토큰을 URL 쿼리 대신 POST body에 싣기로 했다. GET redirect로는 body를 실을 수 없어서, 자동으로 submit 되는 HTML form을 중간에 끼워 넣었다.
 
-- 미들웨어가 redirect 대신 **`<form method="POST">` HTML을 직접 반환**한다. 토큰은 hidden input에.
-- 이 form은 로드 즉시 `script`로 자동 submit → 정산 호스트의 **BFF 라우트(`/api/settlement`)** 로 POST.
-- BFF가 `formData`에서 토큰을 꺼내 **쿠키로 set** 한 뒤 목적지로 redirect.
+- 미들웨어가 redirect 대신 `<form method="POST">` HTML을 직접 반환한다. 토큰은 hidden input에 넣는다.
+- 이 form은 로드되자마자 `script`로 자동 submit 되어 정산 호스트의 BFF 라우트(`/api/settlement`)로 POST 한다.
+- BFF는 `formData`에서 토큰을 꺼내 쿠키로 set 하고 목적지로 redirect 한다.
 
-토큰이 이동하는 채널이 GET URL → **POST body**로 바뀌면서, URL 방식으로는 막지 못했던 **서버 access log, Referer**에도 토큰이 남지 않게 됐다.
+토큰이 오가는 채널이 GET URL에서 POST body로 바뀌면서, URL 방식으로 막지 못했던 서버 access log와 Referer에도 토큰이 남지 않게 됐다.
 
 ```ts
 // app/api/settlement/route.ts — 토큰을 받아 쿠키로 심는 BFF
@@ -164,35 +146,29 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-> POST 후 redirect라 status는 **303 See Other**를 쓴다. POST 결과를 GET으로 따라가게 만들어, 새로고침 시 form이 재제출되는 걸 막는다.
+POST 뒤에 redirect 하므로 status는 303 See Other를 쓴다. POST 결과를 GET으로 따라가게 해서 새로고침할 때 form이 다시 제출되지 않게 한다.
 
 ---
 
 ## 3단계: BFF 보안 가드 (login-CSRF 방어)
 
-남의 사이트에 토큰을 받는 POST 엔드포인트를 열어두는 건 그 자체로 위험하다.
-공격자가 임의의 토큰을 우리 BFF에 POST 하면, 사용자를 **공격자 계정으로 로그인시키는 login-CSRF**가 가능하다.
+토큰을 받는 POST 엔드포인트를 다른 사이트에 열어 두는 것부터가 위험하다. 공격자가 아무 토큰이나 우리 BFF에 POST 하면 사용자를 공격자 계정으로 로그인시킬 수 있다. login-CSRF다.
 
-그래서 BFF에 가드를 추가했다.
+그래서 BFF에 가드를 붙였다. Origin과 Referer를 검증해 우리 핸드오프 출처에서 온 POST만 받는다. 토큰이 담긴 form HTML 응답에는 `Cache-Control: no-store`를 붙여 중간 캐시에 토큰이 남지 않게 했다. `settlementDomain`이 설정되지 않았을 때는 미들웨어와 라우트 양쪽에서 early return 한다.
 
-- **Origin / Referer 검증** — 우리 핸드오프 출처에서 온 POST만 허용
-- 토큰이 담긴 form HTML 응답에 **`Cache-Control: no-store`** — 중간 캐시에 토큰이 남지 않도록
-- `settlementDomain` 미설정 시 **early return guard** (미들웨어/라우트 양쪽)
-
-이 단계에서 "동작하는 핸드오프"가 "어느 정도 방어되는 핸드오프"로 올라왔다.
+이 단계에서 "동작하는 핸드오프"가 "어느 정도 방어되는 핸드오프"가 됐다.
 
 ---
 
 ## 4단계: handoff 라우트로 책임 분리
 
-2~3단계에서 미들웨어는 **도메인 라우팅 + form HTML 생성 + 토큰 읽기**를 다 떠안고 있었다.
-미들웨어는 모든 요청을 거치는 edge 레이어라, 여기에 토큰 핸들링과 HTML 생성 로직이 섞이는 건 책임 과부하다.
+2~3단계의 미들웨어는 도메인 라우팅, form HTML 생성, 토큰 읽기를 모두 떠안고 있었다. 미들웨어는 모든 요청이 거치는 edge 레이어인데, 여기에 토큰 처리와 HTML 생성까지 섞이니 책임이 너무 많았다.
 
-그래서 핸드오프를 **`/api/settlement/handoff` 전용 라우트로 분리**했다.
+그래서 핸드오프를 `/api/settlement/handoff` 전용 라우트로 분리했다.
 
-- **미들웨어**: 경로 기반 도메인 라우팅(`enforceDomain`)만 담당. 토큰과 HTML 로직 전부 제거 → 위 0번의 단순한 형태로 정리
-- **handoff 라우트**: form_post HTML의 **단일 출처**. HttpOnly 쿠키를 서버에서 읽어 form에 emit
-- **정산 메뉴**: 클릭 시 미들웨어 redirect에 의존하지 않고 명시적으로 handoff 엔드포인트를 새 창으로 연다
+- 미들웨어는 경로 기반 도메인 라우팅(`enforceDomain`)만 맡는다. 토큰과 HTML 로직을 전부 걷어내 글 앞에서 본 '현재' 버전의 단순한 형태로 정리했다.
+- form_post HTML의 단일 출처는 handoff 라우트다. HttpOnly 쿠키를 서버에서 읽어 form에 emit 한다.
+- 정산 메뉴는 미들웨어 redirect에 기대지 않는다. 클릭하면 handoff 엔드포인트를 새 창으로 직접 연다.
 
 ```ts
 // modules/app/providers/model/menu.hook.tsx
@@ -201,17 +177,15 @@ const openSettlement = (args: { key: string }) => {
 };
 ```
 
-핸드오프가 "정산 메뉴 클릭"이라는 **명시적 사용자 액션**에 묶이고, 미들웨어는 순수 라우팅으로 돌아갔다.
-관심사가 깔끔하게 갈렸다.
+이제 핸드오프는 "정산 메뉴 클릭"이라는 사용자 행동에 묶이고, 미들웨어는 라우팅만 한다. 관심사가 깔끔하게 갈렸다.
 
 ---
 
-## 5단계: handoff 보안 강화 (open redirect + clickjacking 방어)
+## 5단계: handoff 보안 강화 (open redirect, clickjacking 방어)
 
 마지막으로 handoff 라우트 자체를 조였다.
 
-**(1) `next` 파라미터를 URL 파싱으로 정규화** — `next`는 핸드오프 후 이동할 경로다. 그대로 쓰면 open redirect나 제어문자 혼입에 취약하다.
-`new URL`로 파싱해 **pathname만 추출**하고, `/settlement`로 시작하지 않으면 기본값으로 떨군다. handoff, BFF 양쪽에서 동일하게 적용.
+먼저 `next` 파라미터를 URL 파싱으로 정규화했다. `next`는 핸드오프 뒤에 이동할 경로인데, 그대로 쓰면 open redirect나 제어문자 혼입에 취약하다. `new URL`로 파싱해 pathname만 꺼내고, `/settlement`로 시작하지 않으면 기본값으로 보낸다. handoff와 BFF 양쪽에 똑같이 적용했다.
 
 ```ts
 // entities/settlement/common/lib/settlement.helper.ts
@@ -225,7 +199,7 @@ export function resolveNext(next: string | null) {
 }
 ```
 
-**(2) 응답 보안 헤더** — 토큰이 담긴 form HTML이 iframe에 끼워지거나(clickjacking), Referer로 새거나, 외부로 submit 되지 않도록 헤더로 봉쇄.
+다음은 응답 보안 헤더다. 토큰이 담긴 form HTML이 iframe에 들어가거나(clickjacking), Referer로 새거나, 외부로 submit 되지 않게 헤더로 막았다.
 
 ```ts
 // app/api/settlement/handoff/route.ts
@@ -251,16 +225,13 @@ return new NextResponse(html, {
 });
 ```
 
-- `escapeHtmlAttr`로 토큰/next 값의 HTML 속성 인젝션 차단
-- `X-Frame-Options: DENY` — 토큰 form을 iframe에 못 넣게
-- `Referrer-Policy: no-referrer` — 다음 요청에 출처 노출 안 함
-- **CSP `form-action`을 정산 도메인 origin으로 고정** — 자동 submit이 우리 BFF 외 다른 곳으로 못 가게
+`escapeHtmlAttr`는 토큰과 next 값이 HTML 속성에 끼어드는 인젝션을 막는다. `X-Frame-Options: DENY`로 토큰 form을 iframe에 넣지 못하게 하고, `Referrer-Policy: no-referrer`로 다음 요청에 출처를 드러내지 않는다. CSP `form-action`은 정산 도메인 origin으로 고정해서 자동 submit이 우리 BFF 말고 다른 곳으로 가지 못하게 했다.
 
 ---
 
 ## 현재 아키텍처: 전체 흐름과 토큰 "구독" 방식
 
-지금의 핸드오프 전체 흐름은 이렇다.
+지금의 핸드오프 흐름은 이렇다.
 
 ```text
 [메인 호스트]
@@ -283,9 +254,7 @@ return new NextResponse(html, {
   /settlement/summary  (정산 호스트에 토큰 쿠키 보유 → 로그인된 상태)
 ```
 
-여기서 **"토큰을 구독하는 방식"이 바뀐 지점**이 핵심이다.
-예전엔 토큰이 URL을 타고 흘러서, 토큰을 "받는" 코드가 미들웨어의 쿼리 파싱에 박혀 있었다.
-지금은 정산 호스트에 **HttpOnly 쿠키로 안착된 토큰을, 런타임에서 axios interceptor가 매 요청마다 구독해 헤더로 주입**한다.
+달라진 건 토큰을 "구독"하는 방식이다. 예전에는 토큰이 URL을 타고 흘렀고, 토큰을 받는 코드가 미들웨어의 쿼리 파싱에 박혀 있었다. 지금은 토큰이 정산 호스트의 HttpOnly 쿠키에 자리 잡고, axios interceptor가 런타임에 요청마다 그 토큰을 구독해 헤더에 넣는다.
 
 ```ts
 // packages/shared/utils/http/axiosInstance.ts
@@ -300,8 +269,7 @@ instance.interceptors.request.use(async (config) => {
 });
 ```
 
-그리고 401이 떨어지면 **refresh subscriber 패턴**으로 동시 요청을 한 번의 토큰 갱신에 묶는다.
-갱신이 진행 중이면 후속 요청들은 새 토큰을 **구독(subscribe)** 하며 대기하고, 갱신이 끝나면 한꺼번에 새 토큰으로 재시도한다.
+401이 떨어지면 refresh subscriber 패턴으로 동시에 나간 요청을 토큰 갱신 한 번에 묶는다. 갱신이 진행 중이면 뒤따르는 요청은 새 토큰을 구독(subscribe)하며 기다리고, 갱신이 끝나면 한꺼번에 새 토큰으로 재시도한다.
 
 ```ts
 let isRefreshing = false;
@@ -326,32 +294,25 @@ if (isRefreshing) {
 }
 ```
 
-즉 토큰은 이제 **(1) 호스트 간엔 form POST로 한 번 위임되고 → (2) 정산 호스트 안에선 HttpOnly 쿠키에 앉아 → (3) 매 요청마다 interceptor가 구독해 주입되고 → (4) 만료 시 subscriber 큐로 갱신을 한 번에 묶는** 구조가 됐다.
-"토큰을 URL로 떠넘기던" 모델에서 "토큰을 쿠키에 안착시키고 런타임이 구독하는" 모델로 바뀐 것이다.
+정리하면 토큰은 호스트 사이에서 form POST로 한 번 위임되고, 정산 호스트 안에서는 HttpOnly 쿠키에 머문다. 요청마다 interceptor가 구독해 헤더에 넣고, 만료되면 subscriber 큐가 갱신을 한 번으로 묶는다. 토큰을 URL로 떠넘기던 구조에서, 쿠키에 자리 잡은 토큰을 런타임이 구독하는 구조로 바뀌었다.
 
 ---
 
 ## 제약 조건: 왜 "정석"으로 안 갔나
 
-크로스 도메인 토큰 위임의 교과서적 정답은 **OAuth-style 인가 코드 교환**이다.
-일회용 `code`만 프론트로 넘기고, 정산 호스트가 그 `code`를 **백채널(서버-서버)로 토큰과 교환**한다. 토큰 자체는 절대 브라우저를 타지 않는다.
+크로스 도메인 토큰 위임의 교과서적인 답은 OAuth-style 인가 코드 교환이다. 프론트에는 일회용 `code`만 넘기고, 정산 호스트가 그 `code`를 백채널(서버-서버)에서 토큰으로 바꾼다. 토큰 자체는 브라우저를 타지 않는다.
 
-하지만 이 방식은 **백엔드에 토큰 교환 엔드포인트가 새로 있어야** 성립한다. 그리고 이 작업의 전제 조건이 바로 거기였다 —
+하지만 이 방식은 백엔드에 토큰 교환 엔드포인트가 새로 있어야 성립한다. 이 작업의 전제 조건이 바로 그걸 막고 있었다.
 
 > **"백엔드 리소스를 쓰지 말 것."**
 
-정산 호스트 분리는 백엔드 변경 없이 프론트에서 끝내야 하는 작업이었다. 인가 코드 교환은 시작부터 선택지에 없었다.
+정산 호스트 분리는 백엔드 변경 없이 프론트에서 끝내야 하는 작업이었고, 인가 코드 교환은 처음부터 선택지에 없었다.
 
-그래서 **BFF를 Next.js Route Handler 안에 두는 설계**가 의미를 가진다.
-`/api/settlement/handoff`와 `/api/settlement`는 별도 백엔드 서버가 아니라 **프론트 앱이 소유한 서버 경계**다.
-백엔드 리소스를 한 줄도 추가하지 않으면서, "토큰을 어디서 읽고 어디에 심을지"를 프론트 서버 레이어에서 통제할 수 있다.
-즉 이 핸드오프 구조는 *더 좋아서* 고른 게 아니라, **백엔드를 못 건드린다는 제약 안에서 프론트만으로 끌어낼 수 있는 최선**이었다.
+그래서 BFF를 Next.js Route Handler 안에 둔 설계가 의미를 가진다. `/api/settlement/handoff`와 `/api/settlement`는 프론트 앱이 가진 서버 경계라서 별도 백엔드 서버가 필요 없다. 백엔드 리소스를 한 줄도 늘리지 않고도 토큰을 어디서 읽고 어디에 심을지를 프론트 서버 레이어에서 정할 수 있다. 백엔드를 건드릴 수 없다는 제약 안에서 프론트만으로 할 수 있는 최선이 이 구조였다.
 
-그 제약을 받아들인 뒤 남는 트레이드오프는 명확하다.
+그 제약을 받아들이고 나면 트레이드오프는 분명하다. 토큰은 여전히 한 번은 평문으로 브라우저를 탄다. body로 옮겨 서버 로그와 Referer 노출은 막았지만 백채널 교환만큼 근본적이지는 않다. 그래서 단명(short-lived) 토큰과 HTTPS를 전제로 위험을 절충했다.
 
-- 토큰이 **여전히 평문으로 한 번은 브라우저를 탄다.** body로 옮겨 서버 로그/Referer 노출은 막았지만, 백채널 교환만큼 근본적이진 않다.
-- 그래서 **단명(short-lived) 토큰 + HTTPS 전제**로 위험을 절충했다.
-- 백엔드 리소스를 쓸 수 있게 되거나 감사 요구가 더 커지면 인가 코드 교환으로 교체해야 한다. 그때를 위해 핸드오프를 `/api/settlement/handoff` **단일 출처**로 모아둔 게 미래의 교체 비용을 줄여준다 — 토큰을 읽어 emit 하는 지점이 한 곳뿐이라, 백채널 교환으로 바꿔도 갈아끼울 면적이 작다.
+백엔드 리소스를 쓸 수 있게 되거나 감사 요구가 더 커지면 인가 코드 교환으로 바꿔야 한다. 핸드오프를 `/api/settlement/handoff` 한 곳에 모아 둔 게 그때의 교체 비용을 줄여 준다. 토큰을 읽어 emit 하는 지점이 하나뿐이라 백채널 교환으로 바꿔도 갈아 끼울 범위가 작다.
 
 ---
 
@@ -365,7 +326,4 @@ if (isRefreshing) {
 | 4 | handoff 라우트 분리 | 미들웨어는 라우팅만, 핸드오프 단일 출처 |
 | 5 | + CSP/X-Frame/resolveNext | open redirect, clickjacking 방어 |
 
-토큰을 "어떻게 넘기느냐"는 결국 **어느 채널에 평문이 남는가**의 문제였고,
-URL → body → 쿠키 안착 → 런타임 구독으로 한 칸씩 옮기는 과정이 이 리팩토링의 전부였다.
-**백엔드 리소스를 쓰지 않는다**는 제약 때문에 인가 코드 교환(정석)까지는 못 갔지만,
-그 제약 안에서 프론트 서버 경계(BFF)만으로 노출 채널을 최대한 좁히고 **교체 비용을 한곳에 모아두는 것**까지가 지금 단계에서 내릴 수 있는 합리적인 결정이라고 봤다.
+토큰을 어떻게 넘기느냐는 결국 어느 채널에 평문이 남느냐의 문제였고, URL에서 body로, 다시 쿠키와 런타임 구독으로 한 칸씩 옮긴 게 이 리팩토링의 전부였다. 백엔드 리소스를 쓰지 않는다는 제약 때문에 인가 코드 교환까지는 가지 못했다. 그 안에서는 BFF만으로 노출 채널을 최대한 좁히고 교체할 지점을 한곳에 모아 두는 게 합리적인 결정이라고 봤다.
