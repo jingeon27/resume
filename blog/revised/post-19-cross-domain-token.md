@@ -169,6 +169,6 @@ destinationUrl.search = request.nextUrl.search;
 return NextResponse.redirect(destinationUrl);
 ```
 
-이 사건 뒤에는 middleware가 페이지 요청만 받는다는 가정을 버렸다. 페이지·API·정적 청크·public asset이 matcher에 포함되는지를 각각 검증하고, 두 호스트에서 청크가 redirect 없이 200으로 응답하는지 통합 테스트 대상으로 삼았다.
+이 사건 뒤에는 middleware가 페이지 요청만 받는다는 가정을 버렸다. 페이지, API, 정적 청크, public asset이 matcher에 포함되는지를 각각 검증하고, 두 호스트에서 청크가 redirect 없이 200으로 응답하는지 통합 테스트 대상으로 삼았다.
 
 URL에서 POST 본문으로 옮긴 것은 노출 경로 하나를 줄인 결정이지 인증 문제 전체의 해결은 아니다. 당시 제약을 숨기지 않고 전달 방식의 교체 지점을 한곳에 모았다. 석 달 뒤의 장애를 겪고 나서는 호스트 라우팅처럼 짧은 조건도 실제 브라우저 요청 범위로 검증하게 됐다.
