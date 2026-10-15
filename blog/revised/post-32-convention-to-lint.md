@@ -23,7 +23,7 @@
 | type `T` 접두사 | X | X | 661건 중 262건 (40%) |
 | 컴포넌트 named export | X | X | 1,063건 중 340건 (32%) |
 
-패턴이 선명했어요. **lint로 옮긴 규칙은 위반이 0건이고, 문서에만 있는 규칙은 어긋난 게 수백 건이었어요.** 타입 선언만 합쳐도 1,300건 중 407건(31%)이에요. 테스트·mock 파일을 빼고 세면 1,264건 중 388건으로 비율은 같아요. 유일하게 위반이 남은 lint 규칙은 warning이라 빌드를 세우지 않는 `let` 하나였고요.
+패턴이 선명했어요. **lint로 옮긴 규칙은 위반이 0건이고, 문서에만 있는 규칙은 어긋난 게 수백 건이었어요.** 타입 선언만 합쳐도 1,300건 중 407건(31%)이에요. 테스트, mock 파일을 빼고 세면 1,264건 중 388건으로 비율은 같아요. 유일하게 위반이 남은 lint 규칙은 warning이라 빌드를 세우지 않는 `let` 하나였고요.
 
 이탈이 언제 쌓였는지도 시점별로 재봤는데요. 특정 시기의 문제가 아니었어요.
 
@@ -90,7 +90,7 @@ options의 키가 바뀌는 순간 이 무효화는 아무 일도 하지 않으�
 
 warning에서 error로 올릴 때는 저장소 위반이 0건인지 먼저 확인하는데요. 남아 있는 채로 올리면 그 순간부터 lint가 깨지고, 급한 PR을 막는 규칙은 결국 꺼져요. 규칙이 죽는 경로는 대개 이쪽이에요.
 
-그 뒤로 error가 늘었어요. 이 글을 고치는 시점의 설정 기준으로 관리자 서비스에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사·`let`·queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 복지몰은 반대로 레이어·Public API·page 간 참조·raw key·`any`·non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
+그 뒤로 error가 늘었어요. 이 글을 고치는 시점의 설정 기준으로 관리자 서비스에서 error인 자체 규칙은 `query/no-raw-key`, `query/no-passthrough-hook`, `query/no-enabled-in-options`, `form/no-key-reset`, `antd/no-deprecated-prop` 다섯이에요. 전부 저장소 위반 0건에서 켰고, 뒤의 넷은 새로 생기는 것만 막는 회귀 가드예요. `app/no-query`, `slice/structure`, `slice/public-api`, `boundary/explicit-variant`와 타입 접두사, `let`, queryKey 상수 셀렉터는 아직 warning이에요. 같은 시기 복지몰은 반대로 레이어, Public API, page 간 참조, raw key, `any`, non-null 단언을 전부 error로 잠갔고, "lint 규칙은 warn으로 켜지 않는다"가 원칙이 됐어요. 저장소마다 진도가 달라서 이 상태를 일반화하지는 않아요.
 
 ## 밟은 함정들
 
@@ -137,7 +137,7 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 
 ## 참고
 
-- [typescript-eslint · tsconfigRootDir](https://typescript-eslint.io/packages/parser/#tsconfigrootdir)
-- [ESLint · no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
-- [ESLint · Ignore files](https://eslint.org/docs/latest/use/configure/ignore)
+- [typescript-eslint | tsconfigRootDir](https://typescript-eslint.io/packages/parser/#tsconfigrootdir)
+- [ESLint | no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
+- [ESLint | Ignore files](https://eslint.org/docs/latest/use/configure/ignore)
 - [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31) — 정적으로 판정할 수 있는 기준을 lint로 내린 이유
