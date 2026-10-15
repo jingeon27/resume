@@ -8,7 +8,7 @@
 
 ## 배경: 왜 정산만 다른 호스트인가
 
-세이프닥 병원 관리자(`safedoc-hospital-admin`)는 병원정보·프로그램·예약·정산을 한 앱에서 다룬다.
+세이프닥 병원 관리자(`safedoc-hospital-admin`)는 병원정보, 프로그램, 예약, 정산을 한 앱에서 다룬다.
 이 중 **정산 도메인**은 권한 체계와 감사(audit) 요구가 나머지 기능과 달라서, 운영상 **별도 호스트**로 떼어내야 했다.
 
 - 메인 앱: `app.example.com` (이하 *메인 호스트*)
@@ -139,7 +139,7 @@ GET redirect로는 body를 못 실으니, **auto-submit HTML form**을 끼워 �
 - 이 form은 로드 즉시 `script`로 자동 submit → 정산 호스트의 **BFF 라우트(`/api/settlement`)** 로 POST.
 - BFF가 `formData`에서 토큰을 꺼내 **쿠키로 set** 한 뒤 목적지로 redirect.
 
-토큰이 이동하는 채널이 GET URL → **POST body**로 바뀌면서, URL 방식으로는 막지 못했던 **서버 access log·Referer**에도 토큰이 남지 않게 됐다.
+토큰이 이동하는 채널이 GET URL → **POST body**로 바뀌면서, URL 방식으로는 막지 못했던 **서버 access log, Referer**에도 토큰이 남지 않게 됐다.
 
 ```ts
 // app/api/settlement/route.ts — 토큰을 받아 쿠키로 심는 BFF
@@ -186,11 +186,11 @@ export async function POST(req: NextRequest) {
 ## 4단계: handoff 라우트로 책임 분리
 
 2~3단계에서 미들웨어는 **도메인 라우팅 + form HTML 생성 + 토큰 읽기**를 다 떠안고 있었다.
-미들웨어는 모든 요청을 거치는 edge 레이어라, 여기에 토큰 핸들링·HTML 생성 로직이 섞이는 건 책임 과부하다.
+미들웨어는 모든 요청을 거치는 edge 레이어라, 여기에 토큰 핸들링과 HTML 생성 로직이 섞이는 건 책임 과부하다.
 
 그래서 핸드오프를 **`/api/settlement/handoff` 전용 라우트로 분리**했다.
 
-- **미들웨어**: 경로 기반 도메인 라우팅(`enforceDomain`)만 담당. 토큰·HTML 로직 전부 제거 → 위 0번의 단순한 형태로 정리
+- **미들웨어**: 경로 기반 도메인 라우팅(`enforceDomain`)만 담당. 토큰과 HTML 로직 전부 제거 → 위 0번의 단순한 형태로 정리
 - **handoff 라우트**: form_post HTML의 **단일 출처**. HttpOnly 쿠키를 서버에서 읽어 form에 emit
 - **정산 메뉴**: 클릭 시 미들웨어 redirect에 의존하지 않고 명시적으로 handoff 엔드포인트를 새 창으로 연다
 
@@ -211,7 +211,7 @@ const openSettlement = (args: { key: string }) => {
 마지막으로 handoff 라우트 자체를 조였다.
 
 **(1) `next` 파라미터를 URL 파싱으로 정규화** — `next`는 핸드오프 후 이동할 경로다. 그대로 쓰면 open redirect나 제어문자 혼입에 취약하다.
-`new URL`로 파싱해 **pathname만 추출**하고, `/settlement`로 시작하지 않으면 기본값으로 떨군다. handoff·BFF 양쪽에서 동일하게 적용.
+`new URL`로 파싱해 **pathname만 추출**하고, `/settlement`로 시작하지 않으면 기본값으로 떨군다. handoff, BFF 양쪽에서 동일하게 적용.
 
 ```ts
 // entities/settlement/common/lib/settlement.helper.ts
@@ -363,7 +363,7 @@ if (isRefreshing) {
 | 2 | form POST body (BFF) | 전달 채널을 URL → body로, 노출 제거 |
 | 3 | + Origin/Referer 검증 | login-CSRF 방어, no-store |
 | 4 | handoff 라우트 분리 | 미들웨어는 라우팅만, 핸드오프 단일 출처 |
-| 5 | + CSP/X-Frame/resolveNext | open redirect·clickjacking 방어 |
+| 5 | + CSP/X-Frame/resolveNext | open redirect, clickjacking 방어 |
 
 토큰을 "어떻게 넘기느냐"는 결국 **어느 채널에 평문이 남는가**의 문제였고,
 URL → body → 쿠키 안착 → 런타임 구독으로 한 칸씩 옮기는 과정이 이 리팩토링의 전부였다.
