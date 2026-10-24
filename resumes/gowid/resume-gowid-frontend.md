@@ -6,9 +6,9 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 ## 소개
 
-예약금 결제와 정산, 쿠폰을 개발해 온 프론트엔드 엔지니어입니다. 결제에 실패했을 때 입력을 복원하고, 저장을 다시 시도해도 같은 항목이 중복 등록되지 않도록 만들었습니다. 복지몰과 병원 관리자, 백오피스를 함께 맡아 사용자의 예약부터 운영팀의 처리까지 개발합니다.
+예약금 결제와 정산, 쿠폰을 개발하며 금액과 처리 상태, 재시도 동작을 다뤄 온 프론트엔드 엔지니어입니다. 사용자 화면과 관리자 서비스를 함께 맡아 결제 실패 후 입력 복원, 일괄 저장의 부분 실패, 오래된 조회값으로 저장하는 경우를 처리했습니다.
 
-코드에서 오류를 빠르게 찾을 수 있도록 읽기 쉬운 구조를 유지하려고 합니다. 기능을 개발하면서 복잡하게 얽힌 상태와 공통 코드를 정리해 왔습니다. 구현은 AI에 맡기지만 코드와 테스트를 직접 읽고 화면을 띄워 동작을 확인합니다. 반복해서 고치는 부분은 skills와 lint rule에 남깁니다.
+업무 규칙을 코드에서 확인하기 쉽도록 상태와 변환 로직을 정리합니다. 실제 정산 기준을 확인해 불필요한 가격 이력 구조를 만들지 않았고, 화면별 예외가 쌓인 공통 코드는 다시 나눴습니다. AI가 구현한 코드와 테스트를 직접 검토하며 반복되는 판단은 skills와 lint rule에 남깁니다.
 
 ## 지원동기
 
@@ -22,7 +22,8 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - State & Form: TanStack Query, React Hook Form, Ant Design Form, Zustand, Zod
 - UI: Radix UI, shadcn/ui, Base UI, Tailwind CSS, overlay-kit
 - Testing: Vitest, React Testing Library, MSW, Playwright
-- Monitoring & Analytics: Sentry, AWS CloudWatch, Amplitude
+- Monitoring & Logging: Sentry, AWS CloudWatch
+- Analytics: Amplitude
 - Tooling: pnpm, Turborepo, ESLint, Knip, GitHub Actions
 - AI: Claude Code, Codex
 
@@ -45,7 +46,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 #### 정산과 쿠폰 결제, 기업 관리 | 2025.06 – 현재
 
-수기로 관리하던 정산을 내부 예약 데이터와 연결하는 프로젝트에서 리팩터링과 운영 요청을 맡았습니다. 인수한 페이지는 각각 1,170줄, 1,164줄로 조회와 표, 선택, 편집, 정산 처리가 한데 섞여 있었습니다. 함께 바뀌는 코드끼리 나누고 파일 위치, 타입, 변환 로직을 정리했습니다. ref로 열던 모달은 대상 데이터와 열림 상태를 props로 받도록 바꿨습니다.
+수기로 관리하던 정산을 내부 예약 데이터와 연결하는 프로젝트에서 리팩터링과 운영 요청을 맡았습니다. 각각 1,170줄, 1,164줄인 화면에 조회와 표, 선택, 편집, 정산 처리가 섞여 있었습니다. 함께 바뀌는 코드는 같은 기능 안에 모으고 화면 조합과 서버 계약, 변환 로직을 나눴습니다. ref로 열던 모달도 대상 데이터와 열림 상태를 props로 받아, 어떤 항목을 편집하는지 호출부에서 확인하도록 바꿨습니다.
 
 - 프로그램 가격이 바뀔 때를 대비해 가격 이력을 추가하자는 요청을 받고 실제 정산 기준을 확인했습니다. 정산에는 견적 금액을 쓰고 프로그램 가격은 참고만 하므로 별도 이력 구조는 만들지 않았습니다.
 - 쿠폰 결제는 결제수단과 상태에 따라 입력, 완료, 취소 동작이 달랐습니다. 관련 조건을 도메인 함수와 ts-pattern으로 모았습니다. 결제 예정 금액이 바뀌면 적용했던 쿠폰을 해제하도록 했습니다.
@@ -57,7 +58,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 기존 화면은 서버의 `ensureQuery` 결과를 render props로 받아 클라이언트에서 Query 캐시를 무효화해도 갱신되지 않았습니다. 2025년 5월 예약 화면부터 prefetch와 hydration으로 바꿨습니다. 서버가 준비한 데이터를 클라이언트도 같은 Query 캐시에서 읽어 이후 조회와 갱신을 처리하도록 했습니다.
 
-- 예약자의 가족과 날짜 값이 Query, Zustand, 로컬 상태에 흩어져 있었습니다. 서버에서 받은 목록은 Query에, 작성 중인 값은 React Hook Form에 두고 제출 조건은 Zod로 검사하도록 정리했습니다.
+- 예약자의 가족과 날짜 값이 Query, Zustand, 로컬 상태에 흩어져 가족을 추가하면 선택한 일시가 어긋났습니다. 서버에서 받은 목록은 Query에, 작성 중인 값은 React Hook Form에 두고 제출 조건은 Zod로 검사하도록 정리했습니다.
 - 화면마다 예외가 붙던 공통 검색 필터를 각 화면에서 조합하도록 바꾸고 27개 화면에 적용했습니다. JSX가 일부 반복되지만 한 화면의 요구사항 때문에 공통 코드에 분기를 추가하지 않아도 됩니다. URL과 폼, API 요청은 같은 Zod 스키마를 사용합니다.
 - Ant Design Form에서 중첩 필드명과 값의 타입을 검사하도록 `createTypedForm<T>`를 만들었습니다. 재귀 조건부 타입과 infer로 필드 경로에 맞는 값을 추론합니다. 라이브러리 타입을 보완하는 단언은 래퍼 안에만 뒀습니다.
 - Headless UI에서 Radix UI로 전환해 접근성 primitive와 조합 방식을 활용했습니다. 공통 Bottom Sheet는 Compound Components와 overlay-kit으로 바꿔 본문과 하단 버튼이 같은 폼을 쓰게 했습니다.
@@ -70,19 +71,21 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 - Bottom Sheet 드래그 크래시를 라이브러리의 null ref 접근까지 추적했습니다. 버전업 뒤 달라진 snap point는 공통 Root에서 변환해 사용처 API를 유지했습니다. 누적 75건, 57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.
 - 회원 조회가 타임아웃이나 서버 오류로 실패해도 로그아웃되던 문제를 고쳤습니다. 401일 때만 로그아웃하고 일시적인 실패는 다시 시도할 수 있게 했습니다.
-- 관리자 서비스에는 기능별 Error Boundary를 두어 오류가 난 영역만 다시 시도하게 했습니다. API 오류와 Zod 응답 불일치는 CloudWatch로 트래킹합니다.
+- 관리자 서비스는 독립적으로 복구할 수 있는 기능별로 Error Boundary를 나눴습니다. 동의서의 외부 문서 조회가 실패해도 고객명과 동의 내역은 남도록 처리하고 실패 응답으로 테스트했습니다. API 오류와 Zod 응답 불일치는 CloudWatch로 트래킹합니다.
 
 [Sentry 도입](https://jingeon27.tistory.com/30) | [크래시 분석](https://jingeon27.tistory.com/33)
 
 #### 테스트와 개발 기준 | 2026.04 – 현재
 
-AI 개발 workflow를 4월부터 다듬고, 7월부터 테스트를 도입했습니다.
+4월부터 AI로 구현하며 상태와 공통 코드의 책임을 정리하고, 7월부터 테스트를 도입했습니다. 정상 처리뿐 아니라 결제 실패와 저장 재시도에서 어떤 값을 유지하거나 버릴지도 확인합니다.
 
 티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
 
 새 기능의 기대 동작은 BDD 형식의 `*.spec`에 적고, 운영이나 QA에서 발견한 오류는 `*.test`에 재현합니다. 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지도 확인합니다. API 연동은 dev API 서버를 우선하고 재현하기 어려운 조건에 MSW를 씁니다. 병원 관리자에서 등록하고 백오피스에서 검수와 승인하는 과정은 두 앱을 연결한 E2E로 확인합니다.
 
-에이전트가 같은 수정을 반복하면 skills를 보강합니다. 의존 방향과 공개 API처럼 자동으로 검사할 수 있는 내용은 lint rule로 만들고 RuleTester와 fixture로 테스트합니다.
+테스트와 앱의 오류 처리 설정이 달라 실제로 보이지 않는 오류 화면을 검증하는 문제를 고쳤습니다. 테스트용 QueryClient를 앱과 맞추고, 데이터가 없는 조회 실패와 기존 데이터가 있는 재조회 실패를 구분해 확인합니다. 제출 payload도 제품의 변환 함수를 재사용하지 않고 기대값을 따로 적어, 같은 변환 오류를 답으로 삼지 않게 했습니다.
+
+구현이 의도와 어긋나면 수정본을 확인하고 반복되는 판단은 skills에 남깁니다. 의존 방향과 공개 API처럼 자동 검사할 수 있는 항목은 lint rule로 만들고 RuleTester와 fixture로 테스트합니다. 미사용 코드는 Knip으로 검사합니다.
 
 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16, React 18→19로 전환했습니다. 비동기 API와 캐시 동작 변경에 맞춰 코드를 수정하고 이동과 새로고침을 확인했습니다. 별도로 TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 정보를 사용하는 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
