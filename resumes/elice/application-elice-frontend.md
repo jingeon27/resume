@@ -53,9 +53,9 @@ Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 따
 
 #### AI 개발 workflow | 2026.04 – 현재
 
-compound engineering 방식으로 skills를 보강하면서 FSD와 lint rule, 테스트 기준을 저장소에 맞게 다듬었습니다. 기술의 장단점과 모르는 동작은 에이전트에게 물어 이해를 넓히고, 대안별 이점과 도입 비용을 비교합니다. 지금은 아래 순서로 작업하고, 문제가 나오면 앞 단계로 돌아갑니다.
+compound engineering 방식으로 skills를 보강하면서 FSD와 lint rule, 테스트 기준을 저장소에 맞게 다듬었습니다. 지금은 아래 순서로 작업하고, 문제가 나오면 앞 단계로 돌아갑니다.
 
-티켓, plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰, 화면을 띄워 동작 확인 → 전체 CI(테스트, knip, lint)
+티켓, plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰, 화면을 띄워 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
 
 critical 자동 수정 결과도 검토합니다. lint rule은 RuleTester에 `__fixture__`와 mock으로 테스트 환경을 만들어 검증하고, 미사용 코드는 Knip으로 찾습니다. 병렬 worktree의 CPU 부하 때문에 작업 중에는 변경과 영향 범위부터 검사하고, typecheck는 앱과 패키지 단위로 돌립니다. 전체 검사는 CI에서 확인합니다.
 

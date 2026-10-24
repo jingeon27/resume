@@ -74,9 +74,9 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 #### 테스트와 개발 기준 | 2026.04 – 현재
 
-AI 개발 workflow를 4월부터 다듬고, 7월부터 테스트를 도입했습니다. 기술의 장단점과 낯선 동작은 에이전트에게 물어 이해를 넓히고, 얻는 이점과 감수할 비용을 비교해 선택합니다.
+AI 개발 workflow를 4월부터 다듬고, 7월부터 테스트를 도입했습니다.
 
-티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint)
+티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
 
 새 동작은 BDD 형식의 `*.spec`, 운영과 QA 오류는 `*.test`로 구분합니다. dev API 서버를 우선하고 재현하기 어려운 조건에는 MSW를 씁니다. 병원 관리자 등록부터 백오피스 검수와 승인까지 두 앱을 넘나드는 E2E를 추가했습니다. 반복되는 설계 판단은 skills에, 의존 방향과 공개 API 같은 정적 기준은 lint rule에 남기고 RuleTester와 fixture로 검증합니다.
 
