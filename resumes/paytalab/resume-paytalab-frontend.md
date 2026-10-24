@@ -86,9 +86,9 @@ Next.js 14→16, React 18→19는 Turbopack과 로컬 개발 속도 개선을 �
 
 #### 테스트 도입과 AI 개발 workflow | 2026.04 – 현재
 
-4월부터 에이전트로 구현하고 7월부터 Vitest, React Testing Library, MSW, Playwright로 테스트를 도입했습니다. 반복되는 설계 판단은 skills에, 의존 방향과 공개 API 같은 기준은 lint rule에 남깁니다. 에이전트의 완성본은 직접 읽고, 요구사항이 빠지거나 구조가 어긋나면 반려해 다시 확인합니다.
+4월부터 에이전트로 구현하고 7월부터 Vitest, React Testing Library, MSW, Playwright로 테스트를 도입했습니다. 반복되는 설계 판단은 skills에, 의존 방향과 공개 API 같은 기준은 lint rule에 남깁니다. 에이전트의 완성본은 직접 읽고, 요구사항이 빠지거나 구조가 어긋나면 반려해 다시 확인합니다. 기술을 고를 때도 에이전트에게 장단점과 모르는 동작을 물어보고, 제품에 필요한 이점과 도입 비용을 비교합니다.
 
-티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
+티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint)
 
 새 동작은 BDD 형식의 `*.spec`, 운영과 QA 오류는 `*.test`로 나눕니다. 기대 payload는 제품의 변환 함수를 재사용하지 않고 따로 적습니다. dev API 서버를 우선하고 만들기 어려운 조건에만 MSW를 쓰며, lint rule은 RuleTester와 fixture로 검증합니다.
 
