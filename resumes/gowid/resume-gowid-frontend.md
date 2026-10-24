@@ -98,7 +98,7 @@ Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16
 
 ## 개인 프로젝트
 
-2026년 10월부터 AI 코딩 에이전트와 사진 커뮤니티, 게임 커뮤니티를 개발하고 있습니다. 제품 방향과 기술 선택, 결과 검토를 맡고 구현과 테스트 작성은 에이전트에 맡깁니다. NestJS, Prisma, PostgreSQL로 API를 만들고 S3 직접 업로드와 Next.js 공개 캐시 갱신을 연결했습니다.
+2026년 10월부터 AI 코딩 에이전트와 사진 커뮤니티, 글로벌 게임 커뮤니티를 개발하고 있습니다. 제품 방향과 기술 선택, 결과 검토를 맡고 구현과 테스트 작성은 에이전트에 맡깁니다. NestJS, Prisma, PostgreSQL로 API를 만들고 S3 직접 업로드와 Next.js 공개 캐시 갱신을 연결했습니다.
 
 [소스 코드](https://github.com/jingeon27/side-project)
 
