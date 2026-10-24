@@ -12,6 +12,10 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 [전체 저장소](https://github.com/jingeon27/side-project)
 
+![Game Mate 홈과 로그인, 사진 커뮤니티 로그인 화면을 나란히 배치한 실제 모바일 캡처](assets/ai-experience/01-service-screens.png)
+
+*개발 중 저장한 실제 모바일 화면입니다. Game Mate 홈은 게시물이 없는 초기 상태이며, 로그인 화면의 준비 중 표시도 당시 구현 상태 그대로입니다.*
+
 ## 사진 대회에서 상시 커뮤니티로
 
 처음에는 친구끼리 사진을 올리고 투표하는 대회였습니다. 구현된 화면을 보며 제품을 행사 기간에만 쓰는 구조로 둘 필요는 없다고 생각했습니다. 그룹은 계속 유지하고 사진, 동영상, 합성을 언제든 올릴 수 있게 바꿨습니다.
@@ -19,6 +23,10 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 홈에 그룹 목록을 먼저 보여 주는 대신 가입한 모든 그룹의 게시물을 최신순으로 보여 달라고 요청했습니다. 가입한 그룹은 MY로 옮기고, 초대 링크 없이도 찾아볼 수 있는 공개 탐색을 더했습니다. 공개 그룹은 로그인 없이 감상하고, 비공개 그룹은 가입을 승인받은 뒤 내용을 보도록 나눴습니다.
 
 대회는 그룹의 필수 조건에서 선택 기능으로 바꿨습니다. 상시 게시물과 대회 참여를 구분하고, 그룹 안에서 대회를 열어 투표와 지난 결과를 볼 수 있게 했습니다. 기존 대회와 사진은 보존하도록 이관했습니다.
+
+![기간제 사진 대회를 상시 그룹 커뮤니티로 바꾸고 대회를 선택 기능으로 남긴 제품 방향](assets/ai-experience/02-product-direction.png)
+
+*그룹과 게시물의 수명을 대회 마감에서 분리했습니다.*
 
 게임 커뮤니티에서도 기능을 넣고 빼는 판단을 했습니다. 프로필로 합칠 수 있는 별도 설정 메뉴는 덜어냈고, 코칭은 코치와 수강생 양쪽이 모집할 수 있게 했습니다. 수강료는 시간당, 월 단위, 목표 달성까지로 구분하되 결제와 정산까지 한꺼번에 만들지는 않았습니다. 문의와 인증 요청은 별도 티켓 시스템 대신 기존 관리자 1:1 채팅으로 연결했습니다.
 
@@ -46,22 +54,9 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 사진 서비스는 schema-first GraphQL과 Apollo Client, 게임 서비스는 REST와 TanStack Query를 사용합니다. 서로 다른 API 계약과 캐시를 억지로 통일하지 않고, 실제로 공유하는 UI와 lint 설정을 공용 패키지로 옮겼습니다.
 
-```text
-side-project
-├─ projects/photo-contest
-│  ├─ apps/api          NestJS, GraphQL, Prisma
-│  ├─ apps/web          Next.js, Apollo Client
-│  └─ apps/mobile       Expo WebView
-├─ projects/game-feedback
-│  ├─ apps/api          NestJS, REST, Prisma
-│  ├─ apps/web          Next.js, TanStack Query
-│  ├─ apps/admin        React, Vite
-│  └─ apps/mobile       Expo WebView
-├─ packages
-│  ├─ design-system
-│  └─ eslint-config
-└─ deploy/shared-instance/terraform
-```
+![사진 커뮤니티의 GraphQL과 Apollo, Game Mate의 REST와 TanStack Query를 구분하고 공용 디자인 시스템과 lint를 연결한 서비스 구조](assets/ai-experience/03-service-architecture.png)
+
+*각 서비스의 웹과 API, 모바일은 projects 아래에 두고, 디자인 시스템과 lint는 루트 packages에서 공유합니다.*
 
 게임 서비스의 첫 구현은 App에 여러 책임이 몰려 있었습니다. 화면과 도메인을 분리하도록 요청하고, 작성과 수정을 한 폼의 mode로 처리하던 구조도 바꿨습니다. 입력 필드만 공유하고 생성 후 이동과 수정 후 닫기는 각 화면이 맡습니다. 관리자 API는 같은 테이블을 사용하더라도 사용자 API와 권한과 업무 흐름이 달라 controller와 service를 나눴습니다.
 
@@ -77,14 +72,9 @@ Next.js 캐시가 현재 구조에도 유효한지 AI에게 확인하고 두 서
 
 공개 게시글은 쿠키 없이 조회한 데이터를 공유하고, 사용자별 상태는 그 캐시에 섞지 않습니다. 브라우저의 Query 캐시와 Next 서버 캐시는 따로 갱신해야 하므로 다음 흐름으로 연결했습니다.
 
-```text
-NestJS 쓰기
-  → 같은 DB 트랜잭션에 데이터 변경과 무효화 태그 저장
-  → 커밋 후 Next Route Handler 호출
-  → revalidateTag(tag, { expire: 0 })
-  → 성공한 revision의 대기 기록만 삭제
-     실패하면 DB에 남겨 재시도
-```
+![제품 데이터와 캐시 무효화 태그를 함께 저장하고 Next Route Handler로 만료하며 전달 실패는 DB에서 재시도하는 흐름](assets/ai-experience/04-cache-invalidation.png)
+
+*데이터 변경과 무효화 대상을 함께 남겨, 콜백 실패를 다시 처리할 수 있게 했습니다.*
 
 DB 쓰기가 성공한 뒤 콜백이 실패했다고 사용자에게 저장 실패를 반환하면 중복 작성으로 이어질 수 있습니다. 그래서 쓰기는 성공으로 처리하고 캐시 만료를 재시도합니다. 이때 콜백이 끝나기 전에 같은 태그에 새 쓰기가 생길 수 있어, 이전 콜백이 새 기록까지 지우지 않도록 revision을 비교합니다.
 
@@ -97,6 +87,10 @@ DB 쓰기가 성공한 뒤 콜백이 실패했다고 사용자에게 저장 실�
 ## 업로드의 메모리와 동시성
 
 파일을 API로 전부 보내면 여러 요청이 겹칠 때 파일 크기만큼 서버 메모리와 전송 비용이 늘어납니다. 게시물에 이어 채팅 첨부도 S3 직접 업로드로 바꾸도록 요청했습니다. 사진 서비스도 게시물, 대회 사진, 그룹 대표 사진을 같은 방향으로 옮겼습니다.
+
+![Game Mate의 브라우저, API, S3 업로드 순서와 서버 처리의 프로세스당 동시 3개, 대기 12개 제한](assets/ai-experience/05-upload-concurrency.png)
+
+*Game Mate의 업로드 흐름입니다. 사진 서비스의 완료 검사는 아래에 적은 것처럼 HEAD 확인만 사용합니다.*
 
 게임 서비스에서는 발급 → 브라우저의 S3 전송 → 완료 확인으로 나눴습니다. 서버가 정한 크기와 형식을 POST 정책에 넣고, 완료 시 HEAD와 앞 4KB로 확인한 뒤 같은 ETag 조건으로 최종 객체에 복사합니다. 전체 파일을 서버 메모리에 올리지 않고, 확인한 뒤 바뀐 파일을 그대로 확정하지 않게 했습니다.
 
@@ -111,6 +105,10 @@ S3 버킷 경로와 CORS, 역할을 어디에 연결할지 AI에게 질문하며
 ## 테스트와 lint를 앱의 책임으로
 
 사진 서비스부터 모노레포 전체에 테스트를 몰아두지 말고 각 앱이 소유하도록 요청했습니다. 이후 unit과 integration은 구현 파일 옆으로 옮기고, 새 동작은 `*.spec`, 확인된 오류는 `*.test`로 구분했습니다.
+
+![Vitest, Supertest와 실제 PostgreSQL, Playwright의 검증 범위와 spec 및 test 구분, lint rule 검증](assets/ai-experience/06-test-strategy.png)
+
+*테스트 도구마다 확인할 범위를 나누고, 권한과 동시성은 실제 DB 결과로 검증했습니다.*
 
 - Vitest는 순수 규칙과 UI를, Supertest와 격리 PostgreSQL은 API 요청과 실제 DB 결과를 확인합니다.
 - Playwright는 웹과 WebView 호스트를 연결해 작성과 댓글, 채팅, 이동을 확인합니다. 외부 OS 기능과 OAuth는 fixture로 대체하고, 실제 기기의 인증과 스토어 출시는 별도로 확인할 대상으로 뒀습니다.
@@ -128,6 +126,10 @@ lint는 기존 업무에서 정리한 기준을 이 저장소에 맞춰 적용�
 배포를 준비하면서 AI에게 최소 비용으로 운영할 방법, CD 설정, 자동으로 준비할 수 있는 일과 제가 콘솔에서 해야 할 일을 물었습니다. Lightsail도 검토했지만 이후 두 서비스를 EC2 한 대에 묶고 DB와 파일은 외부 RDS와 S3로 분리하는 구성을 정했습니다.
 
 초기에는 관리할 서버 수를 줄이고 싶었습니다. 대신 EC2 한 대가 멈추면 두 서비스가 함께 중단된다는 비용을 받아들였습니다. 두 API의 프로토콜은 유지하고 Caddy만 외부에 열며, 서비스마다 컨테이너 네트워크와 DB, 계정, 버킷을 구분했습니다.
+
+![검증한 이미지 배포와 단일 EC2 안의 서비스별 네트워크, 외부 RDS와 서비스별 S3를 나눈 배포 구성도](assets/ai-experience/07-deployment.png)
+
+*Terraform으로 준비한 배포 구성입니다. 두 서비스의 서버는 함께 두되 DB와 원본 파일은 외부에 보관합니다.*
 
 Terraform에는 VPC와 서브넷, 보안 그룹, EC2와 고정 IP, RDS, S3, IAM, 선택적 DNS를 담았습니다. DB 비밀번호 값과 S3 액세스 키는 state에 직접 넣지 않고, Secrets Manager 조회와 별도 발급 절차로 다룹니다. 기본값과 잘못된 설정은 mock provider 테스트로 검사합니다.
 

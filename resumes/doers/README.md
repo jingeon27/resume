@@ -2,6 +2,7 @@
 
 - [이력서](resume-doers-ai-product-engineer.md)
 - [AI 활용 경험 포트폴리오](portfolio-doers-ai-experience.md)
+- [포트폴리오 이미지와 생성 방법](assets/ai-experience/README.md)
 - [공식 공고](https://doers.company/careers/175322?lang=ko)
 
 2026년 10월 24일 공고와 저장소를 확인해 작성했습니다. 실무의 프론트엔드 경력과 개인 프로젝트의 서버, 인프라 경험을 구분했습니다. AI 활용은 질문 횟수나 생성 코드량보다 제품과 디자인의 수정, 기술 선택, 검증 기준을 중심으로 설명합니다.
