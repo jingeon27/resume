@@ -261,4 +261,4 @@ lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요
 - [typescript-eslint: consistent-type-assertions](https://typescript-eslint.io/rules/consistent-type-assertions/)
 - [typescript-eslint: no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/)
 - [@hookform/resolvers: zodResolver](https://github.com/react-hook-form/resolvers#zod)
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28)

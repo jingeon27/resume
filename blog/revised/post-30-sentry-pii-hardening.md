@@ -418,5 +418,5 @@ Sentry 워터폴을 보다가 메인 배너 링크가 뷰포트에 들어오는 
 - [Next.js | instrumentation-client.js](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client): 브라우저 초기화와 `onRouterTransitionStart`
 - [getsentry/sentry-javascript](https://github.com/getsentry/sentry-javascript): `@sentry/core`의 `requestDataIntegration`과 `sendDefaultPii` 기본값 변환, fetch와 xhr span 속성
 - [getsentry/sentry-mcp](https://github.com/getsentry/sentry-mcp): `@sentry/mcp-server`의 `--host` 옵션
-- 관련 글: [Sentry가 잡아 준 Bottom Sheet 드래그 크래시, 원인 경로가 사라진 버전으로 올리기까지](https://jingeon27.tistory.com/33)
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+- 관련 글: [Sentry로 추적한 Bottom Sheet 드래그 크래시](https://jingeon27.tistory.com/33)
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28)

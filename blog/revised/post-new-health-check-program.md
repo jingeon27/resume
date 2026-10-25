@@ -151,6 +151,6 @@ const isFull = selected.length >= group.pickCount;
 - [Toss Payments: 결제위젯 연동 가이드](https://docs.tosspayments.com/guides/v2/payment-widget/integration)
 - [Next.js: Intercepting Routes](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes)
 - [Ant Design: Form (`Form.List`)](https://ant.design/components/form)
-- 관련 글: [34개 필드로 구성된 프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://jingeon27.tistory.com/18)
-- 관련 글: [선언적 코드는 변경을 작게 만든다](https://jingeon27.tistory.com/26)
+- 관련 글: [두 관리자 앱에서 프로그램 폼을 공유하는 방법](https://jingeon27.tistory.com/18)
+- 관련 글: [선언적으로 코드를 쓰는 기준](https://jingeon27.tistory.com/26)
 - 관련 글: [예약 폼의 작성 상태를 Zustand에서 React Hook Form으로 옮긴 과정](https://jingeon27.tistory.com/11)

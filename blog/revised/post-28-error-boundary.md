@@ -366,5 +366,5 @@ API 응답에는 method와 URL이 이미 있으니 호출부가 이름을 다시
 - [Zod: 오류 처리와 `safeParse`](https://zod.dev/basics?id=handling-errors)
 - [Zod: `.catch()`](https://zod.dev/api?id=catch)
 - [Next.js: `productionBrowserSourceMaps`](https://nextjs.org/docs/app/api-reference/config/next-config-js/productionBrowserSourceMaps)
-- 관련 글: [선언적 코드는 변경을 작게 만든다](https://jingeon27.tistory.com/26) (검색 필터를 컴파운드 구조로 바꾼 기준)
+- 관련 글: [선언적으로 코드를 쓰는 기준](https://jingeon27.tistory.com/26) (검색 필터를 컴파운드 구조로 바꾼 기준)
 - 관련 글: [타입 단언을 걷어내며 Zod를 경계마다 다르게 배치한 기준](https://jingeon27.tistory.com/32) (응답 관측 경계와 값의 출처에 따른 검증 정책)

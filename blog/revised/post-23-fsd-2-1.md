@@ -137,4 +137,4 @@ typecheck와 ESLint, Vitest가 전부 성공한 뒤에도 서버와 클라이언
 - [FSD Layers](https://feature-sliced.design/docs/reference/layers)
 - [Excessive Entities](https://feature-sliced.design/docs/guides/issues/excessive-entities)
 - [Public API](https://feature-sliced.design/docs/reference/public-api)
-- 관련 글: [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
+- 관련 글: [AI에 구현을 맡기며 다듬은 개발 workflow](https://jingeon27.tistory.com/31)

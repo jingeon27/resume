@@ -75,4 +75,4 @@
 
 - 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
 - 관련 글: [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/31)
-- 관련 글: [타입 단언을 걷어내다 정산 월별표를 깨뜨리고 다시 세운 기준](https://jingeon27.tistory.com/32)
+- 관련 글: [타입 단언을 줄이며 정리한 런타임 검증 기준](https://jingeon27.tistory.com/32)

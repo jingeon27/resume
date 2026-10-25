@@ -138,4 +138,4 @@ lint가 지켜주는 건 문법 층위까지예요. "이 추상화가 적절한�
 - [typescript-eslint | tsconfigRootDir](https://typescript-eslint.io/packages/parser/#tsconfigrootdir)
 - [ESLint | no-restricted-syntax](https://eslint.org/docs/latest/rules/no-restricted-syntax)
 - [ESLint | Ignore files](https://eslint.org/docs/latest/use/configure/ignore)
-- [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31): 정적으로 판정할 수 있는 기준을 lint로 내린 이유
+- [AI에 구현을 맡기며 다듬은 개발 workflow](https://jingeon27.tistory.com/31): 정적으로 판정할 수 있는 기준을 lint로 내린 이유

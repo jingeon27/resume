@@ -161,4 +161,4 @@ Figma 작업은 에이전트가 `claude-in-chrome` MCP나 Chrome CDP 스크립�
 
 - [Compound Engineering](https://every.to/guides/compound-engineering): every.to 원문
 - 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
-- 관련 글: [FSD 폴더는 다 있었는데 새 파일을 어디에 둘지 설명하기 어려웠어요](https://jingeon27.tistory.com/23)
+- 관련 글: [FSD 레이어를 저장소에 맞게 다시 나눈 과정](https://jingeon27.tistory.com/23)

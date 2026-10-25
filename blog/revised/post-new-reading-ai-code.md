@@ -134,6 +134,6 @@ AI 덕분에 쉬워진 건 새 기능 구현만이 아니에요. 폴더 구조�
 ## 참고
 
 - [Every: Compound Engineering](https://every.to/guides/compound-engineering)
-- 관련 글: [AI가 코드를 잘 짜기 시작했는데 제가 덜 바빠지지는 않았어요](https://jingeon27.tistory.com/31)
+- 관련 글: [AI에 구현을 맡기며 다듬은 개발 workflow](https://jingeon27.tistory.com/31)
 - 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
 - 관련 글: [Bottom Sheet 드래그 크래시를 고치며 놓친 것](https://jingeon27.tistory.com/33)

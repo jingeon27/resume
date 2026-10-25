@@ -248,4 +248,4 @@ CORS와 폼 초기화는 둘 다, 따로 보면 맞는 결정 두 개가 만나�
 - [Next.js 문서: `useRouter`의 `bfcacheId`](https://nextjs.org/docs/app/api-reference/functions/use-router#bfcacheid)
 - 관련 글: [예약 폼의 작성 상태를 Zustand에서 React Hook Form으로 옮긴 과정](https://jingeon27.tistory.com/11): 공용 폼 훅을 쓰는 예약 폼
 - 관련 글: [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://jingeon27.tistory.com/21): Cache Components를 켠 계기
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28): 주소로 여는 Drawer와 Error Boundary
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28): 주소로 여는 Drawer와 Error Boundary
