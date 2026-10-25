@@ -1,0 +1,52 @@
+{
+  "updatedOn": "2026-10-26",
+  "timezone": "Asia/Seoul",
+  "dataKind": "test-fixture",
+  "captures": [
+    {
+      "file": "game-feed.png",
+      "source": "side-project-photo-contest-password-only/projects/game-feedback/apps/web/.e2e-build/ci-regression-results/mobile-shell-390px-mobile--411ea-ssible-header-actions-in-en-chromium/brand-header-en-390.png",
+      "verifiedAgainst": "fe32d081",
+      "fileModifiedAt": "2026-10-24T18:19:43.950Z",
+      "width": 390,
+      "height": 844,
+      "sha256": "a7a3e54521913293d4cbeb20ba20ddee41d037c56a5cab8c87155e414ed07aa9"
+    },
+    {
+      "file": "game-signup.png",
+      "source": "side-project-onboarding-layout/projects/game-feedback/apps/web/.data/layout-results/onboarding-layout-signup-k-bae14-at-different-viewport-sizes-chromium/signup-393-852.png",
+      "verifiedAgainst": "c17a3164",
+      "fileModifiedAt": "2026-10-25T16:01:23.529Z",
+      "width": 393,
+      "height": 852,
+      "sha256": "b257348ce5ced20553c6da4348566bf7f870df067a846cdd771b1199d9013c96"
+    },
+    {
+      "file": "photo-explore.png",
+      "source": "side-project-runtime-observability/projects/photo-contest/apps/web/.data/brand-refinement/explore-430-light.png",
+      "verifiedAgainst": "2aa865bf",
+      "fileModifiedAt": "2026-10-25T15:47:45.152Z",
+      "width": 430,
+      "height": 958,
+      "sha256": "4d821d8c6f4434dd74388289057858ddeb95eb4240773788f691b8633556eb8d"
+    },
+    {
+      "file": "photo-group.png",
+      "source": "side-project-runtime-observability/projects/photo-contest/apps/web/.data/brand-refinement/group-430-light.png",
+      "verifiedAgainst": "2aa865bf",
+      "fileModifiedAt": "2026-10-25T15:47:45.572Z",
+      "width": 430,
+      "height": 1237,
+      "sha256": "237fd3b3adc9f1439f095d99776aac27fb84cab4af2a5d00b46d77c133027a98"
+    },
+    {
+      "file": "game-profile-edit.png",
+      "source": "side-project-onboarding-layout/projects/game-feedback/apps/web/test-results/profile-editor-프로필-수정-창에서-닉네임·소개·링크·사진을-관리한다-390px--chromium/profile-edit-sheet.png",
+      "verifiedAgainst": "c17a3164",
+      "fileModifiedAt": "2026-10-25T16:18:21.340Z",
+      "width": 390,
+      "height": 900,
+      "sha256": "ef7ec27e7f80e30785b7dad786b9053e692eba50d874fbedcb7fe41866c97b72"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 // 두어스 포트폴리오의 설명 그림을 SVG와 PNG로 생성한다.
 // 기존 화면 캡처는 원본을 그대로 보관하고 SVG 안에서 배치한다.
-import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,14 +20,12 @@ try {
   sharp = sideRequire('sharp');
 }
 
-const captureSource = resolve(process.env.DOERS_CAPTURE_SOURCE || join(root, '../side-project-bambyul/.data/bambyul'));
-const captureNames = {
-  'game-home.png': 'game-final-mobile.png',
-  'game-login.png': 'game-login-monogram.png',
-  'photo-login.png': 'contest-monogram-mobile.png',
-};
-for (const [target, source] of Object.entries(captureNames)) {
-  if (!existsSync(join(captures, target))) copyFileSync(join(captureSource, source), join(captures, target));
+const captureManifest = JSON.parse(readFileSync(join(captures, 'manifest.json'), 'utf8'));
+for (const capture of captureManifest.captures) {
+  const path = join(captures, capture.file);
+  if (!existsSync(path)) throw new Error(`화면 원본이 없습니다: ${capture.file}`);
+  const hash = createHash('sha256').update(readFileSync(path)).digest('hex');
+  if (hash !== capture.sha256) throw new Error(`화면 원본과 출처 기록이 다릅니다: ${capture.file}`);
 }
 
 const C = {
@@ -60,18 +59,23 @@ const frame = (title, subtitle, height, body) => `<svg xmlns="http://www.w3.org/
   ${text(76, height - 37, '김진건 | AI 활용 경험', { size: 18, fill: C.muted })}
 </svg>`;
 const image = (file, x, y, w, h) => `<image x="${x}" y="${y}" width="${w}" height="${h}" href="data:image/png;base64,${readFileSync(join(captures, file)).toString('base64')}"/>`;
+const screenImage = (file, x, y, width) => {
+  const capture = captureManifest.captures.find((entry) => entry.file === file);
+  if (!capture) throw new Error(`화면 출처가 없습니다: ${file}`);
+  return image(file, x, y, width, width * capture.height / capture.width);
+};
 
 const figures = [];
 figures.push({
   name: '01-service-screens',
-  svg: frame('직접 실행하면서 다듬은 화면', 'Game Mate의 모바일 탐색과 로그인, 사진 커뮤니티의 입력 화면', 1080,
+  svg: frame('현재 개발 중인 모바일 화면', 'Game Mate 피드와 회원가입, 사진 커뮤니티의 그룹 탐색', 1030,
     text(110, 182, 'Game Mate 홈', { size: 26, weight: 700 }) +
-    text(570, 182, 'Game Mate 로그인', { size: 26, weight: 700 }) +
-    text(1030, 182, '사진 커뮤니티 로그인', { size: 26, weight: 700 }) +
-    [94, 554, 1014].map((x) => rect(x, 198, 332, 782, { radius: 24 })).join('') +
-    image('game-home.png', 110, 214, 300, 712.5) +
-    image('game-login.png', 570, 214, 300, 649.23) +
-    image('photo-login.png', 1030, 214, 300, 750)),
+    text(570, 182, 'Game Mate 회원가입', { size: 26, weight: 700 }) +
+    text(1030, 182, '사진 커뮤니티 탐색', { size: 26, weight: 700 }) +
+    [94, 554, 1014].map((x) => rect(x, 198, 332, 720, { radius: 24 })).join('') +
+    screenImage('game-feed.png', 110, 214, 300) +
+    screenImage('game-signup.png', 570, 214, 300) +
+    screenImage('photo-explore.png', 1030, 214, 300)),
 });
 
 figures.push({
@@ -189,6 +193,18 @@ figures.push({
     rect(80, 654, 1280, 125, { fill: C.bg, stroke: 'none', radius: 15 }) +
     text(108, 699, '수신 확인 과정에서 수정한 부분', { size: 26, weight: 700 }) +
     text(108, 743, '페이지뷰 중복 집계와 자동 URL 수집을 확인하고, 수정 후 실제 전송 데이터를 다시 검사했습니다.', { size: 24, fill: C.muted })),
+});
+
+figures.push({
+  name: '09-product-interactions',
+  svg: frame('그룹에서 사진을 보고 프로필을 수정하는 화면', '사진 커뮤니티의 게시물과 인기, Game Mate의 Bottom Sheet 입력 흐름', 1320,
+    text(230, 182, '사진 커뮤니티 그룹', { size: 26, weight: 700 }) +
+    text(870, 182, 'Game Mate 프로필 수정', { size: 26, weight: 700 }) +
+    rect(214, 198, 372, 1014, { radius: 24 }) +
+    rect(854, 198, 372, 818, { radius: 24 }) +
+    screenImage('photo-group.png', 230, 214, 340) +
+    screenImage('game-profile-edit.png', 870, 214, 340) +
+    lines(870, 1080, ['닉네임과 소개, 링크를', '한 시트에서 수정합니다.'], { size: 25, fill: C.muted })),
 });
 
 const previews = [];

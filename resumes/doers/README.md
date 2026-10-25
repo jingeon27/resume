@@ -27,7 +27,9 @@
 | 최소 비용 배포, CD 준비, 두 서비스를 한 EC2와 외부 DB, S3에 배치 | 공통 배포 구성과 Terraform |
 | Amplitude와 Sentry MCP 연결, 실제 수신 결과 재조회 | 두 서비스의 observability 문서와 monitoring.live.spec.ts |
 
-Sentry의 모니터링과 로깅, Web Vitals 측정, MCP 연결은 사용자가 구분해 설명했습니다. 현재 develop의 두 웹은 tracesSampleRate가 0이고 성능 추적을 사용하지 않는다고 명시돼 있습니다. 포트폴리오는 이 코드에서 확인한 오류 수집과 MCP 재조회로 설명하고, 사이드프로젝트 Web Vitals 수집 코드의 위치는 사용자에게 확인을 요청했습니다. 실무 복지몰의 Web Vitals 측정과 섞지 않습니다.
+Sentry의 모니터링과 로깅, Web Vitals 측정, MCP 연결은 구분합니다. 현재 develop의 두 웹은 tracesSampleRate가 0이고 성능 추적을 사용하지 않습니다. 사용자는 2026년 10월 26일 사이드프로젝트의 Web Vitals 측정을 develop에서 작업할 예정이라고 확인했습니다. 포트폴리오에는 완료한 오류 수집과 MCP 재조회를 적고, 실무 복지몰의 Web Vitals 측정과 섞지 않습니다.
+
+화면 캡처는 10월 25~26일 저장된 실제 UI 검증 이미지로 바꿨습니다. Game Mate 가입과 프로필 수정은 최신 작업 브랜치의 화면이며, 코드 링크의 develop 기준과 구분합니다. 원본 경로와 저장 시점, 대조한 커밋, 해시는 이미지 폴더의 captures/manifest.json에 남겼습니다.
 
 ## 제출 전 확인
 

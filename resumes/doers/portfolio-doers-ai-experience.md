@@ -12,9 +12,9 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 [전체 저장소](https://github.com/jingeon27/side-project)
 
-![Game Mate 홈과 로그인, 사진 커뮤니티 로그인 화면을 나란히 배치한 실제 모바일 캡처](assets/ai-experience/01-service-screens.png)
+![Game Mate 피드와 회원가입, 사진 커뮤니티 그룹 탐색의 최근 모바일 캡처](assets/ai-experience/01-service-screens.png)
 
-*개발 중인 Game Mate의 홈과 로그인, 사진 커뮤니티의 로그인 화면입니다.*
+*검증용 데이터로 확인한 Game Mate 피드와 회원가입, 사진 커뮤니티의 그룹 탐색 화면입니다.*
 
 ## 에이전트에게 맡기는 일과 제가 확인하는 것
 
@@ -55,6 +55,10 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 | 실제 동작과 무관한 LIVE, ACTIVE 표시 | 표시 제거 |
 
 모바일에서는 로그인과 약관, 닉네임 입력을 작은 창에 몰아넣지 않고 별도 페이지로 바꿨습니다. 댓글은 처음에는 화면의 75%로 열리고 헤더를 끌어 확장할 수 있게 했습니다. 데스크톱에서는 사진과 대화를 나란히 배치하도록 수정했습니다.
+
+![사진 커뮤니티의 그룹 게시물 화면과 Game Mate의 Bottom Sheet 프로필 수정 화면](assets/ai-experience/09-product-interactions.png)
+
+*사진 서비스의 그룹 화면과 Game Mate의 프로필 수정 화면입니다. 데이터는 화면 검증용입니다.*
 
 두 서비스에서 버튼과 입력창의 모양이 달라지지 않도록 shadcn/ui와 Base UI 기반 공통 디자인 시스템을 만들었습니다. 색과 글자 스타일, 버튼, 입력창, Dialog는 공용 패키지에 뒀습니다. 피드와 레이아웃, 라우팅과 데이터 조회는 각 앱에 남겼습니다. 함께 쓰는 UI를 고칠 때는 두 앱에서 모두 확인합니다.
 
