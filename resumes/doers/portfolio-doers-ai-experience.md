@@ -121,6 +121,12 @@ S3 버킷 경로와 CORS, IAM 역할을 연결할 위치는 에이전트에게 �
 
 [테스트 기준](https://github.com/jingeon27/side-project/blob/6d858497/projects/photo-contest/.agents/skills/testing/SKILL.md) | [공용 ESLint 패키지](https://github.com/jingeon27/side-project/blob/6d858497/packages/eslint-config/README.md) | [lint 적용 범위 변경](https://github.com/jingeon27/side-project/commit/899349f7)
 
+## 사용자 행동 측정과 모니터링
+
+개인 프로젝트에 Sentry를 도입해 오류 모니터링과 로깅, Web Vitals 측정을 적용했습니다. Amplitude로는 사용자 행동 이벤트를 수집합니다.
+
+Amplitude와 Sentry를 MCP로 연결해 에이전트가 사용자 행동 데이터와 오류, 성능 정보를 조회할 수 있게 했습니다. 기능을 개발하거나 문제를 조사할 때 수집된 정보를 코드와 함께 참고할 수 있도록 했습니다.
+
 ## 인프라 선택과 Terraform
 
 배포를 준비하며 에이전트에게 비용을 줄일 방법과 CD 설정 순서를 물었습니다. 자동화할 수 있는 설정과 콘솔에서 직접 해야 할 일도 확인했습니다. Lightsail을 검토한 뒤, 두 서비스를 EC2 한 대에 올리고 DB와 파일은 외부 RDS와 S3에 두기로 했습니다.

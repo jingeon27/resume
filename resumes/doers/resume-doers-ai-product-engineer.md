@@ -38,6 +38,7 @@ Yarn workspace 모노레포에서 사진 커뮤니티와 글로벌 게임 커뮤
 
 - Vitest로 도메인 규칙을, Supertest와 격리된 PostgreSQL로 API 응답과 DB 결과를 테스트합니다. 브라우저 흐름은 Playwright로 확인합니다. 테스트 설정은 각 앱에서 관리하고 루트에서는 실행만 위임합니다.
 - 공용 ESLint 패키지에서 FSD 경계와 공개 API, 컴포넌트의 직접 fetch, 중복된 오버레이 상태를 검사합니다. 규칙은 TypeScript로 작성하고 RuleTester와 fixture로 테스트합니다. DOM 관련 규칙은 Next.js와 Vite에만 적용하고 Expo에서는 제외했습니다.
+- Sentry로 오류 모니터링과 로깅, Web Vitals 측정을 적용했습니다. Amplitude와 Sentry를 MCP로 연결해 에이전트가 사용자 행동 데이터와 오류, 성능 정보를 개발 과정에서 참고할 수 있도록 했습니다.
 - 배포 비용을 줄일 방법과 CD 설정 순서를 AI에게 물어보고 EC2 한 대에 두 서비스를 올리기로 했습니다. DB와 파일은 외부 RDS와 서비스별 S3에 둡니다. Terraform으로 네트워크와 리소스, 권한을 구성하고 mock provider 테스트를 붙였습니다. 실제 AWS 계정에 적용하거나 운영 부하를 검증한 단계는 아닙니다.
 
 ## 경력
