@@ -1,6 +1,11 @@
 # 동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정
 
-사이트맵에 병원, 프로그램, 공지, 콘텐츠 URL을 넣다 보니 API를 다섯 개 호출하게 됐어요. 배포할 때만 만들면 새 콘텐츠가 다음 배포 전까지 사이트맵에 들어가지 않고, 요청마다 전부 조회하면 같은 데이터를 계속 가져와요. 그래서 하루 단위로 재검증하는 캐시를 붙이기로 했어요.
+<div class="note note-summary">
+  <strong>요약</strong>
+  <p>다섯 API에서 사이트맵 URL을 모아 캐시하려는데, 공개 조회도 사용자 쿠키를 읽고 있었어요. 공개 조회와 인증 조회를 구분한 뒤 하루 단위 재검증을 적용했어요.</p>
+</div>
+
+사이트맵에 병원, 프로그램, 공지, 콘텐츠 URL을 넣다 보니 API를 다섯 개 호출하게 됐어요. 배포할 때만 만들면 새 콘텐츠 반영이 늦고, 요청마다 만들면 같은 데이터를 계속 가져와요. 하루 단위로 재검증하도록 캐시를 붙이기로 했어요.
 
 그런데 사이트맵 함수에 `'use cache'`를 붙이자 공개 API 호출이 캐시 경계 안에서 동작하지 않았어요. 원인을 따라가 보니 공용 Axios interceptor였어요. 인증이 필요 없는 요청에서도 서버에서는 무조건 `cookies()`를 읽고 있었거든요.
 
@@ -72,9 +77,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 처음에는 `cacheTag`도 붙였는데, 정작 `revalidateTag`를 부르는 곳이 없었어요. 무효화할 길이 없는 태그는 의도만 흐려서 지웠어요. 나중에 콘텐츠 변경 이벤트와 연결할 때 태그와 무효화 지점을 같이 넣으려고 해요.
 
-## 캐시를 붙이고 나니 사이트맵 정확성 문제가 남았어요
+## 사이트맵에 어떤 URL을 담을지도 확인해야 해요
 
-캐시는 붙였지만 생성 로직에는 한계가 두 가지 남았어요.
+조회 결과를 재사용할 수 있게 됐어도 생성 로직에서 따로 확인할 부분이 있어요.
 
 첫째, 지금 일부 조회는 전체 개수를 먼저 받은 뒤 그 수를 `pageSize`로 보내 한 번에 가져와요. 데이터가 커지면 API 최대 크기를 넘을 수 있어서 페이지 단위 조회와 안정 정렬이 필요해요.
 
@@ -84,4 +89,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 이번에 고친 건 공개 API가 모르는 사이에 사용자 쿠키를 읽던 구조와, 요청마다 같은 데이터를 다시 모으던 문제까지예요. 대량 조회와 부분 실패는 캐시 경계를 만들고 나서야 따로 보였어요.
 
-참고: [Next.js `use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache), [Next.js `cacheLife`](https://nextjs.org/docs/app/api-reference/functions/cacheLife), [Google 사이트맵 가이드](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
+## 참고
+
+- [Next.js: use cache](https://nextjs.org/docs/app/api-reference/directives/use-cache)
+- [Next.js: cacheLife](https://nextjs.org/docs/app/api-reference/functions/cacheLife)
+- [Google: 사이트맵 만들기](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)

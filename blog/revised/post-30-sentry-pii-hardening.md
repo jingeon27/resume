@@ -7,7 +7,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>복지몰에 Sentry를 client, server, edge 세 런타임별로 붙이고, 옵션 이름만 믿었다가 새던 민감 정보 경로를 SDK 소스로 따라가 닫은 과정을 다뤄요. Web Vitals envelope E2E, MCP 연결, 릴리스와 소스맵 업로드, 사용자 영향에 따른 에러 레벨과 이슈에 회원 id만 남긴 이유도 함께 적었어요.</p>
+  <p>복지몰의 브라우저와 서버에서 생기는 오류를 Sentry로 모았어요. 사용자 영향에 따라 에러 레벨을 정하고, Web Vitals와 MCP, 릴리스 연결을 확인했어요. 수집할 필요가 없는 트래픽과 민감 정보를 거르는 과정도 함께 정리했어요.</p>
 </div>
 
 복지몰의 프론트엔드 에러와 Web Vitals를 보려고 Sentry를 도입했어요. `@sentry/nextjs`를 설치하고 이벤트를 올리는 것 자체는 하루면 됐는데요. 운영할 수 있는 상태가 되기까지는 훨씬 많은 일이 필요했어요.
@@ -20,7 +20,7 @@
 - 사용자 영향에 따른 에러 레벨과 그룹핑 정책
 - 의미 없는 수집 트래픽을 줄이는 전송 게이트와 잡음 표본 추출
 
-가장 손이 많이 간 건 민감 정보였어요. 처음엔 `sendDefaultPii: false` 한 줄이면 막힐 거라고 생각했는데요. 옵션 이름이 막을 것처럼 보이는 자리와 SDK가 실제로 막는 자리가 달랐어요. 그래서 옵션마다 SDK 소스를 따라가고, 오류 이벤트, breadcrumb, transaction, span에 무엇이 실리는지 확인하며 수집 정책을 여러 차례 고쳤어요.
+설정을 추가할 때마다 실제 전송 결과도 확인했어요. Web Vitals가 envelope에 담기는지, 소스맵이 배포한 파일과 연결되는지, 민감 정보가 이벤트에 남지 않는지 보는 일이었어요. SDK 옵션만으로 설명되지 않는 동작은 소스를 따라가며 확인했어요.
 
 이 글은 Next.js 16과 `@sentry/nextjs` 10.70을 기준으로 썼어요.
 
@@ -62,161 +62,57 @@ Sentry.init({
 
 같은 오류가 인터셉터 → 에러 바운더리 → `onRequestError`를 지나며 서로 다른 이슈 세 개로 갈릴 수 있었거든요. `captureError`가 처리한 객체에는 열거되지 않는 심볼을 남기고, 상위 수집 지점은 그 표식을 보면 건너뛰어요. 잡음이라 올리지 않기로 거른 오류에도 같은 표식을 남겼어요. 표식이 없으면 걸러 낸 오류가 에러 바운더리에서 `fatal`로 되살아나요.
 
-## `sendDefaultPii: false`로는 토큰 쿠키가 막히지 않았어요
+## 전송 게이트로 의미 없는 트래픽을 줄였어요
 
-처음 설정에는 `sendDefaultPii: false`가 들어 있었어요. 이름만 보면 개인정보를 보내지 않을 것 같았는데요. SDK 소스를 따라가 보니 이 설정으로도 `event.request`에는 요청 헤더와 파싱된 쿠키가 통째로 실리는 구조였어요. 인증 토큰 쿠키인 `sessionToken`과 `renewalToken`(공개용 가명)도 함께요.
+이전 회사에서는 `NODE_ENV`를 기준으로 개발과 테스트 이벤트를 뺐어요. 단순하고 잘 통했지만, 로컬에서 실제 전송을 검증하거나 프로덕션 빌드로 E2E를 돌리는 것처럼 환경 이름과 수집 목적이 어긋나는 경우를 세밀하게 표현하긴 어려웠어요.
 
-이 옵션은 헤더와 쿠키 수집 설정을 `false`로 두지 않고, 제외할 이름을 담은 deny 목록 객체로 바꿔요. 그런데 이벤트에 요청 정보를 싣는 `requestDataIntegration`은 값이 `false`인지만 확인해서, 객체가 오면 켜진 것으로 보고 목록을 적용하지 않은 채 헤더와 쿠키를 그대로 실었어요. deny 목록으로 거르는 코드는 span 경로에만 있었고요.
+원칙은 이번에도 같았어요. 개발 중 콘솔로 이미 볼 수 있는 오류까지 보내면 수집 트래픽과 이슈 잡음만 늘고, 실제 사용자 문제를 찾기 어려워져요. 대신 이번에는 실행 목적에 따라 전송 여부를 명시적으로 고르는 게이트를 만들었어요.
 
-요청 정보는 오류 원인을 찾는 데 도움이 되지만, 의료 정보를 다루는 서비스에서 인증 정보나 사용자가 입력한 내용을 함께 보낼 이유는 없었어요. 그래서 `sendDefaultPii`에 기대지 않고 `dataCollection`에 끌 항목을 전부 적었어요. 요청 헤더, 쿠키, 본문, 쿼리와 사용자 입력은 수집하지 않아요.
-
-```ts
-export const SENTRY_DATA_COLLECTION = {
-  userInfo: false,
-  cookies: false,
-  httpHeaders: { request: false, response: false },
-  httpBodies: [],
-  urlQueryParams: false,
-  genAI: { inputs: false, outputs: false },
-  databaseQueryData: false,
-  graphQL: { document: false, variables: false },
-  stackFrameVariables: false,
-  frameContextLines: 5,
-};
-```
-
-AI 입력과 출력도 닫았어요. 상담 기능의 프롬프트와 응답에는 사용자가 쓴 내용이 들어갈 수 있으니까요. GraphQL과 데이터베이스 계측은 지금 쓰지 않지만, 나중에 통합이 추가되더라도 닫힌 채로 시작하도록 명시했고요.
-
-`stackFrameVariables`도 중요했어요. Node의 `localVariablesIntegration`은 예외 프레임의 지역 변수를 이슈에 붙여요. 오류가 난 함수의 지역 변수에 회원 정보나 토큰이 있으면 그대로 수집될 수 있었어요.
-
-`frameContextLines`는 반대로 5줄을 유지했어요. 이건 개인정보보다는 소스 노출에 가까운 문제였고, 보내는 곳도 같은 사내 Sentry라 원인 분석에 주는 가치가 더 크다고 봤어요. 다만 이 값이 붙는 Node 서버 쪽은 뒤에서 다룰 이유로 소스맵을 올리지 않아서, 지금은 minify된 줄이 실려요.
-
-## 새 수집 키가 생기면 타입 검사가 깨지게 했어요
-
-`dataCollection` 객체를 넘기면 적지 않은 키는 "전부 수집"으로 열려요. 처음에는 `stackFrameVariables`와 `graphQL` 같은 키가 빠져 있었는데요.
-
-SDK의 타입을 그대로 붙이는 것만으로는 막을 수 없었어요. 원본 타입의 모든 필드가 optional이거든요.
+DSN이 있더라도 `NEXT_PUBLIC_SENTRY_ENABLED`가 `false`면 SDK 전체가 꺼져요.
 
 ```ts
-type TSentryDataCollection = NonNullable<NonNullable<Parameters<typeof init>[0]>['dataCollection']>;
-
-type TClosedDataCollection = Required<Omit<TSentryDataCollection, 'queryParams'>> & {
-  httpHeaders: Required<NonNullable<TSentryDataCollection['httpHeaders']>>;
-  graphQL: Required<NonNullable<TSentryDataCollection['graphQL']>>;
-  genAI: Required<NonNullable<TSentryDataCollection['genAI']>>;
-};
+export const IS_SENTRY_ENABLED = Boolean(SENTRY_DSN) && SENTRY_ENABLED !== 'false';
 ```
 
-optional을 걷어내면 SDK가 새 수집 항목을 추가하는 순간 타입 검사가 실패해요. 그때 새 항목을 수집할지 닫을지 정해야 다시 빌드할 수 있어요.
+- 실제 사용자 오류를 수집하거나 전송 흐름을 확인해야 하는 배포에서는 켜요.
+- 상시 수집할 가치가 적은 development 배포와 일반 로컬 실행은 기본으로 꺼요.
+- `dev`, `dev:mock`, `build:e2e`는 기본값을 `false`로 두어 테스트와 개발 트래픽이 저장소를 쓰지 않게 해요.
+- Sentry 전송 자체를 확인하는 E2E나 로컬 연동 점검에서는 명시적으로 `true`를 줘서 다시 켤 수 있어요.
 
-다만 타입으로는 값을 `true`로 잘못 적은 경우까지 잡지 못해요. 그래서 테스트에서 전체 객체를 `toEqual`로 비교해 키가 빠지거나 값이 열리는 경우를 함께 막았어요. 새 키를 놓치면 타입이, 열린 값을 넣으면 테스트가 잡는 셈이에요.
+환경 변수 하나로 가르기로 한 직후에는 로컬을 끄는 값을 git에 올라가지 않는 `.env.local`에 두게 했는데요. 그 줄이 없는 새 클론이나 worktree는 당시 `true`였던 `.env.development`를 읽어 development 이슈에 로컬 이벤트를 섞게 돼 있었어요. 그래서 같은 날 기본값을 실행 스크립트에 고정했어요. 이제 새 클론이나 worktree에서도 기본값은 꺼져 있고, 필요할 때만 의도적으로 켤 수 있어요.
 
-## breadcrumb은 `dataCollection`이 걸러 주지 않았어요
+## 에러 레벨은 사용자 영향으로 정했어요
 
-헤더와 쿠키를 막은 뒤에도 토큰이 나가는 경로가 하나 더 있었어요. 이번에는 breadcrumb이었는데요.
+오류를 모으기 시작한 뒤에는 무엇부터 대응할지 구별할 기준이 필요했어요.
 
-`dataCollection`은 SDK가 자동으로 수집하는 request data에 적용돼요. breadcrumb은 그 바깥이에요. console breadcrumb에는 인자로 넘긴 값이 그대로 들어가는데, 코드베이스에 axios 오류 객체를 `console.error`로 넘기는 곳이 있었어요. 그 객체의 `config.headers`에 인증 정보가 들어 있었고요.
+이 기준의 출발점은 이전 회사에서 Sentry를 운영했던 경험과 우아한형제들의 [「선제적 장애 대응을 위한 Sentry 최적화 적용기」](https://techblog.woowahan.com/21604/)였어요. 이전 회사에서는 브라우저 확장 프로그램, Service Worker, 네트워크 환경에서 반복되는 오류와 이미 비즈니스 흐름에서 처리한 API 오류를 `ignoreErrors`, `denyUrls`, `beforeSend`로 걸렀어요. 개발과 테스트 실행의 이벤트도 전송되지 않게 관리했고요. 모든 오류를 모으는 것보다 사용자에게 영향을 주는 오류를 놓치지 않는 게 중요하다는 걸 이때 배웠어요.
 
-console breadcrumb은 통째로 버렸어요. 같은 오류는 이벤트로 따로 수집하니 console 인자를 다시 보낼 필요가 없었어요.
+우아한형제들의 글은 과도한 오류가 수집 한도를 소진해 정작 중요한 장애 로그가 누락된 경험에서 출발해요. 그래서 서비스 영향도에 따른 레벨, 불필요한 오류 필터링, 알림과 담당 절차를 함께 설계하는데요. 구현을 그대로 가져오지는 않고, 이 앱의 Next.js 런타임과 개인정보, 배포 환경에 맞게 기준을 다시 잡았어요.
 
-fetch, xhr, history breadcrumb은 URL의 쿼리와 해시를 지웠어요. Node의 http breadcrumb은 쿼리를 `http.query`라는 별도 키에도 넣어서 그 값도 삭제했고요.
+처음에는 4xx와 5xx만으로 심각도를 나누려 했어요. 그런데 같은 500이라도 사용자가 겪는 결과는 요청의 역할에 따라 달랐어요.
 
-```ts
-export function sanitizeBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb | null {
-  if (breadcrumb.category === 'console') return null;
-  if (!breadcrumb.data) return breadcrumb;
+| 요청                                      | 5xx     | 4xx       |
+| ----------------------------------------- | ------- | --------- |
+| GET: 화면을 채우는 호출                   | `fatal` | `error`   |
+| 그 외: 사용자가 다시 시도할 수 있는 호출  | `error` | `warning` |
 
-  const data = { ...breadcrumb.data };
+이 앱에서는 화면을 채우는 조회가 막힌 경우와, 화면이 남아 있어 작업을 다시 시도할 수 있는 경우를 구분하려고 이 기본 분류를 정했어요. HTTP 메서드만으로 사용자 영향을 모두 알 수는 없어서, 핵심 동작이 막히거나 대체 흐름이 있는지는 별도로 봐요.
 
-  ['url', 'from', 'to'].forEach((key) => {
-    const value = data[key];
+- `fatal`: 화면이 뜨지 않거나 핵심 조회 결과를 쓸 수 없는 경우
+- `error`: 화면은 남아 있지만 사용자가 하려던 작업이 막힌 경우
+- `warning`: 예상 가능한 실패이며 다시 시도하거나 대체 흐름으로 넘어갈 수 있는 경우
 
-    if (typeof value === 'string') {
-      data[key] = stripUrlParams(value);
-    }
-  });
+401도 전부 같은 방식으로 다루지 않았어요. 액세스 토큰 갱신으로 복구된 401은 보내지 않고, 토큰 갱신 요청 자체가 실패한 경우는 별도 fingerprint로 남겼는데요. 갱신 토큰이 수명대로 만료된 401은 돌아오는 사용자마다 나는 정상적인 세션 종료라 `warning`, 그 밖의 갱신 실패는 `error`로 나눴어요.
 
-  delete data['http.query'];
-  delete data['url.query'];
-  delete data['http.fragment'];
+레벨만 보고도 사용자가 어떤 기능을 잃었고 다시 복구할 수 있는지 알 수 있게 하려는 거였어요.
 
-  return { ...breadcrumb, data };
-}
-```
+## 회원 id 하나만 붙였어요
 
-여기서 한 가지가 더 드러났어요. 애플리케이션이 직접 context에 넣는 값은 자동 수집 차단이 걸러 주지 않아요.
+영향받은 사용자 수를 알아야 한 명의 특이 사례와 여러 명이 겪는 장애를 나눠 우선순위를 정할 수 있어요. 그래서 브라우저 이슈에 회원 id 하나만 붙였어요. 이름, 이메일, 전화번호는 넣지 않았고, IP는 `dataCollection`의 `userInfo: false`로 SDK 쪽에서 막았어요.
 
-- 화면 위치는 `location.href`가 아니라 pathname만 써요.
-- API URL은 쿼리와 해시를 지워요.
-- 숫자, UUID 경로는 `:id`로 접어 개인정보와 이슈 그룹 폭증을 함께 막아요.
-- OAuth callback의 `code`와 `state`, 검색 조건, 회원 식별자가 URL에 남지 않게 했어요.
+서버 렌더에는 사용자를 붙이지 않았어요. 요청 스코프와 캐시된 렌더의 수명이 어긋나면 다른 요청의 이슈에 이전 사용자의 id가 남을 수 있거든요.
 
-## URL과 본문은 읽는 단계와 전송 직전 두 곳에서 닫았어요
-
-수집 항목을 제한한 뒤에도 에이전트 코드리뷰와 재점검에서 누출 경로가 더 나왔어요. 원인은 같았어요. `sendDefaultPii`는 소스로 확인해 놓고, 그 대신 넣은 `dataCollection`의 키들은 다시 이름만 믿은 거예요.
-
-- `urlQueryParams: false`가 끄는 건 `event.request.query_string` 필드뿐이었어요. URL 본체는 SDK가 항상 싣게 돼 있어 쿼리를 단 채로 나갔어요.
-- 브라우저에는 이 옵션을 적용하는 통합 자체가 없었어요. 기본 통합이 `location.href` 전체와 `Referer`를 모든 이벤트와 pageload transaction에 실었어요.
-- `httpBodies: []`로는 요청 본문이 막히지 않았어요. Node의 `httpIntegration`은 이 값과 상관없이 기본값 `'medium'`으로 들어오는 요청 본문을 읽어 스코프에 올리고, 요청 정보를 이벤트에 싣는 쪽은 스코프에 있는 본문을 그대로 붙였어요. 본인인증 콜백 같은 POST 본문이 이슈에 남을 수 있는 구조였어요.
-
-그래서 자동 수집 설정과 별개로 읽는 단계와 전송 직전, 두 곳에서 다시 닫았어요. Node에서는 먼저 본문을 읽지 않도록 했어요.
-
-```ts
-Sentry.httpIntegration({
-  disableIncomingRequestSpans: true,
-  maxIncomingRequestBodySize: 'none',
-});
-```
-
-`disableIncomingRequestSpans`도 함께 넘겨야 했어요. 직접 넘긴 `httpIntegration`이 `@sentry/nextjs`가 기본으로 넣는 같은 이름의 Http 통합을 통째로 대체하는데, 그 기본 통합이 바로 이 값을 켜 둔 것이었거든요. 이 값을 빠뜨리면 Next.js와 Sentry가 같은 incoming request span을 두 번 만들어요.
-
-읽는 단계에서 막은 뒤에도 전송 직전에 한 번 더 지웠어요.
-
-```ts
-Sentry.init({
-  beforeBreadcrumb: sanitizeBreadcrumb,
-  beforeSend: sanitizeEvent,
-  beforeSendTransaction: sanitizeEvent,
-  beforeSendSpan: sanitizeSpan,
-  dataCollection: SENTRY_DATA_COLLECTION,
-});
-```
-
-<div class="note note-decision">
-  <strong>핵심 결정</strong>
-  <p>민감 정보는 두 겹으로 닫아요. 읽는 단계에서는 `dataCollection`과 `httpIntegration` 옵션으로 수집을 막고, 전송 직전에는 `beforeSend` 계열 훅이 옵션으로 막히지 않는 URL, Referer, span 속성을 지우고, 옵션이 이미 막은 쿠키와 본문도 한 번 더 지워요. 옵션 한 줄이 바뀌거나 SDK가 새 경로를 열어도 토큰과 회원 정보가 곧바로 나가지 않게 하려는 거예요. 대신 정화 함수는 알고 있는 키만 지우기 때문에, SDK를 올릴 때마다 새 URL, span 속성을 다시 확인하는 비용을 받아들였어요.</p>
-</div>
-
-`sanitizeEvent`는 다음을 처리해요.
-
-- `event.request.url`의 쿼리와 해시 제거
-- `query_string`, `cookies`, `data` 삭제
-- 대소문자와 관계없이 `Referer`의 쿼리 제거
-- trace와 child span 속성 정리
-
-URL은 한 가지 키로만 오지 않았어요.
-
-```ts
-const URL_ATTRIBUTE_KEYS = ['url', 'url.full', 'http.url', 'http.target', 'http.request.header.referer'];
-
-const QUERY_DATA_KEYS = ['http.query', 'url.query', 'http.fragment'];
-```
-
-특히 plain `url`이 마지막까지 남았어요. fetch, xhr 계측은 정리한 URL을 `http.url`이나 `url.full`에 넣으면서, 별도 `url` 속성에는 정리하지 않은 원본을 넣는데요. 이 앱의 API 호출은 axios(xhr)로 나가서, 쿼리가 붙은 호출은 전부 이 키에 원본 쿼리를 남겼어요.
-
-처음에는 나머지 네 키만 닦고 있었어요. `url`을 목록에 넣기 전까지는 정화한 URL과 원본 URL이 같은 span에 나란히 실렸어요.
-
-INP처럼 transaction에 속하지 않고 따로 전송되는 span은 `beforeSendTransaction`을 거치지 않아요. 그래서 같은 속성 정화를 `beforeSendSpan`에도 연결했어요.
-
-## 정책과 배선은 테스트로 고정했어요
-
-개인정보 정화 함수만 테스트해서는 부족했어요. 함수가 맞더라도 `Sentry.init`에 연결하지 않으면 원본이 그대로 나가니까요. 테스트를 세 층으로 나눴어요.
-
-1. 정책 객체: `dataCollection`의 모든 키와 값이 닫혀 있는지 전체 비교
-2. 정화 함수: URL, 본문, 쿠키, Referer, breadcrumb, span 속성 처리
-3. 초기화 배선: client, server, edge 모두에 정책과 훅이 실제로 전달되는지 확인
-
-SDK가 수집 키를 추가하면 타입 검사가, 정책 값이나 배선이 바뀌면 단위 테스트가 먼저 깨지게 했어요. SDK가 새 URL, span 속성을 추가하는 경우는 이 테스트로 잡히지 않아서, SDK를 올릴 때 직접 확인해야 해요.
+컴포넌트가 SDK의 `setUser`를 직접 부르지도 않아요. 공용 `setSentryUser`가 전송 게이트와 싣는 사용자 필드를 함께 관리해요.
 
 ## Web Vitals는 실제 Sentry envelope까지 확인했어요
 
@@ -335,67 +231,171 @@ Turbopack 빌드라서 처음에는 업로드가 동작하지 않는다고 생�
 
 `next build`가 성공했다고 릴리스 연결이 끝난 건 아니었어요. 배포된 오류의 debug ID와 Sentry artifact가 실제로 맞물리는 걸 보고서야 끝났다고 봤어요.
 
-## 에러 레벨은 사용자 영향으로 정했어요
+## 요청 정보의 자동 수집 범위를 확인했어요
 
-여기까지가 무엇을 보내지 않을지와, 보낸 것이 실제로 닿는지를 확인한 일이었어요. 남은 건 모인 오류 중 무엇에 먼저 움직일지였어요.
+요청 정보를 어디까지 수집하는지 확인하면서 `sendDefaultPii: false`가 적용되는 범위도 살펴봤어요. 이 글에서 확인한 SDK 버전에서는 이 설정만으로 `event.request`의 헤더와 쿠키를 모두 막지 못했어요. 인증 토큰 쿠키인 `sessionToken`과 `renewalToken`(공개용 가명)도 함께 실릴 수 있는 구조였어요.
 
-이 기준의 출발점은 이전 회사에서 Sentry를 운영했던 경험과 우아한형제들의 [「선제적 장애 대응을 위한 Sentry 최적화 적용기」](https://techblog.woowahan.com/21604/)였어요. 이전 회사에서는 브라우저 확장 프로그램, Service Worker, 네트워크 환경에서 반복되는 오류와 이미 비즈니스 흐름에서 처리한 API 오류를 `ignoreErrors`, `denyUrls`, `beforeSend`로 걸렀어요. 개발과 테스트 실행의 이벤트도 전송되지 않게 관리했고요. 모든 오류를 모으는 것보다 사용자에게 영향을 주는 오류를 놓치지 않는 게 중요하다는 걸 이때 배웠어요.
+이 옵션은 헤더와 쿠키 수집 설정을 `false`로 두지 않고, 제외할 이름을 담은 deny 목록 객체로 바꿔요. 그런데 이벤트에 요청 정보를 싣는 `requestDataIntegration`은 값이 `false`인지만 확인해서, 객체가 오면 켜진 것으로 보고 목록을 적용하지 않은 채 헤더와 쿠키를 그대로 실었어요. deny 목록으로 거르는 코드는 span 경로에만 있었고요.
 
-우아한형제들의 글은 과도한 오류가 수집 한도를 소진해 정작 중요한 장애 로그가 누락된 경험에서 출발해요. 그래서 서비스 영향도에 따른 레벨, 불필요한 오류 필터링, 알림과 담당 절차를 함께 설계하는데요. 구현을 그대로 가져오지는 않고, 이 앱의 Next.js 런타임과 개인정보, 배포 환경에 맞게 기준을 다시 잡았어요.
+요청 정보는 오류 원인을 찾는 데 도움이 되지만, 의료 정보를 다루는 서비스에서 인증 정보나 사용자가 입력한 내용을 함께 보낼 이유는 없었어요. 그래서 `sendDefaultPii`에 기대지 않고 `dataCollection`에 끌 항목을 전부 적었어요. 요청 헤더, 쿠키, 본문, 쿼리와 사용자 입력은 수집하지 않아요.
 
-처음에는 4xx와 5xx만으로 심각도를 나누려 했어요. 그런데 같은 500이라도 사용자가 겪는 결과는 요청의 역할에 따라 달랐어요.
+```ts
+export const SENTRY_DATA_COLLECTION = {
+  userInfo: false,
+  cookies: false,
+  httpHeaders: { request: false, response: false },
+  httpBodies: [],
+  urlQueryParams: false,
+  genAI: { inputs: false, outputs: false },
+  databaseQueryData: false,
+  graphQL: { document: false, variables: false },
+  stackFrameVariables: false,
+  frameContextLines: 5,
+};
+```
 
-| 요청                                      | 5xx     | 4xx       |
-| ----------------------------------------- | ------- | --------- |
-| GET: 화면을 채우는 호출                   | `fatal` | `error`   |
-| 그 외: 사용자가 다시 시도할 수 있는 호출  | `error` | `warning` |
+AI 입력과 출력도 닫았어요. 상담 기능의 프롬프트와 응답에는 사용자가 쓴 내용이 들어갈 수 있으니까요. GraphQL과 데이터베이스 계측은 지금 쓰지 않지만, 나중에 통합이 추가되더라도 닫힌 채로 시작하도록 명시했고요.
 
-GET이 실패하면 목록이나 상세 내용이 표시되지 않아요. 반면 POST, PATCH 같은 쓰기 요청은 화면이 남아 있고 사용자가 다시 시도할 수 있고요. 그래서 이렇게 정의했어요.
+`stackFrameVariables`도 중요했어요. Node의 `localVariablesIntegration`은 예외 프레임의 지역 변수를 이슈에 붙여요. 오류가 난 함수의 지역 변수에 회원 정보나 토큰이 있으면 그대로 수집될 수 있었어요.
 
-- `fatal`: 화면이 뜨지 않거나 핵심 조회 결과를 쓸 수 없는 경우
-- `error`: 화면은 남아 있지만 사용자가 하려던 작업이 막힌 경우
-- `warning`: 예상 가능한 실패이며 다시 시도하거나 대체 흐름으로 넘어갈 수 있는 경우
+`frameContextLines`는 반대로 5줄을 유지했어요. 이건 개인정보보다는 소스 노출에 가까운 문제였고, 보내는 곳도 같은 사내 Sentry라 원인 분석에 주는 가치가 더 크다고 봤어요. 다만 Node 서버의 소스맵은 업로드하지 않아서, 지금은 minify된 줄이 실려요.
 
-401도 전부 같은 방식으로 다루지 않았어요. 액세스 토큰 갱신으로 복구된 401은 보내지 않고, 토큰 갱신 요청 자체가 실패한 경우는 별도 fingerprint로 남겼는데요. 갱신 토큰이 수명대로 만료된 401은 돌아오는 사용자마다 나는 정상적인 세션 종료라 `warning`, 그 밖의 갱신 실패는 `error`로 나눴어요.
+## 새 수집 키가 생기면 타입 검사가 깨지게 했어요
 
-레벨만 보고도 사용자가 어떤 기능을 잃었고 다시 복구할 수 있는지 알 수 있게 하려는 거였어요.
+`dataCollection` 객체를 넘기면 적지 않은 키는 "전부 수집"으로 열려요. 처음에는 `stackFrameVariables`와 `graphQL` 같은 키가 빠져 있었는데요.
 
-## 회원 id 하나만 붙였어요
+SDK의 타입을 그대로 붙이는 것만으로는 막을 수 없었어요. 원본 타입의 모든 필드가 optional이거든요.
 
-영향받은 사용자 수를 알아야 한 명의 특이 사례와 여러 명이 겪는 장애를 나눠 우선순위를 정할 수 있어요. 그래서 브라우저 이슈에 회원 id 하나만 붙였어요. 이름, 이메일, 전화번호는 넣지 않았고, IP는 `dataCollection`의 `userInfo: false`로 SDK 쪽에서 막았어요.
+```ts
+type TSentryDataCollection = NonNullable<NonNullable<Parameters<typeof init>[0]>['dataCollection']>;
 
-서버 렌더에는 사용자를 붙이지 않았어요. 요청 스코프와 캐시된 렌더의 수명이 어긋나면 다른 요청의 이슈에 이전 사용자의 id가 남을 수 있거든요.
+type TClosedDataCollection = Required<Omit<TSentryDataCollection, 'queryParams'>> & {
+  httpHeaders: Required<NonNullable<TSentryDataCollection['httpHeaders']>>;
+  graphQL: Required<NonNullable<TSentryDataCollection['graphQL']>>;
+  genAI: Required<NonNullable<TSentryDataCollection['genAI']>>;
+};
+```
 
-컴포넌트가 SDK의 `setUser`를 직접 부르지도 않아요. 공용 `setSentryUser`가 전송 게이트와 싣는 사용자 필드를 함께 관리해요.
+optional을 걷어내면 SDK가 새 수집 항목을 추가하는 순간 타입 검사가 실패해요. 그때 새 항목을 수집할지 닫을지 정해야 다시 빌드할 수 있어요.
+
+다만 타입으로는 값을 `true`로 잘못 적은 경우까지 잡지 못해요. 그래서 테스트에서 전체 객체를 `toEqual`로 비교해 키가 빠지거나 값이 열리는 경우를 함께 막았어요. 새 키를 놓치면 타입이, 열린 값을 넣으면 테스트가 잡는 셈이에요.
+
+## breadcrumb은 `dataCollection`이 걸러 주지 않았어요
+
+헤더와 쿠키를 막은 뒤에도 토큰이 나가는 경로가 하나 더 있었어요. 이번에는 breadcrumb이었는데요.
+
+`dataCollection`은 SDK가 자동으로 수집하는 request data에 적용돼요. breadcrumb은 그 바깥이에요. console breadcrumb에는 인자로 넘긴 값이 그대로 들어가는데, 코드베이스에 axios 오류 객체를 `console.error`로 넘기는 곳이 있었어요. 그 객체의 `config.headers`에 인증 정보가 들어 있었고요.
+
+console breadcrumb은 통째로 버렸어요. 같은 오류는 이벤트로 따로 수집하니 console 인자를 다시 보낼 필요가 없었어요.
+
+fetch, xhr, history breadcrumb은 URL의 쿼리와 해시를 지웠어요. Node의 http breadcrumb은 쿼리를 `http.query`라는 별도 키에도 넣어서 그 값도 삭제했고요.
+
+```ts
+export function sanitizeBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb | null {
+  if (breadcrumb.category === 'console') return null;
+  if (!breadcrumb.data) return breadcrumb;
+
+  const data = { ...breadcrumb.data };
+
+  ['url', 'from', 'to'].forEach((key) => {
+    const value = data[key];
+
+    if (typeof value === 'string') {
+      data[key] = stripUrlParams(value);
+    }
+  });
+
+  delete data['http.query'];
+  delete data['url.query'];
+  delete data['http.fragment'];
+
+  return { ...breadcrumb, data };
+}
+```
+
+여기서 한 가지가 더 드러났어요. 애플리케이션이 직접 context에 넣는 값은 자동 수집 차단이 걸러 주지 않아요.
+
+- 화면 위치는 `location.href`가 아니라 pathname만 써요.
+- API URL은 쿼리와 해시를 지워요.
+- 숫자, UUID 경로는 `:id`로 접어 개인정보와 이슈 그룹 폭증을 함께 막아요.
+- OAuth callback의 `code`와 `state`, 검색 조건, 회원 식별자가 URL에 남지 않게 했어요.
+
+## URL과 본문은 읽는 단계와 전송 직전 두 곳에서 닫았어요
+
+수집 항목을 제한한 뒤에는 에이전트 코드리뷰와 SDK 소스 검토로 URL과 본문이 처리되는 경로를 더 확인했어요. 같은 요청 정보라도 필드와 통합에 따라 옵션이 적용되는 범위가 달랐어요.
+
+- `urlQueryParams: false`가 끄는 건 `event.request.query_string` 필드뿐이었어요. URL 본체는 SDK가 항상 싣게 돼 있어 쿼리를 단 채로 나갔어요.
+- 브라우저에는 이 옵션을 적용하는 통합 자체가 없었어요. 기본 통합이 `location.href` 전체와 `Referer`를 모든 이벤트와 pageload transaction에 실었어요.
+- `httpBodies: []`로는 요청 본문이 막히지 않았어요. Node의 `httpIntegration`은 이 값과 상관없이 기본값 `'medium'`으로 들어오는 요청 본문을 읽어 스코프에 올리고, 요청 정보를 이벤트에 싣는 쪽은 스코프에 있는 본문을 그대로 붙였어요. 본인인증 콜백 같은 POST 본문이 이슈에 남을 수 있는 구조였어요.
+
+그래서 자동 수집 설정과 별개로 읽는 단계와 전송 직전, 두 곳에서 다시 닫았어요. Node에서는 먼저 본문을 읽지 않도록 했어요.
+
+```ts
+Sentry.httpIntegration({
+  disableIncomingRequestSpans: true,
+  maxIncomingRequestBodySize: 'none',
+});
+```
+
+`disableIncomingRequestSpans`도 함께 넘겨야 했어요. 직접 넘긴 `httpIntegration`이 `@sentry/nextjs`가 기본으로 넣는 같은 이름의 Http 통합을 통째로 대체하는데, 그 기본 통합이 바로 이 값을 켜 둔 것이었거든요. 이 값을 빠뜨리면 Next.js와 Sentry가 같은 incoming request span을 두 번 만들어요.
+
+읽는 단계에서 막은 뒤에도 전송 직전에 한 번 더 지웠어요.
+
+```ts
+Sentry.init({
+  beforeBreadcrumb: sanitizeBreadcrumb,
+  beforeSend: sanitizeEvent,
+  beforeSendTransaction: sanitizeEvent,
+  beforeSendSpan: sanitizeSpan,
+  dataCollection: SENTRY_DATA_COLLECTION,
+});
+```
+
+<div class="note note-decision">
+  <strong>핵심 결정</strong>
+  <p>민감 정보는 두 겹으로 닫아요. 읽는 단계에서는 `dataCollection`과 `httpIntegration` 옵션으로 수집을 막고, 전송 직전에는 `beforeSend` 계열 훅이 옵션으로 막히지 않는 URL, Referer, span 속성을 지우고, 옵션이 이미 막은 쿠키와 본문도 한 번 더 지워요. 옵션 한 줄이 바뀌거나 SDK가 새 경로를 열어도 토큰과 회원 정보가 곧바로 나가지 않게 하려는 거예요. 대신 정화 함수는 알고 있는 키만 지우기 때문에, SDK를 올릴 때마다 새 URL, span 속성을 다시 확인하는 비용을 받아들였어요.</p>
+</div>
+
+`sanitizeEvent`는 다음을 처리해요.
+
+- `event.request.url`의 쿼리와 해시 제거
+- `query_string`, `cookies`, `data` 삭제
+- 대소문자와 관계없이 `Referer`의 쿼리 제거
+- trace와 child span 속성 정리
+
+URL은 한 가지 키로만 오지 않았어요.
+
+```ts
+const URL_ATTRIBUTE_KEYS = ['url', 'url.full', 'http.url', 'http.target', 'http.request.header.referer'];
+
+const QUERY_DATA_KEYS = ['http.query', 'url.query', 'http.fragment'];
+```
+
+특히 plain `url`이 마지막까지 남았어요. fetch, xhr 계측은 정리한 URL을 `http.url`이나 `url.full`에 넣으면서, 별도 `url` 속성에는 정리하지 않은 원본을 넣는데요. 이 앱의 API 호출은 axios(xhr)로 나가서, 쿼리가 붙은 호출은 전부 이 키에 원본 쿼리를 남겼어요.
+
+처음에는 나머지 네 키만 닦고 있었어요. `url`을 목록에 넣기 전까지는 정화한 URL과 원본 URL이 같은 span에 나란히 실렸어요.
+
+INP처럼 transaction에 속하지 않고 따로 전송되는 span은 `beforeSendTransaction`을 거치지 않아요. 그래서 같은 속성 정화를 `beforeSendSpan`에도 연결했어요.
+
+## 정책과 배선은 테스트로 고정했어요
+
+개인정보 정화 함수만 테스트해서는 부족했어요. 함수가 맞더라도 `Sentry.init`에 연결하지 않으면 원본이 그대로 나가니까요. 테스트를 세 층으로 나눴어요.
+
+1. 정책 객체: `dataCollection`의 모든 키와 값이 닫혀 있는지 전체 비교
+2. 정화 함수: URL, 본문, 쿠키, Referer, breadcrumb, span 속성 처리
+3. 초기화 배선: client, server, edge 모두에 정책과 훅이 실제로 전달되는지 확인
+
+SDK가 수집 키를 추가하면 타입 검사가, 정책 값이나 배선이 바뀌면 단위 테스트가 먼저 깨지게 했어요. SDK가 새 URL, span 속성을 추가하는 경우는 이 테스트로 잡히지 않아서, SDK를 올릴 때 직접 확인해야 해요.
 
 ## 고칠 수 없는 잡음은 발생 지점에서 표본만 남겼어요
 
-개인정보 경로를 막고 나니 위치 조회 실패가 이슈 목록 위쪽을 채웠어요. 권한 거부는 사용자의 선택이라 보내지 않고, 위치 소스 없음과 시간 초과는 기기와 주변 환경의 영향이 커서 10%만 남겼는데요. 완전히 끄면 급증해도 알아챌 방법이 없어서 표본은 남겼어요.
+위치 조회 실패가 이슈 목록 위쪽을 채우는 문제도 있었어요. 권한 거부는 사용자의 선택이라 보내지 않고, 위치 소스 없음과 시간 초과는 기기와 주변 환경의 영향이 커서 10%만 남겼는데요. 완전히 끄면 급증해도 알아챌 방법이 없어서 표본은 남겼어요.
 
 오류 코드가 없는 실패는 전부 남겼어요. 앱 브리지 reject나 `navigator.geolocation` 부재처럼 우리 코드가 깨졌다는 신호일 수 있거든요.
 
 처음에는 위치 조회 실패를 `ignoreErrors`로 거르려 했어요. 하지만 무시 목록은 메시지가 맞으면 버리는 것밖에 못 해서, 코드 2, 3은 표본만 남기고 코드가 없는 실패는 전부 남기는 규칙을 표현할 수 없었어요. 그래서 원본의 `code`를 볼 수 있는 위치 조회 코드에서 표본 여부를 정하고, fingerprint에는 오류 코드를 넣었어요.
 
 이슈 제목도 문제였어요. `GeolocationPositionError`는 `Error`도 `Event`도 아니어서 SDK가 스택 없는 synthetic 예외로 보내고, 목록에는 제목이 `<unknown>`으로 떴어요. 읽히는 이름의 `Error`로 감싸고 원본은 `cause`로 붙였어요. fingerprint는 그대로 둬서 기존 이슈 그룹은 갈리지 않았어요.
-
-## 전송 게이트로 의미 없는 트래픽을 줄였어요
-
-이전 회사에서는 `NODE_ENV`를 기준으로 개발과 테스트 이벤트를 뺐어요. 단순하고 잘 통했지만, 로컬에서 실제 전송을 검증하거나 프로덕션 빌드로 E2E를 돌리는 것처럼 환경 이름과 수집 목적이 어긋나는 경우를 세밀하게 표현하긴 어려웠어요.
-
-원칙은 이번에도 같았어요. 개발 중 콘솔로 이미 볼 수 있는 오류까지 보내면 수집 트래픽과 이슈 잡음만 늘고, 실제 사용자 문제를 찾기 어려워져요. 대신 이번에는 실행 목적에 따라 전송 여부를 명시적으로 고르는 게이트를 만들었어요.
-
-DSN이 있더라도 `NEXT_PUBLIC_SENTRY_ENABLED`가 `false`면 SDK 전체가 꺼져요.
-
-```ts
-export const IS_SENTRY_ENABLED = Boolean(SENTRY_DSN) && SENTRY_ENABLED !== 'false';
-```
-
-- 실제 사용자 오류를 수집하거나 전송 흐름을 확인해야 하는 배포에서는 켜요.
-- 상시 수집할 가치가 적은 development 배포와 일반 로컬 실행은 기본으로 꺼요.
-- `dev`, `dev:mock`, `build:e2e`는 기본값을 `false`로 두어 테스트와 개발 트래픽이 저장소를 쓰지 않게 해요.
-- Sentry 전송 자체를 확인하는 E2E나 로컬 연동 점검에서는 명시적으로 `true`를 줘서 다시 켤 수 있어요.
-
-환경 변수 하나로 가르기로 한 직후에는 로컬을 끄는 값을 git에 올라가지 않는 `.env.local`에 두게 했는데요. 그 줄이 없는 새 클론이나 worktree는 당시 `true`였던 `.env.development`를 읽어 development 이슈에 로컬 이벤트를 섞게 돼 있었어요. 그래서 같은 날 기본값을 실행 스크립트에 고정했어요. 이제 새 클론이나 worktree에서도 기본값은 꺼져 있고, 필요할 때만 의도적으로 켤 수 있어요.
 
 ## 이 체계가 먼저 알려 준 문제도 있었어요
 
@@ -407,7 +407,7 @@ Sentry 워터폴을 보다가 메인 배너 링크가 뷰포트에 들어오는 
 
 ## 다음 작업에는 이 기준을 남겼어요
 
-누출 대부분은 옵션 이름만 믿은 자리에서 나왔어요. 그래서 설정이 끝났는지는 SDK 소스와 실제 payload를 보고 판단하고, 민감 정보는 읽는 단계와 전송 직전 두 곳에서 닫아요. Web Vitals는 envelope로, MCP는 실제 API 호출로, 릴리스는 artifact bundle로 확인했듯이 설정 파일이 맞는지보다 실제로 동작했는지를 봐요.
+이 작업에서는 설정을 추가한 뒤 실제 전송과 저장 결과까지 확인하는 기준을 남겼어요. Web Vitals는 envelope와 dataset으로, MCP는 API 호출로, 릴리스는 artifact bundle과 debug ID로 확인했어요. 민감 정보는 자동 수집 범위를 제한하고 전송 직전에도 정리하도록 했고요.
 
 돌아보면 Sentry를 붙인 일보다, 무엇을 보내지 않을지와 어떤 신호에 움직일지를 코드, 테스트, 도구로 남긴 일이 더 오래 걸렸어요.
 
@@ -418,5 +418,5 @@ Sentry 워터폴을 보다가 메인 배너 링크가 뷰포트에 들어오는 
 - [Next.js | instrumentation-client.js](https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client): 브라우저 초기화와 `onRouterTransitionStart`
 - [getsentry/sentry-javascript](https://github.com/getsentry/sentry-javascript): `@sentry/core`의 `requestDataIntegration`과 `sendDefaultPii` 기본값 변환, fetch와 xhr span 속성
 - [getsentry/sentry-mcp](https://github.com/getsentry/sentry-mcp): `@sentry/mcp-server`의 `--host` 옵션
-- 관련 글: [Sentry가 잡아 준 Bottom Sheet 드래그 크래시, 원인 경로가 사라진 버전으로 올리기까지](https://jingeon27.tistory.com/33)
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+- 관련 글: [Sentry로 추적한 Bottom Sheet 드래그 크래시](https://jingeon27.tistory.com/33)
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28)

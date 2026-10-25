@@ -1,4 +1,4 @@
-# 타입 단언을 걷어내다 정산 월별표를 깨뜨리고 다시 세운 기준
+# 타입 단언을 줄이며 정리한 런타임 검증 기준
 
 관리자 서비스 모노레포에서 타입 단언을 걷어내는 중이었어요. 표 셀 콜백이 첫 인자를 넓은 타입으로 주길래 두 번째 인자인 행 전체를 읽도록 바꿨는데요. 그러면서 `d || 'INACTIVE'` 같은 폴백 한 줄이 필요 없어 보여 같이 지웠어요. 그랬더니 정산 월별표의 입금상태 칸이 죽었어요. 서버가 모르는 값을 하나 내려주면 `config`가 `undefined`가 되는데, 바로 다음 줄에서 `config.next`를 읽고 있었거든요.
 
@@ -8,12 +8,14 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>타입 단언을 전부 Zod로 바꾸지 않고, 값이 어디서 왔는지에 따라 다르게 처리한 기준을 적었어요. 폴백을 지웠다가 낸 회귀에서 시작해서, 같은 날 `.parse`를 넣었다 되돌린 일, `consistent-type-assertions`를 켰다 뺀 일, 응답 불일치 로그가 실제 스키마 수정으로 이어진 과정까지 다뤄요. 관리자 서비스 모노레포와 복지몰 두 저장소 사례가 섞여 있어서 나올 때마다 어느 쪽인지 적었어요. 코드 블록은 관리자 서비스 `zod ^4.4.3`, 복지몰 `zod ^3.24.4` 기준이에요.</p>
+  <p>타입 단언을 정리하다 런타임 폴백까지 지워 회귀를 만들었어요. 이 일을 계기로 API 응답, URL, 폼처럼 값의 출처에 따라 검증과 실패 처리를 나눈 과정을 정리했어요.</p>
 </div>
+
+예제는 관리자 서비스의 Zod 4와 복지몰의 Zod 3를 기준으로 해요. API가 다른 부분은 본문에서 구분했어요.
 
 ## 타입이 좁다고 런타임 값까지 좁지는 않았어요
 
-작업을 시작할 때 세운 규칙은 단순했어요. `as`가 필요해지는 자리에 Zod 스키마를 두자는 것이었는데요. 막상 코드를 바꿔 보니 절반만 맞는 규칙이었어요.
+처음에는 `as`가 필요해지는 자리에 Zod 스키마를 두려고 했어요. 코드를 바꿔 보니 값이 들어온 경로에 따라 다른 방법이 필요했어요.
 
 단언이 필요한 자리는 두 종류였어요. 하나는 컴포넌트 안에서 이미 타입이 정해진 값을 라이브러리의 느슨한 콜백 타입 때문에 다시 단언하는 자리였고, 다른 하나는 API 응답이나 URL처럼 런타임에 무엇이 들어올지 모르는 자리였어요. 앞쪽은 타입이 어디서 왔는지 바로잡으면 되고, 뒤쪽은 런타임 검증이 필요했어요. 둘 다 Zod로 감싸면 필요 없는 검증만 늘어요.
 
@@ -163,7 +165,7 @@ function useSchemaForm<T extends ZodRawShape>({ schema, ...options }: Options<T>
 
 ## `x is T` 술어는 검증한 쪽에서 받아왔어요
 
-사용자 정의 타입 가드도 정리했어요. `x is T`는 컴파일러가 확인하지 않는 단언이라, 본문이 무엇을 하든 TS는 술어를 그대로 믿어요.
+사용자 정의 타입 가드도 정리했어요. `x is T`라고 적어도 TypeScript가 함수의 조건이 실제로 `T`를 보장하는지 증명해 주지는 않아요. 조건과 반환 타입이 어긋나지 않는지는 작성자가 확인해야 해요.
 
 ```ts
 function isCompletedPayment(value: unknown): value is CompletedPayment {
@@ -242,7 +244,7 @@ if (reservation.success) return handleReservationStatus(reservation.data, row.id
 
 단언을 걷어냈으니 다시 들어오는 것도 막고 싶었어요. 그래서 lint에 `consistent-type-assertions`를 `assertionStyle: 'as'`로 켰는데, 같은 날 뺐어요. 이 규칙은 꺾쇠 문법을 막을 뿐 `as` 재유입은 전혀 못 막아요. 게다가 꺾쇠 단언은 `.tsx`에서 문법상 쓸 수도 없어서 실효가 거의 없었어요. 규칙 이름만 보고 켰다가, 실제로 무엇을 막는지 확인하고 나서 뺀 거예요.
 
-lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요(테스트, 목, e2e에서 끈 건 `no-non-null-assertion` 하나고, `no-explicit-any`는 테스트에서도 error예요). `as` 재유입을 실제로 막으려면 타입 정보를 읽는 `no-unnecessary-type-assertion` 계열 규칙이 필요한데, 아직 켜지 않았어요. 복지몰에서 타입 정보를 읽는 lint를 켜 보니 push 게이트 시간이 3.3배, 피크 메모리가 1.4GB까지 올라갔어요. 관리자 서비스는 애초에 그 파서 옵션을 쓰지 않고요. 이 비용을 감당할 방법을 정하기 전에는 규칙을 켜지 않기로 했어요.
+lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요(테스트, 목, e2e에서 끈 건 `no-non-null-assertion` 하나고, `no-explicit-any`는 테스트에서도 error예요). 타입 정보를 활용하는 검사도 검토했어요. `no-unnecessary-type-assertion`은 타입을 바꾸지 않는 불필요한 단언을 찾는 규칙이지, 모든 `as`를 금지하는 규칙은 아니에요. 복지몰에서 타입 정보를 읽는 lint 구성을 시험했을 때는 push 게이트 시간이 3.3배, 피크 메모리가 1.4GB까지 늘었어요. 이 비용 때문에 당시에는 도입을 보류하고, 단언의 필요성과 안전성은 리뷰에서도 확인하기로 했어요.
 
 절차에는 세 가지를 남겼어요. 첫째, 단언을 걷는 커밋에서는 diff의 삭제된 줄 중 폴백을 담은 것을 따로 훑어요. 이번 회귀가 거기서 나왔거든요. 둘째, `.parse`를 넣기 전에 그 예외를 받는 자리가 어디인지 먼저 확인해요. 셋째, 스키마를 바꾸는 PR은 계약 테스트를 먼저 고정하고 구현을 바꿔요.
 
@@ -255,6 +257,8 @@ lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요
 - [Zod: `safeParse`](https://zod.dev/api?id=safeparse)
 - [Zod: `.catch()`](https://zod.dev/api?id=catch)
 - [Zod: `passthrough` / v4의 `z.looseObject`](https://zod.dev/api?id=looseobject)
-- [jwt-decode README: "it does not validate the signature or the shape"](https://github.com/auth0/jwt-decode#jwt-decode)
+- [jwt-decode README: 토큰 디코딩과 검증의 구분](https://github.com/auth0/jwt-decode#jwt-decode)
+- [typescript-eslint: consistent-type-assertions](https://typescript-eslint.io/rules/consistent-type-assertions/)
+- [typescript-eslint: no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/)
 - [@hookform/resolvers: zodResolver](https://github.com/react-hook-form/resolvers#zod)
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28)

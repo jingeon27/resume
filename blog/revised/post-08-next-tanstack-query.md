@@ -2,7 +2,12 @@
 
 > Next.js 15 App Router와 TanStack Query v5 기준이에요.
 
-App Router에 TanStack Query를 처음 붙였을 때는 서버와 브라우저에서 같은 `getQueryClient()`를 부르면 된다고 생각했어요. 그런데 같은 함수라도 두 환경에서 바라는 수명이 정반대였어요.
+<div class="note note-summary">
+  <strong>요약</strong>
+  <p>서버에서는 요청끼리 캐시를 분리하고, 브라우저에서는 렌더가 바뀌어도 같은 QueryClient를 쓰도록 구성했어요. 이 캐시를 prefetch와 hydration으로 연결하고 어떤 데이터를 서버에서 기다릴지 정했어요.</p>
+</div>
+
+App Router에 TanStack Query를 붙이면서 같은 `getQueryClient()`라도 서버와 브라우저에서는 인스턴스를 만드는 기준이 달라야 했어요.
 
 - 서버에서는 요청끼리 캐시를 공유하면 안 돼요.
 - 브라우저에서는 렌더마다 QueryClient를 다시 만들면 안 돼요.
@@ -139,10 +144,13 @@ export function HomePageView() {
 
 ## 어떤 조회를 서버에서 기다릴지 정하는 기준
 
-- 초기 HTML에 데이터가 꼭 있어야 하거나 오류를 서버에서 처리해야 하면 `await prefetchQuery`를 써요.
+- 초기 HTML에 데이터가 필요하면 `await prefetchQuery`로 완료를 기다려요. prefetch는 실패를 밖으로 던지지 않으므로, 실패를 서버에서 직접 처리해야 한다면 `fetchQuery`로 받아 처리해요.
 - pending query를 streaming하려면 pending dehydration을 켜고, 데이터를 쓰는 컴포넌트를 Suspense 경계 안에서 `useSuspenseQuery`로 구독해요.
 - 어느 방식이든 서버 QueryClient는 요청마다, 브라우저 QueryClient는 한 번만 만들어요.
 
 이 구성을 통째로 복사하기 전에, 데이터가 초기 HTML에 꼭 있어야 하는지부터 정해야 해요. 저는 SEO나 서버 분기에 필요한 조회는 기다리고, 일부 UI가 늦게 보여도 되는 조회는 Suspense로 넘겨요. dehydration 설정은 그걸 정하고 나서야 고를 수 있어요.
 
-참고: [TanStack Query Advanced SSR](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)
+## 참고
+
+- [TanStack Query: Advanced SSR](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)
+- [TanStack Query: Prefetching](https://tanstack.com/query/latest/docs/framework/react/guides/prefetching)

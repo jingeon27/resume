@@ -1,6 +1,11 @@
-# 타입을 복잡하게 만들지 않고 잘못된 상태만 막은 네 가지 경우
+# TypeScript로 호출부의 실수를 줄이는 방법
 
-저는 TypeScript를 잘 쓴다는 게 복잡한 타입을 만들 줄 안다는 뜻이라고 생각하지 않아요. 호출부에서 실수할 만한 지점을 찾아 그 상태만 컴파일 단계에서 막으면 충분하다고 봐요. 실제 코드에서 자주 내렸던 판단 네 가지를 골라 봤어요.
+<div class="note note-summary">
+  <strong>요약</strong>
+  <p>필수 키의 누락, 서로 연결된 prop, 함께 넘기면 안 되는 조합을 타입으로 검사한 예제예요. 호출부에서 어떤 실수를 막을지 정한 뒤 그 관계에 맞는 타입을 골랐어요.</p>
+</div>
+
+타입을 정리할 때는 호출부에서 어떤 실수가 가능한지 먼저 봐요. 필드가 빠지는지, 값과 콜백의 타입이 따로 움직이는지, 허용하면 안 되는 prop 조합이 열려 있는지요. 자주 마주친 네 가지 경우를 정리했어요.
 
 ## 키 누락은 막고 값은 좁게 남겨요
 
@@ -19,7 +24,7 @@ ROUTES.profile;
 // '/profile'
 ```
 
-변수에 `Record<RouteName, string>`을 직접 붙이면 값이 `string`으로 넓어질 수 있어요. `satisfies`는 키 누락과 잘못된 경로를 검사하면서도 리터럴 추론은 그대로 둬요. 객체에 필요한 값이 다 있는지만 확인하고 싶을 때 써요.
+변수에 `Record<RouteName, string>`을 직접 붙이면 각 경로는 `string`으로 읽혀요. 위 예제는 `as const`로 경로 리터럴을 유지하고 `satisfies`로 키와 경로 형식을 검사해요. 호출부에서는 `ROUTES.profile`이 정확히 어떤 경로인지도 알 수 있어요.
 
 ## `undefined` 값과 키 생략은 달라요
 
@@ -39,7 +44,7 @@ const value: Example = {
 - `requiredKey`는 키가 꼭 있어야 하고, 값으로 `undefined`를 넣을 수 있어요.
 - `optionalKey`는 키 자체를 빼도 돼요.
 
-API 요청 객체에서는 이 차이가 실제 동작으로 이어졌어요. 키를 보내면서 값이 아직 없다고 알리는 것과 요청에서 조건 자체를 빼는 건 같지 않았거든요. `exactOptionalPropertyTypes`를 켜면 이 차이를 타입에도 남길 수 있어요.
+객체에서 키의 존재 여부를 검사하거나 여러 객체를 합칠 때 이 차이가 드러나요. `exactOptionalPropertyTypes`를 켜면 `optionalKey?: number`에 명시적으로 `undefined`를 넣는 것도 구분해 검사해요. 다만 JSON 객체로 직렬화하면 값이 `undefined`인 프로퍼티는 생략되므로, 이 타입 차이가 서버까지 그대로 전달된다고 보면 안 돼요.
 
 ## 함께 움직이는 prop은 제네릭 하나로 묶어요
 
@@ -65,7 +70,7 @@ type PaymentMethod = 'normal' | 'coupon';
 />;
 ```
 
-여기서 필요한 건 `value`와 callback의 인자가 어긋나지 않는다는 보장 하나였어요. 범용 Select 타입 체계까지 만들 일은 아니었고요. 타입으로 풀어야 할 관계가 하나면 제네릭도 하나면 돼요.
+이 예제에서는 `PaymentMethod`를 한 번 정하면 선택값과 콜백이 같은 값 집합을 사용해요. 두 prop에 타입을 따로 적지 않아도 관계를 유지할 수 있어요.
 
 ## 같이 들어오면 안 되는 prop 조합은 막아요
 
@@ -97,4 +102,8 @@ type Props<T extends string> = ControlledProps<T> | LabelOnlyProps;
 
 네 경우 모두 실제로 틀릴 수 있는 지점만 막았어요. 객체에서 빠지면 안 되는 값, key가 있는지 없는지, 서로 연결된 prop, 허용하면 안 되는 조합이요. 타입 정의가 길어졌는데 호출부가 더 읽기 쉬워지지도, 실수가 줄지도 않는다면 그 추상화는 걷어내요.
 
-참고: [TypeScript 4.9 `satisfies`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html), [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig/exactOptionalPropertyTypes.html)
+## 참고
+
+- [TypeScript 4.9: satisfies](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html)
+- [TypeScript: exactOptionalPropertyTypes](https://www.typescriptlang.org/tsconfig/exactOptionalPropertyTypes.html)
+- [MDN: JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)

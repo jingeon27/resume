@@ -1,4 +1,4 @@
-# Next.js에 맡기던 동작을 클라이언트로 옮기며 치른 비용
+# Next.js의 라우팅과 캐시 문제를 추적한 기록
 
 <figure class="figure-wide">
   <img src="../assets/covers/next-router-cache.jpg" alt="잘못된 캐시 슬롯으로 되돌아가는 경로와 서버 내비게이션, 클라이언트 Query, 브라우저 History를 분리한 URL 상태 구조" />
@@ -7,7 +7,7 @@
 
 <div class="note note-summary">
   <strong>이 글에서 다루는 것</strong>
-  <p>Next.js를 쓰면서 만난 세 문제의 원인과 대응을 적어요. 프로덕션 빌드에서만 나는 라우터 캐시 회귀, 16.3의 `crossorigin` 변경과 겹친 프록시 matcher의 범위 오류, 배포 뒤 오래 열린 탭에서 실패하는 서버 액션이에요. 프레임워크가 맡던 동작을 클라이언트로 옮기면서 토큰과 폼 쪽에 남은 비용, 반대로 프레임워크가 상태를 대신 들고 있어 생긴 폼 문제, 우회를 걷어낼 조건도 함께 적었어요.</p>
+  <p>검색해도 주소가 바뀌지 않는 문제, 버전업 뒤 청크 요청이 막히는 문제, 오래 열린 탭의 서버 액션 실패를 추적했어요. 서버 내비게이션이 필요한 동작과 URL만 바꾸면 되는 동작을 나누고, 폼 초기화와 쿠키 처리에 생긴 영향도 확인했어요.</p>
 </div>
 
 Next.js를 쓰면서 문제를 세 번 만났어요. Back-Office 목록에서는 검색을 눌러도 주소가 바뀌지 않았어요. 버전을 올리자 병원 관리자의 JS 번들이 CORS로 막혔고, 배포가 지나간 뒤에도 탭을 열어 둔 사용자는 업데이트 공지를 닫지 못했어요. 라우터 캐시, 프록시, 서버 액션에서 하나씩이었는데 원인은 제각각이었어요. 라우터 캐시와 서버 액션은 서버나 프레임워크에 맡기던 동작을 클라이언트로 옮겨 풀었고, 프록시는 matcher 범위를 고치고 버전을 묶었어요.
@@ -20,9 +20,7 @@ Back-Office의 목록 화면을 확인하다 검색이 안 되는 문제를 발�
 
 `router.replace`를 부르는데 주소창이 바뀌지 않았어요.
 
-확인하는 방법을 찾는 데 시간이 걸렸어요. 테스트부터 짰는데 전부 통과했어요. 테스트 코드를 읽어 봐도 이상한 데가 없었고요. jsdom 위에서 도는 테스트도, 개발 서버도 이 문제를 보지 못해요. 라우터 캐시가 프로덕션 빌드에서만 이렇게 동작하기 때문이에요.
-
-그래서 확인을 `pnpm build && pnpm start`로 바꿨어요. 프로덕션 빌드를 띄워 놓고 보니 확인한 Back-Office 목록 7개 중 6개가 검색을 눌러도 주소가 전혀 바뀌지 않았어요.
+개발 서버에서는 재현되지 않아 확인 방법을 바꿨어요. 로컬에서 build 후 start로 실행하니 Back-Office 목록 7개 중 6개에서 같은 조건으로 주소가 바뀌지 않았어요.
 
 원인은 라우터 캐시의 키였어요. 이 화면들은 서버 렌더에서 `searchParams`를 읽지 않아요. 목록은 전부 클라이언트가 조회하거든요. 그런데 캐시에 쓸 때 키로 삼는 값이 요청 URL의 검색 문자열이 아니라 서버가 실제 렌더에 사용한 검색 문자열이었어요. `searchParams`를 읽지 않는 라우트에서는 이 값이 항상 빈 문자열이에요. 그래서 `/a?foo=bar`로 들어온 요청이 파라미터 없는 `/a`가 찾아가는 슬롯에 캐시를 남겼어요. 이 엔트리에는 요청 URL이 그대로 저장돼 있어서, 나중에 `router.replace('/a')`가 이 슬롯을 맞히면 옛 검색 문자열이 주소창과 `useSearchParams()`에 되살아나요.
 
@@ -62,7 +60,7 @@ export function pushUrl(url: string) {
 
 서버가 조회한 결과를 props로 내려 그리는 구조였다면 이 해법은 성립하지 않아요. 쿼리를 읽어 다시 조회하는 주체가 서버뿐이라, 목록을 새로 받으려면 서버 내비게이션을 시작하는 수밖에 없거든요. `replaceState`를 불러도 주소만 바뀌고 목록은 그대로예요.
 
-### 그리고 이건 우회가 아니에요
+### 같은 경로의 조회 조건에는 History API를 유지해요
 
 버전이 올라가 라우터 캐시 버그가 고쳐지면 `router.replace`는 "동작은 해요". 그래도 돌아갈 이유가 없어요.
 
@@ -141,11 +139,11 @@ Next.js에 대응이 없는 건 아니에요. `deploymentId`를 설정해 두면
 
 ### 클라이언트로 내리면서 늘어난 위험
 
-`sessionToken`을 JS가 읽을 수 있게 한 이상, 반출 조건은 "XSS가 나면"보다 넓어요. 페이지에서 도는 스크립트는 다 읽을 수 있어요. 서드파티 태그, 콘텐츠 스크립트를 가진 브라우저 확장, 번들에 딸려 들어온 의존성까지 전부요. 취약점이 하나도 없어도 클라이언트 관측 도구가 쿠키나 요청 헤더를 자동으로 수집하면 토큰이 제3자 서버로 나가요.
+`sessionToken`을 JavaScript가 읽게 하면 페이지 권한으로 실행되는 서드파티 태그와 의존성 코드도 접근할 수 있어요. XSS뿐 아니라 클라이언트 도구가 쿠키나 요청 헤더를 수집하는 경로도 확인해야 해요.
 
-토큰 만료를 줄이면 노출되는 시간이 줄 뿐, 반출 자체를 막지는 못해요. 그마저도 기대만큼 듣지 않아요. 재발급 경로를 페이지에서 부를 수 있는 이상 공격자도 같은 경로로 갱신하면 되니까요. 실제 노출 창은 `sessionToken`보다 `renewalToken` 수명에 가까워요.
+액세스 토큰이 한 번 유출된 경우에는 짧은 만료 시간이 사용 가능 시간을 제한해요. 다만 악성 스크립트가 페이지에서 계속 실행되고 재발급 응답도 읽을 수 있다면 새 토큰을 얻을 수 있어요. 이 경우에는 만료 시간만 줄여 해결할 수 없어요.
 
-"`renewalToken`은 httpOnly니까 안전하다"고 보기도 어려워요. 브라우저가 쿠키를 알아서 실어 보내니까 페이지에서 도는 코드는 재발급 경로를 호출하기만 하면 돼요. 값 자체가 페이지로 새어 나오지 않는지도 httpOnly 플래그만 보고는 답할 수 없어요. 서버 쪽에 그 쿠키 값을 읽어 돌려주는 경로가 없는지까지 봐야 해요.
+HttpOnly는 `renewalToken` 값을 JavaScript가 직접 읽는 것을 막아요. 하지만 브라우저가 쿠키를 실어 보내는 요청까지 막지는 않아요. 재발급 응답을 누가 읽을 수 있는지, 쿠키 값을 응답으로 돌려주는 경로는 없는지도 따로 봐야 해요.
 
 아직 넣은 완화책은 없어요. 만료를 줄이는 일도, 재발급 경로에 제약을 거는 일도 하지 않았어요. 공지와 토큰 읽기에서 서버 액션을 걷어내서 배포와 무관하게 도는 경로를 얻었고, 대신 이 목록이 생겼어요.
 
@@ -245,8 +243,9 @@ CORS와 폼 초기화는 둘 다, 따로 보면 맞는 결정 두 개가 만나�
 - [Next.js 문서: Linking and Navigating의 `window.history.pushState`](https://nextjs.org/docs/app/getting-started/linking-and-navigating#windowhistorypushstate)
 - [Next.js 문서: Server Actions의 Deployment considerations](https://nextjs.org/docs/app/guides/server-actions#deployment-considerations)
 - [Next.js 문서: Self-hosting의 Version Skew(`deploymentId`)](https://nextjs.org/docs/app/guides/self-hosting#version-skew)
+- [OWASP: Session Management의 HttpOnly](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#httponly-attribute)
 - [Next.js 문서: Preserving UI state](https://nextjs.org/docs/app/guides/preserving-ui-state)
 - [Next.js 문서: `useRouter`의 `bfcacheId`](https://nextjs.org/docs/app/api-reference/functions/use-router#bfcacheid)
 - 관련 글: [예약 폼의 작성 상태를 Zustand에서 React Hook Form으로 옮긴 과정](https://jingeon27.tistory.com/11): 공용 폼 훅을 쓰는 예약 폼
 - 관련 글: [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://jingeon27.tistory.com/21): Cache Components를 켠 계기
-- 관련 글: [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28): 주소로 여는 Drawer와 Error Boundary
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28): 주소로 여는 Drawer와 Error Boundary
