@@ -123,7 +123,7 @@ figures.push({
 
 figures.push({
   name: '05-upload-concurrency',
-  svg: frame('파일은 S3로, 확정 처리는 API로', 'Game Mate의 직접 업로드와 프로세스별 파일 처리 상한', 1010,
+  svg: frame('파일은 S3로, 확정 처리는 API로', '서버의 동시 처리 상한을 두던 방식에서 모든 파일의 직접 업로드로 통일했습니다', 1010,
     [80, 550, 1020].map((x, i) => rect(x, 180, 340, 75, { fill: i === 2 ? C.orangeBg : C.blueBg, stroke: 'none', radius: 14 }) +
       text(x + 170, 229, ['브라우저', 'NestJS API', 'S3'][i], { anchor: 'middle', size: 28, weight: 700 })).join('') +
     [250, 720, 1190].map((x) => `<path d="M${x} 270 V720" stroke="${C.line}" stroke-width="2" stroke-dasharray="6 7"/>`).join('') +
@@ -134,14 +134,11 @@ figures.push({
     arrow(720, 617, 1178, 617) + text(958, 594, 'HEAD, 앞 4KB 검사, ETag 조건부 복사', { anchor: 'middle', size: 22 }) +
     arrow(720, 687, 262, 687) + text(480, 669, '확정한 객체 ID 반환', { anchor: 'middle', size: 23 }) +
     rect(80, 764, 1280, 150, { fill: C.bg, stroke: 'none', radius: 16 }) +
-    text(108, 811, '서버에 남는 작업', { size: 26, weight: 700 }) + lines(108, 849, ['프로필 변환과 기존 multipart', '본문 수신 전에 슬롯 확보'], { size: 21, leading: 31, fill: C.muted }) +
-    text(508, 803, '동시 3개', { size: 23, weight: 600, anchor: 'middle' }) +
-    [0, 1, 2].map((i) => rect(434 + i * 53, 824, 44, 51, { fill: C.blueBg, stroke: '#8db1f8', radius: 8 })).join('') +
-    text(826, 803, '대기 12개', { size: 23, weight: 600, anchor: 'middle' }) +
-    Array.from({ length: 12 }, (_, i) => rect(715 + (i % 6) * 39, 821 + Math.floor(i / 6) * 33, 31, 25, { fill: C.white, radius: 5 })).join('') +
-    arrow(982, 848, 1040, 848) +
-    rect(1060, 813, 268, 74, { fill: C.redBg, stroke: 'none', radius: 12 }) +
-    text(1194, 860, '상한 초과 시 503', { anchor: 'middle', size: 25, weight: 700, fill: C.red })),
+    text(108, 808, '이전: API에서 파일 수신', { size: 26, weight: 700 }) +
+    lines(108, 849, ['동시 3개 처리, 12개 대기', '서버가 받을 수 있는 양을 제한'], { size: 23, leading: 34, fill: C.muted }) +
+    arrow(618, 841, 736, 841) +
+    text(794, 808, '현재: 모든 파일을 S3로 직접 전송', { size: 26, weight: 700, fill: C.orange }) +
+    lines(794, 849, ['프로필 사진도 같은 방식으로 통일', 'API는 필요한 부분만 검사한 뒤 확정'], { size: 23, leading: 34, fill: C.muted })),
 });
 
 figures.push({
@@ -175,7 +172,23 @@ figures.push({
     rect(80, 699, 1280, 106, { fill: C.orangeBg, stroke: 'none', radius: 15 }) +
     text(108, 742, '받아들인 비용', { size: 25, weight: 700, fill: C.orange }) +
     text(337, 742, 'EC2 장애 시 두 서비스가 함께 중단됩니다.', { size: 26, weight: 600 }) +
-    text(337, 778, 'Terraform 구성과 mock provider 테스트를 준비했으며 실제 AWS 적용과 부하 검증은 다음 단계입니다.', { size: 21, fill: C.muted })),
+    text(337, 778, 'Terraform과 컨테이너 smoke 테스트를 준비했으며 실제 AWS 적용과 부하 검증은 별도입니다.', { size: 21, fill: C.muted })),
+});
+
+figures.push({
+  name: '08-monitoring-mcp',
+  svg: frame('수집한 정보를 MCP로 다시 확인', '오류와 사용자 행동을 각각 수집하고 에이전트가 서비스 안에서 다시 조회하게 했습니다', 880,
+    card(80, 190, 360, 170, '오류와 로그', ['API와 브라우저', '개발용 확인 이벤트'], { fill: C.blueBg, size: 23 }) +
+    card(520, 190, 360, 170, 'Sentry', ['service, layer, release', '수집 응답과 eventId'], { size: 23 }) +
+    card(960, 190, 400, 170, 'Sentry MCP', ['eventId로 다시 조회', '발생 위치와 배포 버전 확인'], { fill: C.orangeBg, size: 23 }) +
+    arrow(449, 277, 510, 277) + arrow(889, 277, 950, 277) +
+    card(80, 420, 360, 170, '사용자 행동', ['페이지뷰와 성공 이벤트', '개발 프로젝트로 전송'], { fill: C.blueBg, size: 23 }) +
+    card(520, 420, 360, 170, 'Amplitude', ['화면과 client 구분', '페이지뷰 집계'], { size: 23 }) +
+    card(960, 420, 400, 170, 'Amplitude MCP', ['프로젝트와 이벤트 조회', '개발 프로젝트의 집계 확인'], { fill: C.orangeBg, size: 23 }) +
+    arrow(449, 507, 510, 507) + arrow(889, 507, 950, 507) +
+    rect(80, 654, 1280, 125, { fill: C.bg, stroke: 'none', radius: 15 }) +
+    text(108, 699, '수신 확인 과정에서 수정한 부분', { size: 26, weight: 700 }) +
+    text(108, 743, '페이지뷰 중복 집계와 자동 URL 수집을 확인하고, 수정 후 실제 전송 데이터를 다시 검사했습니다.', { size: 24, fill: C.muted })),
 });
 
 const previews = [];

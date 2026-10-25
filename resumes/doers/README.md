@@ -9,7 +9,7 @@
 
 ## 코드와 기록
 
-코드 링크는 `side-project`의 `6d858497264490c7095e51b8e0effed55324e913`에 고정했습니다. GitHub에서 공개 저장소인 것도 확인했습니다. 현재 기본 브랜치는 develop이며, 기능 브랜치 작업이나 배포 예정 상태를 운영 성과로 바꾸지 않았습니다.
+포트폴리오는 2026년 10월 26일 `side-project`의 develop을 다시 확인해 수정했습니다. 코드 링크는 `2aa865bfbea937a65b921d6620a8b71bbdc21275`에 고정했습니다. GitHub에서 공개 저장소인 것도 확인했습니다. 기능 브랜치 작업이나 배포 예정 상태를 운영 성과로 바꾸지 않았습니다.
 
 다른 Codex 세션의 사용자 요청을 읽고 실제 코드와 대조했습니다. 대화 전체나 인증 설정은 제출 문서에 옮기지 않았습니다.
 
@@ -21,9 +21,13 @@
 | 작성과 수정의 흐름을 나누고 입력 필드만 공유 | 게임 서비스 post-composer |
 | API에서 내용이 바뀌면 Next Route Handler로 캐시 만료 | 캐시 무효화 서비스와 DB 대기 기록, 경합 통합 테스트 |
 | 게시물과 채팅, 사진 서비스 전반의 presigned 업로드 | 서비스별 저장소와 업로드 구현 |
+| API 파일 수신의 동시 처리 제한에서 모든 파일의 S3 직접 업로드로 변경 | 2ca0034f 커밋과 현재 MediaStorage 구현 |
 | 앱별 테스트 소유, unit과 integration을 구현 옆에 배치 | 테스트 skills와 앱별 설정 |
 | 공용 TypeScript ESLint와 RuleTester, fixture | 공용 ESLint 패키지 |
 | 최소 비용 배포, CD 준비, 두 서비스를 한 EC2와 외부 DB, S3에 배치 | 공통 배포 구성과 Terraform |
+| Amplitude와 Sentry MCP 연결, 실제 수신 결과 재조회 | 두 서비스의 observability 문서와 monitoring.live.spec.ts |
+
+Sentry의 모니터링과 로깅, Web Vitals 측정, MCP 연결은 사용자가 구분해 설명했습니다. 현재 develop의 두 웹은 tracesSampleRate가 0이고 성능 추적을 사용하지 않는다고 명시돼 있습니다. 포트폴리오는 이 코드에서 확인한 오류 수집과 MCP 재조회로 설명하고, 사이드프로젝트 Web Vitals 수집 코드의 위치는 사용자에게 확인을 요청했습니다. 실무 복지몰의 Web Vitals 측정과 섞지 않습니다.
 
 ## 제출 전 확인
 
