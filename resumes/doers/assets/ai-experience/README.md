@@ -10,8 +10,8 @@
 | 04-cache-invalidation | DB 변경과 태그 무효화, 전달 실패 복구 |
 | 05-upload-concurrency | API 수신의 동시 처리 제한에서 S3 직접 업로드로 바꾼 흐름 |
 | 06-test-strategy | 테스트 범위와 명세, 회귀 테스트, lint 검증 |
-| 07-deployment | 공용 EC2와 외부 RDS, 서비스별 S3 배포 구성 |
-| 08-monitoring-mcp | Sentry와 Amplitude 수집, MCP로 실제 수신 결과 재조회 |
+| 07-deployment | 같은 EC2의 두 서비스와 PostgreSQL, EBS 분리와 S3 백업 |
+| 08-monitoring-mcp | 오류, Web Vitals, 사용자 행동 수집과 MCP 재조회 |
 | 09-product-interactions | 사진 커뮤니티 그룹과 Game Mate 프로필 수정 |
 
 ## 화면 캡처
@@ -26,15 +26,15 @@ captures 폴더에는 실제 UI 검증에서 저장한 PNG 원본을 수정 없�
 | photo-group.png | 10월 26일 00:47 | 2aa865bf의 사진 서비스 그룹 |
 | game-profile-edit.png | 10월 26일 01:18 | c17a3164의 프로필 수정 |
 
-Game Mate의 가입과 프로필 수정은 아직 develop에 합쳐지지 않은 최신 작업 브랜치의 화면입니다. 사진 서비스의 두 화면은 develop과 소스가 같은지 대조했습니다. 원본 경로, 크기, 저장 시점과 SHA-256은 [manifest.json](captures/manifest.json)에 있습니다. 저장 시점은 원본 파일의 수정 시각이며 이미지 생성 후 코드가 바뀌었을 가능성은 대조한 커밋으로 구분합니다.
+Game Mate의 가입과 프로필 수정은 캡처 당시 작업 브랜치의 화면이며 97923a8c에서 develop에 합쳐졌습니다. 사진 서비스의 두 화면은 develop과 소스가 같은지 대조했습니다. 원본 경로, 크기, 저장 시점과 SHA-256은 [manifest.json](captures/manifest.json)에 있습니다. 저장 시점은 원본 파일의 수정 시각이며 이미지 생성 후 코드가 바뀌었을 가능성은 대조한 커밋으로 구분합니다.
 
 이번 작업에서는 브라우저를 연결할 수 없어 새로 촬영하지 않고 최근 검증 이미지를 사용했습니다. 원본을 자르거나 내용과 색을 바꾸지 않았고, 구성도 안에서 비율을 유지해 축소했습니다. 이전 game-home.png, game-login.png, photo-login.png는 과거 원본으로 보관하며 현재 본문에는 사용하지 않습니다.
 
 ## 구성도의 기준
 
-2026년 10월 26일 side-project의 develop, 커밋 2aa865bf를 기준으로 본문과 구성도를 대조했습니다. 캐시 전달 실패 후 재시도와 revision 확인은 그대로 유지했습니다. 05번은 과거 동시 3개, 대기 12개 제한과 현재의 S3 직접 업로드를 구분하도록 바꿨습니다. 사진 서비스는 파일 내용을 읽지 않고 HEAD만 확인하므로 Game Mate의 4KB 검사와 구분합니다.
+2026년 10월 26일 side-project의 develop, 커밋 b758d2e8까지 확인해 본문과 구성도를 대조했습니다. 캐시 전달 실패 후 재시도와 revision 확인은 그대로 유지했습니다. 05번은 과거 동시 3개, 대기 12개 제한과 현재의 S3 직접 업로드를 구분하도록 바꿨습니다. 사진 서비스는 파일 내용을 읽지 않고 HEAD만 확인하므로 Game Mate의 4KB 검사와 구분합니다. 03번의 공용 lint 경로는 config/eslint로, 07번은 RDS 대신 같은 EC2의 PostgreSQL과 별도 EBS, S3 덤프로 변경한 최신 설계에 맞췄습니다.
 
-08번은 두 서비스의 observability 문서에 남은 실제 수신과 MCP 재조회 과정을 설명합니다. 개발용 이벤트와 페이지뷰 집계 확인이며 제품의 전환율이나 성능 개선 성과를 뜻하지 않습니다. Web Vitals는 사용자가 develop에서 작업할 예정이라고 확인해 현재 수집 구성도에는 넣지 않았습니다. 배포 그림은 Terraform과 컨테이너 smoke 테스트를 준비한 상태로, 실제 AWS 적용 완료를 뜻하지 않습니다.
+08번은 두 서비스의 observability 문서에 남은 실제 수신과 MCP 재조회 과정을 설명합니다. 오류, 페이지뷰에 더해 Web Vitals 수집을 추가했고, 실제 Sentry의 LCP, CLS, INP span 수신과 브라우저에서 다섯 지표의 전송을 검사하는 범위를 구분했습니다. 개발용 이벤트와 테스트 상호작용의 확인이며 제품의 전환율이나 성능 개선 성과를 뜻하지 않습니다. 배포 그림은 Terraform과 컨테이너 smoke 테스트를 준비한 상태로, 실제 AWS 적용 완료를 뜻하지 않습니다.
 
 실무의 QA 더블 체크 요청은 그대로 유지하고, 사이드 프로젝트에 별도 QA 요청 단계가 있었다고 그리지 않았습니다.
 

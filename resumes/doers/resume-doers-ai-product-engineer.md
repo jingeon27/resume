@@ -38,8 +38,8 @@ Yarn workspace 모노레포에서 사진 커뮤니티와 글로벌 게임 커뮤
 
 - Vitest로 도메인 규칙을, Supertest와 격리된 PostgreSQL로 API 응답과 DB 결과를 테스트합니다. 브라우저 흐름은 Playwright로 확인합니다. 테스트 설정은 각 앱에서 관리하고 루트에서는 실행만 위임합니다.
 - 공용 ESLint 패키지에서 FSD 경계와 공개 API, 컴포넌트의 직접 fetch, 중복된 오버레이 상태를 검사합니다. 규칙은 TypeScript로 작성하고 RuleTester와 fixture로 테스트합니다. DOM 관련 규칙은 Next.js와 Vite에만 적용하고 Expo에서는 제외했습니다.
-- Sentry로 오류 모니터링과 로깅을 적용하고, Amplitude로 사용자 행동을 수집합니다. 두 도구를 MCP로 연결해 개발용 Sentry 이벤트와 Amplitude 페이지뷰가 실제로 수집됐는지 다시 조회했습니다.
-- 배포 비용을 줄일 방법과 CD 설정 순서를 AI에게 물어보고 EC2 한 대에 두 서비스를 올리기로 했습니다. DB와 파일은 외부 RDS와 서비스별 S3에 둡니다. Terraform으로 네트워크와 리소스, 권한을 구성하고 mock provider 테스트를 붙였습니다. 실제 AWS 계정에 적용하거나 운영 부하를 검증한 단계는 아닙니다.
+- Sentry로 오류 모니터링과 로깅, Web Vitals 측정을 적용하고 Amplitude로 사용자 행동을 수집합니다. 두 도구를 MCP로 연결해 확인용 오류와 성능 span, 개발 프로젝트의 페이지뷰를 다시 조회했습니다. 브라우저 테스트에서는 LCP, CLS, INP와 FCP, TTFB의 실제 전송을 확인합니다.
+- 배포 비용과 관리 부담을 비교해 두 서비스와 PostgreSQL을 EC2 한 대에서 실행하도록 구성했습니다. DB는 별도 EBS 볼륨에 저장하고 일일 스냅샷과 배포 전 S3 덤프를 준비했습니다. Terraform과 mock provider 테스트로 구성하며, 전체 인프라의 AWS 적용과 운영 부하 검증은 별도입니다.
 
 ## 경력
 
@@ -103,7 +103,7 @@ PO가 전달한 프로토타입의 모든 화면을 구현해 글로벌 사용�
 - Testing: Vitest, Supertest, React Testing Library, Playwright, MSW
 - Monitoring & Logging: Sentry, AWS CloudWatch
 - Analytics: Amplitude
-- Infrastructure: Docker, GitHub Actions, AWS EC2, RDS, S3, Terraform
+- Infrastructure: Docker, GitHub Actions, AWS EC2, EBS, S3, Terraform
 - AI: Claude Code, Codex
 
 서버와 인프라 구성은 개인 프로젝트에서 다룬 경험입니다.

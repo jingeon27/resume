@@ -9,7 +9,7 @@
 
 ## 코드와 기록
 
-포트폴리오는 2026년 10월 26일 `side-project`의 develop을 다시 확인해 수정했습니다. 코드 링크는 `2aa865bfbea937a65b921d6620a8b71bbdc21275`에 고정했습니다. GitHub에서 공개 저장소인 것도 확인했습니다. 기능 브랜치 작업이나 배포 예정 상태를 운영 성과로 바꾸지 않았습니다.
+포트폴리오는 2026년 10월 26일 `side-project`의 develop `b758d2e8`까지 확인해 수정했습니다. 코드 링크는 작업별로 대조한 커밋에 고정했습니다. GitHub에서 공개 저장소인 것도 확인했습니다. 기능 브랜치 작업이나 배포 예정 상태를 운영 성과로 바꾸지 않았습니다.
 
 다른 Codex 세션의 사용자 요청을 읽고 실제 코드와 대조했습니다. 대화 전체나 인증 설정은 제출 문서에 옮기지 않았습니다.
 
@@ -24,12 +24,18 @@
 | API 파일 수신의 동시 처리 제한에서 모든 파일의 S3 직접 업로드로 변경 | 2ca0034f 커밋과 현재 MediaStorage 구현 |
 | 앱별 테스트 소유, unit과 integration을 구현 옆에 배치 | 테스트 skills와 앱별 설정 |
 | 공용 TypeScript ESLint와 RuleTester, fixture | 공용 ESLint 패키지 |
-| 최소 비용 배포, CD 준비, 두 서비스를 한 EC2와 외부 DB, S3에 배치 | 공통 배포 구성과 Terraform |
+| 초기 배포 비용 축소, RDS 대신 같은 EC2의 PostgreSQL로 변경 | 0054e673의 EBS 분리, 스냅샷과 S3 덤프, 배포 전 백업 검사 |
+| 실제 S3 업로드와 조회 확인 요청 | 게임 서비스 implementation 문서의 HTTP/API 검증 기록 |
+| 공용 설정과 실행 도구 패키지 통합 | packages/config와 packages/toolkit, 수정된 문서 링크 |
 | Amplitude와 Sentry MCP 연결, 실제 수신 결과 재조회 | 두 서비스의 observability 문서와 monitoring.live.spec.ts |
+| 가입 본문만 스크롤하고 완료 버튼 유지, 프로필은 버튼으로 수정 창 열기 | 97923a8c의 가입, 프로필, API 계약과 회귀 테스트 |
+| Sentry에 두 서비스의 Web Vitals도 수집 | 82199271의 BrowserTracing 설정, 전송 테스트와 MCP 수신 기록 |
 
-Sentry의 모니터링과 로깅, Web Vitals 측정, MCP 연결은 구분합니다. 현재 develop의 두 웹은 tracesSampleRate가 0이고 성능 추적을 사용하지 않습니다. 사용자는 2026년 10월 26일 사이드프로젝트의 Web Vitals 측정을 develop에서 작업할 예정이라고 확인했습니다. 포트폴리오에는 완료한 오류 수집과 MCP 재조회를 적고, 실무 복지몰의 Web Vitals 측정과 섞지 않습니다.
+최근 다른 세션에서 사용자가 요청한 프로필 수정 방식, 소개의 링크 이동, Sentry release 확인, MCP 연결 뒤 실제 수신 검사, 두 서비스의 Web Vitals 추가를 읽고 구현과 대조했습니다. 대화에 포함된 계정, 인증 설정과 원문 로그는 옮기지 않았습니다.
 
-화면 캡처는 10월 25~26일 저장된 실제 UI 검증 이미지로 바꿨습니다. Game Mate 가입과 프로필 수정은 최신 작업 브랜치의 화면이며, 코드 링크의 develop 기준과 구분합니다. 원본 경로와 저장 시점, 대조한 커밋, 해시는 이미지 폴더의 captures/manifest.json에 남겼습니다.
+Web Vitals는 처음 확인할 때 구현 예정이었으나 82199271에서 develop에 합쳐졌습니다. 브라우저의 다섯 지표 전송 테스트와 실제 Sentry의 LCP, CLS, INP span을 MCP로 재조회한 기록을 확인해 반영했습니다. 운영 사용자 성능 개선이나 운영 배포를 완료했다는 뜻으로 쓰지 않습니다. 실무 복지몰의 SDK 전송 방식과도 구분합니다.
+
+화면 캡처는 10월 25~26일 저장된 실제 UI 검증 이미지입니다. Game Mate 가입과 프로필 수정도 97923a8c에서 develop에 합쳐졌습니다. 원본 경로와 저장 시점, 대조한 커밋, 해시는 이미지 폴더의 captures/manifest.json에 남겼습니다.
 
 ## 제출 전 확인
 

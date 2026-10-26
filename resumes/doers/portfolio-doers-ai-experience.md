@@ -4,7 +4,7 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 ## 직접 만들고 있는 제품
 
-2026년 10월부터 친구들과 사진을 모으는 그룹 커뮤니티와 글로벌 게임 커뮤니티 Game Mate를 만들고 있습니다. 제품 방향과 디자인, 기술 선택은 제가 맡고 구현과 테스트 작성은 코딩 에이전트에 맡깁니다. 웹뿐 아니라 API와 DB, 배포 구성까지 다루고 있습니다.
+2026년 10월부터 친구들과 사진을 모으는 그룹 커뮤니티 별사대와 글로벌 게임 커뮤니티 Game Mate를 만들고 있습니다. 제품 방향과 디자인, 기술 선택은 제가 맡고 구현과 테스트 작성은 코딩 에이전트에 맡깁니다. 웹뿐 아니라 API와 DB, 배포 구성까지 다루고 있습니다.
 
 사진 서비스에서는 대회가 끝나도 사진과 관계가 남도록 제품 방향을 바꿨습니다. Game Mate에서는 글과 댓글, 채팅으로 게임에 관한 피드백과 코칭을 주고받도록 만들었습니다. 두 서비스는 Yarn workspace 모노레포에서 관리합니다.
 
@@ -40,7 +40,7 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 글로벌 게임 커뮤니티에서는 프로필에서 처리할 수 있는 설정 메뉴를 합쳤습니다. 코칭은 코치와 수강생 모두 모집 글을 쓸 수 있게 했습니다. 수강료 표기는 시간당, 월 단위, 목표 달성까지로 나눴지만 결제와 정산은 아직 만들지 않았습니다. 문의와 인증 요청도 별도 티켓 시스템을 추가하지 않고 기존 관리자 1:1 채팅으로 받도록 했습니다.
 
-[사진 서비스 제품 방향](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/photo-contest/docs/product-plan.md) | [글로벌 게임 커뮤니티 제품 범위](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/docs/product.md)
+[사진 서비스 제품 방향](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/docs/product-plan.md) | [글로벌 게임 커뮤니티 제품 범위](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/product.md)
 
 ## 화면을 보고 수정한 부분
 
@@ -56,13 +56,17 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 모바일에서는 로그인과 약관, 닉네임 입력을 작은 창에 몰아넣지 않고 별도 페이지로 바꿨습니다. 댓글은 처음에는 화면의 75%로 열리고 헤더를 끌어 확장할 수 있게 했습니다. 데스크톱에서는 사진과 대화를 나란히 배치하도록 수정했습니다.
 
+최근에는 가입 화면에서 게임 프로필을 선택적으로 연결하게 하고, 짧은 화면에서도 입력 본문만 스크롤되도록 바꿨습니다. 가입 완료 버튼은 하단에 남겨 입력을 마친 뒤 다시 찾아 내려가지 않게 했습니다.
+
+프로필은 펼침 메뉴에서 고치는 방식 대신 '프로필 수정' 버튼으로 Bottom Sheet를 열도록 요청했습니다. 닉네임과 자기소개를 수정하고, 소개에 넣은 웹 주소는 프로필에서 누를 수 있게 했습니다. 이 작업에 맞춰 DB의 자기소개 필드와 API 계약, 생성 SDK도 함께 변경했습니다. 게임 프로필에는 제공되는 시즌 순위와 외부 상세 링크도 추가했습니다.
+
 ![사진 커뮤니티의 그룹 게시물 화면과 Game Mate의 Bottom Sheet 프로필 수정 화면](assets/ai-experience/09-product-interactions.png)
 
 *사진 서비스의 그룹 화면과 Game Mate의 프로필 수정 화면입니다. 데이터는 화면 검증용입니다.*
 
 두 서비스에서 버튼과 입력창의 모양이 달라지지 않도록 shadcn/ui와 Base UI 기반 공통 디자인 시스템을 만들었습니다. 색과 글자 스타일, 버튼, 입력창, Dialog는 공용 패키지에 뒀습니다. 피드와 레이아웃, 라우팅과 데이터 조회는 각 앱에 남겼습니다. 함께 쓰는 UI를 고칠 때는 두 앱에서 모두 확인합니다.
 
-[공통 디자인 시스템](https://github.com/jingeon27/side-project/tree/2aa865bf/packages/design-system) | [사진 서비스 화면 구성](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/photo-contest/apps/web/AGENTS.md)
+[공통 디자인 시스템](https://github.com/jingeon27/side-project/tree/82199271/packages/design-system) | [사진 서비스 화면 구성](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/apps/web/AGENTS.md)
 
 ## 서비스 구조와 상태 관리
 
@@ -78,7 +82,7 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](resum
 
 REST는 서버 스키마에서 OpenAPI 문서와 Orval SDK를 생성합니다. Zod 응답 검증에 실패했을 때 기본값을 넣는 처리는 화면 표시용 필드에만 허용했습니다. ID, 권한, 세션처럼 잘못 읽으면 안 되는 값은 검증에 실패하면 요청도 실패로 처리합니다.
 
-[게임 서비스 아키텍처](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/docs/architecture.md) | [생성과 수정 흐름 분리](https://github.com/jingeon27/side-project/tree/2aa865bf/projects/game-feedback/apps/web/src/widgets/post-composer)
+[게임 서비스 아키텍처](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/architecture.md) | [생성과 수정 흐름 분리](https://github.com/jingeon27/side-project/tree/82199271/projects/game-feedback/apps/web/src/widgets/post-composer)
 
 ## 공개 캐시 갱신과 재시도
 
@@ -96,7 +100,7 @@ Next.js 캐시를 적용할 수 있을지 에이전트에게 물어보고 갱신
 
 사진 서비스는 공개 SEO 데이터에만 fetch 캐시를 적용하고, 개인화된 Apollo 요청은 no-store로 유지했습니다. 공개 여부와 대회 일정은 별도로 확인하며 mutation 뒤 공개 태그를 만료합니다.
 
-[캐시 무효화 구현](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.service.ts) | [실패와 경합 테스트](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts)
+[캐시 무효화 구현](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.service.ts) | [실패와 경합 테스트](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts)
 
 ## 파일을 API 서버가 받지 않도록 변경
 
@@ -110,9 +114,9 @@ Next.js 캐시를 적용할 수 있을지 에이전트에게 물어보고 갱신
 
 사진 서비스의 게시물, 대회 사진, 그룹 대표 사진도 직접 업로드합니다. 원본을 보관하기로 해 서버 변환을 없앴고 완료 시 HEAD로 크기와 형식만 확인합니다. Game Mate와 달리 파일 내용까지 검사하거나 별도 객체로 복사하지는 않습니다. 서명 정책이 만료되기 전에는 같은 키의 파일이 다시 올라올 수도 있습니다.
 
-S3 버킷 경로와 CORS, IAM 역할을 연결할 위치는 에이전트에게 질문하며 설정했습니다. 업로드 테스트는 로컬 S3 대체 환경에서 진행했습니다.
+S3 버킷 경로와 CORS, IAM 역할을 연결할 위치는 에이전트에게 질문하며 설정했습니다. 반복 테스트는 로컬 S3 대체 환경에서 돌리고, Game Mate는 실제 AWS S3에서도 게시물, 프로필, 채팅 파일의 업로드와 조회를 확인했습니다. HTTP와 API로 서명 발급, 직접 업로드, 완료 처리, 원본 일치와 Range 조회를 검사했습니다.
 
-[게임 서비스 파일 확정](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/apps/api/src/media-storage/media-storage.service.ts) | [S3 직접 업로드 통일](https://github.com/jingeon27/side-project/commit/2ca0034f) | [사진 서비스 업로드](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/photo-contest/apps/api/src/media-upload/media-upload.service.ts)
+[게임 서비스 파일 확정](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/apps/api/src/media-storage/media-storage.service.ts) | [S3 직접 업로드 통일](https://github.com/jingeon27/side-project/commit/2ca0034f) | [사진 서비스 업로드](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/apps/api/src/media-upload/media-upload.service.ts) | [실제 S3 검증 기록](https://github.com/jingeon27/side-project/blob/b758d2e8/projects/game-feedback/docs/implementation.md)
 
 ## 앱별 테스트와 공통 lint
 
@@ -131,7 +135,7 @@ S3 버킷 경로와 CORS, IAM 역할을 연결할 위치는 에이전트에게 �
 
 자동으로 검사할 수 있는 것은 lint rule로 옮겼습니다. 작성과 수정 흐름을 어디서 나눌지처럼 코드마다 판단해야 하는 내용은 skills에 적고 리뷰할 때 확인합니다.
 
-[테스트 기준](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/photo-contest/.agents/skills/testing/SKILL.md) | [공용 ESLint 패키지](https://github.com/jingeon27/side-project/blob/2aa865bf/packages/eslint-config/README.md) | [lint 적용 범위 변경](https://github.com/jingeon27/side-project/commit/899349f7)
+[테스트 기준](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/.agents/skills/testing/SKILL.md) | [공용 ESLint 설정](https://github.com/jingeon27/side-project/blob/b758d2e8/packages/config/eslint/README.md) | [lint 적용 범위 변경](https://github.com/jingeon27/side-project/commit/899349f7)
 
 ## 사용자 행동 측정과 모니터링
 
@@ -139,31 +143,35 @@ Sentry로 API와 Next.js 서버, 브라우저에서 발생한 오류를 수집�
 
 두 도구를 MCP로 연결해 에이전트가 수집된 정보를 코드와 함께 조회할 수 있게 했습니다. 개발용 확인 이벤트를 실제 수집 서버로 보낸 뒤 Sentry에서는 eventId로 오류와 실행 위치를 다시 찾고, Amplitude에서는 개발 프로젝트에 페이지뷰가 집계됐는지 확인했습니다.
 
-![API와 브라우저의 오류는 Sentry로, 사용자 행동은 Amplitude로 보내고 각각 MCP로 수신 결과를 다시 조회하는 흐름](assets/ai-experience/08-monitoring-mcp.png)
+![오류와 Web Vitals는 Sentry로, 사용자 행동은 Amplitude로 보내고 MCP로 수신 결과를 다시 조회하는 흐름](assets/ai-experience/08-monitoring-mcp.png)
 
 *수집 응답이 성공한 것과 서비스 안에서 이벤트를 다시 조회한 것을 각각 확인했습니다.*
 
 이 과정에서 사진 서비스의 페이지뷰가 개발 모드에서 중복 집계되는 문제와, 자동 URL 수집에 검색어가 붙는 문제도 확인해 수정했습니다. 수집 설정을 넣는 것으로 끝내지 않고 실제 SDK가 보낸 데이터까지 확인하도록 검증을 보완했습니다.
 
-[Game Mate 수집과 MCP 검증](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/game-feedback/docs/observability.md) | [사진 서비스 수집 검증](https://github.com/jingeon27/side-project/blob/2aa865bf/projects/photo-contest/docs/observability.md)
+두 웹에 Web Vitals 측정도 추가했습니다. Sentry BrowserTracing으로 LCP, CLS, INP와 FCP, TTFB를 수집하고, 오류 전송과 별도로 성능 span의 속성을 정리합니다. 화면별로 비교할 수 있도록 경로의 ID와 검색어는 제거하고 측정값은 남깁니다.
+
+격리된 빌드에서 Chromium의 상호작용으로 다섯 지표가 전송되는지 테스트합니다. 검증용 상호작용을 실제 Sentry로 보내고, LCP, CLS, INP span은 MCP에서 trace ID로 다시 조회했습니다.
+
+[Game Mate 수집과 MCP 검증](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/observability.md) | [사진 서비스 수집 검증](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/docs/observability.md) | [Web Vitals 전송 테스트](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/apps/web/e2e/sentry-web-vitals.spec.ts)
 
 ## 인프라 선택과 Terraform
 
-배포를 준비하며 에이전트에게 비용을 줄일 방법과 CD 설정 순서를 물었습니다. 자동화할 수 있는 설정과 콘솔에서 직접 해야 할 일도 확인했습니다. Lightsail을 검토한 뒤, 두 서비스를 EC2 한 대에 올리고 DB와 파일은 외부 RDS와 S3에 두기로 했습니다.
+배포를 준비하며 에이전트에게 비용을 줄일 방법과 CD 설정 순서를 물었습니다. Lightsail과 EC2를 비교했고, 처음에는 두 서비스를 EC2 한 대에 올리고 DB는 RDS에 두는 구성을 잡았습니다. 이후 초기 비용을 더 줄이려고 PostgreSQL도 같은 EC2의 컨테이너로 옮기고, 파일은 서비스별 S3에 두도록 변경했습니다.
 
-아직 사용자가 없는 단계라 관리할 서버 수를 줄이는 쪽을 택했습니다. 한 대가 멈추면 두 서비스가 함께 중단될 수 있다는 점은 감수했습니다. 외부 요청은 Caddy로 받고, 서비스별로 컨테이너 네트워크와 DB, 계정, 버킷을 나눴습니다. 각 API의 프로토콜은 그대로 유지했습니다.
+한 대가 멈추면 두 서비스와 DB가 함께 중단되고, DB 백업과 복구도 직접 관리해야 합니다. 이 비용을 감수하는 대신 DB 데이터는 별도 EBS 볼륨에 저장하고, 일일 스냅샷과 배포 전 S3 덤프를 준비했습니다. 덤프 업로드가 실패하면 migration도 진행하지 않게 했습니다.
 
-![검증한 이미지 배포와 단일 EC2 안의 서비스별 네트워크, 외부 RDS와 서비스별 S3를 나눈 배포 구성도](assets/ai-experience/07-deployment.png)
+![한 EC2 안의 두 서비스와 PostgreSQL, 별도 EBS 데이터 볼륨과 S3 파일 및 백업 버킷을 나눈 배포 구성도](assets/ai-experience/07-deployment.png)
 
-*Terraform으로 준비한 배포 구성입니다. 두 서비스의 서버는 함께 두되 DB와 원본 파일은 외부에 보관합니다.*
+*DB는 같은 EC2에서 실행하되 데이터 볼륨을 분리했습니다. 파일과 DB 덤프는 S3에 보관하도록 구성했습니다.*
 
-VPC와 서브넷, 보안 그룹, EC2와 고정 IP, RDS, S3, IAM을 Terraform으로 구성했습니다. DNS는 선택해서 설정할 수 있게 했습니다. DB 비밀번호는 Secrets Manager에서 조회하고 S3 액세스 키는 별도로 발급해 state에 직접 넣지 않습니다.
+외부 요청은 Caddy로 받고 서비스별 네트워크와 DB, 계정을 나눴습니다. 실행 중 사용하는 DB 계정과 migration 계정도 구분했습니다. VPC와 서브넷, 보안 그룹, EC2와 고정 IP, EBS와 스냅샷 정책, S3와 IAM은 Terraform으로 구성했습니다. 비밀번호와 액세스 키는 Terraform에서 생성하지 않고 별도로 주입합니다.
 
 CI에서 검증한 이미지를 digest로 고정해 배포하고, readiness 확인에 실패하면 이전 이미지로 되돌리도록 했습니다. 같은 호스트에서 배포가 겹치지 않게 잠금도 뒀습니다. 이미지 롤백으로 DB까지 되돌릴 수는 없어 migration과 백업은 따로 확인해야 합니다.
 
 Terraform 설정은 mock provider 테스트로 확인합니다. 배포 구성은 API와 웹 컨테이너, Caddy, PostgreSQL을 함께 띄워 재배포와 재시작, 롤백을 확인하는 smoke 테스트도 뒀습니다. 실제 AWS 리소스 적용과 운영 부하 검증은 별도입니다.
 
-[공통 배포 구성](https://github.com/jingeon27/side-project/blob/2aa865bf/deploy/shared-instance/README.md) | [Terraform](https://github.com/jingeon27/side-project/tree/2aa865bf/deploy/shared-instance/terraform) | [Terraform 설정 테스트](https://github.com/jingeon27/side-project/blob/2aa865bf/deploy/shared-instance/terraform/tests/plan.tftest.hcl)
+[공통 배포 구성](https://github.com/jingeon27/side-project/blob/b758d2e8/deploy/shared-instance/README.md) | [Terraform](https://github.com/jingeon27/side-project/tree/b758d2e8/deploy/shared-instance/terraform) | [Terraform 설정 테스트](https://github.com/jingeon27/side-project/blob/b758d2e8/deploy/shared-instance/terraform/tests/plan.tftest.hcl)
 
 ## 실무의 AI 개발 workflow
 

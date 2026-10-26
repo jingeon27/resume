@@ -104,7 +104,7 @@ figures.push({
     text(786, 566, '별도 앱: Expo WebView, React/Vite 관리자', { size: 21, fill: C.muted }) +
     rect(80, 580, 1280, 90, { fill: C.blueBg, stroke: 'none', radius: 16 }) +
     text(108, 619, '공용 패키지', { size: 25, weight: 700, fill: C.blue }) +
-    text(322, 619, 'design-system', { size: 26, weight: 600 }) + text(795, 619, 'eslint-config', { size: 26, weight: 600 }) +
+    text(322, 619, 'design-system', { size: 26, weight: 600 }) + text(795, 619, 'config/eslint', { size: 26, weight: 600 }) +
     text(322, 651, 'shadcn/ui, Base UI, 디자인 토큰', { size: 22, fill: C.muted }) +
     text(795, 651, 'FSD 경계, 공개 API, 상태 중복 검사', { size: 22, fill: C.muted })),
 });
@@ -160,39 +160,45 @@ figures.push({
 
 figures.push({
   name: '07-deployment',
-  svg: frame('두 서비스의 공통 배포 구성', 'EC2 한 대로 시작하고, DB와 파일은 외부 RDS와 S3로 분리하는 설계', 895,
-    card(70, 210, 280, 372, 'GitHub Actions', ['테스트와 빌드', '검증한 이미지', 'digest로 고정', '배포 작업 직렬화', '실패 시 이전 이미지'], { size: 23 }) +
+  svg: frame('두 서비스의 공통 배포 구성', 'EC2 한 대에서 웹과 API, PostgreSQL을 실행하고 파일과 백업은 S3에 보관', 1090,
+    card(70, 210, 280, 372, 'GitHub Actions', ['테스트와 빌드', '검증한 이미지', 'digest로 고정', '배포 전 DB 덤프', '실패 시 이전 이미지'], { size: 23 }) +
     arrow(360, 404, 409, 404) +
-    rect(430, 180, 550, 465, { fill: C.bg, radius: 22 }) +
+    rect(430, 180, 550, 670, { fill: C.bg, radius: 22 }) +
     text(458, 225, 'EC2 한 대', { size: 30, weight: 700 }) +
     rect(458, 254, 494, 74, { fill: C.blueBg, stroke: 'none', radius: 13 }) +
     text(705, 301, 'Caddy 80 / 443', { size: 27, weight: 600, anchor: 'middle' }) +
     arrow(584, 338, 584, 361) + arrow(826, 338, 826, 361) +
-    card(458, 375, 234, 220, 'Game Mate', ['Next.js Web', 'NestJS API', '전용 네트워크'], { size: 23 }) +
-    card(718, 375, 234, 220, '사진 커뮤니티', ['Next.js Web', 'NestJS API', '전용 네트워크'], { size: 23 }) +
-    card(1060, 200, 310, 188, 'RDS PostgreSQL', ['한 인스턴스, 별도 DB', 'game_feedback', 'photo_contest'], { size: 22 }) +
-    card(1060, 430, 310, 188, '비공개 S3', ['Game Mate 버킷', '사진 커뮤니티 버킷', '서비스별 접근 권한'], { size: 22 }) +
-    route('M989 458 H1020 V294 H1051') + route('M989 540 H1051') +
-    rect(80, 699, 1280, 106, { fill: C.orangeBg, stroke: 'none', radius: 15 }) +
-    text(108, 742, '받아들인 비용', { size: 25, weight: 700, fill: C.orange }) +
-    text(337, 742, 'EC2 장애 시 두 서비스가 함께 중단됩니다.', { size: 26, weight: 600 }) +
-    text(337, 778, 'Terraform과 컨테이너 smoke 테스트를 준비했으며 실제 AWS 적용과 부하 검증은 별도입니다.', { size: 21, fill: C.muted })),
+    card(458, 375, 234, 190, 'Game Mate', ['Next.js Web', 'NestJS API', '전용 네트워크'], { size: 23 }) +
+    card(718, 375, 234, 190, '사진 커뮤니티', ['Next.js Web', 'NestJS API', '전용 네트워크'], { size: 23 }) +
+    arrow(575, 575, 575, 610) + arrow(835, 575, 835, 610) +
+    card(458, 620, 494, 190, 'PostgreSQL 컨테이너', ['서비스별 DB와 계정 분리', '데이터는 별도 EBS 볼륨', '실행 계정과 migration 계정 분리'], { size: 23 }) +
+    card(1060, 210, 310, 235, '파일 S3', ['서비스별 버킷', '서명된 업로드와 조회', '서비스별 접근 권한'], { size: 22 }) +
+    card(1060, 510, 310, 300, 'DB 백업', ['EBS 일일 스냅샷', '배포 전 pg_dump', '별도 S3 백업 버킷', '덤프 실패 시 배포 중단'], { size: 22 }) +
+    route('M989 458 H1020 V327 H1051') + route('M989 715 H1051') +
+    rect(80, 890, 1280, 110, { fill: C.orangeBg, stroke: 'none', radius: 15 }) +
+    text(108, 933, '받아들인 비용', { size: 25, weight: 700, fill: C.orange }) +
+    text(337, 933, 'EC2 장애 시 두 서비스와 DB가 함께 중단됩니다.', { size: 26, weight: 600 }) +
+    text(337, 970, '초기 비용을 줄이는 대신 백업과 복구를 직접 관리합니다. 전체 AWS 적용과 부하 검증은 별도입니다.', { size: 21, fill: C.muted })),
 });
 
 figures.push({
   name: '08-monitoring-mcp',
-  svg: frame('수집한 정보를 MCP로 다시 확인', '오류와 사용자 행동을 각각 수집하고 에이전트가 서비스 안에서 다시 조회하게 했습니다', 880,
+  svg: frame('수집한 정보를 MCP로 다시 확인', '오류와 Web Vitals, 사용자 행동을 나눠 수집하고 서비스 안에서 다시 조회했습니다', 1090,
     card(80, 190, 360, 170, '오류와 로그', ['API와 브라우저', '개발용 확인 이벤트'], { fill: C.blueBg, size: 23 }) +
     card(520, 190, 360, 170, 'Sentry', ['service, layer, release', '수집 응답과 eventId'], { size: 23 }) +
     card(960, 190, 400, 170, 'Sentry MCP', ['eventId로 다시 조회', '발생 위치와 배포 버전 확인'], { fill: C.orangeBg, size: 23 }) +
     arrow(449, 277, 510, 277) + arrow(889, 277, 950, 277) +
-    card(80, 420, 360, 170, '사용자 행동', ['페이지뷰와 성공 이벤트', '개발 프로젝트로 전송'], { fill: C.blueBg, size: 23 }) +
-    card(520, 420, 360, 170, 'Amplitude', ['화면과 client 구분', '페이지뷰 집계'], { size: 23 }) +
-    card(960, 420, 400, 170, 'Amplitude MCP', ['프로젝트와 이벤트 조회', '개발 프로젝트의 집계 확인'], { fill: C.orangeBg, size: 23 }) +
+    card(80, 420, 360, 170, '브라우저 성능', ['LCP, CLS, INP', 'FCP, TTFB'], { fill: C.blueBg, size: 23 }) +
+    card(520, 420, 360, 170, 'Sentry Web Vitals', ['측정값과 성능 span', '브라우저 전송 테스트'], { size: 23 }) +
+    card(960, 420, 400, 170, 'Sentry MCP', ['trace ID로 실제 수신 확인', 'LCP, CLS, INP span 조회'], { fill: C.orangeBg, size: 23 }) +
     arrow(449, 507, 510, 507) + arrow(889, 507, 950, 507) +
-    rect(80, 654, 1280, 125, { fill: C.bg, stroke: 'none', radius: 15 }) +
-    text(108, 699, '수신 확인 과정에서 수정한 부분', { size: 26, weight: 700 }) +
-    text(108, 743, '페이지뷰 중복 집계와 자동 URL 수집을 확인하고, 수정 후 실제 전송 데이터를 다시 검사했습니다.', { size: 24, fill: C.muted })),
+    card(80, 650, 360, 170, '사용자 행동', ['페이지뷰와 성공 이벤트', '개발 프로젝트로 전송'], { fill: C.blueBg, size: 23 }) +
+    card(520, 650, 360, 170, 'Amplitude', ['화면과 client 구분', '페이지뷰 집계'], { size: 23 }) +
+    card(960, 650, 400, 170, 'Amplitude MCP', ['프로젝트와 이벤트 조회', '개발 프로젝트의 집계 확인'], { fill: C.orangeBg, size: 23 }) +
+    arrow(449, 737, 510, 737) + arrow(889, 737, 950, 737) +
+    rect(80, 875, 1280, 125, { fill: C.bg, stroke: 'none', radius: 15 }) +
+    text(108, 920, '검증한 범위', { size: 26, weight: 700 }) +
+    text(108, 964, '개발용 이벤트와 테스트 상호작용으로 전송과 수신을 확인했습니다. 운영 사용자 성과와는 구분합니다.', { size: 24, fill: C.muted })),
 });
 
 figures.push({
