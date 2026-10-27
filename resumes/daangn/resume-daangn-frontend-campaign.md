@@ -16,12 +16,13 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - **진입 흐름과 실험:** Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실험에 화면 구현과 사용자 행동 측정으로 참여했습니다. 이벤트 140개 이상을 새로 붙이거나 고쳐 예약 중 어디서 나가는지 구분하게 했습니다.
 - **모바일과 WebView:** 직접 써 보며 찾은 리뷰 작성 불편을 PO에게 공유하고 담당자가 정한 개선안을 구현했습니다. 앱에서 열리지 않던 상담 버튼은 네이티브 브릿지로 연결했습니다.
 - **코딩 에이전트와 일하는 저장소:** 파일 배치와 상태의 책임을 정리하고 skills, lint rule, 테스트 기준을 보완해 에이전트의 구현이 저장소 기준에 맞게 나오도록 했습니다.
+- **요구사항부터 배포 구성까지:** 개인 프로젝트로 두 커뮤니티 서비스의 요구사항 정의, GraphQL과 Apollo Client 기반 웹, NestJS API, 테스트, 배포 구성을 혼자 맡고 있습니다.
 
 ## 지원동기
 
-중학교 때 게임 커뮤니티에서 가까운 지역에 살던 사람들을 알게 돼 정모로 만났고, 몇몇과는 지금도 연락하며 지냅니다. 가까운 이웃과 관계를 이어 온 경험이 특별해, 동네 사람들을 잇는 당근의 제품을 만들고 싶습니다.
+지금은 사내 유일한 프론트엔드 개발자로 QA까지 맡고, 백오피스와 병원 관리자는 화면 디자인도 직접 합니다. 혼자 여러 역할을 맡으며 빠르게 출시해 왔지만, 설계를 함께 검토할 프론트엔드 동료는 없었습니다. 많은 사용자가 쓰는 제품을 여러 팀이 함께 만드는 당근에서 동료들과 코드를 리뷰하고, PM, 디자이너, 데이터 분석가와 역할을 나눠 문제를 정의하고 실험으로 검증하는 방식을 배우고 싶습니다.
 
-세이프닥에서는 병원, 운영팀, 사용자가 쓰는 세 제품을 함께 개발하며 한쪽의 변경이 다른 쪽 화면과 예약에 어떻게 이어지는지 맞춰 왔습니다. 일자리와 레슨, 채팅과 알림처럼 여러 사람과 서비스가 이어지는 당근에서 이 경험을 살리고 싶습니다. 지금까지 제품 실험에는 구현과 사용자 행동 측정으로 참여했습니다. 당근에서는 동료들과 지표를 직접 보며 가설을 세우고, 출시한 뒤 결과까지 확인하는 일을 맡고 싶습니다. 혼자 다듬어 온 코딩 에이전트 workflow도 팀의 리뷰를 받으며 넓히고 싶습니다.
+병원, 운영팀, 사용자가 쓰는 세 제품을 함께 개발하며 한쪽의 변경이 다른 쪽 화면과 예약에 어떻게 이어지는지 맞춰 왔습니다. 일자리와 레슨, 채팅과 알림처럼 여러 서비스가 이어지는 당근에서도 이 경험을 살릴 수 있다고 생각합니다. 지금까지 제품 실험에는 구현과 사용자 행동 측정으로 참여했는데, 당근에서는 지표를 직접 보며 가설을 세우고 출시 뒤 결과까지 확인하는 일을 맡겠습니다. 혼자 다듬어 온 코딩 에이전트 workflow도 동료들의 리뷰를 받으며 넓혀 가겠습니다.
 
 ## 경력
 
@@ -125,14 +126,16 @@ PO가 전달한 프로토타입의 화면을 모두 반영해, 기존 제품을 
 
 ### 사진 커뮤니티와 글로벌 게임 커뮤니티 | 2026.10 – 현재
 
-AI 코딩 에이전트와 두 커뮤니티 서비스를 개발하고 있습니다. 제품 방향과 기술 선택, 결과 검토는 제가 맡고 구현과 테스트 작성은 에이전트에 맡깁니다. 낯선 서버와 인프라 기술은 에이전트에게 대안과 비용, 동작 원리를 묻고 코드와 문서를 확인해 골랐습니다. 두 제품 모두 초기 사용자 검증을 준비하고 있습니다.
+친구들과 사진을 모으는 그룹 커뮤니티 별사대와 글로벌 게임 커뮤니티 Game Mate를 혼자 만들고 있습니다. 요구사항 정의부터 화면 설계, API와 DB, 테스트, 배포 구성까지 맡고, 구현과 테스트 작성은 코딩 에이전트에 맡깁니다. 낯선 서버와 인프라 기술은 에이전트에게 대안과 비용, 동작 원리를 묻고 코드와 문서를 확인해 골랐습니다. 두 서비스 모두 공개 전 초기 사용자 검증을 준비하고 있습니다.
 
-- 사진 서비스는 GraphQL과 Apollo Client, 게임 서비스는 REST와 TanStack Query를 쓰고, API는 NestJS, Prisma, PostgreSQL로 만들었습니다. 공개 데이터는 SSR 캐시를 공유하고 사용자별 상태는 따로 조회합니다.
-- 사진 대회가 열릴 때만 쓰는 서비스에서 평소에도 사진을 모으는 그룹 커뮤니티로 방향을 바꿨습니다. 홈에는 가입한 그룹들의 새 게시물을 보여 주고, 대회는 그룹 안에서 필요할 때 열게 했습니다.
-- 게임 커뮤니티의 댓글과 답글 알림을 누르면 해당 글이나 댓글로 이동하고, 읽음 처리 뒤에는 목록과 상단 알림 개수를 함께 갱신합니다. 차단과 숨김, 삭제 상태에 따른 알림 제외와 중복 생성 방지는 API 통합 테스트에 넣었습니다.
-- 게시글을 수정하면 NestJS에서 Next.js Route Handler를 호출해 공개 캐시를 만료합니다. 호출이 실패하면 DB에 함께 저장한 만료 대상으로 다시 시도합니다.
+- 사용자 경험, 공개 범위와 권한, 업로드 제한, 검증할 가설을 제품 문서에 먼저 정했습니다. 10월 13일 사진 대회 MVP로 시작했지만, 직접 써 보니 대회가 열릴 때만 들어오는 서비스보다 평소에도 사진을 모으는 편이 낫다고 판단해 19일 상시 그룹 커뮤니티로 방향을 바꿨습니다. 기존 대회와 사진 데이터, 이전 링크는 보존했습니다.
+- 가입 → 첫 게시물 → 좋아요 → 재방문 흐름을 보려고 Amplitude를 붙였습니다. 실제 수집 결과를 다시 조회해, 개발 모드에서 페이지뷰가 두 번 집계되고 URL에 검색어가 남는 문제를 찾아 고쳤습니다.
+- 별사대는 schema-first GraphQL과 Apollo Client로 만들었습니다. NestJS와 Prisma, PostgreSQL 위에 도메인별 스키마와 resolver를 두고, 웹은 도메인별 문서에서 GraphQL Code Generator로 타입이 붙은 Document를 생성합니다. 서버 스키마로 앱의 모든 문서를 검증하는 계약 테스트를 둬 스키마와 맞지 않는 문서는 웹 테스트에서 실패합니다. API는 쿼리 깊이와 필드, alias 수를 검증 규칙으로 제한합니다.
+- 모든 객체에 id를 받아 Apollo 정규화 캐시로 갱신합니다. 자식 컴포넌트에는 id만 넘겨 useFragment로 읽고, 사진 목록은 offsetLimitPagination으로 이어 받으며, 좋아요와 투표는 optimisticResponse로 먼저 반영합니다. 도메인별 캐시 정책은 두 도메인이 같은 필드를 정의하면 바로 실패하도록 합치고 실제 InMemoryCache로 테스트합니다.
+- Next.js App Router에서는 RSC가 PreloadQuery로 미리 받은 결과를 브라우저 캐시로 넘기고, 화면은 useBackgroundQuery와 useReadQuery로 같은 조회를 구독합니다. 개인화된 조회는 캐시하지 않고 익명으로 볼 수 있는 공개 콘텐츠와 사이트맵만 서버 캐시에 둡니다. mutation은 Next 프록시를 거치게 해, 앞선 필드가 커밋된 뒤 다음 필드가 실패해 data가 null로 오는 부분 성공까지 판단해 공개 캐시를 만료합니다.
+- Game Mate는 REST와 TanStack Query로 만들었고, 댓글 알림을 누르면 해당 글이나 댓글로 이동하며 읽음 뒤 알림 개수를 함께 갱신합니다. 두 서비스와 PostgreSQL은 EC2 한 대에서 Caddy 뒤에 실행하도록 구성하고, CI에서 검증한 이미지를 digest로 고정해 배포하며 readiness 확인에 실패하면 이전 이미지로 되돌립니다. AWS 리소스는 Terraform으로 구성하고 mock provider로 테스트합니다.
 
-[소스 코드](https://github.com/jingeon27/side-project)
+[소스 코드](https://github.com/jingeon27/side-project) | [별사대 제품 문서](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/docs/product-plan.md) | [Apollo 사용 기준](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/apps/web/.agents/skills/apollo/SKILL.md)
 
 ## 기술
 
@@ -141,7 +144,8 @@ AI 코딩 에이전트와 두 커뮤니티 서비스를 개발하고 있습니�
 - UI: Tailwind CSS, shadcn/ui, Base UI
 - Testing: Vitest, React Testing Library, MSW, Playwright
 - Monitoring & Analytics: Sentry, Amplitude
-- API & Data(개인 프로젝트): NestJS, GraphQL, Apollo Client, Prisma, PostgreSQL
+- API & Data(개인 프로젝트): GraphQL, Apollo Client, GraphQL Code Generator, NestJS, Prisma, PostgreSQL
+- Infrastructure(개인 프로젝트): Docker, AWS EC2, Terraform
 - Tooling: pnpm, Turborepo, Turbopack, ESLint, Knip
 - AI: Claude Code, Codex
 
