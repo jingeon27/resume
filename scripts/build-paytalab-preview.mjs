@@ -12,9 +12,10 @@ const document = {
   id: 'resume', name: '이력서', source: 'resume-paytalab-frontend.md', output: 'resume-paytalab-preview.html',
   pdf: '김진건_페이타랩_이력서.pdf',
   plans: [
-    { start: '김진건', label: '소개 · 제품 흐름 · 모바일 · 백오피스', short: '소개·제품 개발' },
-    { start: '데이터 조회 전환과 검색 회귀 대응', label: '조회 · 운영 오류 · 성능 · 공통 코드', short: '조회·오류·성능' },
-    { start: '테스트 도입과 AI 개발 workflow', label: '테스트 · 협업 · 기술 · 지원동기', short: '테스트·협업' },
+    { start: '김진건', label: '소개와 기술, 리뷰 개선', short: '소개와 사용성' },
+    { start: '건강검진 서비스 내재화', label: '건강검진과 사용자 행동 측정, 앱 연계와 관리자', short: '제품 개발' },
+    { start: '데이터 조회와 검색 노출 개선', label: '조회와 검색 노출, 운영 오류, 글로벌 서비스', short: '조회와 운영' },
+    { start: '테스트 도입과 AI 개발 workflow', label: '테스트와 AI, 왓타임', short: '테스트와 협업' },
   ],
 };
 const unknown = process.argv.slice(2).filter((arg) => !['resume', '--pdf'].includes(arg));
@@ -70,8 +71,8 @@ function renderBlock(block, section, documentId) {
       return skill ? `<li><strong>${escape(skill[1])}</strong><span>${inline(skill[2])}</span></li>` : `<li>${inline(item)}</li>`;
     }).join('\n')}</ul>`;
   }
-  const className = block.id === 1 ? 'contact' : block.text.startsWith('병역') ? 'role-note'
-    : block.text.startsWith('티켓·plan 검토 →') ? 'workflow' : '';
+  const className = block.id === 1 ? 'contact' : (block.text.startsWith('병역') || block.text.startsWith('산업기능요원')) ? 'role-note'
+    : block.text.startsWith('티켓과 plan 검토 →') ? 'workflow' : '';
   return `<p${className ? ` class="${className}"` : ''} ${attr}>${inline(block.text)}</p>`;
 }
 

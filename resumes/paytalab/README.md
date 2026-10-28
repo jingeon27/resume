@@ -17,7 +17,7 @@
 
 ## 미리보기와 PDF
 
-[기존 HTML 미리보기](resume-paytalab-preview.html)와 이전에 만든 PDF는 이번 원문을 반영하지 않은 버전입니다. 제출용 PDF는 원문 검토 후 다시 생성해야 합니다.
+[HTML 미리보기](resume-paytalab-preview.html)는 2026년 10월 29일 최신 원문으로 다시 생성했습니다. PDF도 4쪽으로 생성해 페이지별 잘림과 줄바꿈을 확인했습니다. 원문 52개 블록과 외부 링크 14개를 보존합니다. PDF는 저장소의 `*.pdf` 제외 규칙에 따라 로컬 파일로만 관리합니다.
 
 저장소 루트에서 실행합니다.
 
@@ -26,4 +26,4 @@ node scripts/build-paytalab-preview.mjs
 node scripts/build-paytalab-preview.mjs --pdf
 ```
 
-PDF 생성은 기본적으로 macOS Google Chrome을 사용하며 다른 환경은 CHROME_BIN으로 지정합니다. 이번 작업에서는 HTML과 PDF를 재생성하지 않았습니다.
+PDF 생성은 기본적으로 macOS Google Chrome을 사용하며 다른 환경은 CHROME_BIN으로 지정합니다. 원문이나 인쇄 스타일을 수정하면 HTML과 PDF를 함께 다시 생성하고 페이지 넘침을 확인합니다.
