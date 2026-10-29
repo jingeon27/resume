@@ -103,7 +103,7 @@ Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16
 
 ## 개인 프로젝트
 
-2026년 10월부터 사진 커뮤니티와 글로벌 게임 커뮤니티를 개발하고 있습니다. 제품 방향과 기술 선택은 제가 정하고 구현과 테스트 작성은 에이전트에 맡깁니다. NestJS, Prisma, PostgreSQL로 API를 만들고 S3 직접 업로드와 Next.js 공개 캐시 갱신을 연결했습니다. 공통 UI는 shadcn/ui와 Base UI로 만들었습니다. 두 서비스 모두 공개 전입니다.
+2026년 10월부터 사진 커뮤니티와 글로벌 게임 커뮤니티 Game Mate를 개발하고 있습니다. Game Mate는 친추 판매와 게임 코칭을 원하는 사람을 연결하려고 시작해 가격을 표시한 모집 글과 1:1 문의 채팅을 구현했습니다. 제품 방향과 기술 선택은 제가 정하고 구현과 테스트 작성은 에이전트에 맡깁니다. NestJS, Prisma, PostgreSQL로 API를 만들고 S3 직접 업로드와 Next.js 공개 캐시 갱신을 연결했습니다. 공통 UI는 shadcn/ui와 Base UI로 만들었습니다. 두 서비스 모두 공개 전입니다.
 
 [소스 코드](https://github.com/jingeon27/side-project)
 
