@@ -2,6 +2,8 @@
 
 공통 이력서는 [resumev7.md](../resumev7.md), 이전 버전은 [resumev6.md](../resumev6.md)에서 볼 수 있습니다. 성격상 장단점은 [장단점 메모](../성격상-장단점.md)에 정리했습니다.
 
+경력별 담당 범위와 주요 프로젝트의 판단, 구현과 검증은 [일반 포트폴리오와 경력기술서](../portfolio.md)에 정리했습니다. AI 작업 방식과 개인 프로젝트의 구현 상세는 [AI 활용 경험 포트폴리오](doers/portfolio-doers-ai-experience.md)에서 볼 수 있습니다.
+
 | 회사 | 문서 |
 | --- | --- |
 | 고위드 | [이력서](gowid/resume-gowid-frontend.md), [준비 메모](gowid/README.md) |

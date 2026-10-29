@@ -2,10 +2,12 @@
 
 ## 공통 문서
 
-- [최신 공통 이력서](resumev6.md)
+- [최신 공통 이력서](resumev7.md)
 - [상세 이력서](resume.md)
-- [경력기술서](경력기술서.md)
-- [포트폴리오](portfolio-v2.md)
+- [일반 포트폴리오와 경력기술서](portfolio.md)
+- [AI 활용 경험 포트폴리오](resumes/doers/portfolio-doers-ai-experience.md)
+- [이전 경력기술서](경력기술서.md)
+- [이전 포트폴리오](portfolio-v2.md)
 - [성격상 장단점](성격상-장단점.md)
 - [공통 컬처핏과 업무 사례](공통%20컬처핏%20-%20유니크한%20장점.md)
 - [블로그 수정본](blog/revised/README.md)
