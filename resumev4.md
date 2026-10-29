@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -22,16 +22,16 @@
 
 **직접 판단해서 바꾼 것들**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정과 open redirect 방어를 적용했습니다. ([글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props로만 받아 쓰다 보니 무효화해도 화면이 안 바뀌었습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 
 **Program 관리 v2**
 
-- CMS와 병원 CRM이 함께 쓰는 38필드 Program 폼을 다뤘습니다. 공통 원본·검수 요청·임시저장이 생명주기가 달라서 `common/inspection/draft`로 나누고, 필드명은 `createTypedForm`으로 타입 안전하게 좁히고, 서버↔폼 변환은 Transfer Layer로 분리했습니다. `Form.List`·`useWatch`·custom validator로 cascade validation을 적용했습니다. ([글](https://jingeon27.tistory.com/18))
+- CMS와 병원 CRM이 함께 쓰는 38필드 Program 폼을 다뤘습니다. 공통 원본·검수 요청·임시저장이 생명주기가 달라서 `common/inspection/draft`로 나누고, 필드명은 `createTypedForm`으로 타입 안전하게 좁히고, 서버↔폼 변환은 Transfer Layer로 분리했습니다. `Form.List`·`useWatch`·custom validator로 cascade validation을 적용했습니다. ([글](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정))
 
 **폼 정리**
 
-- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. props drilling으로 얽혀 있던 가족 동기화 컴포넌트가 520줄에서 55줄로 줄었고, 흩어진 if 검증은 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
+- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. props drilling으로 얽혀 있던 가족 동기화 컴포넌트가 520줄에서 55줄로 줄었고, 흩어진 if 검증은 `superRefine` 스키마로 옮겼습니다. ([예약](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정) · [리뷰](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정))
 
 **아키텍처**
 

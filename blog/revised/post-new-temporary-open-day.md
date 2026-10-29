@@ -86,7 +86,7 @@ export const isClosedByException = (exceptions: Exceptions, date: dayjs.Dayjs) =
 
 휴무 판정은 `type === 'CLOSED'`로 쓰는 편이 더 명확해 보여요. 그런데 그러면 `type`이 생기기 전에 저장된 휴무가 휴무에서 빠져요. 쉬기로 한 날이 예약 가능일로 열리는 거죠. 새 규칙을 넣으면서 옛 데이터의 뜻까지 바뀌면 안 되니까 "OPEN이 아니면 휴무"로 썼어요.
 
-스키마에서 빈 `type`을 `'CLOSED'`로 채우면 되지 않을까요? 여기서는 통하지 않아요. 두 저장소의 응답 파서는 스키마로 검증만 하고 원본을 그대로 돌려주기 때문에, 스키마의 기본값이 런타임 값에 반영되지 않아요([32번 글](https://jingeon27.tistory.com/32)에 이 경계를 적었어요). 그래서 스키마에서는 `type`을 `nullish`로 열어 두고, 값이 없을 때의 뜻은 판정 함수가 정해요.
+스키마에서 빈 `type`을 `'CLOSED'`로 채우면 되지 않을까요? 여기서는 통하지 않아요. 두 저장소의 응답 파서는 스키마로 검증만 하고 원본을 그대로 돌려주기 때문에, 스키마의 기본값이 런타임 값에 반영되지 않아요([32번 글](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)에 이 경계를 적었어요). 그래서 스키마에서는 `type`을 `nullish`로 열어 두고, 값이 없을 때의 뜻은 판정 함수가 정해요.
 
 같은 순서를 세 곳에 넣었어요. Back-Office 예약 등록은 공용 판정 함수를 그대로 쓰고, 병원 관리자 예약 등록은 이미 두 목록으로 갈라 둔 폼 값을 같은 순서로 읽어요. 복지몰은 저장소가 달라 공용 패키지를 쓸 수 없어서, 같은 판정 함수를 따로 두고 순서를 테스트로 고정했어요.
 
@@ -160,6 +160,6 @@ PR이 합쳐지고 이틀 뒤에는 테스트 기준을 저장소의 스킬에 �
 - [Day.js: IsBetween 플러그인](https://day.js.org/docs/en/plugin/is-between)
 - [Zod: `.catch()`](https://zod.dev/api?id=catch)
 - [Vitest: Test Projects](https://vitest.dev/guide/projects)
-- 관련 글: [프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://jingeon27.tistory.com/18)
-- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
-- 관련 글: [타입 단언을 줄이며 정리한 런타임 검증 기준](https://jingeon27.tistory.com/32)
+- 관련 글: [프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- 관련 글: [타입 단언을 줄이며 정리한 런타임 검증 기준](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)

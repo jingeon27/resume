@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -31,7 +31,7 @@
 
 **문제를 먼저 찾아 원인을 없애기**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, **form POST BFF**로 바꾸면서 이동 경로를 `/settlement` 하위로 제한하고 CSP `form-action`·`X-Frame-Options`·open redirect 방어와 회귀 테스트를 적용했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, **form POST BFF**로 바꾸면서 이동 경로를 `/settlement` 하위로 제한하고 CSP `form-action`·`X-Frame-Options`·open redirect 방어와 회귀 테스트를 적용했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - Next.js soft navigation 때문에 직전 예약자의 이름·연락처·병력이 다음 예약 화면에 남는 것을 발견해, 재진입과 성공 시에는 초기화하되 제출 실패 시에는 입력을 보존하도록 상태 생명주기를 나누고 브라우저 회귀 테스트를 추가했습니다.
 - 성공만 반환하던 Mock이 실서버의 필수값·enum 계약 위반을 가린다는 것을 발견해, Mock을 끄고 실제 인증과 API로 확인하는 계약 테스트 환경을 분리했습니다. 서버의 거절 코드와 필드 단위 위반 목록을 드러내게 했고, 이렇게 찾은 차이는 폼·타입·Mock에 되돌려 반영했습니다.
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props와 Context로만 받아 쓰다 보니 캐시를 무효화해도 화면이 바뀌지 않았습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
@@ -80,10 +80,10 @@
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
-- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
 
 ---
 

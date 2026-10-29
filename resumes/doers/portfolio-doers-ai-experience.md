@@ -1,6 +1,6 @@
 # 김진건의 AI 활용 경험과 제품 개발
 
-jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](https://github.com/jingeon27/resume/blob/main/resumes/doers/resume-doers-ai-product-engineer.md)
+jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog) | [이력서](https://github.com/jingeon27/resume/blob/main/resumes/doers/resume-doers-ai-product-engineer.md)
 
 세이프닥에서 여러 제품의 프론트엔드를 맡으며 AI로 구현하고 코드와 테스트를 검토하는 방식을 다듬었습니다. 개인 프로젝트에서는 요구사항과 화면 설계부터 API와 DB, 배포 구성까지 직접 정합니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고, 만들 기능과 기술 선택, 완성된 결과의 검토는 제가 맡습니다.
 
@@ -24,7 +24,7 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](https
 
 에이전트가 완성본을 제출하면 검토하고 부족한 부분은 수정을 요청해 다시 확인합니다. 기능 개발과 리팩터링에서는 변경된 제품 코드와 테스트를 읽습니다. 새 기능은 BDD 형식의 `*.spec`에 컴포넌트별 기대 동작을 적고 누락을 검토하며, 운영이나 QA 오류는 `*.test`에 재현합니다. 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지도 확인합니다.
 
-[테스트 도입과 검증 기준](https://jingeon27.tistory.com/25) | [AI 개발 workflow](https://jingeon27.tistory.com/31)
+[테스트 도입과 검증 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ## 개인 프로젝트에서 직접 정한 제품 방향
 

@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 **병역사항** · 현역 산업기능요원 복무 중
 
@@ -37,7 +37,7 @@
 - 전체 화면과 목록·상세·차트 같은 화면 구획에 서로 다른 Query Error Boundary를 적용했습니다. 한 API가 실패해도 나머지 화면은 계속 사용할 수 있으며, 상태 코드별 안내와 재시도·뒤로가기·새로고침을 제공하고 화면 경로·경계·컴포넌트 정보를 로그에 남기도록 에러 처리 방식을 통일했습니다.
 - Next.js 16.3 업그레이드 후 정산 도메인에서 발생한 CORS 장애를 Network panel과 Next.js Issue·PR까지 추적했습니다. `/_next` 번들 요청이 정산 proxy를 거쳐 원본 도메인으로 redirect된 것이 직접적인 원인이었으며, 정적 경로를 matcher에서 제외해 해결했습니다. 다른 콘텐츠에 미칠 운영 위험을 고려해 업스트림 수정 전까지는 16.2로 되돌렸습니다.
 - 한 화면에 있는 두 입금 테이블이 URL page key를 공유하고, 펼친 서버 응답을 Ant Design Table이 다시 slicing하면서 행이 사라지는 장애를 분석했습니다. 테이블별 page key를 분리하고 공통 테이블이 서버·클라이언트 pagination 방식을 명시적으로 구분하도록 수정했습니다.
-- 정산 도메인 인증 과정에서 URL로 토큰을 전달하던 구현이 access log와 Referer에 인증 정보를 남길 수 있음을 발견했습니다. form POST BFF 방식으로 재설계하고 CSP `form-action`, open redirect 방어, 회귀 테스트를 적용했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- 정산 도메인 인증 과정에서 URL로 토큰을 전달하던 구현이 access log와 Referer에 인증 정보를 남길 수 있음을 발견했습니다. form POST BFF 방식으로 재설계하고 CSP `form-action`, open redirect 방어, 회귀 테스트를 적용했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 
 #### 테스트와 CI/CD
 
@@ -66,7 +66,7 @@
 
 #### 검색·SEO와 제품 분석
 
-- 병원·프로그램·공지·콘텐츠 URL을 5개 공개 API에서 수집하는 동적 sitemap을 구현했습니다. 공개 API가 인증용 `cookies()`에 의존해 캐시되지 않던 구조를 분리하고, Next.js `'use cache'`와 `cacheLife('days')`를 적용해 sitemap을 24시간 단위로 재생성하도록 구성했습니다. ([기술 글](https://jingeon27.tistory.com/21))
+- 병원·프로그램·공지·콘텐츠 URL을 5개 공개 API에서 수집하는 동적 sitemap을 구현했습니다. 공개 API가 인증용 `cookies()`에 의존해 캐시되지 않던 구조를 분리하고, Next.js `'use cache'`와 `cacheLife('days')`를 적용해 sitemap을 24시간 단위로 재생성하도록 구성했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정))
 - 제품 분석 이벤트 약 250개 중 140개 이상을 구현했습니다. 신규 가입 과정에서 UTM이 유실되던 문제는 프론트엔드에 저장 코드를 먼저 넣었다가 Amplitude 속성 상태가 원인임을 stage 환경에서 검증해 열흘 만에 되돌리고 **설정으로 해결**했습니다.
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
@@ -90,9 +90,9 @@
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
 
 ---
 

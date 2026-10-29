@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [Blog](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 (2025.08 - 2028.06)
 
@@ -33,7 +33,7 @@
 
 **직접 판단해서 바꾼 것들**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 서버 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 referrer-policy(no-referrer)·CSP `form-action` 고정·open redirect 방어를 적용했습니다. ([글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌었습니다. `useSuspenseQuery`로 캐시를 직접 구독하게 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 시술 결제내역에 쿠폰결제를 추가할 때, 결제건을 수단 독립적 타입(union)으로 두고 분기를 `ts-pattern` `exhaustive`로 모아 기존 렌더링 코드를 거의 수정하지 않고 새 결제수단을 흡수했습니다. 처음 이 영역을 "결제수단은 늘어난다"는 전제로 설계해둔 덕분이고 확장 diff가 근거입니다(개방-폐쇄).
 - 신규 가입 UTM 유실은 OAuth 식별자 분리·신규 속성 가설부터 확인하며 `utm_source` 저장 코드를 먼저 넣었다가, Amplitude 속성 상태(`unexpected`)가 원인임을 찾아 열흘 만에 되돌리고 설정으로 해결했습니다.
@@ -50,13 +50,13 @@
 - 최종 예약 전환율 자체는 큰 변화가 없었지만, 리뷰 조회 행동이 예약 전환과 강하게 연결된다는 점을 확인했습니다.
 - 시술상세에 들어온 사용자 중 25%가 리뷰를 조회했고(병원상세는 8%), 리뷰를 조회한 사용자의 예약 전환율이 미조회 사용자보다 15%p 높았습니다. 이는 인과관계가 아닌 행동 간 상관관계로 해석했습니다.
 
-**예약 폼 리팩토링 (가족 동기화 520 → 55줄)** · 2025.06 ([글](https://jingeon27.tistory.com/11))
+**예약 폼 리팩토링 (가족 동기화 520 → 55줄)** · 2025.06 ([글](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정))
 
 - props drilling과 `useEffect` 4개로 얽혀 있던 가족 동기화를 `RHF + Zod`로 정리했습니다.
 - 날짜 선택 상태가 local state와 Zustand store에 중복으로 있고, 가족 목록이 React Query 캐시와 store에 이중으로 관리되던 걸 FormProvider 중심으로 모아 한 곳에서 들고 있게 했습니다.
 - 가족 동기화 로직(ReservationPersonSelector)이 520줄에서 55줄로 줄었고 if로 흩어져 있던 검증을 `superRefine` 스키마로 옮겼습니다. 같은 패턴을 리뷰 작성·상담 신청·회원정보 수정에도 썼습니다.
 
-**리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** · 2025.05 ([글](https://jingeon27.tistory.com/15))
+**리뷰 작성 플로우 재설계 (3단계 funnel + step별 Zod schema, FSD 분리)** · 2025.05 ([글](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정))
 
 - 3단계 funnel, step별 Zod schema, 통합 schema를 설계했습니다. 가족 정보는 prefetch한 뒤 폼에 주입했습니다. 이후 상담·견적 요청 플로우를 설계할 때 레퍼런스로 활용했습니다.
 
@@ -126,7 +126,7 @@
 
 - 병원·프로그램·공지·혜택 탐색·검색 경로를 5개 API에서 `Promise.all`로 모아 sitemap을 동적으로 만들었고 페이지 유형별 우선순위를 줬습니다.
 - `page:1, size:1`로 `totalCnt`를 먼저 받고 `size=totalCnt`로 전량을 가져왔습니다. Next.js가 `<loc>`를 XML 이스케이프하지 않아서 직접 escape를 적용했습니다.
-- 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 문제를 함께 막았고 `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://jingeon27.tistory.com/21))
+- 세부시술 allowlist와 `'use cache'`(`cacheLife('days')`, 24시간 재생성)로 sitemap이 너무 커지거나 생성이 무거워지는 문제를 함께 막았고 `robots.ts`의 disallow 경로도 정리했습니다. ([글](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정))
 
 **글로벌 서비스 신규 프론트 구축 (safedoc-global)** · 2026.07.31 – 08
 

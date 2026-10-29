@@ -25,4 +25,4 @@
 이력서를 첨부하였으니 검토 부탁드립니다. 바쁜 월요일 아침에 시간 내어 읽어주셔서 감사합니다. 좋은 한 주 보내시길 바랍니다.
 
 김진건 드림
-jingeon27@gmail.com · <https://github.com/jingeon27> · <https://jingeon27.tistory.com>
+jingeon27@gmail.com · <https://github.com/jingeon27> · <https://blog.bambyul.com/ko/blog>

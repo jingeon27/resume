@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -41,7 +41,7 @@ React와 TypeScript로 사용자 웹과 관리자 서비스를 개발하는 프�
 - 검사를 정해진 수만큼 고르면 다음 그룹을 자동으로 열자는 요청이 있었습니다. 기존 선택을 수정할 때도 화면이 넘어가는 점을 짚고 담당자와 논의했습니다. 선택 수를 채운 그룹에서는 아직 고르지 않은 chip을 비활성화하도록 바꾸고, 빠져 있던 디자인도 요청해 반영했습니다.
 - 검사항목 일괄 저장 중 일부 요청만 성공하면, 서버 목록을 다시 받아 발급된 ID를 폼에 반영했습니다. 재시도할 때 이미 저장된 항목이 중복 등록되지 않도록 했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 진입 흐름과 실험 참여 | 2025.07 – 현재
 
@@ -77,7 +77,7 @@ React와 TypeScript로 사용자 웹과 관리자 서비스를 개발하는 프�
 - 새 기능은 BDD 형식의 `*.spec`에 컴포넌트별 기대 동작을 적고 누락을 검토합니다. 운영이나 QA 오류는 `*.test`에 재현하며, 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지 확인합니다. API 연동은 dev API 서버를 우선하고 어려운 조건은 MSW로 재현합니다.
 - 화면 간 직접 참조 62건과 슬라이스 내부 직접 import 경고 271건을 정리하고 lint error로 막았습니다. 자체 규칙은 RuleTester와 fixture, mock으로 검증합니다.
 
-[AI 개발 workflow](https://jingeon27.tistory.com/31) | [테스트 도입 기준](https://jingeon27.tistory.com/25)
+[AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요) | [테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### Next.js와 상태 관리 | 2025.05 – 현재
 
@@ -88,7 +88,7 @@ React와 TypeScript로 사용자 웹과 관리자 서비스를 개발하는 프�
 - 예약 화면의 가족과 날짜 값이 Query 캐시, Zustand, 로컬 상태에 흩어져 있어 가족을 추가하면 선택한 일시가 어긋났습니다. 서버 목록은 Query, 입력 중인 값은 React Hook Form으로 관리하고 제출 조건은 Zod로 검증하도록 바꿨습니다. 519줄이던 예약 대상 선택 컴포넌트는 55줄로 줄었습니다.
 - 공통 검색 필터에 화면별 예외가 쌓여, 각 화면에서 필요한 필터를 조합하도록 바꾸고 27개 화면에 적용했습니다. JSX가 일부 반복되는 것은 감수했습니다. Ant Design Form에는 재귀 조건부 타입과 infer를 사용한 `createTypedForm<T>`를 만들어 중첩 필드명과 값의 타입을 검사합니다.
 
-[Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27) | [FSD 구조 변경](https://jingeon27.tistory.com/23)
+[Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들) | [FSD 구조 변경](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)
 
 #### 운영 오류 추적과 기술 선택 | 2025.10 – 현재
 
@@ -98,13 +98,13 @@ React와 TypeScript로 사용자 웹과 관리자 서비스를 개발하는 프�
 - Tailwind CSS v4로 넘어가기 전, 8월 27일~10월 1일 사용자 브라우저가 color-mix()와 @property를 지원하는지 Amplitude로 확인했습니다. 하루 평균 약 1,000명 중 color-mix() 미지원은 하루 1명꼴(평균 0.94명)이었고, @property 미지원은 없었습니다. 철회도 검토했지만 v4.1의 색상 fallback을 확인하고 전환했습니다.
 - Next.js 14→16, React 18→19 전환은 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 결정했습니다. 비동기 API와 캐시 변경에 맞춰 코드를 고치고 직접 진입, 뒤로가기, 새로고침을 확인했습니다. 별도로 TypeScript 7 네이티브 체커를 함께 돌려 복지몰 타입 검사 시간을 12.5초에서 1.9초로 줄였고, 타입 정보를 쓰는 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 글로벌 사용자 서비스와 CMS | 2026.07 – 09
 
 기존 제품을 운영하면서 PO가 전달한 프로토타입의 모든 화면을 구현해 사용자 서비스와 CMS를 3주 만에 PoC로 배포했습니다. 2,021줄 단일 파일로 작성된 코드를 Next.js 16과 strict TypeScript로 옮기고, shadcn/ui와 Base UI를 적용했습니다. 영어, 한국어, 아랍어와 RTL을 지원합니다. 와이어프레임에 빠져 있던 인증 전후 입력 유지와 실패 안내, 완료 후 이동 동작도 추가했습니다. 클라이언트에 포함되던 목 백엔드 코드는 분리해 앱 번들을 2,564KB에서 1,880KB로 줄였습니다.
 
-[프로토타입을 서비스로 옮긴 과정](https://jingeon27.tistory.com/24)
+[프로토타입을 서비스로 옮긴 과정](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -114,7 +114,7 @@ React와 TypeScript로 사용자 웹과 관리자 서비스를 개발하는 프�
 - 면접 템플릿 입력은 네 단계로 나눠 단계마다 검증하고, 작성하다 나가도 sessionStorage에서 내용을 복원하도록 했습니다. 여러 앱에서 쓰는 Query key와 조회 함수는 공용 패키지로 모으고, mutation 후 갱신할 데이터를 정리했습니다. 공통 드래그 컴포넌트는 공고 순서와 중첩 필터, 설정 테이블에 적용했습니다.
 - Electron 앱은 채용 사이트 로그인 → 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다. NestJS도 도입하려 했지만 Electron main 프로세스에는 무겁다는 CTO 피드백을 받아 제거했고, 모듈 구분과 생성자 주입은 참고해 남겼습니다.
 
-[Electron 초기 구조](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 초기 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 개인 프로젝트
 

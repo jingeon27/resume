@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 병역: 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -33,7 +33,7 @@
 
 백오피스의 기업과 대학 관리에는 컨택상태, 활동 이력, 다음 예정을 관리하는 영업관리 기능을 더해 10월 운영에 배포했습니다. 발급한 쿠폰이 남은 채 제휴를 해지하려 하면 일괄 회수부터 안내하는데, 이 판정은 쿠폰 조회가 끝나기 전이나 이전 대상의 값이 남은 동안에도 저장을 통과시킬 수 있었습니다. 그래서 해당 기업이나 대학의 조회 결과를 받은 뒤에만 판정하고 그 전에는 저장을 막았습니다.
 
-[결제내역에 쿠폰 결제를 추가한 과정](https://jingeon27.tistory.com/22)
+[결제내역에 쿠폰 결제를 추가한 과정](https://blog.bambyul.com/ko/blog/결제-내역에-쿠폰-결제를-추가하며-분기를-한곳으로-모은-과정)
 
 #### 건강검진 예약과 결제 | 2026.09 – 현재
 
@@ -41,7 +41,7 @@
 
 토스페이먼츠 결제창은 모바일에서 결과를 리다이렉트로만 돌려줘서, 결제창에 다녀오면 페이지가 새로 열리고 입력이 사라졌습니다. 앱 전역 Zustand persist 대신 입력값을 결제 시도의 `orderId`와 함께 sessionStorage에 저장했습니다. 같은 주문이면서 현재 Zod 스키마를 통과한 값만 한 번 복원해, 이전 결제 시도나 옛 폼의 값으로 덮어쓰지 않게 했습니다. 결제 준비부터 결제창이 열릴 때까지는 한 mutation으로 묶어 중복 신청을 막았습니다. 결제 실패 후 입력 복원과 승인 요청 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 사용자 불편을 찾아 제안한 일 | 2025.06 – 2026.09
 
@@ -65,7 +65,7 @@
 
 화면마다 예외가 쌓이던 검색 필터는 각 화면이 조합하도록 바꿔 27개 화면을 옮겼고, Ant Design Form에는 중첩 필드명과 값을 재귀 조건부 타입으로 검사하는 `createTypedForm<T>`를 만들었습니다. 예약 화면의 가족과 날짜는 서버 목록을 Query, 작성 중인 값을 React Hook Form, 제출 조건을 Zod로 나눠 다뤘습니다.
 
-[Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27)
+[Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### Sentry 도입과 운영 오류 추적 | 2026.08 – 현재
 
@@ -73,7 +73,7 @@
 - Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적해 버전업으로 해결했습니다. 누적 **75건, 57명 이상**이던 오류 그룹이 9월 10일 배포 뒤 **18일간 0건**이었습니다.
 - 회원 조회가 어떤 이유로 실패해도 로그아웃되던 정책을 401일 때만 끊도록 바꿨고, 배포 뒤 관련 CS 문의와 Sentry 이슈가 없었습니다.
 
-[Sentry 도입 과정](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 개발 환경과 AI 개발 workflow | 2026.04 – 현재
 
@@ -85,7 +85,7 @@
 - 새 기능의 기대 동작은 BDD 형식의 `*.spec`에, 운영과 QA에서 나온 오류는 `*.test`에 씁니다. 새 패턴의 테스트는 제품 코드를 일부러 깨뜨려 실패하는지 확인합니다. 테스트는 dev API 서버를 우선하고, 만들기 어려운 조건에만 MSW 목을 씁니다.
 - worktree를 병렬로 띄울 때마다 전체 검사를 돌리면 CPU 경합으로 처리량이 떨어졌습니다. 그래서 작업 중에는 변경과 영향 범위만 검사하고 전체 검사는 CI에 맡깁니다. 복지몰 타입 검사는 TypeScript 7 네이티브 체커로 **12.5초에서 1.9초**로 줄였고, 타입 정보를 쓰는 lint는 검사 시간이 3.3배 늘어 보류했습니다.
 
-[AI 개발 workflow 개선](https://jingeon27.tistory.com/31) | [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+[AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요) | [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -95,7 +95,7 @@
 - 앱마다 있던 Query key와 조회 함수를 공용 패키지로 모으고, mutation마다 갱신할 대상을 정했습니다. 드래그 공통 컴포넌트는 채용 공고, 중첩 필터 트리, 설정 테이블에 적용했습니다.
 - 채용 사이트 로그인 → 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 Electron 초기 구조를 설계하고, 잡플래닛과 게임잡을 연동했습니다. NestJS 도입은 무겁다는 CTO 피드백으로 닷새 만에 걷어냈습니다.
 
-[Electron 수집 앱 구조](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 수집 앱 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 기술
 

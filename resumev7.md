@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 병역: 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -42,7 +42,7 @@
 - 선택 수를 채우면 다음 그룹을 자동으로 열자는 요청에는, 기존 선택을 고칠 때도 화면이 넘어간다는 문제를 짚었습니다. 담당자와 논의해 미선택 chip만 비활성화했고, 빠져 있던 비활성 상태 디자인도 요청해 반영했습니다.
 - 검진 구성 수정이 거절됐을 때 삭제된 검사항목까지 조회 응답에 들어오는 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값은 dev API 서버 응답에 맞췄습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 임시 진료일과 예약 가능일 판정 | 2026.09
 
@@ -68,7 +68,7 @@
 - cacheComponents를 켠 뒤로 뒤로 가기로 돌아온 신청 폼에 이전 입력이 남아 있었습니다. `<Activity>`가 화면을 언마운트하지 않고 숨기기 때문이었습니다. 숨겨질 때도 실행되는 layout effect cleanup에서 공용 폼 훅이 마운트 시점의 기본값으로 되돌리게 했습니다.
 - SEO는 상위 검색 결과를 비교해 병원과 시술 상세의 메타데이터와 JSON-LD(MedicalClinic, Product)에 위치와 인근 지하철역 정보를 넣었습니다. 스트리밍 메타데이터를 읽지 못하는 봇에는 htmlLimitedBots로 head 태그에 담아 보냈습니다. 동적 sitemap은 공개 조회가 인증 쿠키를 읽던 부분을 떼어 낸 뒤, `'use cache'`로 하루 단위 재검증을 하게 했습니다.
 
-[Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27)
+[Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 공통 검색, 폼, 코드 구조 | 2025.06 – 현재
 
@@ -80,7 +80,7 @@ Ant Design Form의 중첩 필드명과 값이 폼 타입으로 충분히 검사�
 - 인수한 정산 화면은 1,170줄, 1,164줄이었습니다. 조회, 표, 선택, 편집, 정산 처리를 나누고, ref로 열던 모달은 대상 데이터와 열림 상태를 props로 받게 바꿨습니다. 가격 이력을 추가하자는 요청에는 정산 기준이 프로그램 가격인지 견적 금액인지부터 확인했고, 견적 금액이 기준이라 이력 구조는 만들지 않았습니다.
 - FSD에서는 재사용할 것 같으면 entities에 두던 기준이 모호해 같은 성격의 코드가 여러 레이어로 흩어졌습니다. 서버 도메인은 features, 화면 조합은 pages, 도메인과 무관한 공통 UI는 shared로 정했습니다. 복지몰의 화면 간 직접 참조 62건을 정리하고 lint error로 막았습니다. 관리자 서비스에도 같은 기준을 적용하며 프로그램과 시술 도메인의 순환 의존성을 끊었습니다.
 
-[프로그램 폼](https://jingeon27.tistory.com/18) | [공통 UI와 추상화 기준](https://jingeon27.tistory.com/26) | [FSD 구조 변경](https://jingeon27.tistory.com/23)
+[프로그램 폼](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정) | [공통 UI와 추상화 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) | [FSD 구조 변경](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)
 
 #### 쿠폰과 결제내역, 백오피스 업무 | 2025.06 – 현재
 
@@ -91,7 +91,7 @@ Ant Design Form의 중첩 필드명과 값이 폼 타입으로 충분히 검사�
 - 백오피스의 기업과 대학 관리에 컨택상태, 활동 이력, 다음 예정을 관리하는 영업관리 기능과 담당자별 목록을 만들어 10월 운영에 배포했습니다. 쿠폰이 남은 채 제휴를 해지하려 하면 일괄 회수부터 안내하는데, 이 판정이 쿠폰 조회가 끝나기 전이나 이전 대상의 값이 남은 동안에도 저장을 통과시킬 수 있었습니다. 해당 기업이나 대학의 조회 결과를 받은 뒤에만 판정하고, 그 전에는 안내와 함께 저장을 막았습니다.
 - 그 밖에 포인트 일괄 지급과 데이터 추출을 추가하고, 관리자 권한별 메뉴와 병원 알림 수신 설정을 반영했습니다.
 
-[결제내역에 쿠폰 결제를 추가한 과정](https://jingeon27.tistory.com/22)
+[결제내역에 쿠폰 결제를 추가한 과정](https://blog.bambyul.com/ko/blog/결제-내역에-쿠폰-결제를-추가하며-분기를-한곳으로-모은-과정)
 
 #### Sentry 도입과 운영 오류 추적 | 2026.08 – 현재
 
@@ -102,7 +102,7 @@ Ant Design Form의 중첩 필드명과 값이 폼 타입으로 충분히 검사�
 - 관리자 서비스는 일부 조회만 실패해도 앱 루트의 Error Boundary가 헤더와 정상 구획까지 지웠습니다. 따로 복구할 수 있는 기능 단위로 경계를 나눠 실패한 구획만 다시 시도하게 했고, 백오피스 라우트 30개를 같은 화면 구성으로 맞췄습니다. API 오류, 렌더링 오류, Zod 스키마 불일치는 CloudWatch에서 추적합니다.
 - 동의서의 외부 문서 조회가 실패하면 고객명과 동의 내역까지 사라졌습니다. 문서 영역에 별도 오류 경계를 두고, 조회가 실패해도 나머지 정보가 남는지 테스트했습니다.
 
-[Sentry 도입 과정](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33) | [에러 처리 개편](https://jingeon27.tistory.com/28)
+[Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지) | [에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
 
 #### 테스트 도입과 AI 개발 workflow | 2026.04 – 현재
 
@@ -117,7 +117,7 @@ Ant Design Form의 중첩 필드명과 값이 폼 타입으로 충분히 검사�
 - 컨벤션 문서가 있어도 같은 리뷰 코멘트가 반복돼 기존 위반을 정리하고 lint error로 검사하도록 바꿨습니다. 규칙 자체는 RuleTester와 `__fixture__`, mock으로 테스트하고, 미사용 코드와 export는 Knip으로 검사합니다.
 - 병렬 worktree마다 전체 검사를 반복해 CPU 부하가 커졌습니다. 작업 중에는 변경분과 영향 범위를 먼저 검사하고, 타입 검사는 앱과 패키지 단위로 진행합니다. dev API 서버 연동 테스트는 로컬과 push 전 검증에서 실행합니다.
 
-[테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25) | [AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+[테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### 개발 환경과 기술 전환 | 2025.10 – 현재
 
@@ -143,7 +143,7 @@ PO가 전달한 프로토타입의 화면을 모두 반영해, 기존 제품을 
 - 클라이언트 번들에 목 백엔드 코드가 딸려 들어가던 의존을 끊어, 앱 번들을 2,564KB에서 1,880KB로 줄였습니다. 200건을 한 번에 받던 조회는 20건 단위 무한 스크롤과 행 가상화로 바꿨습니다.
 - 인증 코드 입력 전후의 값 유지, 실패 안내, 완료 후 이동처럼 와이어프레임에 없던 동작을 채웠습니다. CMS에서 링크 발급 → 사용자 서비스에서 업로드 → CMS에서 다운로드까지는 한 시나리오의 E2E로 확인했습니다.
 
-[프로토타입을 서비스로 옮긴 과정](https://jingeon27.tistory.com/24)
+[프로토타입을 서비스로 옮긴 과정](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -154,7 +154,7 @@ PO가 전달한 프로토타입의 화면을 모두 반영해, 기존 제품을 
 - 앱마다 있던 TanStack Query key와 queryFn은 query-key-factory 기반 공용 패키지로 모으고, mutation마다 갱신할 대상을 정했습니다. dnd-kit으로 만든 드래그 공통 컴포넌트는 채용 공고 순서, 후보자 필터 중첩 트리, 설정 테이블에 적용했습니다.
 - Electron 수집 앱은 채용 사이트 로그인 → 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 초기 구조를 설계했습니다. 잡플래닛과 게임잡을 연동했고, 지원자 한 명의 오류가 전체 수집을 멈추지 않게 했습니다. NestJS 도입은 Electron main 프로세스에 무겁다는 CTO 피드백으로 닷새 만에 걷어냈고, 모듈 경계와 생성자 주입만 참고해 factory에서 조립했습니다. 코드는 이후 동료가 상당 부분 다시 작성했습니다.
 
-[Electron 수집 앱의 구조 변경](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 수집 앱의 구조 변경](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 기술
 
@@ -169,10 +169,10 @@ PO가 전달한 프로토타입의 화면을 모두 반영해, 기존 제품을 
 
 ## 기술 글
 
-- [Next.js에 맡기던 동작을 클라이언트로 옮기며 치른 비용](https://jingeon27.tistory.com/27): 프로덕션에서만 나는 라우터 캐시 회귀, 16.3의 `crossorigin` 변경, 오래 열린 탭의 서버 액션.
-- [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25): 기능 명세와 회귀 테스트 구분, 실제 폼 제출, API 계약, E2E 검증 기준.
-- [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/31): plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬 및 CI 검증 범위.
-- [Sentry 도입 과정](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33): 오류 수집 기준과 라이브러리 내부까지 원인을 추적한 사례.
+- [Next.js에 맡기던 동작을 클라이언트로 옮기며 치른 비용](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들): 프로덕션에서만 나는 라우터 캐시 회귀, 16.3의 `crossorigin` 변경, 오래 열린 탭의 서버 액션.
+- [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준): 기능 명세와 회귀 테스트 구분, 실제 폼 제출, API 계약, E2E 검증 기준.
+- [AI 작업의 판단과 검증을 나눈 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요): plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬 및 CI 검증 범위.
+- [Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지): 오류 수집 기준과 라이브러리 내부까지 원인을 추적한 사례.
 
 ## 학력
 

@@ -1,7 +1,7 @@
 # 김진건 · Design Engineer / Frontend Engineer
 
 010-6865-8208 · jingeon27@gmail.com  
-[GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)  
+[GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)  
 **병역사항** · 현역 산업기능요원 복무 중
 
 ## Professional Summary
@@ -86,9 +86,9 @@
 ## Open Source & Writing
 
 - **Open Source** · Toss Slash `useFunnel` 타입 오류 수정 [PR #363](https://github.com/toss/slash/pull/363) 병합
-- **Authentication** · [Cross-domain 인증: URL token을 form POST BFF 구조로 전환](https://jingeon27.tistory.com/19)
-- **Next.js** · [`use cache` 환경에서 sitemap 구성](https://jingeon27.tistory.com/21)
-- **Refactoring** · [예약 폼 리팩터링: 520줄 컴포넌트를 55줄로 줄인 과정](https://jingeon27.tistory.com/11)
+- **Authentication** · [Cross-domain 인증: URL token을 form POST BFF 구조로 전환](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- **Next.js** · [`use cache` 환경에서 sitemap 구성](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- **Refactoring** · [예약 폼 리팩터링: 520줄 컴포넌트를 55줄로 줄인 과정](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
 
 ## Education & Certification
 

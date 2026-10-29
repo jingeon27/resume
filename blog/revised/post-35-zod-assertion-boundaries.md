@@ -75,7 +75,7 @@ try {
 
 ## 응답 경계는 아직 막지 않고 관측만 해요
 
-API 응답에 스키마를 씌우는 작업은 이 정리보다 3주쯤 앞서 했고, 화면 장애 범위를 줄이는 이야기와 함께 [별도 글](https://jingeon27.tistory.com/28)에 적었어요. 여기서는 그 경계가 이번 판단에 어떤 제약을 걸었는지만 짚을게요. 이미 돌아가는 화면에 뒤늦게 스키마를 씌우는 마이그레이션이라, 파싱 결과로 갈아끼우면 스키마에 아직 적지 않은 필드가 조용히 사라져요(zod는 3, 4 모두 객체의 미선언 키를 기본으로 버려요). 그래서 검증만 하고 원본을 돌려줘요.
+API 응답에 스키마를 씌우는 작업은 이 정리보다 3주쯤 앞서 했고, 화면 장애 범위를 줄이는 이야기와 함께 [별도 글](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)에 적었어요. 여기서는 그 경계가 이번 판단에 어떤 제약을 걸었는지만 짚을게요. 이미 돌아가는 화면에 뒤늦게 스키마를 씌우는 마이그레이션이라, 파싱 결과로 갈아끼우면 스키마에 아직 적지 않은 필드가 조용히 사라져요(zod는 3, 4 모두 객체의 미선언 키를 기본으로 버려요). 그래서 검증만 하고 원본을 돌려줘요.
 
 develop 기준으로 관리자 서비스는 `*.api.ts` 75개 파일에서 `parseApiResponse(`를 264곳, 복지몰은 28개 파일에서 86곳 호출해요(테스트, 목, 정의 파일은 뺀 수치예요).
 
@@ -261,4 +261,4 @@ lint에는 `no-explicit-any`와 `no-non-null-assertion`을 error로 올렸어요
 - [typescript-eslint: consistent-type-assertions](https://typescript-eslint.io/rules/consistent-type-assertions/)
 - [typescript-eslint: no-unnecessary-type-assertion](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/)
 - [@hookform/resolvers: zodResolver](https://github.com/react-hook-form/resolvers#zod)
-- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://jingeon27.tistory.com/28)
+- 관련 글: [오류가 난 영역만 다시 시도하도록 Error Boundary 나누기](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)

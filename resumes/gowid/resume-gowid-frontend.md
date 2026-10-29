@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -42,7 +42,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 결제 준비부터 결제창이 열릴 때까지 한 mutation에서 처리해 중복 주문을 막았습니다. 결제 실패 후 입력이 복원되는지, 승인 요청에 실패하면 예약 목록으로 이동하는지는 dev API 서버에 연결한 E2E로 확인했습니다.
 - 검사항목 일괄 저장에서 일부 요청만 성공하면 서버가 발급한 ID를 폼에 반영합니다. 재시도할 때 이미 저장된 항목을 다시 만들지 않도록 했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 정산과 쿠폰 결제, 기업 관리 | 2025.06 – 현재
 
@@ -52,7 +52,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 쿠폰 결제는 결제수단과 상태에 따라 입력, 완료, 취소 동작이 달랐습니다. 관련 조건을 도메인 함수와 ts-pattern으로 모았습니다. 결제 예정 금액이 바뀌면 적용했던 쿠폰을 해제하도록 했습니다.
 - 기업과 대학의 연락 상태, 활동 이력, 다음 일정, 담당자별 목록을 개발했습니다. 제휴 해지 시 쿠폰 회수 여부는 현재 선택한 대상의 조회가 끝난 뒤 판단하도록 했습니다. 조회가 끝나기 전이나 이전 기업의 값으로 저장하는 경우를 막았습니다.
 
-[쿠폰 결제 처리](https://jingeon27.tistory.com/22)
+[쿠폰 결제 처리](https://blog.bambyul.com/ko/blog/결제-내역에-쿠폰-결제를-추가하며-분기를-한곳으로-모은-과정)
 
 #### 공통 폼과 데이터 조회 구조 | 2025.05 – 현재
 
@@ -63,7 +63,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - Ant Design Form의 중첩 필드명과 값의 타입을 검사하는 `createTypedForm<T>`를 만들었습니다. 재귀 조건부 타입과 infer로 필드 경로에 맞는 값을 추론해, 잘못된 필드명이나 값의 타입을 컴파일 단계에서 찾습니다. 라이브러리 타입을 보완하기 위한 단언은 래퍼 안에 뒀습니다.
 - Headless UI에서 Radix UI로 전환해 접근성 primitive와 조합 방식을 활용했습니다. 공통 Bottom Sheet는 Compound Components와 overlay-kit으로 바꿔 본문과 하단 버튼이 같은 폼을 쓰게 했습니다.
 
-[폼 타입 설계](https://jingeon27.tistory.com/18) | [공통 UI와 추상화](https://jingeon27.tistory.com/26)
+[폼 타입 설계](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정) | [공통 UI와 추상화](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 #### 운영 오류 추적과 장애 격리 | 2026.08 – 현재
 
@@ -73,7 +73,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 회원 조회가 타임아웃이나 서버 오류로 실패해도 로그아웃되던 문제를 고쳤습니다. 401일 때만 로그아웃하고 일시적인 실패는 다시 시도할 수 있게 했습니다.
 - 관리자 서비스는 독립적으로 복구할 수 있는 기능별로 Error Boundary를 나눴습니다. 동의서의 외부 문서 조회가 실패해도 고객명과 동의 내역은 남도록 처리하고 실패 응답으로 테스트했습니다. API 오류와 Zod 응답 불일치는 CloudWatch로 트래킹합니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트와 AI 개발 workflow | 2026.04 – 현재
 
@@ -89,7 +89,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16, React 18→19로 전환했습니다. 비동기 API와 캐시 동작 변경에 맞춰 코드를 수정하고 이동과 새로고침을 확인했습니다. 별도로 TypeScript 7 네이티브 체커를 병행해 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 정보를 사용하는 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
-[테스트 도입 기준](https://jingeon27.tistory.com/25) | [AI 개발 workflow](https://jingeon27.tistory.com/31)
+[테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -99,7 +99,7 @@ Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16
 - 면접 템플릿의 네 단계 입력을 `useFunnel`로 만들고 단계별로 검증했습니다. 작성 중인 값은 sessionStorage로 복원했습니다. 앱마다 있던 Query key와 조회 함수는 공용 패키지로 모았습니다.
 - Electron 앱은 로그인 → 지원자 수집 → 중복 확인 → 업로드로 이어지는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다. NestJS 도입도 시도했지만 main 프로세스에는 무겁다는 CTO 피드백을 받아 제거했습니다. 모듈 구분과 생성자 주입은 참고해 남겼습니다.
 
-[Electron 초기 구조](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 초기 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 개인 프로젝트
 

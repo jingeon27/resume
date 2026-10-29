@@ -243,7 +243,7 @@ p { margin-bottom: 7px; }
 <details class="print-help"><summary>인쇄 설정</summary><p>대상: PDF로 저장<br>용지: A4 · 배율: 100%<br>여백: 없음<br>머리글·바닥글: 끄기</p></details></div></div>
 <main id="resume"><article class="sheet sheet-resume sheet-cover" id="page-1" aria-label="1쪽 · 소개와 기술, 리뷰 개선">
 <div class="page-content"><h1 data-source-block="0">김진건</h1>
-<p class="contact" data-source-block="1">Frontend Engineer | <a href="mailto:jingeon27@gmail.com">jingeon27@gmail.com</a> | <a href="https://github.com/jingeon27">GitHub</a> | <a href="https://jingeon27.tistory.com/">기술 블로그</a></p>
+<p class="contact" data-source-block="1">Frontend Engineer | <a href="mailto:jingeon27@gmail.com">jingeon27@gmail.com</a> | <a href="https://github.com/jingeon27">GitHub</a> | <a href="https://blog.bambyul.com/ko/blog">기술 블로그</a></p>
 <p class="role-note" data-source-block="2">산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망</p>
 <h2 data-source-block="3">소개</h2>
 <p data-source-block="4">사용자 웹과 관리자 서비스를 함께 개발해 온 프론트엔드 엔지니어입니다. 세이프닥에서 예약과 결제, SEO, 이벤트 랜딩, WebView 연동을 맡았습니다. 모바일로 리뷰를 쓰다 발견한 선택 UI의 불편을 PO에게 공유하고, 기획과 디자인 담당자가 정한 개선안을 구현했습니다.</p>
@@ -280,7 +280,7 @@ p { margin-bottom: 7px; }
 <li>모바일에서 결제창을 다녀와도 신청 내용이 남도록 입력값과 <code>orderId</code>를 sessionStorage에 저장했습니다. 주문 ID가 일치하고 Zod 검증을 통과한 값만 한 번 복원합니다. 결제 준비부터 창이 열릴 때까지는 다시 신청할 수 없게 해 중복 주문을 막았습니다.</li>
 <li>결제 실패 후 입력이 복원되는지, 승인 요청에 실패하면 예약 목록으로 이동하는지는 dev API 서버에 연결한 E2E로 확인했습니다. 검진 구성을 수정할 수 없던 문제는 조회 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다.</li>
 <li>검사항목을 일괄 저장하다 일부만 성공한 경우에는 서버가 발급한 ID를 폼에 반영했습니다. 이전 입력으로 재시도해 이미 만든 항목이 다시 등록되는 것을 막았습니다.</li></ul>
-<p data-source-block="20"><a href="https://jingeon27.tistory.com/34">건강검진 개발 과정</a></p>
+<p data-source-block="20"><a href="https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준">건강검진 개발 과정</a></p>
 </section>
 <section class="case">
 <h4 class="project" data-source-block="21"><span>이벤트 랜딩과 사용자 행동 측정</span><span class="project-period">2025.07 – 현재</span></h4>
@@ -307,7 +307,7 @@ p { margin-bottom: 7px; }
 <ul class="simple-list" data-source-block="28"><li>관리자 검색 오류가 개발 서버에서는 나타나지 않아 build 후 start로 확인했습니다. 목록 7개 중 6개에서 재현됐고 업스트림 이슈로 라우터 캐시 문제를 확인했습니다. 서버가 검색 조건을 읽지 않는 화면이므로 같은 경로의 URL 조건 변경은 History API로 처리했습니다.</li>
 <li>검색엔진이 읽는 HTML을 확인해 페이지별 canonical, 상세 페이지 사이의 링크, 병원과 시술의 JSON-LD를 고쳤습니다. 검색 목록은 서버 HTML에 포함하고, 공개 조회는 인증 쿠키와 분리해 사이트맵을 하루 단위로 재검증합니다.</li>
 <li>화면마다 예외가 붙던 공통 검색 필터를 각 화면에서 조합하도록 바꾸고 27개 화면에 적용했습니다. JSX 중복은 일부 감수하고 화면별 변경을 해당 화면 안에서 다루도록 했습니다. URL과 폼, API 요청은 같은 Zod 스키마를 사용하고, Ant Design Form의 중첩 필드명과 값은 <code>createTypedForm&lt;T&gt;</code>로 타입 검사를 받게 했습니다.</li></ul>
-<p data-source-block="29"><a href="https://jingeon27.tistory.com/27">Next.js 검색 오류 대응</a> | <a href="https://jingeon27.tistory.com/21">사이트맵 개선</a> | <a href="https://jingeon27.tistory.com/18">폼 설계</a></p>
+<p data-source-block="29"><a href="https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들">Next.js 검색 오류 대응</a> | <a href="https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정">사이트맵 개선</a> | <a href="https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정">폼 설계</a></p>
 </section>
 <section class="case">
 <h4 class="project" data-source-block="30"><span>Sentry 도입과 운영 오류 대응</span><span class="project-period">2026.08 – 현재</span></h4>
@@ -315,13 +315,13 @@ p { margin-bottom: 7px; }
 <ul class="simple-list" data-source-block="32"><li>Bottom Sheet 크래시는 라이브러리의 null ref 접근까지 추적해 버전업으로 해결했습니다. 바뀐 snap point는 공통 Root에서 변환해 26개 사용처의 API를 유지했습니다. 누적 75건, 57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.</li>
 <li>회원 조회가 타임아웃이나 서버 오류로 실패해도 로그아웃되던 문제를 고쳤습니다. 401일 때만 로그아웃하도록 바꿨고, 9월 23일 배포 뒤 28일까지 관련 CS 문의와 Sentry 이슈가 없었습니다.</li>
 <li>일부 조회 실패로 정상 화면까지 사라지지 않도록 기능별 Error Boundary를 뒀습니다. 동의서에서는 외부 문서 조회가 실패해도 고객명과 동의 내역은 남도록 나누고 테스트했습니다. API 오류와 응답 스키마 불일치는 CloudWatch로 트래킹합니다.</li></ul>
-<p data-source-block="33"><a href="https://jingeon27.tistory.com/30">Sentry 도입</a> | <a href="https://jingeon27.tistory.com/33">크래시 분석</a></p>
+<p data-source-block="33"><a href="https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정">Sentry 도입</a> | <a href="https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지">크래시 분석</a></p>
 </section>
 <section class="case">
 <h4 class="project" data-source-block="34"><span>글로벌 서비스와 기술 선택</span><span class="project-period">2026.07 – 현재</span></h4>
 <p data-source-block="35">기존 제품을 운영하면서 글로벌 사용자 서비스와 CMS를 개발했습니다. PO가 전달한 프로토타입의 모든 화면을 구현해 3주 만에 PoC로 배포했습니다. Next.js, shadcn/ui, Base UI를 사용하고 영어, 한국어, 아랍어와 RTL을 지원했습니다. 와이어프레임에 없던 인증 전후 입력 유지, 오류 안내, 완료 후 이동도 추가했습니다. 클라이언트 번들에 들어가던 목 백엔드 코드를 분리해 앱 번들을 2,564KB에서 1,880KB로 줄였습니다.</p>
 <p data-source-block="36">Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16, React 18→19로 전환했습니다. 비동기 API와 캐시 동작 변경에 맞춰 코드를 수정하고 링크 직접 진입, 뒤로가기, 새로고침을 확인했습니다. 타입 정보를 사용하는 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.</p>
-<p data-source-block="37"><a href="https://jingeon27.tistory.com/24">글로벌 서비스 개발</a></p>
+<p data-source-block="37"><a href="https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유">글로벌 서비스 개발</a></p>
 </section>
 </div>
 <footer class="page-footer"><span>김진건 · 이력서</span><span>3 / 4</span></footer>
@@ -335,14 +335,14 @@ p { margin-bottom: 7px; }
 <p data-source-block="42">새 기능의 기대 동작은 BDD 형식의 <code>*.spec</code>에 적고 컴포넌트별로 빠진 조건이 없는지 검토합니다. 운영이나 QA에서 발견한 오류는 <code>*.test</code>에 재현합니다. 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지도 확인합니다. 기대 payload는 제품의 변환 함수를 재사용하지 않고 따로 적습니다. API 연동은 dev API 서버를 우선하고 재현하기 어려운 조건에 MSW를 씁니다. lint rule은 RuleTester와 fixture로 테스트합니다.</p>
 <p data-source-block="43">테스트용 QueryClient의 오류 처리도 앱과 맞췄습니다. 처음 데이터를 받지 못한 경우와 이미 받은 데이터를 재조회하다 실패한 경우를 나눠 검증합니다. 공통 Bottom Sheet를 바꿀 때 헤더까지 스크롤되는 문제를 놓친 뒤에는 레이아웃 회귀 테스트를 추가했습니다.</p>
 <p data-source-block="44">병렬 worktree마다 전체 검사를 반복해 CPU 부하가 커졌습니다. 작업 중에는 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 진행합니다. dev API 서버 연동 테스트는 로컬과 push 전 검증에서 실행합니다.</p>
-<p data-source-block="45"><a href="https://jingeon27.tistory.com/25">테스트 도입 기준</a> | <a href="https://jingeon27.tistory.com/31">AI 개발 workflow</a></p>
+<p data-source-block="45"><a href="https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준">테스트 도입 기준</a> | <a href="https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요">AI 개발 workflow</a></p>
 </section>
 <h3 data-source-block="46">왓타임 | Frontend Engineer | 2024.01 – 2024.11</h3>
 <p data-source-block="47">채용 SaaS RoundHR이 시장성을 확인하며 기능을 늘리던 시기에 합류했습니다. 채용 관리와 채용 담당자용 웹, 랜딩과 라운지, 외부 채용 사이트의 지원자 데이터를 가져오는 Electron 앱을 개발했습니다. 개발자, 디자이너와 pnpm, Turborepo 모노레포에서 협업했습니다.</p>
 <ul class="simple-list" data-source-block="48"><li>채용 페이지와 지원서 설정, 메일과 면접 알림 템플릿, 채용 단계 자동화, 평가와 온보딩을 개발하고 Notion, Strapi 콘텐츠를 연결했습니다.</li>
 <li>면접 템플릿의 네 단계 입력을 <code>useFunnel</code>로 만들고 단계별로 검증했습니다. 작성 중인 값은 sessionStorage로 복원했습니다. 앱마다 있던 Query key와 조회 함수는 공용 패키지로 모았습니다. 공고 순서와 중첩 필터, 설정 테이블에는 드래그 공통 컴포넌트를 적용했습니다.</li>
 <li>Electron 앱은 로그인 → 지원자 수집 → 중복 확인 → 업로드로 이어지는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다. NestJS도 도입하려 했지만 Electron main 프로세스에는 무겁다는 CTO 피드백을 받아 제거했습니다. 모듈 구분과 생성자 주입은 참고해 남겼습니다.</li></ul>
-<p data-source-block="49"><a href="https://jingeon27.tistory.com/5">Electron 초기 구조</a> | <a href="https://jingeon27.tistory.com/6">Query key 공통화</a></p>
+<p data-source-block="49"><a href="https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준">Electron 초기 구조</a> | <a href="https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유">Query key 공통화</a></p>
 <h2 data-source-block="50">학력</h2>
 <p data-source-block="51">대덕소프트웨어마이스터고등학교 소프트웨어개발과 | 2021.03 – 2024.01</p>
 </div>

@@ -1,6 +1,6 @@
 # 김진건 · Frontend Engineer
 
-jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -51,7 +51,7 @@ B2C·B2B2C WebView 사용자몰, 운영 백오피스, 병원 어드민과 글로
 - **서버 상태 정리** · TanStack Query의 query option·key·캐시 무효화 방식을 통일했습니다. 서버에서 `ensureQueryData`로 준비한 데이터를 `HydrationBoundary`로 전달하고, 클라이언트 View가 같은 Query 캐시를 `useQuery`로 구독하도록 raw props 전달을 줄였습니다.
 - **계약과 UI 패턴** · Zod를 폼·API 응답·검색 파라미터 검증과 type guard에 적용했습니다. Ant Design의 폼·테이블 사용 방식을 표준화하고 Radix UI·es-toolkit·ts-pattern을 도입해 복잡한 분기와 반복 UI를 조합 가능한 패턴으로 바꿨습니다.
 - **정산 기능 인수·개선** · 전달받은 정산 코드를 기존 프로젝트의 폴더 구조, 상태 관리, API 호출과 검증 기준에 맞게 리팩터링했습니다. 이후 추가된 결제 내역과 운영 요구사항, 예외 상황을 반영하며 유지보수했습니다.
-- **산출물** · [예약 폼의 작성 상태를 한 곳에서 관리하도록 바꾼 과정](https://jingeon27.tistory.com/11) · [선언적 코드는 변경을 작게 만든다](https://jingeon27.tistory.com/26) · [38필드 프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://jingeon27.tistory.com/18)
+- **산출물** · [예약 폼의 작성 상태를 한 곳에서 관리하도록 바꾼 과정](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정) · [선언적 코드는 변경을 작게 만든다](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) · [38필드 프로그램 폼을 타입과 변환 계층으로 나눈 과정](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정)
 
 #### 프로젝트 2 · 글로벌 사용자 서비스와 운영 CMS 출시
 
@@ -83,7 +83,7 @@ B2C·B2B2C WebView 사용자몰, 운영 백오피스, 병원 어드민과 글로
 - **AI 개발 워크플로 (2026.04–현재)** · Jira 티켓과 Figma를 먼저 확인해 불명확한 요구사항을 조율한 뒤, 에이전트가 영향 범위와 판단 지점을 포함한 실행 계획을 제안하도록 했습니다. 계획을 검토하면 격리 worktree에서 구현·테스트·AI 리뷰를 진행하고 Critical 항목은 자동 수정한 뒤, 변경 파일의 lint·typecheck·관련 테스트를 통과해 push·PR까지 이어지도록 구성했습니다. 스테이지 배포 전에는 누적 diff 전체를 직접 읽어 리팩터링하고, 배포 후 발견한 반복 패턴은 Skill·lint·공통 구현에 반영합니다.
 - **메이저 업그레이드** · React 18→19, Next.js 14→16, TypeScript 5→6, Node.js 20→24, ESLint 8→9, Webpack→Turbopack 전환을 진행했습니다. TypeScript 네이티브 체커 `tsgo`는 기존 도구와 병행해 타입 검사에 사용했습니다.
 - **개발 성능** · TypeScript 7 네이티브 체커 병행으로 타입 검사를 **12.5초→1.9초**, 복지몰 E2E의 내비게이션 대기와 오버레이 간섭을 고쳐 콜드 실행을 **3.5분→20초**로 단축했습니다.
-- **산출물** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://jingeon27.tistory.com/31) · [Sentry 도입기](https://jingeon27.tistory.com/30) · [에러 처리 개편](https://jingeon27.tistory.com/28) · [테스트 도입](https://jingeon27.tistory.com/25)
+- **산출물** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요) · [Sentry 도입기](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) · [에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편) · [테스트 도입](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### 프로젝트 4 · Next.js 프로덕션 회귀 분석과 내비게이션 재설계
 
@@ -96,7 +96,7 @@ B2C·B2B2C WebView 사용자몰, 운영 백오피스, 병원 어드민과 글로
 - **원인 분석** · 실제 프로덕션 빌드로 관리자 목록을 점검해 당시 7개 중 6개에서 같은 문제를 재현했습니다. 서버가 `searchParams`를 읽지 않는 라우트에서 요청 URL과 다른 검색 문자열이 Router Cache에 기록되는 Next.js 회귀를 업스트림 이슈와 수정 PR까지 추적했습니다.
 - **기술 결정** · 같은 pathname에서 서버 컴포넌트를 다시 계산할 필요 없이 클라이언트 Query가 조회를 담당하는 상태는 native History API로 변경했습니다. 뒤로가기 의미에 따라 `pushState`와 `replaceState`를 구분하고, 조회 책임은 목록 View의 `useQuery`에 뒀습니다.
 - **결과** · 불필요한 RSC 내비게이션 없이 검색과 상세 URL 상태가 갱신되도록 했습니다. 프레임워크 수정 버전을 기다리는 임시 조치가 아니라 상태를 실제로 소비하는 계층이 소유한다는 내비게이션 기준으로 남겼습니다.
-- **산출물** · [Next.js를 사용하며 겪은 프로덕션 이슈](https://jingeon27.tistory.com/27)
+- **산출물** · [Next.js를 사용하며 겪은 프로덕션 이슈](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 ### 왓타임 · Frontend Engineer
 
@@ -127,10 +127,10 @@ B2C·B2B2C WebView 사용자몰, 운영 백오피스, 병원 어드민과 글로
 ## Open Source & Technical Writing
 
 - **Open Source** · Toss Slash `useFunnel` 타입 계약 수정 [PR #363](https://github.com/toss/slash/pull/363) 병합
-- **AI Workflow** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://jingeon27.tistory.com/31)
-- **Observability** · [Sentry 도입기 — 에러 수집과 Web Vitals·MCP·릴리스까지](https://jingeon27.tistory.com/30)
-- **Testing** · [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25)
-- **Next.js** · [Next.js를 사용하며 겪은 프로덕션 이슈](https://jingeon27.tistory.com/27)
+- **AI Workflow** · [Compound Engineering으로 코드 검토 위치를 바꿔 온 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
+- **Observability** · [Sentry 도입기 — 에러 수집과 Web Vitals·MCP·릴리스까지](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)
+- **Testing** · [테스트를 전부 지운 뒤 다시 만든 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- **Next.js** · [Next.js를 사용하며 겪은 프로덕션 이슈](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 ---
 

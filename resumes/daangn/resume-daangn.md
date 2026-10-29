@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -90,10 +90,10 @@ toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 수정한 PR이 머�
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
-- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
 
 ---
 

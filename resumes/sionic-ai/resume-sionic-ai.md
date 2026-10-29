@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Developer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Developer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -55,7 +55,7 @@
 
 **아키텍처·품질·개발 환경**
 
-- 정산 서비스는 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달은 서버 access log와 Referer에 토큰이 남을 위험이 있어, **form POST BFF로 바꾸고 `referrer-policy(no-referrer)`·CSP `form-action` 고정·open redirect 방어를 적용**했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- 정산 서비스는 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달은 서버 access log와 Referer에 토큰이 남을 위험이 있어, **form POST BFF로 바꾸고 `referrer-policy(no-referrer)`·CSP `form-action` 고정·open redirect 방어를 적용**했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - 합류 시점의 B2C 웹은 6-layer FSD 골격은 있었지만 `@legacy`에 250개 파일이 남아 있었고, 앞선 담당자들이 석 달간 442개에서 여기까지 줄여온 상태였습니다. 남은 250개를 **26일 만에 0개로** 옮겼습니다(2025.05–06).
 - 옮기고 나니 레이어는 있는데 무엇이 어디 속하는지가 사람마다 달랐습니다. 레이어별 책임과 재사용 카탈로그를 가이드 문서 6개로 정의하고, 역방향 의존은 외부 의존성 없이 직접 만든 ESLint 플러그인으로 lint 단계에서 막았습니다. 규칙을 문서로만 두면 지켜지지 않는다고 봤습니다.
 - 그 규칙 위에서 코드베이스가 세 배 가까이 늘었습니다(`features` 49→298, `shared` 181→497, `pages` 27→91).
@@ -91,10 +91,10 @@ toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 수정한 PR이 머�
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
-- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
 
 ---
 

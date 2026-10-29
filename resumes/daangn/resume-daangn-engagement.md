@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -52,7 +52,7 @@ AI 덕분에 개인 프로젝트에서도 서버와 배포까지 직접 만들�
 - 인증 후 이동 중 앱이 멈추는 오류를 Next.js 소스까지 추적했습니다. `redirect()` 처리 중 훅 호출 순서가 달라지는 경우를 찾아 해당 경로의 진입 조건 확인과 리다이렉트를 React 렌더 전의 proxy로 옮겼습니다.
 - 잘못 안내된 쿠폰함 주소는 앱 핫픽스 대신 Load Balancer에서 리다이렉트하자고 제안해 합의했습니다.
 
-[쿠폰 결제 처리](https://jingeon27.tistory.com/22) | [Next.js 오류 대응](https://jingeon27.tistory.com/27)
+[쿠폰 결제 처리](https://blog.bambyul.com/ko/blog/결제-내역에-쿠폰-결제를-추가하며-분기를-한곳으로-모은-과정) | [Next.js 오류 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 사용자 행동 측정과 실험 참여 | 2025.07 – 현재
 
@@ -77,7 +77,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 - 모바일 결제에 실패하면 주문 ID가 일치하고 Zod 검증을 통과한 입력값만 한 번 복원합니다. 결제 준비부터 창을 열 때까지 한 mutation에서 처리해 중복 신청을 막았습니다.
 - 정해진 수의 검사를 고르면 다음 그룹을 자동으로 열자는 요청에, 기존 선택을 수정할 때도 화면이 넘어간다는 문제를 짚었습니다. 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화했고, 필요한 디자인도 요청해 반영했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 모바일 리뷰 작성 개선 | 2025.06 – 08
 
@@ -92,7 +92,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 - 재사용할 것 같으면 entities에 두던 모호한 기준을 바꿔 서버 도메인은 features, 화면 조합은 pages, 공통 UI는 shared로 정했습니다. 화면 간 직접 참조를 정리하고 lint rule로 검사합니다. Bottom Sheet는 Compound Components와 overlay-kit으로 바꿔 본문과 하단 버튼이 같은 폼을 쓰게 했습니다.
 - 글로벌 사용자 서비스와 CMS는 전달받은 프로토타입의 모든 화면을 구현해 3주 만에 PoC로 배포했습니다. shadcn/ui와 Base UI를 사용하고 다국어와 RTL을 지원했습니다. 파일 전송은 React 밖 스토어에서 관리하며 동시에 전송하는 용량을 제한했습니다.
 
-[폼 설계](https://jingeon27.tistory.com/18) | [FSD 구조 변경](https://jingeon27.tistory.com/23)
+[폼 설계](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정) | [FSD 구조 변경](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)
 
 #### 운영 오류와 검증 기준 | 2026.04 – 현재
 
@@ -110,7 +110,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 
 반복되는 리뷰 내용은 skills에 남기고, import 방향과 공개 API처럼 자동으로 검사할 수 있는 내용은 lint rule로 만듭니다. 규칙은 RuleTester와 fixture로 테스트하고 미사용 코드는 Knip으로 찾습니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [테스트 도입 기준](https://jingeon27.tistory.com/25) | [AI 개발 workflow](https://jingeon27.tistory.com/31)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -120,7 +120,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 - 면접 템플릿은 네 단계로 입력하고 단계별로 검증하도록 만들었습니다. 작성 중인 값은 sessionStorage로 복원합니다. 앱마다 있던 Query key와 조회 함수는 공용 패키지로 모아 mutation 후 같은 기준으로 갱신하도록 했습니다.
 - 드래그 공통 컴포넌트를 공고 순서와 중첩 필터, 설정 테이블에 적용했습니다. Electron 앱은 공통 수집 단계와 사이트별 adapter로 나누는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다.
 
-[Query key 공통화](https://jingeon27.tistory.com/6) | [Electron 초기 구조](https://jingeon27.tistory.com/5)
+[Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유) | [Electron 초기 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준)
 
 ## 개인 프로젝트
 

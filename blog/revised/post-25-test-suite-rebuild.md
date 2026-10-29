@@ -154,9 +154,9 @@ await expect(page.getByRole('button', { name: '카카오로 계속하기' })).to
 
 리다이렉트 목적지와 실제 화면을 함께 확인해야, 가드나 화면이 깨졌을 때 테스트도 실패해요.
 
-한 앱에서 끝나지 않는 흐름은 두 앱을 잇는 E2E로 봤어요. 병원 관리자의 프로그램 등록 및 검수 요청과 Back-Office의 검수 화면은 처음 만들 때 테스트가 없었고, 테스트 체계를 들인 뒤에 등록부터 검수중 전환, 반려, 승인까지 이어지는 E2E를 추가했어요. 두 앱을 함께 띄우고 dev API 서버를 그대로 호출해요. 과정은 [AI 작업 흐름을 다룬 글](https://jingeon27.tistory.com/31)에 적었어요.
+한 앱에서 끝나지 않는 흐름은 두 앱을 잇는 E2E로 봤어요. 병원 관리자의 프로그램 등록 및 검수 요청과 Back-Office의 검수 화면은 처음 만들 때 테스트가 없었고, 테스트 체계를 들인 뒤에 등록부터 검수중 전환, 반려, 승인까지 이어지는 E2E를 추가했어요. 두 앱을 함께 띄우고 dev API 서버를 그대로 호출해요. 과정은 [AI 작업 흐름을 다룬 글](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)에 적었어요.
 
-실행 환경도 문제에 맞게 골랐어요. 복지몰 E2E는 기본적으로 Next 개발 서버를 띄워요. build 후 start로 실행하는 경로도 뒀지만, 쿠키를 읽는 정적 생성 라우트의 동시 요청 문제가 있어 기본값으로 두지 못했어요. Back-Office 검색 오류도 개발 서버에서는 나타나지 않아 build 후 start로 재현했어요([27번 글](https://jingeon27.tistory.com/27)).
+실행 환경도 문제에 맞게 골랐어요. 복지몰 E2E는 기본적으로 Next 개발 서버를 띄워요. build 후 start로 실행하는 경로도 뒀지만, 쿠키를 읽는 정적 생성 라우트의 동시 요청 문제가 있어 기본값으로 두지 못했어요. Back-Office 검색 오류도 개발 서버에서는 나타나지 않아 build 후 start로 재현했어요([27번 글](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)).
 
 ## 테스트에서는 핵심 행동이 보이도록 반복을 남겼어요
 
@@ -198,7 +198,7 @@ AI가 작성한 제품 코드와 테스트도 직접 읽어요. 테스트의 준
 
 자동으로 실행할 범위도 운영 환경에 맞춰 조정했어요. 관리자 서비스에 Vitest PR 검증을 붙였지만, CI 러너가 dev 환경과 한 인스턴스를 함께 써서 전 패키지의 MSW 테스트가 dev 환경까지 멈추게 했어요. 그래서 MSW 통합 테스트는 push 전 변경분 검증에서 실행하도록 바꿨어요.
 
-당시 관리자 서비스 CI에는 lint, 타입 검사, Knip과 MSW를 쓰지 않는 테스트를 뒀어요. dev API 서버 연동 테스트는 별도 단계로 실행하되, 서버 배포와 데이터 변경의 영향을 받아 PR을 막지는 않도록 했어요. 복지몰 CI는 lint, 타입 검사, Knip을 실행하고, 두 저장소의 E2E는 CI 밖에서 확인했어요. 실행 비용과 외부 환경 의존성에 맞춰 검증할 자리를 나눴고, 이후 바뀐 구성은 [현재 AI 개발 workflow](https://jingeon27.tistory.com/31)에서 이어 설명해요.
+당시 관리자 서비스 CI에는 lint, 타입 검사, Knip과 MSW를 쓰지 않는 테스트를 뒀어요. dev API 서버 연동 테스트는 별도 단계로 실행하되, 서버 배포와 데이터 변경의 영향을 받아 PR을 막지는 않도록 했어요. 복지몰 CI는 lint, 타입 검사, Knip을 실행하고, 두 저장소의 E2E는 CI 밖에서 확인했어요. 실행 비용과 외부 환경 의존성에 맞춰 검증할 자리를 나눴고, 이후 바뀐 구성은 [현재 AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)에서 이어 설명해요.
 
 기준은 지금도 바뀌고 있어요. 새 기능에 필요한 조건을 더하고, 놓친 오류는 회귀 테스트로 남기고, 코드가 바뀌면 테스트가 아직 그 코드를 보고 있는지도 같이 확인해요.
 
@@ -206,6 +206,6 @@ AI가 작성한 제품 코드와 테스트도 직접 읽어요. 테스트의 준
 
 - [MSW: `server.listen()`의 `onUnhandledRequest`](https://mswjs.io/docs/api/setup-server/listen)
 - [Playwright: Page assertions (`toHaveURL`)](https://playwright.dev/docs/api/class-pageassertions)
-- 관련 글: [Next.js에 맡기던 동작을 클라이언트로 옮기며 치른 비용](https://jingeon27.tistory.com/27)
-- 관련 글: [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/31)
-- 관련 글: [타입 단언을 걷어내다 다시 세운 실패 정책](https://jingeon27.tistory.com/32)
+- 관련 글: [Next.js에 맡기던 동작을 클라이언트로 옮기며 치른 비용](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
+- 관련 글: [AI 작업의 판단과 검증을 나눈 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
+- 관련 글: [타입 단언을 걷어내다 다시 세운 실패 정책](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)

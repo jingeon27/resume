@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 병역 · 산업기능요원 현역 복무 중(2025.08 –), 복무 1년 경과로 현역 전직 요건 충족
 
@@ -57,7 +57,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 
 임시 진료일도 세 제품이 함께 바뀌어야 했어요. 기존에는 임시 휴무만 있었는데, 병원이 쉬는 요일의 특정 날짜를 진료일로 여는 임시 진료일이 새로 생겼어요. 서버가 두 항목을 같은 배열에 `type`으로 구분해 보내게 됐지만 기존 예약 판정은 이 배열을 모두 휴무로 읽는 구조라, 그대로 두면 새로 연 날이 예약 불가로 보일 수 있었어요. 두 관리 화면에 임시 진료일 입력을 따로 두고, 복지몰의 예약 가능일 판정은 `type`으로 두 항목을 나누되 `type`이 없는 옛 데이터는 그대로 휴무로 읽게 맞췄어요. 9월 10일 배포 이후에는 세 제품이 임시 진료일을 똑같이 예약 가능일로 다뤄요.
 
-예약 폼에서는 React Query 캐시·Zustand·로컬 상태에 나뉘어 있던 가족·날짜 선택 상태를 React Hook Form·Zod로 모았어요. 가족을 추가한 뒤 날짜가 어긋나던 동작을 고쳤고, 예약 대상 선택 컴포넌트는 리팩터링 당시 519줄에서 55줄이 됐어요. [예약 폼 리팩터링](https://jingeon27.tistory.com/11)에 변경 과정을 적었어요.
+예약 폼에서는 React Query 캐시·Zustand·로컬 상태에 나뉘어 있던 가족·날짜 선택 상태를 React Hook Form·Zod로 모았어요. 가족을 추가한 뒤 날짜가 어긋나던 동작을 고쳤고, 예약 대상 선택 컴포넌트는 리팩터링 당시 519줄에서 55줄이 됐어요. [예약 폼 리팩터링](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)에 변경 과정을 적었어요.
 
 수기로 관리하던 정산을 내부 예약 데이터와 연결하는 화면의 초기 구현은 인수해서 다듬었어요. 긴 컴포넌트를 나누고 ref로 모달을 여는 방식을 정리하며 배포 전 운영 요구를 반영했어요. 가격 이력을 추가하자는 요청이 왔을 때는 정산 기준이 프로그램 가격인지 견적 금액인지 개발팀장과 먼저 확인했고, 기준이 견적 금액이라 필요하지 않은 이력 구조는 만들지 않았어요.
 
@@ -85,19 +85,19 @@ PM이 제안한 전화상담 실험에서는 플로팅 버튼을 하단 내비 �
 
 9월에는 세 저장소를 점검하며 게이트가 실제로 실패할 수 있는지도 확인했어요. 복지몰의 자체 lint 규칙은 테스트가 없었고, 레이어 루트 import나 동적 import 같은 경우를 놓치고 있었어요. 규칙을 고치고 테스트를 붙인 뒤, 그 테스트를 수정 전 규칙에 돌려 8건이 실패하는 것을 확인했어요. 자기 배럴 import 때문에 knip이 쓰이지 않는 export를 잡지 못하던 것도 규칙으로 막았어요. 글로벌 서비스는 테스트에서도 응답 스키마 위반을 경고로만 남겨 계약이 어긋나도 통과하고 있었어요. 운영 동작은 그대로 두고 테스트에서만 실패하게 바꾼 뒤, 목 데이터 한 칸을 일부러 틀리게 해 테스트가 실패하는 것을 확인했어요.
 
-이 흐름을 갖췄어도 놓친 일이 있어요. Bottom Sheet를 compound 구조로 한 번에 옮길 때 AI가 만든 Root에서는 헤더까지 스크롤 영역에 들어가 있었어요. 저도 diff를 읽었지만 긴 본문을 실제로 스크롤해 보지 않아 알아채지 못했고, 9월 라이브러리 업그레이드 때도 AI 리뷰와 좌표 테스트를 통과한 채 남았어요. 이후 본문만 스크롤되도록 고치고 브라우저 레이아웃 테스트를 추가했어요. [테스트 체계를 다시 만든 과정](https://jingeon27.tistory.com/25) · [선언적 코드에 관한 글](https://jingeon27.tistory.com/26)
+이 흐름을 갖췄어도 놓친 일이 있어요. Bottom Sheet를 compound 구조로 한 번에 옮길 때 AI가 만든 Root에서는 헤더까지 스크롤 영역에 들어가 있었어요. 저도 diff를 읽었지만 긴 본문을 실제로 스크롤해 보지 않아 알아채지 못했고, 9월 라이브러리 업그레이드 때도 AI 리뷰와 좌표 테스트를 통과한 채 남았어요. 이후 본문만 스크롤되도록 고치고 브라우저 레이아웃 테스트를 추가했어요. [테스트 체계를 다시 만든 과정](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) · [선언적 코드에 관한 글](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 #### 운영에서 드러난 문제를 끝까지 확인한 일
 
-복지몰에 Sentry를 client·server·edge별로 붙이고 release와 브라우저 소스맵을 연결했어요. 의료 서비스라 SDK 소스를 따라가 URL·헤더·본문과 breadcrumb에 민감 정보가 실리는 경로를 찾아 막았어요. 이슈에는 회원 ID만 남겨 영향 사용자 수를 볼 수 있게 했어요. Sentry에서 발견한 Bottom Sheet 드래그 크래시는 수정 배포 전까지 운영에서 57명 이상에게 75건 발생했어요. 라이브러리 소스에서 null ref를 읽는 경로를 찾아 그 경로가 없는 버전으로 올렸고, 9월 10일 배포 뒤 9월 28일 확인까지 같은 오류 그룹은 0건이었어요. [Sentry 도입](https://jingeon27.tistory.com/30) · [크래시 분석](https://jingeon27.tistory.com/33)
+복지몰에 Sentry를 client·server·edge별로 붙이고 release와 브라우저 소스맵을 연결했어요. 의료 서비스라 SDK 소스를 따라가 URL·헤더·본문과 breadcrumb에 민감 정보가 실리는 경로를 찾아 막았어요. 이슈에는 회원 ID만 남겨 영향 사용자 수를 볼 수 있게 했어요. Sentry에서 발견한 Bottom Sheet 드래그 크래시는 수정 배포 전까지 운영에서 57명 이상에게 75건 발생했어요. 라이브러리 소스에서 null ref를 읽는 경로를 찾아 그 경로가 없는 버전으로 올렸고, 9월 10일 배포 뒤 9월 28일 확인까지 같은 오류 그룹은 0건이었어요. [Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) · [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
-Next.js 16 전환 뒤에는 URL에 검색 조건이 붙은 관리자 목록에서 검색이 멈췄어요. 개발 서버와 jsdom 테스트는 통과했지만 프로덕션 빌드에서는 확인한 목록 7개 중 6개에서 재현됐어요. 업스트림 라우터 캐시 이슈를 확인하고, 서버가 조회 조건을 읽지 않는 화면에서는 같은 경로의 쿼리 변경을 History API로 처리하도록 바꿨어요. 8월 18일 History API로 옮긴 뒤 9월 28일까지 같은 증상의 재보고는 없었어요. [원인과 수정 과정](https://jingeon27.tistory.com/27)
+Next.js 16 전환 뒤에는 URL에 검색 조건이 붙은 관리자 목록에서 검색이 멈췄어요. 개발 서버와 jsdom 테스트는 통과했지만 프로덕션 빌드에서는 확인한 목록 7개 중 6개에서 재현됐어요. 업스트림 라우터 캐시 이슈를 확인하고, 서버가 조회 조건을 읽지 않는 화면에서는 같은 경로의 쿼리 변경을 History API로 처리하도록 바꿨어요. 8월 18일 History API로 옮긴 뒤 9월 28일까지 같은 증상의 재보고는 없었어요. [원인과 수정 과정](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 dev API 서버에서 회원 조회가 잠깐 늦어지자 로그아웃되는 것을 보고 실패 처리 조건을 확인했어요. 기존에는 5xx·타임아웃도 토큰 만료처럼 취급했어요. 401에서만 로그아웃하고 일시적인 실패는 새로고침으로 복구할 수 있는 에러 화면으로 보내도록 바꿨어요. 9월 23일 배포 뒤 9월 28일까지 관련 CS 문의는 없었고, 운영 Sentry에도 회원 조회 실패와 401 로그아웃은 0건이었어요.
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
-**역할** React·TypeScript로 ATS 'RoundHR'의 채용 관리 웹·채용 담당자용 웹·랜딩·후보자 수집 Electron 앱 개발 (팀원) · **협업** 프론트엔드·백엔드 팀, 디자이너 · **관련 글** [Electron 수집 앱 구조](https://jingeon27.tistory.com/5) · [query-key-factory 적용](https://jingeon27.tistory.com/6)
+**역할** React·TypeScript로 ATS 'RoundHR'의 채용 관리 웹·채용 담당자용 웹·랜딩·후보자 수집 Electron 앱 개발 (팀원) · **협업** 프론트엔드·백엔드 팀, 디자이너 · **관련 글** [Electron 수집 앱 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) · [query-key-factory 적용](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 제가 합류한 2024년에는 ATS 'RoundHR'의 시장성을 확인하며 기능을 늘리고 있었어요. pnpm·Turborepo 모노레포에서 채용 관리 웹의 설정 폼·자동화 규칙, 채용 담당자용 웹의 서류·면접 평가 화면과 온보딩 안내, 랜딩의 모바일 화면을 개발했어요. 면접 템플릿은 네 단계의 입력과 검증을 `useFunnel`로 나눠 중간에 나가도 이어 쓸 수 있게 했어요. React Query key는 `query-key-factory`로 정리했어요.
 

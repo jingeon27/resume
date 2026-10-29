@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -88,7 +88,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - **입력, 순서 변경 UX:** 지원코드는 영문, 숫자 6~20자만 받도록 Form 규칙으로 검증했습니다. 검사항목 노출순서는 숫자 입력에서 드래그로 바꾸고, 행의 드래그 가능 여부는 `onRow`로 전달하도록 정리했습니다. 예약 상세의 상태, 서류 확인 정렬과 예약금 문구도 함께 정비했습니다.
 - **조회 책임과 의존 경계:** 검진 구성 슬라이스의 순환 의존을 끊고 포함항목 모달이 자체 조회하도록 바꿨습니다. 조건부 조회는 `skipToken`으로 표현하고 UI의 직접 API 호출은 mutation 훅으로 옮겼습니다. 건강검진 식별자 집합은 `enum`에서 `as const`로 전환했습니다.
 
-관련 글: [건강검진 개발 과정](https://jingeon27.tistory.com/34)
+관련 글: [건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### SSR, Streaming과 클라이언트 조회
 
@@ -125,7 +125,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - Headless UI에서 Radix UI로 옮겨 Slot, `asChild` 조합과 접근성 primitive를 활용했습니다. 기존 props, 열림 상태, 이벤트를 새 API에 맞춰 바꾸는 비용이 있었고, ref와 이벤트 전달에 따른 포커스 동작도 확인했습니다. Bottom Sheet의 기반 라이브러리는 유지하고 조합 API를 변경했습니다.
 - WebView에서 동작하지 않던 `tel:` 상담 버튼은 기존 네이티브 브릿지의 외부 링크 열기로 연결했습니다. 외부 예약 사이트 이동에서는 뒤로 가기가 WebView 전체를 닫는 문제를 배포 전에 확인하고, 외부 사이트 열기와 웹 내부 뒤로 가기를 구분했습니다.
 
-관련 글: [예약 폼 리팩터링](https://jingeon27.tistory.com/11) | [공통 UI와 추상화 기준](https://jingeon27.tistory.com/26)
+관련 글: [예약 폼 리팩터링](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정) | [공통 UI와 추상화 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 #### 정산 관리 리팩터링
 
@@ -177,7 +177,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - **규칙의 자동 강제:** 경계 관련 규칙(라우트 조회 금지, 경계 중복, 조회 래퍼 훅)은 ESLint로 검사하고 위반이 0건이 된 규칙부터 error로 올려 PR 게이트에서 차단했습니다.
 - **외부 문서 장애의 영향 범위:** 10월에는 동의서의 Notion 조회가 실패하면 고객명과 병원명, 동의 내역까지 오류 화면으로 바뀌는 문제를 고쳤습니다. 문서 영역에 별도 오류 경계를 두고 재시도하도록 했습니다. 실패 응답에서도 동의 내역이 남는지 테스트했습니다.
 
-관련 글: [에러 처리 개편](https://jingeon27.tistory.com/28)
+관련 글: [에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
 
 #### Sentry 도입과 운영 오류 추적
 
@@ -193,7 +193,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - **수정 후 확인:** Bottom Sheet 오류 그룹은 조사 시점 23건, 17명, 수정 배포 전까지 누적 75건, 57명 이상이었습니다. 9월 10일 배포 뒤 28일까지 18일 동안 같은 그룹은 0건으로 확인했습니다.
 - **불필요한 요청 발견:** 메인 화면의 pageload 워터폴을 보다가 배너 링크가 뷰포트에 들어오기만 해도 여러 경로를 prefetch하는 것을 찾았습니다. 해당 링크의 prefetch를 끄고 요청이 사라지는 것을 확인했습니다. 이 변경의 Web Vitals 개선폭은 따로 측정하지 않았습니다.
 
-관련 글: [Sentry 도입 과정](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33)
+관련 글: [Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트 도입
 
@@ -233,7 +233,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - **자동화의 적용 경계:** 생성형으로 관리하던 채팅 도메인은 한때 lint와 테스트 대상에서 분리하고 typecheck는 유지했습니다. 10월에는 제외 지정을 걷어내 검사 대상으로 되돌리고 회귀 테스트를 보완했습니다.
 - **기존 위반 정리:** 슬라이스 Public API 규칙은 위반 271건에서 warn으로 시작해 271 → 44 → 17 → 0건으로 정리한 뒤 error로 올렸습니다. 마지막 17건은 배럴이 없던 한 슬라이스에 모여 있어 공개 배럴을 추가했습니다. 서브도메인을 예외로 허용하면 다른 저장소의 공개 경로 기준과 달라지기 때문입니다. 기존 위반이 남은 규칙은 바로 CI 차단 항목으로 만들지 않습니다.
 
-관련 글: [AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+관련 글: [AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### 사용자 행동 측정과 실험 참여
 
@@ -347,7 +347,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - 관리자 목록은 서버 렌더에서 검색 조건을 읽지 않고 클라이언트 View가 URL과 TanStack Query로 조회하고 있었습니다. 같은 경로의 검색, 상세 쿼리는 뒤로가기 의미에 따라 `window.history.replaceState`와 `pushState`로 처리해 불필요한 RSC 내비게이션을 피했습니다. 검색과 history 동작은 테스트로 고정하고, 해당 화면은 프로덕션 빌드에서도 확인했습니다.
 - **적용 범위:** History API는 서버 렌더가 조회 조건을 읽지 않는 화면의 같은 pathname 쿼리 변경에 사용합니다. 해당 화면은 업스트림 수정 뒤에도 유지할 기준입니다. 수정 버전에서 별도의 Turbopack 청크 CORS 회귀가 발생해 업그레이드를 멈추고, 안정 버전과 두 도메인의 프로덕션 smoke test를 별도 확인 조건으로 뒀습니다. 8월 13일 검색 핫픽스와 18일 History API 전환 뒤 9월 28일까지 같은 검색 오류의 재보고는 없었습니다.
 
-관련 글: [Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27)
+관련 글: [Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### Tailwind CSS v4 전환 판단
 
@@ -397,7 +397,7 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 - **채용 사이트 지원자 데이터 수집 앱:** 외부 채용 사이트에 로그인해 지원자 데이터를 가져오고 RoundHR에 업로드하는 Electron 앱을 개발했습니다. 로그인 → 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 초기 구조를 만들었습니다. NestJS 도입 뒤 Electron main 프로세스에는 무겁다는 CTO 피드백을 받아 닷새 만에 제거했습니다. 모듈 구분과 생성자 주입은 참고하고, factory에서 직접 조립하도록 바꿨습니다. 잡플래닛의 암호화 ZIP, 게임잡의 2차 인증, 지원자 정보 추출 등을 연동했고, 지원자 한 명의 오류가 전체 수집을 멈추지 않게 했습니다. 이후 동료가 코드를 상당 부분 다시 작성했고, 제 담당 범위는 초기 구조 설계와 사이트 연동입니다.
 - **수집 앱 오류 추적:** 기존 Electron Sentry 수집 흐름에서 서버 오류는 `error`, 인증, 조회 실패는 `info`, 그 밖의 API 오류는 `warning`으로 나눠 운영 중 확인할 오류의 우선순위를 구분했습니다.
 
-관련 글: [Electron 수집 앱의 구조 변경](https://jingeon27.tistory.com/5) | [query-key-factory 적용](https://jingeon27.tistory.com/6) | [toss/slash `useFunnel` 타입 수정 PR](https://github.com/toss/slash/pull/363)
+관련 글: [Electron 수집 앱의 구조 변경](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [query-key-factory 적용](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유) | [toss/slash `useFunnel` 타입 수정 PR](https://github.com/toss/slash/pull/363)
 
 ---
 
@@ -405,12 +405,12 @@ AI가 구현한 코드와 테스트를 직접 검토합니다. 테스트에서�
 
 작업하면서 선택한 방법과 비용, 놓쳤다가 다시 고친 부분을 글로 남깁니다.
 
-- [설계와 추상화 기준](https://jingeon27.tistory.com/26): 공통 UI의 조합 가능성과 기능, 화면의 구체적인 책임을 나누는 기준.
-- [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25): 기능 명세, 회귀 테스트 구분, 실제 폼 제출, API 계약, E2E 검증 기준을 보완한 과정.
-- [타입 단언을 걷어내다 다시 세운 기준](https://jingeon27.tistory.com/32): 폴백 제거로 발생한 회귀를 통해 타입 정리와 런타임 실패 정책을 구분한 과정.
-- [AI 작업의 판단과 검증을 나눈 과정](https://jingeon27.tistory.com/31): plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬, CI 검증 범위를 정한 이유.
-- [건강검진 개발 과정](https://jingeon27.tistory.com/34): 기존 비급여와 다른 검진 관리, 예약, 결제 흐름을 세 제품에 추가한 과정.
-- [Sentry 도입 과정](https://jingeon27.tistory.com/30) | [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33): 오류 수집 기준을 만들고 라이브러리 내부까지 원인을 추적한 사례.
+- [설계와 추상화 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준): 공통 UI의 조합 가능성과 기능, 화면의 구체적인 책임을 나누는 기준.
+- [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준): 기능 명세, 회귀 테스트 구분, 실제 폼 제출, API 계약, E2E 검증 기준을 보완한 과정.
+- [타입 단언을 걷어내다 다시 세운 기준](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준): 폴백 제거로 발생한 회귀를 통해 타입 정리와 런타임 실패 정책을 구분한 과정.
+- [AI 작업의 판단과 검증을 나눈 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요): plan 승인, 병렬 worktree, 에이전트 리뷰와 로컬, CI 검증 범위를 정한 이유.
+- [건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준): 기존 비급여와 다른 검진 관리, 예약, 결제 흐름을 세 제품에 추가한 과정.
+- [Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지): 오류 수집 기준을 만들고 라이브러리 내부까지 원인을 추적한 사례.
 
 ---
 

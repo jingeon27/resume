@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 **병역** · 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -55,7 +55,7 @@ AI 개발 workflow를 개선하며 반복되는 검토 기준은 skills와 lint 
 - **부분 저장·결제 실패:** 일괄 등록 후 서버 목록을 다시 받아 저장된 항목의 ID를 폼에 반영하고 중복 등록을 막았습니다. 결제 입력은 Zustand persist 대신 `orderId`와 함께 `sessionStorage`에 저장해, 같은 주문이며 Zod 검증을 통과한 값만 한 번 복원합니다. 결제창에서 실패로 돌아올 때의 입력 복원과 승인 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다.
 - 검진 구성 수정이 거절됐을 때, 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값도 dev API 서버에서 확인하며 맞췄습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 모바일 리뷰 작성 개선 | 2025.06 – 2026.09
 
@@ -99,13 +99,13 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - 관리자 검색 오류는 localhost의 `dev`에서는 나타나지 않아 `build` 후 `start`로 재현했습니다. 목록 7개 중 6개에서 확인하고 라우터 캐시 이슈까지 추적했습니다. 서버가 검색 조건을 읽지 않는 화면이므로 같은 경로의 조건 변경은 History API로 처리해 불필요한 RSC 재요청도 줄였습니다. 수정 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.
 - `cacheComponents` 적용 뒤 이전 입력이 남는 폼은 `<Activity>`의 화면 유지 동작을 확인해, 숨겨질 때도 실행되는 effect cleanup에서 초기화하도록 고쳤습니다. 리뷰 정렬·사진 필터의 URL·로컬 상태 중복도 정리했습니다.
 
-[Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27)
+[Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 예약 폼의 상태 관리 개선 | 2025.06
 
 예약 화면의 가족·날짜 값이 Query 캐시·Zustand·로컬 상태에 나뉘어 있어, 날짜를 고른 뒤 가족을 추가하면 선택한 일시가 어긋났습니다. 서버 목록은 Query, 작성 중인 값은 React Hook Form, 제출 전 검증은 Zod로 역할을 나누고, 가족 목록이 바뀌면 폼의 예약 대상과 일시를 함께 맞추도록 했습니다. 동기화 로직을 훅과 하위 컴포넌트로 분리해 519줄이던 예약 대상 선택 컴포넌트를 55줄로 줄였습니다.
 
-[예약 폼 리팩터링](https://jingeon27.tistory.com/11)
+[예약 폼 리팩터링](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
 
 #### 관리자 서비스의 검색·폼·화면 구조 표준화 | 2026.04 – 현재
 
@@ -116,13 +116,13 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - Zod 실패는 출처별로 처리합니다. 기존 API 응답은 불일치를 Sentry로 트래킹하고 원본을 통과시키며 스키마를 맞춥니다. URL은 잘못된 필드만 기본값으로 되돌리고, 결제 복원값은 검증에 실패하면 버립니다. 운영에서만 나온 null 응답도 추적해 스키마를 고쳤습니다.
 - 독립적으로 복구할 수 있는 기능마다 Error Boundary를 적용했습니다. 백오피스 라우트 30개의 조회·화면 구성을 같은 패턴으로 맞추고 재시도를 테스트했습니다. API·렌더링 오류와 Zod 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.
 
-[공통화 기준](https://jingeon27.tistory.com/26) · [Zod 검증 경계](https://jingeon27.tistory.com/32)
+[공통화 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) · [Zod 검증 경계](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)
 
 #### 복지몰·관리자 서비스의 FSD 구조 정리 | 2026.09
 
 여러 기능에서 재사용할 것 같다는 이유로 `entities`에 코드를 두다 보니 `features`와의 구분이 모호했습니다. 서버 모델·API와 연결된 코드는 `features`, 화면별 조합은 `pages`, 도메인과 무관한 공용 UI는 `shared`로 기준을 다시 정했습니다. 복지몰에서 화면끼리 직접 참조하던 62건을 정리하고 새 위반은 lint error로 막았습니다. 파일을 옮기는 작업과 함께 의존 방향을 검사해 같은 구조가 다시 생기지 않도록 했습니다.
 
-[FSD 구조 변경](https://jingeon27.tistory.com/23)
+[FSD 구조 변경](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)
 
 #### 정산 관리 리팩터링 | 2026.04 – 현재
 
@@ -140,7 +140,7 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적했습니다. 버전업으로 바뀐 snap point 규칙은 공통 Root에서 변환했습니다. 수정 전 누적 75건·57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.
 - 회원 조회 실패 시 무조건 로그아웃하던 코드는 401일 때만 끊도록 바꿨습니다. 9월 23일 배포 뒤 28일까지 관련 CS·Sentry 이슈가 없었습니다.
 
-[Sentry 도입 과정](https://jingeon27.tistory.com/30) · [Bottom Sheet 크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) · [Bottom Sheet 크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트 도입 | 2026.07 – 현재
 
@@ -151,7 +151,7 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - 9월에는 병원 관리자 등록 → 백오피스 검수중·반려·승인을 두 앱에 걸쳐 확인하는 E2E를 추가했습니다. 기대한 최종 상태를 구현 완료의 검증 조건으로 사용합니다.
 - MSW를 쓰지 않는 테스트는 PR의 CI에, MSW 통합 테스트는 push 전 변경분 검사에 연결했습니다. 서버 상태 준비가 필요한 계약 테스트는 PR 비차단으로 따로 실행하고, E2E는 CI 밖에서 실행합니다.
 
-[테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+[테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### AI 개발 workflow | 2026.04 – 현재
 
@@ -166,7 +166,7 @@ SEO는 다른 서비스와 비교해 메타데이터와 JSON-LD를 설계했습�
 - 반복되는 판단은 skills·lint rule에 남기고 미사용 코드는 Knip으로 확인합니다. 슬라이스 내부 파일을 직접 참조하던 위반 271건을 정리해 lint error로 막았습니다. lint rule은 RuleTester·`__fixture__`·mock으로 검증합니다.
 - 병렬 worktree의 CPU 부하를 줄이려고 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행합니다. 전체 검사는 CI에서 확인합니다.
 
-[AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+[AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### UI 기술 선택과 전환 | 2025.10 – 현재
 
@@ -196,7 +196,7 @@ NestJS는 Electron main 프로세스에 무겁다는 CTO 피드백을 받아 닷
 
 기존 Sentry 수집 흐름에는 서버 오류·인증 실패·기타 API 오류의 레벨을 나눴습니다.
 
-[Electron 수집 앱의 구조 변경](https://jingeon27.tistory.com/5) · [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 수집 앱의 구조 변경](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) · [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 기술
 

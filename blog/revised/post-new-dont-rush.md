@@ -42,6 +42,6 @@
 
 ## 참고
 
-- [예약 폼의 작성 상태를 옮긴 과정](https://jingeon27.tistory.com/11)
-- [리뷰 작성 폼을 단계별로 나눈 과정](https://jingeon27.tistory.com/15)
-- [AI 개발 작업 흐름을 바꾼 과정](https://jingeon27.tistory.com/31)
+- [예약 폼의 작성 상태를 옮긴 과정](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 폼을 단계별로 나눈 과정](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
+- [AI 개발 작업 흐름을 바꾼 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)

@@ -115,7 +115,7 @@ dev 데이터 기준으로 114개 주소가 올라갔고, 첫 생성에 15초쯤
 
 키워드 검색은 서버가 목록을 미리 받아 두고 있었어요. 그런데 제가 작성한 라우트와 화면 훅이 서로 다른 스키마로 URL을 읽고 있었어요. 라우트 쪽은 주소에 없는 혜택 키를 `false`로 채우고, 화면 쪽은 비워 뒀어요. 그 값이 queryKey에 들어가 키가 갈리니, 화면이 서버 캐시를 찾지 못하고 다시 조회했어요. 사이트맵의 검색 주소 678개가 그 상태였어요. 같은 스키마로 조회 조건을 만들도록 맞추고, prefetch 분기를 별도 함수로 분리해 테스트했어요.
 
-진료과 검색은 더 단순했어요. 라우트가 진료과 목록만 미리 받고 병원 목록은 클라이언트에서만 받고 있었어요. 화면 훅이 쓰는 조회 조건을 함수로 떼어 서버 prefetch와 같이 쓰게 했어요. 훅은 위치 스토어의 좌표를 queryKey에 싣는데 서버는 그 스토어를 모르니, 스토어의 초기 좌표를 상수로 빼서 양쪽이 같이 써요. 봇처럼 페이지를 새로 여는 요청은 스토어도 그 초기값이라 키가 맞아요. prefetch가 왜 끝날 때까지 기다려야 하는지는 [14번 글](https://jingeon27.tistory.com/14)에 따로 정리했어요.
+진료과 검색은 더 단순했어요. 라우트가 진료과 목록만 미리 받고 병원 목록은 클라이언트에서만 받고 있었어요. 화면 훅이 쓰는 조회 조건을 함수로 떼어 서버 prefetch와 같이 쓰게 했어요. 훅은 위치 스토어의 좌표를 queryKey에 싣는데 서버는 그 스토어를 모르니, 스토어의 초기 좌표를 상수로 빼서 양쪽이 같이 써요. 봇처럼 페이지를 새로 여는 요청은 스토어도 그 초기값이라 키가 맞아요. prefetch가 왜 끝날 때까지 기다려야 하는지는 [14번 글](https://blog.bambyul.com/ko/blog/nextjs-app-router에서-prefetch를-기다려야-하는-경우)에 따로 정리했어요.
 
 이 회귀는 화면으로는 다시 못 잡으니 E2E로 고정했어요. dev 서버 사이트맵에서 시술, 병원, 진료과 검색 주소를 골라 `OAI-SearchBot` UA로 요청하고, `<script>`를 걷어낸 HTML에 카드 링크와 canonical이 있는지 봐요.
 
@@ -162,5 +162,5 @@ export const HTML_LIMITED_BOTS = new RegExp(`${HTML_LIMITED_BOT_UA_RE.source}|${
 - [Google Search Central: 크롤링 가능한 링크](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)
 - [Google Search Central: 페이지를 설명하는 제목 작성](https://developers.google.com/search/docs/appearance/title-link)
 - [Google Search Central: 리뷰 스니펫과 AggregateRating](https://developers.google.com/search/docs/appearance/structured-data/review-snippet)
-- [Next.js App Router에서 prefetch를 기다려야 하는 경우](https://jingeon27.tistory.com/14)
-- [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://jingeon27.tistory.com/21)
+- [Next.js App Router에서 prefetch를 기다려야 하는 경우](https://blog.bambyul.com/ko/blog/nextjs-app-router에서-prefetch를-기다려야-하는-경우)
+- [동적 사이트맵에서 공개 API와 인증 API의 경계를 나눈 과정](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)

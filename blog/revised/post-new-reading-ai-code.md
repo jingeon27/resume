@@ -62,7 +62,7 @@
 
 복지몰의 Bottom Sheet를 compound 구조로 바꿀 때는 AI가 만든 코드와 기존 검토 과정을 믿고 작업을 마쳤어요. 하지만 헤더가 본문과 같은 스크롤 영역에 들어가 있어서, 본문을 스크롤하면 제목도 함께 올라갔어요. 이후 드래그 크래시를 해결하려고 라이브러리를 업그레이드하면서도 이 구조를 그대로 옮겼어요. diff를 읽고 시트 높이와 스냅 위치까지 확인했지만, 스크롤할 때 제목이 고정되는지는 놓쳤어요.
 
-코드를 읽었는데도 화면의 잘못된 동작을 놓친 경험이었어요. 그 뒤로는 스크롤이나 드래그처럼 실제 화면에서 확인해야 하는 동작도 따로 챙기고, 같은 문제가 다시 생기면 알 수 있도록 브라우저 테스트를 남겨요. [자세한 수정 과정은 별도 글에 적었어요.](https://jingeon27.tistory.com/33)
+코드를 읽었는데도 화면의 잘못된 동작을 놓친 경험이었어요. 그 뒤로는 스크롤이나 드래그처럼 실제 화면에서 확인해야 하는 동작도 따로 챙기고, 같은 문제가 다시 생기면 알 수 있도록 브라우저 테스트를 남겨요. [자세한 수정 과정은 별도 글에 적었어요.](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 ## 화면을 눌러 보기 전에 코드에서 찾는 문제
 
@@ -134,6 +134,6 @@ AI 덕분에 쉬워진 건 새 기능 구현만이 아니에요. 폴더 구조�
 ## 참고
 
 - [Every: Compound Engineering](https://every.to/guides/compound-engineering)
-- 관련 글: [AI에 구현을 맡기며 다듬은 개발 workflow](https://jingeon27.tistory.com/31)
-- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
-- 관련 글: [Bottom Sheet 드래그 크래시를 고치며 놓친 것](https://jingeon27.tistory.com/33)
+- 관련 글: [AI에 구현을 맡기며 다듬은 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- 관련 글: [Bottom Sheet 드래그 크래시를 고치며 놓친 것](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)

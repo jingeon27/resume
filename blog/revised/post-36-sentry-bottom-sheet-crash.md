@@ -160,4 +160,4 @@ it('두 번째로 높은 스냅에서 시작하면 그 자리를 가리켜야 �
 - [react-modal-sheet #188: 닫기 버튼 위에서 끝나는 드래그에서 `getBoundingClientRect` of null](https://github.com/Temzasse/react-modal-sheet/issues/188)
 - [react-modal-sheet v5.0.0 릴리스](https://github.com/Temzasse/react-modal-sheet/releases/tag/v5.0.0): README의 v4 → v5 마이그레이션 안내 포함
 - [framer/motion](https://github.com/framer/motion): 드래그 종료 콜백을 다음 프레임 post-render에 예약하는 `VisualElementDragControls`
-- 관련 글: [Sentry를 붙이면서 정한 에러 레벨과 PII 정화 기준](https://jingeon27.tistory.com/30)
+- 관련 글: [Sentry를 붙이면서 정한 에러 레벨과 PII 정화 기준](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)

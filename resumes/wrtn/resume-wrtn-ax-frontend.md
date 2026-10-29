@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -131,11 +131,11 @@
 
 구현 결과뿐 아니라 문제를 정의한 과정, 선택한 구조의 근거와 남은 한계까지 기록합니다.
 
-- **Monitoring** · [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://jingeon27.tistory.com/30)
-- **Testing** · [테스트 도입](https://jingeon27.tistory.com/25)
-- **AI-native Workflow** · [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
-- **Reliability** · [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
-- **Declarative Design** · [선언적 코드는 변경을 작게 만든다 — 내가 React 코드를 구조화하는 기준](https://jingeon27.tistory.com/26)
+- **Monitoring** · [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)
+- **Testing** · [테스트 도입](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- **AI-native Workflow** · [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
+- **Reliability** · [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
+- **Declarative Design** · [선언적 코드는 변경을 작게 만든다 — 내가 React 코드를 구조화하는 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 ---
 

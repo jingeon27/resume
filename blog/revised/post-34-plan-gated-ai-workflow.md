@@ -150,7 +150,7 @@ Figma 작업은 에이전트가 `claude-in-chrome` MCP나 Chrome CDP 스크립�
 
 여러 PR을 모아 배포할 때는 합쳐진 diff 전체를 다시 봐요. 배포 PR을 따로 만드는 흐름에서는 이 검토를 거치고, PR 병합과 배포를 한 번에 맡기는 흐름에서는 별도 검토가 생략돼요. PR 하나만 볼 때는 자연스러웠던 코드도 함께 놓으면 중복된 추상화나 어긋난 이름, 갈라진 FSD 경계가 보여서 전체 규칙에 맞게 다시 리팩터링했어요.
 
-배포 뒤에도 마음에 걸리는 패턴이 있으면 그 파일만 고치지 않고 프로젝트 전체에서 찾아 skill이나 lint, 공용 구현을 바꾸기도 했어요. 복지몰에서 `entities`를 없애고 page 간 직접 참조를 막는 규칙(정리 전 62건에서 0건)까지 넣은 작업도 여기서 시작됐는데요. 이 개편은 develop에 반영됐고, 과정은 [FSD 레이어를 다시 나눈 글](https://jingeon27.tistory.com/23)에 적었어요.
+배포 뒤에도 마음에 걸리는 패턴이 있으면 그 파일만 고치지 않고 프로젝트 전체에서 찾아 skill이나 lint, 공용 구현을 바꾸기도 했어요. 복지몰에서 `entities`를 없애고 page 간 직접 참조를 막는 규칙(정리 전 62건에서 0건)까지 넣은 작업도 여기서 시작됐는데요. 이 개편은 develop에 반영됐고, 과정은 [FSD 레이어를 다시 나눈 글](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)에 적었어요.
 
 <div class="note note-decision">
   <strong>최종 결정</strong>
@@ -160,5 +160,5 @@ Figma 작업은 에이전트가 `claude-in-chrome` MCP나 Chrome CDP 스크립�
 ## 참고
 
 - [Compound Engineering](https://every.to/guides/compound-engineering): every.to 원문
-- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
-- 관련 글: [FSD 레이어를 저장소에 맞게 다시 나눈 과정](https://jingeon27.tistory.com/23)
+- 관련 글: [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- 관련 글: [FSD 레이어를 저장소에 맞게 다시 나눈 과정](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)

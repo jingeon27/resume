@@ -280,5 +280,5 @@ typed API는 필드명과 값의 타입을 검사해요. 빈 섹션을 제외하
 
 - [Ant Design 5 Form: 필드와 폼 인스턴스 API](https://5x.ant.design/components/form/)
 - [TypeScript Conditional Types: 조건부 타입과 infer](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html)
-- [선언적인 코드 작성에 대한 기록](https://jingeon27.tistory.com/26)
-- [테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+- [선언적인 코드 작성에 대한 기록](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
+- [테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)

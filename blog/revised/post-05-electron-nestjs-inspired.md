@@ -155,4 +155,4 @@ Puppeteer 의존성은 생성자로 받게 바꿔서 대체 객체를 넣을 수
 - [NestJS: Modules](https://docs.nestjs.com/modules)
 - [Electron: Inter-Process Communication](https://www.electronjs.org/docs/latest/tutorial/ipc): `ipcMain.handle`로 요청을 받는 패턴
 - [TypeScript Handbook: abstract Classes and Members](https://www.typescriptlang.org/docs/handbook/2/classes.html#abstract-classes-and-members)
-- 관련 글: [Puppeteer에서 요청과 응답을 함께 기다릴 때 놓쳤던 것](https://jingeon27.tistory.com/4): 같은 수집 앱에서 비밀번호가 걸린 파일을 받을 때 겪은 문제
+- 관련 글: [Puppeteer에서 요청과 응답을 함께 기다릴 때 놓쳤던 것](https://blog.bambyul.com/ko/blog/puppeteer의-request와-response를-함께-기다리기-closure보다-중요했던-수명-관리): 같은 수집 앱에서 비밀번호가 걸린 파일을 받을 때 겪은 문제

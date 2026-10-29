@@ -197,5 +197,5 @@ v5에서 같은 구조를 새로 만든다면 `queryOptions`도 대안이에요.
 - [TanStack Query: Query Invalidation](https://tanstack.com/query/latest/docs/framework/react/guides/query-invalidation): 앞부분이 일치하는 쿼리를 함께 무효화하는 기본 동작
 - [TanStack Query: Query Options](https://tanstack.com/query/latest/docs/framework/react/guides/query-options): v5에서 query key, 조회 함수, 옵션을 함께 정의하는 대안
 - [TanStack Query: Migrating to TanStack Query v5](https://tanstack.com/query/latest/docs/framework/react/guides/migrating-to-v5): 위치 인자 overload 제거, 객체 형식으로 통일
-- 관련 글: [같은 회사에서 Electron 수집 앱의 구조를 나눈 과정](https://jingeon27.tistory.com/5)
-- 관련 글: [Next.js App Router에서 서버와 브라우저의 QueryClient를 나눈 이유](https://jingeon27.tistory.com/8) (다음 회사에서 v5 `queryOptions`로 query key와 `queryFn`을 묶어 쓴 절이 있어요)
+- 관련 글: [같은 회사에서 Electron 수집 앱의 구조를 나눈 과정](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준)
+- 관련 글: [Next.js App Router에서 서버와 브라우저의 QueryClient를 나눈 이유](https://blog.bambyul.com/ko/blog/nextjs-app-router에서-tanstack-query를-ssr과-함께-쓰는-방법) (다음 회사에서 v5 `queryOptions`로 query key와 `queryFn`을 묶어 쓴 절이 있어요)

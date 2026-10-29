@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 (2025.08 – 2028.06)
 
@@ -44,7 +44,7 @@
 - 전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 약 1,100파일 규모를 6-layer FSD로 통일했고, CMS·병원 CRM 모노레포는 공유 도메인을 entities/features 패키지로 새로 정의하고(이 시점 13개), 기능별 shared 5개를 FSD에 맞게 하나로 통합해 9개로 정리했습니다. 레이어 경계는 의존성 없는 자체 ESLint 플러그인(flat config)으로 강제해 위반이 lint에서 잡힙니다.
 - FSD의 도메인 중심 분리를 그대로 따르기보다, 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고 page마다 달라지는 특이 UI는 page에서 조립합니다. 도메인이 아니라 두 번째 사용처(재사용)가 분리 신호이고, page는 로직 없이 연결만 하는 얇은 adapter로 둡니다.
 - `.claude` 스킬·커맨드를 직접 작성해 반복 작업을 줄이고, AI 생성 코드는 컨벤션으로 검증합니다.
-- 정산은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://jingeon27.tistory.com/19))
+- 정산은 첫 구현이던 URL 토큰 전달의 노출 위험을 짚어 form POST BFF로 다시 설계했습니다. ([글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
 

@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -70,7 +70,7 @@
 - 합류 시점의 B2C 웹은 6-layer FSD 골격은 있었지만 `@legacy`에 250개 파일이 남아 있었고, 남은 250개를 **26일 만에 0개로** 옮겼습니다(2025.05–06). 이후 레이어별 책임을 가이드 문서로 정의하고 역방향 의존은 직접 만든 ESLint 플러그인으로 막아, 그 규칙 위에서 코드베이스가 세 배 가까이 늘었습니다.
 - 운영 중인 B2C 웹을 Next.js 14→16, Node 24, Turbopack으로 단계적으로 옮기며 호환 문제를 해결했고, TypeScript 네이티브 체커를 병행해 로컬 타입 검사를 **12.5초에서 1.9초로** 줄였습니다.
 - 테스트는 순수 함수·스키마 → API 계약 → UI 통합 → 브라우저 E2E로 나눴습니다. E2E를 처음 붙였을 때 10개 시나리오의 콜드 실행이 3.5분씩 걸리고 간헐 실패해서, 원인을 잘못된 내비게이션 대기 조건과 반복 삽입되는 프로모션 오버레이로 분리해 20초·3회 연속 flaky 0으로 안정화한 뒤 CI에 올렸습니다.
-- 정산 서비스는 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, form POST BFF로 바꾸면서 CSP `form-action` 고정과 open redirect 방어, 회귀 테스트를 적용했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- 정산 서비스는 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, form POST BFF로 바꾸면서 CSP `form-action` 고정과 open redirect 방어, 회귀 테스트를 적용했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -97,10 +97,10 @@ toss/slash `useFunnel`의 `NonEmptyArray` 타입 오류를 수정한 PR이 머�
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
-- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
 
 ---
 

@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -58,7 +58,7 @@ Sentry와 Amplitude에는 확인용 이벤트를 보낸 뒤 MCP로 다시 조회
 
 기능 개발과 리팩터링에서는 변경된 제품 코드와 테스트를 읽습니다. 맥락이 필요한 기준은 skills에 남기고 자동 검사할 수 있는 항목은 lint rule로 만듭니다. 규칙은 RuleTester와 fixture로 검증하고 미사용 코드는 Knip으로 찾습니다.
 
-[AI 개발 workflow](https://jingeon27.tistory.com/31) | [테스트 도입 기준](https://jingeon27.tistory.com/25)
+[AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요) | [테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### 건강검진 내재화 | 2026.09 – 현재
 
@@ -67,7 +67,7 @@ Sentry와 Amplitude에는 확인용 이벤트를 보낸 뒤 MCP로 다시 조회
 - 정해진 수의 검사를 고르면 다음 그룹을 자동으로 열자는 요청에, 기존 선택을 수정할 때도 화면이 넘어간다는 문제를 짚었습니다. 담당자와 논의해 선택 수를 채운 그룹의 미선택 chip만 비활성화했고, 필요한 디자인도 요청해 반영했습니다.
 - 모바일 결제창에서 돌아오면 주문 ID가 일치하고 Zod 검증을 통과한 입력값만 한 번 복원합니다. 결제 실패 후 입력 복원과 승인 요청 실패 시 예약 목록 이동은 dev API 서버에 연결한 E2E로 확인했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 글로벌 서비스와 CMS | 2026.07 – 09
 
@@ -75,7 +75,7 @@ PO가 전달한 프로토타입의 모든 화면을 구현해 글로벌 사용�
 
 파일 전송은 React 밖 스토어에서 관리하고 `useSyncExternalStore`로 상태를 구독합니다. 동시에 전송 중인 파일 크기의 합을 2GB로 제한하고 FIFO로 처리합니다. 클라이언트 번들에 들어가던 목 백엔드 코드를 분리해 앱 번들을 2,564KB에서 1,880KB로 줄였습니다.
 
-[글로벌 서비스 개발 과정](https://jingeon27.tistory.com/24)
+[글로벌 서비스 개발 과정](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 #### 구조 개선과 운영 대응 | 2025.05 – 현재
 

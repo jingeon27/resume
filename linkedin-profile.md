@@ -35,7 +35,7 @@ Frontend Engineer · 만든 것을 계측과 모니터링으로 확인하는 개
 타입 검사 12.5초 → 1.9초, E2E 콜드 실행 3.5분 → 20초. 글로벌 서비스와 운영 CMS를 3주 만에 출시했습니다.
 
 과정과 판단 근거를 기술 블로그에 기록합니다.
-https://jingeon27.tistory.com
+https://blog.bambyul.com/ko/blog
 ```
 
 ---
@@ -69,9 +69,9 @@ https://jingeon27.tistory.com
 
 ## Featured (추천 고정)
 
-1. [Sentry 도입기 — 에러 수집과 Web Vitals·MCP·릴리스까지](https://jingeon27.tistory.com/30)
-2. [Compound Engineering으로 코드 검토 범위를 줄여 온 과정](https://jingeon27.tistory.com/31)
-3. [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
+1. [Sentry 도입기 — 에러 수집과 Web Vitals·MCP·릴리스까지](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)
+2. [Compound Engineering으로 코드 검토 범위를 줄여 온 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
+3. [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
 4. [toss/slash 기여 PR](https://github.com/toss/slash/pull/363)
 
 ---

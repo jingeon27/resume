@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 **지원 포지션** · Software Engineer (Frontend Platform)  
 **병역사항** · 현역 산업기능요원 복무 중
@@ -113,11 +113,11 @@
 
 ## Technical Writing
 
-- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
-- [테스트를 전부 지운 뒤 다시 만든 기준](https://jingeon27.tistory.com/25)
-- [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
-- [서로 다른 두 SSE를 하나의 상담 화면에 연결한 과정](https://jingeon27.tistory.com/20)
-- [선언적 코드는 변경을 작게 만든다](https://jingeon27.tistory.com/26)
+- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
+- [테스트를 전부 지운 뒤 다시 만든 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
+- [서로 다른 두 SSE를 하나의 상담 화면에 연결한 과정](https://blog.bambyul.com/ko/blog/우리-백엔드가-못-건드리는-영역에서-ai-상담-챗봇-붙이기)
+- [선언적 코드는 변경을 작게 만든다](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 ---
 

@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 **병역** · 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -43,7 +43,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 - 스트리밍 응답은 `<head>`를 먼저 보내고 늦게 끝난 메타데이터를 `<body>`에 붙입니다. 기본 봇 목록에 없던 카카오톡·Daum 미리보기 봇과 AI 인용 봇이 canonical을 `<body>`에서 받고 있어, 목록에 더해 메타데이터를 기다린 뒤 `<head>`에서 받게 했습니다.
 - Next.js 16 전환 뒤 관리자 검색이 동작하지 않는 오류는 개발 서버와 jsdom 테스트에서 나타나지 않아, 프로덕션 빌드로 재현해 목록 7개 중 6개에서 확인했습니다. 업스트림 라우터 캐시 이슈를 찾은 뒤, 클라이언트에서 목록을 조회하는 화면의 같은 경로 검색 조건 변경은 RSC 요청 없이 History API로 처리했습니다. 업스트림 버그는 16.3에서 고쳐졌지만, 이 화면들은 서버에 다시 물을 게 없어 버전을 올려도 History API를 유지하기로 했습니다. 8월 13일 핫픽스와 18일 전환 뒤 9월 28일까지 같은 증상의 재보고는 없었습니다.
 
-관련 글: [Next.js 회귀 대응](https://jingeon27.tistory.com/27)
+관련 글: [Next.js 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 폼·검색 필터의 타입과 스키마 설계 | 2025.06 – 현재
 
@@ -55,7 +55,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 - 리뷰 정렬·사진 리뷰 필터가 URL 값을 `useState`로 복제하고 있어, 뒤로 가기나 다른 필터가 URL을 바꾸면 목록과 선택 표시가 어긋날 수 있었습니다. URL을 기준으로 읽도록 바꿔 상태의 출처를 하나로 맞췄습니다.
 - 예약 화면의 가족·날짜 선택 값이 Query 캐시·Zustand·로컬 상태에 나뉘어 있던 것을 React Hook Form과 Zod로 모아, 가족을 추가하면 날짜가 어긋나던 문제를 고치고 예약 대상 선택 컴포넌트를 519줄에서 55줄로 줄였습니다.
 
-관련 글: [Zod 검증 경계](https://jingeon27.tistory.com/32) · [공통 컴포넌트와 변경 범위](https://jingeon27.tistory.com/26) · [예약 폼 리팩터링](https://jingeon27.tistory.com/11)
+관련 글: [Zod 검증 경계](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준) · [공통 컴포넌트와 변경 범위](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) · [예약 폼 리팩터링](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
 
 #### 웹 접근성과 공통 UI | 2026.07 – 09
 
@@ -78,7 +78,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 - 일괄 등록 API는 일부 항목만 저장될 수 있어, 요청 결과와 관계없이 서버 목록을 다시 조회해 발급된 ID를 폼에 넣고 재시도할 때 같은 항목을 중복 등록하지 않게 했습니다.
 - 토스페이먼츠 결제창은 모바일에서 결과를 리다이렉트로만 돌려줘, 실패로 돌아오면 문서가 새로 로드되며 입력이 사라집니다. 떠나기 전 신청 내용을 결제 시도(`orderId`)와 함께 `sessionStorage`에 남기고, 돌아오면 한 번만 꺼내 현재 폼 스키마로 `safeParse`한 값만 되살립니다. 어긋난 값은 버립니다. 다시 입력하는 수고가 한 번 생기지만, 배포로 바뀐 폼에 옛 값이 덮이면 화면이 깨지기 때문입니다. 이 복원과 승인 실패 시 예약 목록으로 가는 경로는 dev API 서버 E2E로 확인했습니다.
 
-관련 글: [건강검진 개발 과정](https://jingeon27.tistory.com/34)
+관련 글: [건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### Sentry 도입 | 2026.08 – 09
 
@@ -92,7 +92,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 - Bottom Sheet를 드래그할 때 생긴 크래시를 라이브러리의 null ref 접근까지 추적했습니다. 라이브러리를 업데이트하며 바뀐 snap point 규칙은 공통 Root에서 변환해 기존 사용처를 유지했고, 수정 배포 전까지 누적 57명 이상에게 75건 발생한 오류 그룹은 배포 후 18일 동안 0건이었습니다.
 - 회원 조회가 실패하면 바로 로그아웃되던 처리를 401 응답일 때만 로그아웃하도록 고쳤습니다. 9월 23일 운영 배포 뒤 9월 28일까지 관련 CS 문의와 운영 Sentry의 회원 조회 실패·401 로그아웃이 0건이었습니다.
 
-관련 글: [Sentry 도입 과정](https://jingeon27.tistory.com/30) · [크래시 분석](https://jingeon27.tistory.com/33)
+관련 글: [Sentry 도입 과정](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) · [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트 도입 | 2026.07 – 현재
 
@@ -106,7 +106,7 @@ React 19·Next.js 16과 TypeScript로 가입 회원 약 15만 명의 복지몰�
 - 새 기능의 기대 동작은 BDD 형식의 `*.spec`에 적고, 운영·QA에서 발견한 오류는 `*.test`에 재현합니다. 컴포넌트별로 필요한 조건이 빠졌으면 반려하고, 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지 확인한 뒤 넣습니다.
 - dev API 서버를 쓰는 테스트는 서버 상태를 준비해야 하고 실행에도 시간이 걸려, API 계약 테스트는 PR을 차단하지 않는 별도 단계로 두고 E2E는 CI 밖에서 실행합니다.
 
-관련 글: [테스트를 다시 만든 기준](https://jingeon27.tistory.com/25)
+관련 글: [테스트를 다시 만든 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### 리뷰 작성 화면 개선 | 2025.06 – 08
 
@@ -139,7 +139,7 @@ Claude Code와 Codex로 여러 git worktree에서 기능을 개발하고 리팩�
 - lint rule도 RuleTester와 `__fixture__`·mock으로 테스트 환경을 만들어 검증합니다.
 - 타입 검사는 TypeScript 7 네이티브 체커를 병행해 복지몰 기준 12.5초에서 1.9초로 줄였고, 타입 인지 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
-관련 글: [AI 워크플로 개선](https://jingeon27.tistory.com/31)
+관련 글: [AI 워크플로 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ---
 
@@ -174,7 +174,7 @@ Claude Code와 Codex로 여러 git worktree에서 기능을 개발하고 리팩�
 
 NestJS를 도입하려 했지만 CTO님이 Electron main 프로세스에는 무겁다고 리뷰해 닷새 만에 걷어냈습니다. 모듈 구분과 생성자 주입은 참고하되, 팩토리에서 직접 조립하도록 했습니다.
 
-관련 글: [Electron 수집 앱 구조](https://jingeon27.tistory.com/5) · [React Query key 정리](https://jingeon27.tistory.com/6)
+관련 글: [Electron 수집 앱 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) · [React Query key 정리](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 학력·자격
 

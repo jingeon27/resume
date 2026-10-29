@@ -29,7 +29,7 @@ React·Next.js 구축 + 테스트·에러 모니터링·CI 체계 구축.
 
 혼자 오래 운영하다 보니 **같은 문제가 다시 오지 않게 만드는 일**에 특히 시간을 씁니다. 반복되는 실수는 lint 규칙으로 자동 검사하게 만들고, 리팩터링은 바꾸기 전 동작을 테스트로 고정한 뒤 시작하며, 장애는 모니터링과 회귀 테스트로 연결합니다. 인수인계 후에도 유지보수가 가능한 상태로 넘겨 드리는 것을 중요하게 생각합니다.
 
-작업 과정은 문서로 남기고 [기술 블로그](https://jingeon27.tistory.com/)에 30여 편을 공개하고 있습니다. 어떤 문제를 어떻게 판단했는지 확인하실 수 있습니다.
+작업 과정은 문서로 남기고 [기술 블로그](https://blog.bambyul.com/ko/blog)에 30여 편을 공개하고 있습니다. 어떤 문제를 어떻게 판단했는지 확인하실 수 있습니다.
 
 ---
 
@@ -102,15 +102,15 @@ React·Next.js 구축 + 테스트·에러 모니터링·CI 체계 구축.
 
 ## 7. 포트폴리오로 걸 링크
 
-- 기술 블로그 — <https://jingeon27.tistory.com/>
+- 기술 블로그 — <https://blog.bambyul.com/ko/blog>
 - GitHub — <https://github.com/jingeon27>
 
 **대표 글로 걸면 좋은 것 (클라이언트가 읽어도 신뢰가 가는 것 위주)**
 
-- [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://jingeon27.tistory.com/30)
-- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://jingeon27.tistory.com/28)
-- [테스트 체계 재구축기](https://jingeon27.tistory.com/25)
-- [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://jingeon27.tistory.com/24)
+- [Sentry 도입기 — 붙이는 건 하루, 다듬는 데 닷새](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)
+- [오류는 남기고 화면은 덜 잃게 만든 에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
+- [테스트 체계 재구축기](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
+- [프로토타입을 실사용 서비스로 옮기며 작업 규칙을 먼저 만든 이유](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 ---
 

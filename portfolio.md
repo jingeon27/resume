@@ -2,7 +2,7 @@
 
 > Frontend Engineer
 >
-> jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+> jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -535,4 +535,4 @@ export const candidateDetailKeys = createQueryKeys('CandidateDetail', {
 
 - jingeon27@gmail.com
 - [GitHub @jingeon27](https://github.com/jingeon27)
-- [Blog](https://jingeon27.tistory.com/)
+- [Blog](https://blog.bambyul.com/ko/blog)

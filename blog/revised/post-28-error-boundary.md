@@ -228,7 +228,7 @@ export function parseApiResponse<T>(schema: z.ZodType, response: AxiosResponse<T
 
 이 방식으로 런타임 타입 안전성이 완성되지는 않아요. 잘못된 값도 호출부까지 가니까요. 대신 이미 배포된 세 앱(글로벌 관리 화면은 PoC)에 계약 검증을 한꺼번에 넣으면서 실제 응답과 스키마의 차이부터 모을 수 있었어요. 로그로 확인된 `null`, 빠진 enum 값, 문자열로 오는 소수는 사흘 뒤 20개 파일의 스키마에 반영했어요.
 
-신규 기능이나 잘못된 값을 그대로 쓰면 안 되는 입력에는 차단형 검증을 써요. 모든 Zod 스키마가 실패했을 때 같은 동작을 할 필요는 없었어요. 값의 출처에 따라 관측, 복구, 차단을 나눈 기준은 [다른 글](https://jingeon27.tistory.com/32)에 따로 정리했어요.
+신규 기능이나 잘못된 값을 그대로 쓰면 안 되는 입력에는 차단형 검증을 써요. 모든 Zod 스키마가 실패했을 때 같은 동작을 할 필요는 없었어요. 값의 출처에 따라 관측, 복구, 차단을 나눈 기준은 [다른 글](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)에 따로 정리했어요.
 
 ## 잘못된 URL은 필드 단위로 복구했어요
 
@@ -366,5 +366,5 @@ API 응답에는 method와 URL이 이미 있으니 호출부가 이름을 다시
 - [Zod: 오류 처리와 `safeParse`](https://zod.dev/basics?id=handling-errors)
 - [Zod: `.catch()`](https://zod.dev/api?id=catch)
 - [Next.js: `productionBrowserSourceMaps`](https://nextjs.org/docs/app/api-reference/config/next-config-js/productionBrowserSourceMaps)
-- 관련 글: [선언적으로 코드를 쓰는 기준](https://jingeon27.tistory.com/26) (검색 필터를 컴파운드 구조로 바꾼 기준)
-- 관련 글: [타입 단언을 걷어내며 Zod를 경계마다 다르게 배치한 기준](https://jingeon27.tistory.com/32) (응답 관측 경계와 값의 출처에 따른 검증 정책)
+- 관련 글: [선언적으로 코드를 쓰는 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) (검색 필터를 컴파운드 구조로 바꾼 기준)
+- 관련 글: [타입 단언을 걷어내며 Zod를 경계마다 다르게 배치한 기준](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준) (응답 관측 경계와 값의 출처에 따른 검증 정책)

@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -25,7 +25,7 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 
 **정산·결제·쿠폰 도메인**
 
-- 정산 서비스와 메인 서비스의 도메인이 달라 HttpOnly 쿠키를 공유할 수 없는 상황에서, URL query로 토큰을 전달하던 기존 방식의 access log·Referer 노출 위험을 발견했습니다. **form POST BFF**로 바꾸고 `referrer-policy: no-referrer`, CSP `form-action`, `X-Frame-Options: DENY`, HTML escape, `no-store`, `303`, pathname 정규화 기반 open redirect 방어를 적용했습니다. ([관련 글](https://jingeon27.tistory.com/19))
+- 정산 서비스와 메인 서비스의 도메인이 달라 HttpOnly 쿠키를 공유할 수 없는 상황에서, URL query로 토큰을 전달하던 기존 방식의 access log·Referer 노출 위험을 발견했습니다. **form POST BFF**로 바꾸고 `referrer-policy: no-referrer`, CSP `form-action`, `X-Frame-Options: DENY`, HTML escape, `no-store`, `303`, pathname 정규화 기반 open redirect 방어를 적용했습니다. ([관련 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - Next.js Middleware와 Route Group으로 정산 호스트의 레이아웃·라우팅을 분리하되 코드베이스는 하나로 유지하고, 인증 핸드오프는 별도 API Route의 책임으로 분리했습니다.
 - 정산내역 숨김 처리 시 관련 query cache를 즉시 갱신하고 실패하면 이전 상태로 되돌려, 정산내역과 비교 탭의 화면 상태를 함께 유지했습니다.
 - 제휴실적관리 화면을 정산관리 대시보드로 새로 구축하고 날짜·검색·인계 상태 필터, 전체 예약 목록, 정산 제외, 성과금 표시 등 운영 기능을 확장했습니다.
@@ -37,21 +37,21 @@ React·Next.js·TypeScript로 B2C 서비스와 운영 플랫폼을 개발해 온
 - SafeDoc App을 **Next.js 16.2 + Turbopack** 프로덕션 빌드로 이행하고 미사용 webpack 설정을 제거했습니다. 검색 필터의 `any/unknown`을 Zod schema로 교체하고 탭·모드 분기를 단일 enum과 `ts-pattern`으로 정리했습니다.
 - `queryOptions → Server Component prefetch → HydrationBoundary → useSuspenseQuery` 패턴으로 서버와 클라이언트가 같은 query contract를 사용하게 했습니다. props로만 전달받아 무효화 후 갱신되지 않던 데이터를 query cache 직접 구독 방식으로 전환했습니다.
 - 외국인 의료관광 서비스의 **Next.js 16 App Router** 프로젝트를 세팅하고, API 연동 전 단계에서 en·ko·ar 다국어 라우팅, 필수 문자열의 컴파일 타임 검증과 shadcn(base-ui) 기반 초기 UI를 구현하고 있습니다. 프로젝트 전반의 테스트 코드 적용을 위한 범위와 작성 기준도 준비하고 있습니다.
-- 병원·프로그램·공지·혜택 데이터를 5개 API에서 수집하는 동적 sitemap을 구축하고 XML escape, allowlist와 24시간 cache life로 생성 비용을 제어했습니다. ([관련 글](https://jingeon27.tistory.com/21))
+- 병원·프로그램·공지·혜택 데이터를 5개 API에서 수집하는 동적 sitemap을 구축하고 XML escape, allowlist와 24시간 cache life로 생성 비용을 제어했습니다. ([관련 글](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정))
 - 로그인·약관 리다이렉트의 이중 인코딩, 외부 URL, 자기참조를 막는 정규화 유틸을 만들고 소셜 로그인 callback의 redirect cookie 유실 문제를 해결했습니다.
 
 **사용자 경험과 데이터 기반 개선**
 
 - Radix UI와 `tailwind-variants`를 기반으로 Button, Input, BottomSheet, Dialog, Toast, Tooltip, Checkbox, Radio, Toggle, Tabs, Chip, Menu 등 **primitive 20개**를 설계하고 예약·검색·리뷰·마이페이지에 적용했습니다.
 - BottomSheet를 Compound API로 구성해 브라우저 뒤로가기(`popstate`), route change, backdrop tap, snap point와 mount 해제를 공통 라이프사이클에서 처리했습니다.
-- props drilling과 `useEffect` 4개로 얽혀 있던 예약 폼을 React Hook Form·Zod 중심으로 바꾸고, 가족 데이터 동기화 컴포넌트를 **520줄에서 55줄**로 줄였습니다. 같은 기준을 리뷰·상담·회원정보 폼에 적용했습니다. ([관련 글](https://jingeon27.tistory.com/11))
+- props drilling과 `useEffect` 4개로 얽혀 있던 예약 폼을 React Hook Form·Zod 중심으로 바꾸고, 가족 데이터 동기화 컴포넌트를 **520줄에서 55줄**로 줄였습니다. 같은 기준을 리뷰·상담·회원정보 폼에 적용했습니다. ([관련 글](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정))
 - 복지몰 전반에 예약·상담·검색 행동을 추적하는 Amplitude 이벤트 약 240개를 설계했습니다. 시술상세 개편 전후를 분석해 리뷰 조회 사용자의 예약 전환율이 미조회 사용자보다 **15%p 높음**을 확인했습니다.
 
 **개발 생산성과 협업**
 
 - Atomic Design과 FSD가 혼재한 약 **1,100개 파일**을 6-layer FSD로 점진 정리하고, 레이어 역방향 의존을 자체 ESLint 플러그인으로 검증했습니다.
 - CMS·병원 CRM Turborepo에서 공통 도메인을 entities/features 패키지로 정의하고 shared 패키지 5개를 하나로 통합해 **13개 패키지를 9개로 재편**했습니다.
-- CMS와 병원 CRM이 공유하는 38필드 프로그램 폼을 원본·검수·임시저장 생명주기로 분리하고, 잘못된 필드 경로를 컴파일 단계에서 차단하는 typed form과 서버↔폼 Transfer Layer를 구현했습니다. ([관련 글](https://jingeon27.tistory.com/18))
+- CMS와 병원 CRM이 공유하는 38필드 프로그램 폼을 원본·검수·임시저장 생명주기로 분리하고, 잘못된 필드 경로를 컴파일 단계에서 차단하는 typed form과 서버↔폼 Transfer Layer를 구현했습니다. ([관련 글](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정))
 - GitHub Actions 기반 병원 CRM 배포 workflow와 pnpm 공통 의존성 관리를 구성하고, Jira·Figma·API·운영 맥락을 확인하며 PO·디자이너·백엔드와 변경 영향과 선택지를 공유했습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11

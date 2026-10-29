@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 ---
 
@@ -11,7 +11,7 @@
 - **운영과 제품 임팩트** — 회원 15만 명 규모의 서비스에서 예약·리뷰·상담·쿠폰·정산 흐름을 운영하고, 행동 데이터를 통해 **리뷰를 본 사용자의 예약 전환율이 15%p 높다**는 상관관계를 다음 실험의 근거로 남겼습니다.
 - **지속 가능한 구조** — 레이어 규칙은 자체 ESLint 플러그인으로, 반복 작업은 자동화로 옮겼습니다. 테스트는 스키마·API 계약·UI 통합·브라우저 E2E로 나눠 어떤 실패가 어느 계층에서 잡히는지 분명해지게 했습니다.
 - **모노레포와 글로벌 품질** — pnpm·Turborepo 기반 3개 앱과 9개 패키지의 경계를 정하고 Next.js 14→16·Node 24·Turbopack 전환을 진행했습니다. 영어·한국어·아랍어와 RTL, 키보드 포커스·오류 알림 회귀 테스트도 함께 설계했습니다.
-- **판단을 문서로 남기는 습관** — 구현 이유와 남은 한계를 저장소 문서와 [기술 블로그](https://jingeon27.tistory.com/)에 적어두어, 다음 변경에서 같은 맥락을 다시 찾는 비용을 줄입니다.
+- **판단을 문서로 남기는 습관** — 구현 이유와 남은 한계를 저장소 문서와 [기술 블로그](https://blog.bambyul.com/ko/blog)에 적어두어, 다음 변경에서 같은 맥락을 다시 찾는 비용을 줄입니다.
 
 ---
 
@@ -42,7 +42,7 @@
 
 **같은 문제가 다시 나지 않게**
 
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, **form POST BFF**로 바꾸면서 CSP `form-action`·`X-Frame-Options`·open redirect 방어와 회귀 테스트를 적용했습니다. ([기술 글](https://jingeon27.tistory.com/19))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 처음 구현했던 URL 토큰 전달이 서버 access log와 Referer에 토큰을 남긴다는 것을 확인하고, **form POST BFF**로 바꾸면서 CSP `form-action`·`X-Frame-Options`·open redirect 방어와 회귀 테스트를 적용했습니다. ([기술 글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - Next.js soft navigation 때문에 직전 예약자의 이름·연락처·병력이 다음 예약 화면에 남는 것을 발견해, 재진입과 성공 시에는 초기화하되 제출 실패 시에는 입력을 보존하도록 상태 생명주기를 나누고 브라우저 회귀 테스트를 추가했습니다.
 - 성공만 반환하던 Mock이 실서버의 필수값·enum 계약 위반을 가린다는 것을 발견해, Mock을 끄고 실제 인증과 API로 확인하는 계약 테스트 환경을 따로 만들었습니다. 400만 보고는 어느 필드가 문제인지 알 수 없어 서버가 준 거절 코드와 필드 단위 위반 목록을 그대로 드러내게 했고, 찾은 차이는 폼과 타입에 되돌려 반영했습니다.
 - 테스트는 순수 함수·스키마 → API 계약·저장 왕복 → UI 통합 → 브라우저 E2E로 나눴습니다. 폼은 화면을 사용자처럼 조작해 상태를 가진 MSW에 저장한 뒤 다시 조회하고, 번역·기존 ID·조건부 그룹·이미지 순서와 실패 뒤 재시도까지 검증합니다. soft navigation·SSR HTML·IntersectionObserver·가상화처럼 브라우저에서만 증명할 수 있는 결합만 Playwright에 둡니다. E2E를 처음 붙였을 때 10개 시나리오의 콜드 실행이 3.5분씩 걸리고 간헐 실패해서, 원인을 잘못된 내비게이션 대기 조건(`waitForURL`의 기본 `waitUntil: 'load'`)과 반복 삽입되는 프로모션 오버레이로 분리해 20초·3회 연속 flaky 0으로 안정화한 뒤 CI에 올렸습니다.
@@ -88,10 +88,10 @@
 
 ## Writing
 
-- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://jingeon27.tistory.com/19)
-- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://jingeon27.tistory.com/21)
-- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://jingeon27.tistory.com/11)
-- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://jingeon27.tistory.com/15)
+- [크로스 도메인 인증을 URL 토큰에서 form POST BFF로](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정)
+- [Next.js `'use cache'`로 대규모 sitemap 생성 비용 줄이기](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정)
+- [예약 폼 리팩토링 — 가족 정보 동기화 520줄을 55줄로](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정)
+- [리뷰 작성 플로우 재설계 — 3단계 funnel과 step별 Zod 스키마](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정)
 
 ---
 

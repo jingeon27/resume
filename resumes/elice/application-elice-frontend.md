@@ -1,6 +1,6 @@
 # 김진건 | 엘리스 프론트엔드 지원서
 
-jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 병역: 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -33,7 +33,7 @@ AI가 작성한 코드와 테스트도 직접 검토합니다. 조회 실패를 
 - 일괄 저장 중 일부 요청만 성공하면 서버가 발급한 ID를 폼에 반영합니다. 재시도할 때 이미 저장된 항목이 중복 등록되지 않게 했습니다.
 - 모바일에서 결제창을 다녀와도 신청 내용이 남도록 입력값과 `orderId`를 sessionStorage에 저장했습니다. 주문 ID가 일치하고 Zod 검증을 통과한 값만 한 번 복원합니다. 결제 실패 후 입력이 복원되는지, 승인 요청에 실패하면 예약 목록으로 이동하는지는 dev API 서버에 연결한 E2E로 확인했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### Sentry 도입과 오류 대응 | 2026.08 – 현재
 
@@ -43,7 +43,7 @@ Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추
 
 관리자 서비스는 독립적으로 복구할 수 있는 기능 단위로 Error Boundary를 나눴습니다. 동의서의 외부 문서 조회가 실패하면 고객명과 동의 내역까지 사라져, 문서 영역에 별도 경계를 두었습니다. 실패 응답에서도 나머지 정보가 남는지 테스트했습니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트 도입 | 2026.07 – 현재
 
@@ -53,7 +53,7 @@ Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추
 
 테스트용 QueryClient가 앱과 다르게 오류를 처리해, 실제 화면에서는 오류 경계에 가려질 UI가 테스트에서는 보이고 있었습니다. 설정을 앱과 맞추고 데이터가 없는 첫 조회 실패와 이미 받은 데이터가 있는 재조회 실패를 구분해 검증하도록 바꿨습니다.
 
-[테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+[테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### AI 개발 workflow | 2026.04 – 현재
 
@@ -63,7 +63,7 @@ Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추
 
 에이전트 리뷰의 critical 항목은 자동 수정하게 하고 결과를 확인합니다. 완성된 코드와 테스트를 읽고 부족한 부분은 수정을 요청한 뒤 다시 봅니다. lint rule은 RuleTester와 `__fixture__`, mock으로 테스트하고 미사용 코드는 Knip으로 찾습니다. 병렬 검사로 CPU 부하가 커 작업 중에는 변경분과 영향 범위를 먼저 검사하고, typecheck는 앱과 패키지 단위로 진행합니다. dev API 서버 연동 테스트는 로컬과 push 전 검증에서 실행합니다.
 
-[AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+[AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ### 왓타임 | 2024.01 – 2024.11
 

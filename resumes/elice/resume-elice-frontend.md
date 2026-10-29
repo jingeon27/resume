@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -43,7 +43,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 공통 UI는 접근성 primitive와 조합 유연성을 보고 Headless UI에서 Radix UI로 옮겼습니다. Bottom Sheet는 Compound Components와 overlay-kit으로 바꿔 본문과 하단 버튼이 같은 폼을 쓰게 했습니다.
 - 인수한 정산 페이지는 각각 1,170줄, 1,164줄로 조회와 표, 선택, 편집, 정산 처리가 섞여 있었습니다. 함께 바뀌는 코드끼리 나누고 타입과 파일 위치를 정리했습니다. ref로 열던 모달은 대상 데이터와 열림 상태를 props로 받도록 바꿨습니다.
 
-[폼 타입 설계](https://jingeon27.tistory.com/18) | [공통 UI와 추상화](https://jingeon27.tistory.com/26) | [FSD 구조 변경](https://jingeon27.tistory.com/23)
+[폼 타입 설계](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정) | [공통 UI와 추상화](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) | [FSD 구조 변경](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요)
 
 #### 서버 렌더링과 데이터 조회 | 2025.05 – 현재
 
@@ -54,7 +54,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16, React 18→19로 전환했습니다. 비동기 API와 캐시 동작 변경에 맞춰 코드를 수정하고 링크 직접 진입, 뒤로가기, 새로고침을 확인했습니다.
 - TypeScript 7 네이티브 체커를 병행해 복지몰 타입 검사 시간을 12.5초에서 1.9초로 줄였습니다. 타입 정보를 사용하는 lint도 검토했지만 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
-[Next.js 오류 대응](https://jingeon27.tistory.com/27)
+[Next.js 오류 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 상담 채팅과 공유 패키지 | 2026.06 – 현재
 
@@ -73,7 +73,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 모바일 결제창에서 돌아오면 `orderId`가 일치하고 Zod 검증을 통과한 입력값만 한 번 복원합니다. 결제 실패 후 입력이 복원되는지, 승인 요청에 실패하면 예약 목록으로 이동하는지는 dev API 서버에 연결한 E2E로 확인했습니다. 검사항목을 일괄 저장할 때 일부만 성공하면 발급된 ID를 폼에 반영해 재시도 시 중복으로 등록되지 않게 했습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### Sentry 도입과 운영 오류 추적 | 2026.08 – 현재
 
@@ -84,7 +84,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 일부 조회가 실패해 헤더와 정상 화면까지 사라지던 오류 처리를 독립적으로 복구할 수 있는 기능 단위로 나눴습니다. 백오피스 라우트 30개에 적용했습니다. 동의서에서는 외부 문서를 불러오지 못해도 고객명과 동의 내역은 남도록 경계를 나누고 실패 응답으로 테스트했습니다.
 - Zod 검증에 실패했을 때는 값의 출처에 따라 다르게 처리합니다. 기존 API 응답 불일치는 CloudWatch로 트래킹합니다. URL은 잘못된 필드만 기본값으로 바꾸고, 결제 후 복원할 입력값은 검증에 실패하면 버립니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [크래시 분석](https://jingeon27.tistory.com/33) | [부분 장애 격리](https://jingeon27.tistory.com/28)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지) | [부분 장애 격리](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편)
 
 #### 테스트 도입 | 2026.07 – 현재
 
@@ -96,7 +96,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 병원 관리자 등록부터 백오피스의 검수, 반려, 승인까지 두 앱을 넘나드는 E2E를 만들었습니다.
 - 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지도 확인합니다. 자체 lint rule도 RuleTester와 fixture, mock으로 검증합니다.
 
-[테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+[테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### AI 개발 workflow | 2026.04 – 현재
 
@@ -108,7 +108,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 병렬 worktree의 검사 부하를 줄이려고 작업 중에는 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 진행합니다. 전체 검사는 CI에서, dev API 서버 연동 테스트는 로컬과 push 전에 실행합니다.
 
-[AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+[AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### 글로벌 사용자 서비스와 CMS | 2026.07 – 09
 
@@ -116,7 +116,7 @@ PO가 전달한 프로토타입의 모든 화면을 구현해 글로벌 사용�
 
 파일 전송은 React 밖 스토어에서 관리하고 `useSyncExternalStore`로 상태를 구독합니다. 동시에 전송 중인 파일 크기의 합을 2GB로 제한하고 FIFO로 처리합니다. 먼저 들어온 큰 파일 때문에 작은 파일이 기다릴 수는 있습니다. 클라이언트 번들에 들어가던 목 백엔드 코드를 분리해 앱 번들을 2,564KB에서 1,880KB로 줄였습니다.
 
-[글로벌 서비스 개발 과정](https://jingeon27.tistory.com/24)
+[글로벌 서비스 개발 과정](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -126,7 +126,7 @@ PO가 전달한 프로토타입의 모든 화면을 구현해 글로벌 사용�
 - 면접 템플릿은 네 단계로 입력하고 단계별로 검증하도록 만들었습니다. 작성 중인 값은 sessionStorage로 복원합니다. 앱마다 있던 Query key와 조회 함수는 공용 패키지로 모았습니다. 공고 순서와 중첩 필터, 테이블에 쓰는 드래그 공통 컴포넌트도 개발했습니다.
 - Electron 앱은 공통 수집 단계와 사이트별 adapter로 나누는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다. NestJS도 도입하려 했지만 Electron main 프로세스에는 무겁다는 CTO 피드백을 받아 제거했습니다. 모듈 구분과 생성자 주입은 참고해 남겼습니다.
 
-[Electron 초기 구조](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 초기 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 개인 프로젝트
 

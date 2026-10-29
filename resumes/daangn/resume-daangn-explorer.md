@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 ## 소개
 
@@ -59,7 +59,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 - 복지몰에서는 React Hook Form을 도입해 Zustand로 관리하던 폼 상태를 정리했습니다. 입력값은 폼, 서버 데이터는 TanStack Query, 검색 조건은 URL이 맡도록 나눴습니다. 화면마다 같은 값을 여러 곳에 저장하고 맞추는 코드를 줄이려는 선택이었습니다.
 - 리팩터링할 때는 기존 요청 payload와 사용자 동작을 테스트로 먼저 확인했습니다. **432줄짜리 등록·수정 Drawer**를 분리하면서 등록 후 닫히지 않는 문제와 URL 직접 진입 시 제출 타입이 달라지는 문제를 찾았습니다. 병원 어드민 등록부터 CMS 검수·반려·승인까지 두 서비스를 넘나드는 E2E도 추가했습니다.
 
-관련 글: [선언적 코드와 변경 범위](https://jingeon27.tistory.com/26) · [테스트를 다시 만든 기준](https://jingeon27.tistory.com/25)
+관련 글: [선언적 코드와 변경 범위](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) · [테스트를 다시 만든 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### FSD 배치 기준과 공유 패키지 정리
 
@@ -94,7 +94,7 @@ Frontend Engineer · jingeon27@gmail.com · [GitHub](https://github.com/jingeon2
 - **관리자 서비스의 부분 장애 격리:** 목록 조회 하나가 실패하면 메뉴와 다른 기능까지 사라지던 Error Boundary를 독립적으로 복구할 수 있는 기능 단위로 나눴습니다. 재시도와 정상 영역 유지 동작은 테스트로 확인했습니다.
 - **모니터링 도입:** 복지몰에 Sentry를 client·server·edge 런타임별로 연결하고, release·소스맵·breadcrumb으로 오류를 추적했습니다. 관리자 서비스에는 CloudWatch 구조화 로그를 적용했습니다. Sentry에서 링크 prefetch만으로 권한 검증용 사용자 정보 API가 호출되는 것을 확인해 불필요한 호출을 제거했습니다.
 
-관련 글: [에러 처리 개편](https://jingeon27.tistory.com/28) · [Next.js 회귀 대응](https://jingeon27.tistory.com/27) · [Sentry 도입과 운영](https://jingeon27.tistory.com/30)
+관련 글: [에러 처리 개편](https://blog.bambyul.com/ko/blog/오류는-남기고-화면은-덜-잃게-만든-에러-처리-개편) · [Next.js 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들) · [Sentry 도입과 운영](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정)
 
 #### AI와 일하면서 바꾼 개발 방식
 
@@ -108,7 +108,7 @@ AI가 만든 코드는 처음부터 지금까지 모두 읽습니다. 처음에�
 - 서로 겹치지 않는 티켓은 Orca의 별도 worktree에서 병렬로 진행합니다. 상태나 import 구조를 바꾸는 리팩터링은 VS Code에서 직접 편집하며 하나의 에이전트와 계속 검토합니다. Stage 배포 전에는 합쳐진 diff와 실제 화면을 확인합니다.
 - 여러 worktree에서 전체 검사를 동시에 돌리자 CPU 경합으로 작업이 느려졌습니다. 로컬은 변경분 위주로 확인하고 전체 검사는 push 후 CI로 옮겼습니다. 관리자 서비스의 PR 검사는 lint·타입 검사·Unit·Integration 테스트, 소비자 앱은 lint·타입 검사·Knip까지입니다. 실서버 계약 테스트와 브라우저 E2E는 PR을 막는 검사와 별도로 실행합니다.
 
-관련 글: [AI 워크플로를 개선한 과정](https://jingeon27.tistory.com/31) · [테스트를 다시 만든 기준](https://jingeon27.tistory.com/25) · [선언적 코드와 변경 범위](https://jingeon27.tistory.com/26)
+관련 글: [AI 워크플로를 개선한 과정](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요) · [테스트를 다시 만든 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) · [선언적 코드와 변경 범위](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준)
 
 ### 왓타임 | Frontend Engineer
 

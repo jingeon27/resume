@@ -1,6 +1,6 @@
 # 김진건
 
-Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://jingeon27.tistory.com/)
+Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 산업기능요원 현역 복무 중 | 2025.08 편입 | 전직 희망
 
@@ -49,7 +49,7 @@ QA 중 리뷰 속도와 코드 일관성을 함께 챙기려고 리뷰 봇을 �
 - 결제 실패 후 입력이 복원되는지, 승인 요청에 실패하면 예약 목록으로 이동하는지는 dev API 서버에 연결한 E2E로 확인했습니다. 검진 구성을 수정할 수 없던 문제는 조회 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다.
 - 검사항목을 일괄 저장하다 일부만 성공한 경우에는 서버가 발급한 ID를 폼에 반영했습니다. 이전 입력으로 재시도해 이미 만든 항목이 다시 등록되는 것을 막았습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 이벤트 랜딩과 사용자 행동 측정 | 2025.07 – 현재
 
@@ -75,7 +75,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 - 검색엔진이 읽는 HTML을 확인해 페이지별 canonical, 상세 페이지 사이의 링크, 병원과 시술의 JSON-LD를 고쳤습니다. 검색 목록은 서버 HTML에 포함하고, 공개 조회는 인증 쿠키와 분리해 사이트맵을 하루 단위로 재검증합니다.
 - 화면마다 예외가 붙던 공통 검색 필터를 각 화면에서 조합하도록 바꾸고 27개 화면에 적용했습니다. JSX 중복은 일부 감수하고 화면별 변경을 해당 화면 안에서 다루도록 했습니다. URL과 폼, API 요청은 같은 Zod 스키마를 사용하고, Ant Design Form의 중첩 필드명과 값은 `createTypedForm<T>`로 타입 검사를 받게 했습니다.
 
-[Next.js 검색 오류 대응](https://jingeon27.tistory.com/27) | [사이트맵 개선](https://jingeon27.tistory.com/21) | [폼 설계](https://jingeon27.tistory.com/18)
+[Next.js 검색 오류 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들) | [사이트맵 개선](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정) | [폼 설계](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정)
 
 #### Sentry 도입과 운영 오류 대응 | 2026.08 – 현재
 
@@ -85,7 +85,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 - 회원 조회가 타임아웃이나 서버 오류로 실패해도 로그아웃되던 문제를 고쳤습니다. 401일 때만 로그아웃하도록 바꿨고, 9월 23일 배포 뒤 28일까지 관련 CS 문의와 Sentry 이슈가 없었습니다.
 - 일부 조회 실패로 정상 화면까지 사라지지 않도록 기능별 Error Boundary를 뒀습니다. 동의서에서는 외부 문서 조회가 실패해도 고객명과 동의 내역은 남도록 나누고 테스트했습니다. API 오류와 응답 스키마 불일치는 CloudWatch로 트래킹합니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) | [크래시 분석](https://jingeon27.tistory.com/33)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 글로벌 서비스와 기술 선택 | 2026.07 – 현재
 
@@ -93,7 +93,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자가 주도한 실
 
 Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16, React 18→19로 전환했습니다. 비동기 API와 캐시 동작 변경에 맞춰 코드를 수정하고 링크 직접 진입, 뒤로가기, 새로고침을 확인했습니다. 타입 정보를 사용하는 lint는 검사 시간이 3.3배 늘어 도입을 보류했습니다.
 
-[글로벌 서비스 개발](https://jingeon27.tistory.com/24)
+[글로벌 서비스 개발](https://blog.bambyul.com/ko/blog/프로토타입을-실사용-서비스로-옮기며-작업-규칙을-먼저-만든-이유)
 
 #### 테스트 도입과 AI 개발 workflow | 2026.04 – 현재
 
@@ -109,7 +109,7 @@ Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16
 
 병렬 worktree마다 전체 검사를 반복해 CPU 부하가 커졌습니다. 작업 중에는 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 진행합니다. dev API 서버 연동 테스트는 로컬과 push 전 검증에서 실행합니다.
 
-[테스트 도입 기준](https://jingeon27.tistory.com/25) | [AI 개발 workflow](https://jingeon27.tistory.com/31)
+[테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 ### 왓타임 | Frontend Engineer | 2024.01 – 2024.11
 
@@ -119,7 +119,7 @@ Turbopack과 Next.js 16의 로컬 개발 속도 개선을 보고 Next.js 14→16
 - 면접 템플릿의 네 단계 입력을 `useFunnel`로 만들고 단계별로 검증했습니다. 작성 중인 값은 sessionStorage로 복원했습니다. 앱마다 있던 Query key와 조회 함수는 공용 패키지로 모았습니다. 공고 순서와 중첩 필터, 설정 테이블에는 드래그 공통 컴포넌트를 적용했습니다.
 - Electron 앱은 로그인 → 지원자 수집 → 중복 확인 → 업로드로 이어지는 초기 구조를 설계하고 잡플래닛, 게임잡을 연동했습니다. NestJS도 도입하려 했지만 Electron main 프로세스에는 무겁다는 CTO 피드백을 받아 제거했습니다. 모듈 구분과 생성자 주입은 참고해 남겼습니다.
 
-[Electron 초기 구조](https://jingeon27.tistory.com/5) | [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 초기 구조](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) | [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 학력
 

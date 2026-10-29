@@ -6,7 +6,7 @@
 
 ## 1. 인물 / 배경
 
-- 김진건, Frontend Engineer. jingeon27@gmail.com · github.com/jingeon27 · jingeon27.tistory.com
+- 김진건, Frontend Engineer. jingeon27@gmail.com · github.com/jingeon27 · blog.bambyul.com/ko/blog
 - 대덕소프트웨어마이스터고 졸업(2024.01) 후 바로 취업. 경력 약 2년 7개월
 - **왓타임 (2024.01 – 2024.11)** — 일정 조율 '되는시간' + 채용 관리 'RoundHR' 모노레포. 프론트엔드 팀원
 - **세이프닥 (2025.05 – 현재)** — 병원 복지 할인 플랫폼. 2025.12까지 팀원, **2026.01부터 사내 유일 프론트엔드 엔지니어**

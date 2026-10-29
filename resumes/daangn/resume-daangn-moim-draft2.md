@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://jingeon27.tistory.com/)
+**Frontend Engineer** · jingeon27@gmail.com · [GitHub](https://github.com/jingeon27) · [기술 블로그](https://blog.bambyul.com/ko/blog)
 
 **병역** · 산업기능요원 현역 복무 중(2025.08 –), 전직 희망
 
@@ -45,7 +45,7 @@
 - 결제 입력은 `orderId`와 함께 `sessionStorage`에 저장하고, 같은 주문이며 Zod 검증을 통과한 값만 한 번 복원합니다. 결제창 실패 후 입력 복원과 승인 실패 시 예약 목록 이동은 dev API 서버 E2E로 확인했습니다. 일괄 저장 뒤에는 서버가 발급한 ID를 폼에 반영해 중복 등록을 막았습니다.
 - 검진 구성 수정이 거절됐을 때 응답에 삭제된 검사항목이 포함된 것을 찾아 백엔드에 전달했습니다. null 필드와 요청값도 dev API 서버에서 확인하며 맞췄습니다.
 
-[건강검진 개발 과정](https://jingeon27.tistory.com/34)
+[건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
 
 #### 모바일 리뷰 작성 개선 | 2025.06 – 07
 
@@ -63,7 +63,7 @@
 - 인증 후 리다이렉트에서 앱이 멈추는 오류는 조사 당시 68건·53명에게 발생했습니다. Next.js 소스에서 `AppRouter`가 훅 호출 도중 렌더를 끝내는 경로를 확인하고, 인증 확인·리다이렉트를 React 렌더링 전 proxy로 옮겼습니다.
 - 다른 서비스와 비교해 메타데이터·JSON-LD를 설계하고 병원·시술·인근 지하철역 정보를 반영했습니다. 정해진 값이 없을 때 직접 채워도 되는지 확인한 뒤 적용했습니다. Streaming 도입에 맞춰 일부 미리보기 봇에는 메타데이터를 `<head>`로 보내도록 설정했습니다.
 
-[Next.js 검색 회귀 대응](https://jingeon27.tistory.com/27)
+[Next.js 검색 회귀 대응](https://blog.bambyul.com/ko/blog/nextjs를-사용하면서-겪었던-이슈들)
 
 #### 코드 구조와 기술부채 개선 | 2025.06 – 현재
 
@@ -75,7 +75,7 @@
 - **정산 리팩터링:** 엑셀 정산을 내부 예약 DB와 연결하는 기능의 초기 구현을 인수했습니다. 배포 전 요구사항을 반영하며 1,000줄이 넘는 파일의 조회·표·선택·편집·정산 처리를 나누고 타입·의존성을 정리했습니다. ref·`useImperativeHandle`로 열던 모달은 대상 데이터와 `open`·`onCancel`을 props로 받게 바꿨습니다. 낙관적 갱신의 조회 취소·rollback을 보완하고 필터 유실·다중 선택 오류를 회귀 테스트로 확인했습니다(2026.04 – 현재).
 - **검증·오류 처리:** 기존 API 응답의 Zod 불일치는 트래킹하며 스키마를 맞추고, 잘못된 URL 필드는 기본값으로 되돌리며 결제 복원값은 버립니다. 독립적으로 복구할 기능마다 Error Boundary를 적용하고 백오피스 라우트 30개의 조회·화면 구성을 통일했습니다. API·렌더링 오류와 스키마 불일치는 AWS CloudWatch 로그로 추적합니다.
 
-[예약 폼](https://jingeon27.tistory.com/11) · [공통화 기준](https://jingeon27.tistory.com/26) · [FSD 구조](https://jingeon27.tistory.com/23) · [Zod 검증](https://jingeon27.tistory.com/32)
+[예약 폼](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정) · [공통화 기준](https://blog.bambyul.com/ko/blog/선언적으로-코드를-쓰는-기준) · [FSD 구조](https://blog.bambyul.com/ko/blog/fsd-폴더는-다-있었는데-새-파일을-어디에-둘지-설명하기-어려웠어요) · [Zod 검증](https://blog.bambyul.com/ko/blog/타입-단언을-걷어내며-zod를-경계마다-다르게-배치한-기준)
 
 #### Sentry 도입과 운영 오류 추적 | 2026.08 – 현재
 
@@ -85,7 +85,7 @@
 - Bottom Sheet 드래그 크래시는 라이브러리의 null ref 접근까지 추적했습니다. 버전업에 따른 snap point 변경은 공통 Root에서 변환했습니다. 누적 75건·57명 이상이던 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 0건이었습니다.
 - 회원 조회가 실패하면 무조건 로그아웃하던 코드를 401일 때만 끊도록 바꿨습니다. 9월 23일 배포 뒤 28일까지 관련 CS·Sentry 이슈가 없었습니다.
 
-[Sentry 도입](https://jingeon27.tistory.com/30) · [Bottom Sheet 크래시](https://jingeon27.tistory.com/33)
+[Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) · [Bottom Sheet 크래시](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
 #### 테스트 도입 | 2026.07 – 현재
 
@@ -95,7 +95,7 @@
 - 새 기능의 기대 동작은 BDD 형식의 `*.spec.{ts,tsx}`, 운영·QA 오류와 console warning은 `*.test.{ts,tsx}`로 구분합니다. 컴포넌트별 명세 누락을 검토하고, 새 패턴은 제품 코드를 일부러 깨뜨려 테스트가 실패하는지도 확인합니다.
 - 9월에는 병원 관리자 등록 → 백오피스 검수중·반려·승인을 두 앱에 걸쳐 확인하는 E2E를 추가했습니다. 기대한 최종 상태를 구현 완료의 검증 조건으로 사용합니다.
 
-[테스트 코드를 도입하면서 세운 기준](https://jingeon27.tistory.com/25)
+[테스트 코드를 도입하면서 세운 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준)
 
 #### AI 개발 workflow | 2026.04 – 현재
 
@@ -107,7 +107,7 @@
 - 반복되는 판단은 skills·lint rule에 남기고 미사용 코드는 Knip으로 확인합니다. 슬라이스 내부 파일을 직접 참조하던 위반 271건을 정리했습니다. lint rule은 RuleTester·`__fixture__`·mock으로 검증합니다.
 - 병렬 worktree의 CPU 부하를 줄이려고 작업 중에는 변경·영향 범위의 lint·테스트와 앱·패키지 단위 typecheck를 실행합니다. 전체 검사는 CI에서 확인합니다.
 
-[AI 개발 workflow 개선](https://jingeon27.tistory.com/31)
+[AI 개발 workflow 개선](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### 기술 선택과 전환 | 2025.10 – 현재
 
@@ -138,7 +138,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 검색·상세·예약·�
 - 앱별 Query key·조회 함수를 공용 패키지로 모으고 mutation마다 갱신 대상을 정했습니다. 드래그 컴포넌트는 공고 순서·중첩 필터 트리·설정 테이블에서 공유하고 클릭·드래그 충돌을 조정했습니다.
 - 채용 사이트 로그인 → 지원자 수집 → 중복 확인 → 업로드를 공통 단계와 사이트별 adapter로 나누는 Electron 초기 구조를 설계하고 잡플래닛·게임잡을 연동했습니다. NestJS는 무겁다는 CTO 피드백을 받아 닷새 만에 제거하고, 모듈 구분·생성자 주입은 참고해 factory에서 조립했습니다. 이후 동료가 상당 부분을 다시 작성했으며 제 역할은 초기 구조와 사이트 연동입니다. 기존 Sentry 오류 수집의 레벨도 구분했습니다.
 
-[Electron 구조 변경](https://jingeon27.tistory.com/5) · [Query key 공통화](https://jingeon27.tistory.com/6)
+[Electron 구조 변경](https://blog.bambyul.com/ko/blog/nestjs의-책임-분리를-참고해-electron-수집-앱을-나눈-기준) · [Query key 공통화](https://blog.bambyul.com/ko/blog/tanstack-query-v4의-query-key를-query-key-factory로-정리한-이유)
 
 ## 기술
 

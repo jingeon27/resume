@@ -1,6 +1,6 @@
 # 김진건
 
-**Frontend Engineer** · <jingeon27@gmail.com> · [GitHub](https://github.com/jingeon27) · [Blog](https://jingeon27.tistory.com/)
+**Frontend Engineer** · <jingeon27@gmail.com> · [GitHub](https://github.com/jingeon27) · [Blog](https://blog.bambyul.com/ko/blog)
 
 복지몰·CMS·병원 CRM 단독 담당 · Claude Code 기반 AI 워크플로우 구축
 
@@ -29,8 +29,8 @@
 
 **판매자/운영자 관리 도구 (백오피스)**
 
-- 프로그램 관리는 시술상세 추가에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하도록 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했습니다. ([글](https://jingeon27.tistory.com/18))
-- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 적용했습니다. ([글](https://jingeon27.tistory.com/19))
+- 프로그램 관리는 시술상세 추가에 맞춰, 프로그램을 상세 이미지 템플릿(`SafedocTemplate`/`CustomImage`) 형식으로 등록하도록 다시 설계했습니다(38필드 복합 폼). 예약·정산·쿠폰·병원 계약 운영 화면은 SearchFilter / Table / Modal / Drawer / Detail Form 패턴으로 정리했습니다. ([글](https://blog.bambyul.com/ko/blog/두-관리자-앱의-프로그램-폼을-만드는-과정))
+- 정산은 메인과 도메인이 달라 쿠키를 공유할 수 없었습니다. 첫 구현이던 URL 토큰 전달은 access log·Referer에 토큰이 남을 위험이 있어, form POST BFF로 바꾸고 CSP `form-action` 고정, open redirect 방어를 적용했습니다. ([글](https://blog.bambyul.com/ko/blog/정산-서비스를-별도-호스트로-분리하며-도메인-간-토큰-전달을-설계한-과정))
 - 정리해 둔 패턴을 기반으로 쿠폰 템플릿 관리 도메인을 약 12개 파일 규모로 구현했습니다.
 
 **모노레포 재설계 (Turborepo + pnpm)**
@@ -53,9 +53,9 @@
 
 **제품 UX & 모바일**
 
-- AI 상담 챗봇은 포맷을 바꿀 수 없는 외부 세션 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, 렌더는 세션 SSE 하나로 일원화하되 AI 생성 스트림은 연결 유지용으로 분리했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://jingeon27.tistory.com/20))
+- AI 상담 챗봇은 포맷을 바꿀 수 없는 외부 세션 SSE를 `@tanstack/ai` 어댑터 계약에 맞춰야 했습니다. 콜백으로 오는 SSE를 async generator로 바꾸는 push→pull 브릿지를 만들었고, 렌더는 세션 SSE 하나로 일원화하되 AI 생성 스트림은 연결 유지용으로 분리했습니다. 이 과정에서 `useChat`이 `ChatClient`를 `useMemo`로 생성해 인스턴스 안정성이 보장되지 않는 걸 발견해 `useState` lazy init PR을 upstream에 올렸습니다([PR #864](https://github.com/TanStack/ai/pull/864), 리뷰 중). ([글](https://blog.bambyul.com/ko/blog/우리-백엔드가-못-건드리는-영역에서-ai-상담-챗봇-붙이기))
 - `@core` primitive 20개를 Radix/shadcn 기반으로 정리하고 `tailwind-variants` 토큰으로 묶었습니다. BottomSheet는 Compound + `overlay-kit`로 만들어 뒤로가기·backdrop·snap 같은 모바일 엣지케이스를 한곳에서 처리했습니다.
-- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고, 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. 가족 동기화 컴포넌트는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://jingeon27.tistory.com/11) · [리뷰](https://jingeon27.tistory.com/15))
+- 예약·리뷰·상담 폼을 `RHF + Zod`로 정리하고, 다단계 리뷰 작성은 `@use-funnel/core`로 구조화했습니다. 가족 동기화 컴포넌트는 520줄에서 55줄로 줄었고, 흩어져 있던 if 검증을 `superRefine` 스키마로 옮겼습니다. ([예약](https://blog.bambyul.com/ko/blog/예약-폼의-작성-상태를-zustand에서-react-hook-form으로-옮긴-과정) · [리뷰](https://blog.bambyul.com/ko/blog/3단계-리뷰-작성-폼의-역할을-rhfzod퍼널로-다시-나눈-과정))
 - 웹과 인앱 웹뷰에서 같은 예약/상담 흐름이 깨지지 않도록 bridge, popstate, BottomSheet, backdrop 동작을 함께 봤습니다.
 
 **데이터 레이어 & RSC 캐싱**
@@ -63,7 +63,7 @@
 - 서버에서 `dehydrate`한 캐시를 클라이언트가 props/Context로만 받아 쓰다 보니, 캐시를 무효화해도 화면이 안 바뀌는 상태였습니다. `queryOptions` prefetch → `HydrationBoundary` → `useSuspenseQuery` 구독으로 바꿔 캐시와 화면을 한 소스로 묶었습니다.
 - 전역 상태도 정리했습니다. 유저 정보 Context를 걷어내 React Query로 모으고, Zustand store에 흩어져 있던 폼 상태 관리를 React Hook Form으로 통합했습니다.
 - 아키텍처는 FSD의 도메인 중심 분리를 그대로 따르기보다, 서버 모델을 그대로 반영하는 재사용 UI(예: `ProgramCard`)는 공용 레이어로 내리고 page마다 달라지는 특이 UI는 page에서 조립하는 걸 기준으로 삼았습니다. 도메인이 아니라 두 번째 사용처(재사용)가 분리 신호이고, page는 로직 없이 연결만 하는 얇은 adapter로 둡니다. (전임자가 도입한 FSD가 Atomic Design과 혼용돼 있던 상태를 FSD로 통일한 뒤 이 방향으로 개선했습니다.)
-- axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다. ([글](https://jingeon27.tistory.com/21))
+- axios 서버 인터셉터에서 `cookies()`를 떼서 공개 API의 정적 생성(sitemap 등)을 살렸고, 토큰이 꼭 필요한 `member/info`만 전용 fetch로 따로 뺐습니다. ([글](https://blog.bambyul.com/ko/blog/동적-사이트맵을-만들며-공개-api와-인증-api의-경계를-나눈-과정))
 - `code-reviewer`, Zod·타입 경계, 도메인별 패턴으로 반복 회귀를 줄였습니다.
 
 ### 왓타임 (Whattime / round) | Frontend Engineer | 2024.01 – 2024.11
