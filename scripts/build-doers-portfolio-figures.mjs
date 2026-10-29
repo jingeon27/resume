@@ -68,13 +68,13 @@ const screenImage = (file, x, y, width) => {
 const figures = [];
 figures.push({
   name: '01-service-screens',
-  svg: frame('현재 개발 중인 모바일 화면', 'Game Mate 피드와 회원가입, 사진 커뮤니티의 그룹 탐색', 1030,
-    text(110, 182, 'Game Mate 홈', { size: 26, weight: 700 }) +
-    text(570, 182, 'Game Mate 회원가입', { size: 26, weight: 700 }) +
+  svg: frame('현재 개발 중인 모바일 화면', 'Game Mate 친추 판매와 코칭, 별사대 그룹 탐색 | 2026.10.30 촬영', 1030,
+    text(110, 182, 'Game Mate 친추 판매', { size: 26, weight: 700 }) +
+    text(570, 182, 'Game Mate 코칭', { size: 26, weight: 700 }) +
     text(1030, 182, '사진 커뮤니티 탐색', { size: 26, weight: 700 }) +
     [94, 554, 1014].map((x) => rect(x, 198, 332, 720, { radius: 24 })).join('') +
-    screenImage('game-feed.png', 110, 214, 300) +
-    screenImage('game-signup.png', 570, 214, 300) +
+    screenImage('game-sales.png', 110, 214, 300) +
+    screenImage('game-coaching.png', 570, 214, 300) +
     screenImage('photo-explore.png', 1030, 214, 300)),
 });
 
@@ -201,16 +201,44 @@ figures.push({
     text(108, 964, '개발용 이벤트와 테스트 상호작용으로 전송과 수신을 확인했습니다. 운영 사용자 성과와는 구분합니다.', { size: 24, fill: C.muted })),
 });
 
+const displayedHeight = (file, width) => {
+  const capture = captureManifest.captures.find((entry) => entry.file === file);
+  if (!capture) throw new Error(`화면 출처가 없습니다: ${file}`);
+  return Math.ceil(width * capture.height / capture.width);
+};
+const groupHeight = displayedHeight('photo-group.png', 340);
+const profileHeight = displayedHeight('game-profile-edit.png', 340);
 figures.push({
   name: '09-product-interactions',
-  svg: frame('그룹에서 사진을 보고 프로필을 수정하는 화면', '사진 커뮤니티의 게시물과 인기, Game Mate의 Bottom Sheet 입력 흐름', 1320,
-    text(230, 182, '사진 커뮤니티 그룹', { size: 26, weight: 700 }) +
+  svg: frame('사진을 보고 프로필을 수정하는 실제 화면', '별사대 그룹과 Game Mate 프로필 | 2026.10.30 촬영, 테스트 데이터', Math.max(groupHeight, profileHeight) + 310,
+    text(230, 182, '별사대 그룹', { size: 26, weight: 700 }) +
     text(870, 182, 'Game Mate 프로필 수정', { size: 26, weight: 700 }) +
-    rect(214, 198, 372, 1014, { radius: 24 }) +
-    rect(854, 198, 372, 818, { radius: 24 }) +
+    rect(214, 198, 372, groupHeight + 32, { radius: 24 }) +
+    rect(854, 198, 372, profileHeight + 32, { radius: 24 }) +
     screenImage('photo-group.png', 230, 214, 340) +
     screenImage('game-profile-edit.png', 870, 214, 340) +
-    lines(870, 1080, ['닉네임과 소개, 링크를', '한 시트에서 수정합니다.'], { size: 25, fill: C.muted })),
+    lines(870, profileHeight + 278, ['실제 폼에 입력한 화면입니다.', '닉네임과 소개를 함께 수정합니다.'], { size: 24, fill: C.muted })),
+});
+figures.push({
+  name: '10-game-marketplace',
+  svg: frame('친추 판매와 코칭을 연결하는 화면', '가격과 조건을 보고 문의할 상대를 고릅니다 | 2026.10.30 촬영, 테스트 데이터', 1110,
+    text(230, 182, '친추 판매 모집', { size: 26, weight: 700 }) +
+    text(870, 182, '코칭 모집과 수강료', { size: 26, weight: 700 }) +
+    rect(214, 198, 392, 812, { radius: 24 }) +
+    rect(854, 198, 392, 812, { radius: 24 }) +
+    screenImage('game-sales.png', 230, 214, 360) +
+    screenImage('game-coaching.png', 870, 214, 360)),
+});
+const createGroupHeight = displayedHeight('photo-group-create.png', 340);
+figures.push({
+  name: '11-photo-group-flow',
+  svg: frame('그룹을 만들고 공개 그룹을 탐색하는 화면', '별사대의 그룹 생성 페이지와 탐색 | 2026.10.30 촬영, 테스트 데이터', createGroupHeight + 310,
+    text(230, 182, '그룹 생성 페이지', { size: 26, weight: 700 }) +
+    text(870, 182, '공개 그룹 탐색', { size: 26, weight: 700 }) +
+    rect(214, 198, 372, createGroupHeight + 32, { radius: 24 }) +
+    rect(854, 198, 372, displayedHeight('photo-explore.png', 340) + 32, { radius: 24 }) +
+    screenImage('photo-group-create.png', 230, 214, 340) +
+    screenImage('photo-explore.png', 870, 214, 340)),
 });
 
 const previews = [];

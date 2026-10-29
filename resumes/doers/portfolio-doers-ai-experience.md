@@ -34,7 +34,7 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](https
 
 ![별사대 그룹 게시물과 Game Mate의 프로필 수정 화면](assets/ai-experience/09-product-interactions.png)
 
-*실제 구현 화면입니다. 게시물과 계정은 화면 검증용 데이터입니다.*
+*2026년 10월 30일 최신 작업 코드의 실제 화면을 다시 촬영했습니다. 게시물과 계정, 가격은 촬영용 테스트 데이터입니다.*
 
 ### 별사대는 대회가 없어도 사진을 모을 수 있게 바꿨습니다
 
@@ -46,6 +46,10 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](https
 
 화면에서는 사진을 가리는 순위와 실제로 없는 스토리 기능의 테두리를 빼도록 요청했습니다. 참고한 서비스의 장식을 그대로 가져오기보다 사진을 보고 반응하는 흐름에 필요한 요소를 골랐습니다. 공개 그룹은 누구나 내용을 볼 수 있게 하고 비공개 그룹은 가입 승인을 거치게 했습니다.
 
+![별사대의 최신 그룹 생성과 공개 탐색 화면](assets/ai-experience/11-photo-group-flow.png)
+
+*그룹 이름과 소개, 공개 범위를 입력하는 실제 생성 페이지와 공개 그룹 탐색입니다. 격리 환경에서 만든 그룹을 표시합니다.*
+
 검증하려는 가설은 대회가 없어도 친구들과 사진을 모으는지, 초대와 반응이 재방문으로 이어지는지입니다. 가입 → 첫 게시물 → 좋아요 → 재방문 흐름을 확인할 준비를 했으며 실사용 성과는 아직 측정하지 않았습니다.
 
 ### Game Mate는 친추 판매와 코칭을 연결하려고 시작했습니다
@@ -54,7 +58,11 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [이력서](https
 
 가입 때 게임 프로필 연결은 선택 사항으로 뒀습니다. 로그인과 가입 정보 입력은 별도 페이지로 나누고, 짧은 화면에서도 완료 버튼은 하단에 남기고 입력 본문만 스크롤되게 했습니다. 프로필 수정은 Bottom Sheet로 모으고 자기소개 DB 필드와 API 계약, SDK도 함께 바꿨습니다. 운영자 문의와 인증 요청은 관리자 1:1 채팅으로 받도록 했습니다.
 
-[별사대 제품 방향](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/docs/product-plan.md) | [Game Mate 구현 범위](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/product.md) | [피드와 가입 화면](assets/ai-experience/01-service-screens.png)
+![Game Mate의 최신 친추 판매와 코칭 모집 화면](assets/ai-experience/10-game-marketplace.png)
+
+*친추 판매의 금액과 가격 협의, 코칭의 모집 역할과 수강료 단위를 보여 줍니다. 실제 거래나 매칭 성과를 나타내는 데이터는 아닙니다. [데스크톱 친추 판매 화면](assets/ai-experience/captures/game-sales-desktop.png)과 [로그인 화면](assets/ai-experience/captures/game-login.png)도 같은 코드로 촬영했습니다.*
+
+[별사대 제품 방향](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/docs/product-plan.md) | [Game Mate 구현 범위](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/product.md) | [최신 모바일 화면 모음](assets/ai-experience/01-service-screens.png)
 
 ## 글 저장과 캐시 갱신의 실패를 나눴습니다
 
@@ -90,19 +98,43 @@ Game Mate에서는 직접 업로드한 파일의 확정 조건도 검토했습�
 
 Game Mate의 작성과 수정은 입력 필드만 공유합니다. 작성 후 페이지 이동과 수정 후 창 닫기는 각 화면에서 처리하도록 나눴습니다. 파일 배치와 공통 코드 사용처럼 맥락이 필요한 기준은 skills에 적고 FSD 의존 방향과 공개 API, 컴포넌트의 직접 fetch와 중복 오버레이 상태는 lint rule로 검사합니다. 규칙은 RuleTester와 fixture로 테스트합니다.
 
-서버 데이터는 별사대의 Apollo와 Game Mate의 TanStack Query에 두고 폼은 RHF와 Zod, 오버레이는 overlay-kit으로 관리합니다. 별사대는 GraphQL 문서에서 타입을 생성하고 모든 문서를 서버 스키마와 대조합니다. 페이지네이션과 낙관적 갱신은 실제 Apollo 캐시로 확인합니다. Game Mate의 REST 계약은 OpenAPI와 Orval SDK로 연결합니다.
+![서비스마다 다른 API와 캐시를 유지하고 UI와 lint 기준을 공유한 구조](assets/ai-experience/03-service-architecture.png)
 
-API 통합 테스트는 격리된 PostgreSQL의 결과를 확인합니다. 대회당 한 표, 동시 가입과 양도, 캐시 호출 경합처럼 권한과 동시성이 중요한 조건을 포함합니다. 브라우저와 WebView 흐름은 Playwright로 확인하되 OS 기능과 외부 인증은 fixture로 대체합니다. 실행별 DB 스키마와 포트, 빌드 경로를 나눠 개발 서버와 다른 테스트를 건드리지 않게 했습니다.
+서버 데이터는 별사대의 Apollo와 Game Mate의 TanStack Query에 두고 폼은 RHF와 Zod, 오버레이는 overlay-kit으로 관리합니다.
 
-[서비스 구조도](assets/ai-experience/03-service-architecture.png) | [테스트 범위](assets/ai-experience/06-test-strategy.png) | [공용 ESLint](https://github.com/jingeon27/side-project/blob/b758d2e8/packages/config/eslint/README.md) | [Apollo 사용 기준](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/apps/web/.agents/skills/apollo/SKILL.md)
+[공통 디자인 시스템](https://github.com/jingeon27/side-project/tree/82199271/packages/design-system) | [테스트 기준](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/.agents/skills/testing/SKILL.md) | [공용 ESLint](https://github.com/jingeon27/side-project/blob/b758d2e8/packages/config/eslint/README.md) | [Apollo 사용 기준](https://github.com/jingeon27/side-project/blob/89b25290/projects/photo-contest/apps/web/.agents/skills/apollo/SKILL.md)
+
+### GraphQL과 REST에서 계약을 확인하는 방법
+
+별사대는 NestJS의 schema-first GraphQL을 사용합니다. 도메인별 스키마와 resolver를 나누고 웹의 쿼리 문서에서 GraphQL Code Generator로 타입이 붙은 Document를 만듭니다. 모든 연산과 fragment를 서버 스키마와 대조하고 연산 이름이 겹치지 않는지도 검사합니다. 서버는 쿼리 깊이와 필드, alias 수를 제한합니다.
+
+Apollo 캐시는 객체 id를 기준으로 갱신하고 자식 컴포넌트는 `useFragment`로 필요한 값을 읽습니다. 사진 목록의 페이지네이션과 좋아요의 낙관적 갱신은 실제 InMemoryCache에 데이터를 써서 확인합니다. 도메인별 캐시 정책을 합칠 때 같은 필드를 중복 정의하면 실패하도록 했습니다.
+
+RSC의 `PreloadQuery` 결과를 브라우저로 넘기고 화면은 같은 조회를 구독합니다. 개인화된 요청과 공개 SEO 요청을 분리하고, mutation 일부가 저장된 뒤 다른 필드가 실패해 응답의 `data`가 null이 되는 경우도 공개 캐시 만료 조건에서 다룹니다.
+
+Game Mate는 OpenAPI에서 생성한 Orval SDK와 Zod 응답 검증을 사용합니다. ID와 권한, 세션처럼 잘못 읽으면 안 되는 값은 검증에 실패하면 요청을 실패로 처리하고 화면 표시용 필드에만 기본값을 허용했습니다. 조회와 mutation options는 필요한 곳에서 조합하고 서버 데이터를 별도 UI 상태로 복제하지 않게 했습니다.
+
+### 테스트마다 확인할 결과를 나눴습니다
+
+![함수와 UI, API와 DB, 브라우저 흐름의 검증 범위](assets/ai-experience/06-test-strategy.png)
+
+함수와 스키마는 Vitest로, UI와 폼은 React Testing Library로 확인합니다. 단순 호출 횟수 대신 실제 폼 입력과 제출값, 캐시에 남은 값을 단언합니다. API는 Supertest 요청 뒤 DB에 저장된 결과를 확인합니다. 대회당 한 표와 동시 가입, 관리자 양도, 캐시 호출 경합처럼 권한과 동시성이 중요한 조건을 포함합니다. 브라우저 흐름은 Playwright로 검증합니다. unit과 integration 테스트는 구현 옆에 두고 설정은 앱이 소유하며 루트에서는 실행만 위임합니다.
+
+웹과 WebView 호스트를 연결한 테스트는 글 작성과 댓글, 채팅과 화면 이동을 확인합니다. OS 기능과 외부 OAuth를 fixture로 대신한 테스트를 실기기나 실제 제공자 연동의 성공으로 해석하지 않습니다. DB와 S3의 테스트 데이터도 실행별로 나누고 해당 실행이 만든 스키마와 객체만 정리합니다.
+
+공통 lint rule도 RuleTester와 fixture로 검사합니다. FSD 경계와 공개 API, 직접 fetch와 오버레이 상태 중복을 규칙으로 옮기되 DOM 관련 규칙은 Expo에 적용하지 않습니다. 작성과 수정의 책임을 어디서 나눌지처럼 맥락에 따라 달라지는 판단은 skills와 코드 리뷰에 남깁니다.
 
 ## 수집 성공 응답 뒤 실제 데이터도 다시 조회했습니다
 
-Sentry와 Amplitude 설정을 넣은 뒤 개발용 확인 이벤트를 보내고 MCP로 다시 조회했습니다. Sentry에서는 eventId로 오류를, Amplitude에서는 개발 프로젝트의 페이지뷰를 확인했습니다. 이 과정에서 사진 서비스의 개발 모드 중복 페이지뷰와 자동 URL 수집에 검색어가 붙는 문제를 찾아 고쳤습니다.
+Sentry와 Amplitude 설정을 넣은 뒤 개발용 확인 이벤트를 보내고 MCP로 다시 조회했습니다.
+
+![오류와 Web Vitals, 사용자 행동의 수신 결과를 MCP로 다시 확인하는 흐름](assets/ai-experience/08-monitoring-mcp.png)
+
+수집된 값은 서비스와 실행 위치, 배포 버전을 구분해 남깁니다. Sentry에서는 eventId로 오류를, Amplitude에서는 개발 프로젝트의 페이지뷰를 확인했습니다. 이 과정에서 사진 서비스의 개발 모드 중복 페이지뷰와 자동 URL 수집에 검색어가 붙는 문제를 찾아 고쳤습니다.
 
 Web Vitals는 브라우저 테스트에서 LCP, CLS, INP, FCP, TTFB 전송을 확인합니다. 실제 Sentry로 보낸 검증용 LCP, CLS, INP span도 trace ID로 다시 조회했습니다. 경로의 ID와 검색어는 제거하고 측정값을 남깁니다. 수신 경로를 검증한 것이며 사용자 성능을 개선한 결과로 쓰지는 않습니다.
 
-[수집과 MCP 검증 흐름](assets/ai-experience/08-monitoring-mcp.png) | [Game Mate 검증 기록](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/observability.md) | [별사대 검증 기록](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/docs/observability.md)
+[Game Mate 검증 기록](https://github.com/jingeon27/side-project/blob/82199271/projects/game-feedback/docs/observability.md) | [별사대 검증 기록](https://github.com/jingeon27/side-project/blob/82199271/projects/photo-contest/docs/observability.md)
 
 ## 초기 비용과 복구 부담을 함께 비교했습니다
 

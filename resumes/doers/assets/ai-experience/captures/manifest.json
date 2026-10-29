@@ -1,52 +1,118 @@
 {
-  "updatedOn": "2026-10-26",
+  "updatedOn": "2026-10-30",
   "timezone": "Asia/Seoul",
   "dataKind": "test-fixture",
+  "captureMethod": "Playwright Chromium, production web build and real isolated API/PostgreSQL; S3 upload for photo fixture. No screenshot pixel editing.",
+  "sourceState": "Latest local worktree, including uncommitted and untracked source files. sourceCommit records its base; workingTreeFilesSha256 fingerprints Git-listed source paths and contents.",
   "captures": [
     {
       "file": "game-feed.png",
-      "source": "side-project-photo-contest-password-only/projects/game-feedback/apps/web/.e2e-build/ci-regression-results/mobile-shell-390px-mobile--411ea-ssible-header-actions-in-en-chromium/brand-header-en-390.png",
-      "verifiedAgainst": "fe32d081",
-      "fileModifiedAt": "2026-10-24T18:19:43.950Z",
-      "width": 390,
-      "height": 844,
-      "sha256": "a7a3e54521913293d4cbeb20ba20ddee41d037c56a5cab8c87155e414ed07aa9"
-    },
-    {
-      "file": "game-signup.png",
-      "source": "side-project-onboarding-layout/projects/game-feedback/apps/web/.data/layout-results/onboarding-layout-signup-k-bae14-at-different-viewport-sizes-chromium/signup-393-852.png",
-      "verifiedAgainst": "c17a3164",
-      "fileModifiedAt": "2026-10-25T16:01:23.529Z",
-      "width": 393,
-      "height": 852,
-      "sha256": "b257348ce5ced20553c6da4348566bf7f870df067a846cdd771b1199d9013c96"
-    },
-    {
-      "file": "photo-explore.png",
-      "source": "side-project-runtime-observability/projects/photo-contest/apps/web/.data/brand-refinement/explore-430-light.png",
-      "verifiedAgainst": "2aa865bf",
-      "fileModifiedAt": "2026-10-25T15:47:45.152Z",
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:47.868801+00:00",
       "width": 430,
-      "height": 958,
-      "sha256": "4d821d8c6f4434dd74388289057858ddeb95eb4240773788f691b8633556eb8d"
+      "height": 932,
+      "sha256": "24391ea7fee80d2ac9cafdccbf6d5955e2272af7c0b32b51b0b7d5e215c525f7"
     },
     {
-      "file": "photo-group.png",
-      "source": "side-project-runtime-observability/projects/photo-contest/apps/web/.data/brand-refinement/group-430-light.png",
-      "verifiedAgainst": "2aa865bf",
-      "fileModifiedAt": "2026-10-25T15:47:45.572Z",
+      "file": "game-sales.png",
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:48.034566+00:00",
       "width": 430,
-      "height": 1237,
-      "sha256": "237fd3b3adc9f1439f095d99776aac27fb84cab4af2a5d00b46d77c133027a98"
+      "height": 932,
+      "sha256": "fecfd496643ce3212642409b4c7303bdf62f45a19df93c7d0ec190569f83f3ef"
+    },
+    {
+      "file": "game-coaching.png",
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:48.258101+00:00",
+      "width": 430,
+      "height": 932,
+      "sha256": "ee7a10e2530384265e6daff0ad9ebb6577fbf61e765fad68092eef5ac1f281ea"
+    },
+    {
+      "file": "game-sales-desktop.png",
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:48.072755+00:00",
+      "width": 1280,
+      "height": 900,
+      "sha256": "c025cbe9cfbc0305423e70253d32882a881a84c8e64b317795819cd1bc352006"
+    },
+    {
+      "file": "game-login.png",
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:48.378376+00:00",
+      "width": 430,
+      "height": 932,
+      "sha256": "7b499fc819620fbfd484caef541e2370bea44c7af7a51748cc6549b765ced445"
     },
     {
       "file": "game-profile-edit.png",
-      "source": "side-project-onboarding-layout/projects/game-feedback/apps/web/test-results/profile-editor-프로필-수정-창에서-닉네임·소개·링크·사진을-관리한다-390px--chromium/profile-edit-sheet.png",
-      "verifiedAgainst": "c17a3164",
-      "fileModifiedAt": "2026-10-25T16:18:21.340Z",
-      "width": 390,
-      "height": 900,
-      "sha256": "ef7ec27e7f80e30785b7dad786b9053e692eba50d874fbedcb7fe41866c97b72"
+      "source": "side-project/projects/game-feedback/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:48.955860+00:00",
+      "width": 430,
+      "height": 932,
+      "sha256": "c5d09b2d875c8a0a054a11b1f9a44a1ef56a2ebaea3d0a2b59bde32373c4fa02"
+    },
+    {
+      "file": "photo-explore.png",
+      "source": "side-project/projects/photo-contest/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:05.648621+00:00",
+      "width": 430,
+      "height": 932,
+      "sha256": "2959da6bcdaa868c24fe5a0b839d041a48ddfce57fc4967e63e05ee80c30fd4f"
+    },
+    {
+      "file": "photo-group.png",
+      "source": "side-project/projects/photo-contest/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:06.173612+00:00",
+      "width": 430,
+      "height": 1568,
+      "sha256": "2b9d42e4f60a630e9fdb90e551b58e61d119c73a8280fbb55154fe94b7dd4ff6"
+    },
+    {
+      "file": "photo-group-create.png",
+      "source": "side-project/projects/photo-contest/apps/web/.data/portfolio-capture/capture.spec.ts",
+      "sourceCommit": "89b25290b4e3fd8e820225576f13798c76c4dcc2",
+      "sourceBranch": "fix/project-wide-audit",
+      "workingTreeDirty": true,
+      "workingTreeDiffSha256": "af7d3ee11ccf20b2af68a65efdede28e80a9a260e9140f095fe36033bd5f6dad",
+      "capturedAt": "2026-10-29T17:22:06.277798+00:00",
+      "width": 430,
+      "height": 1100,
+      "sha256": "8829952a56947a21cbab15729dfaa59f4cc10bdb12cc7049798c4db9b1aa78ed"
     }
-  ]
+  ],
+  "workingTreeFilesSha256": "d70cc5e759c9ffb4b69ddd45ccc746658bc824e78d704aebeb57b9176fd86d05"
 }
