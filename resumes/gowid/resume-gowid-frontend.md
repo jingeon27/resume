@@ -6,17 +6,17 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 ## 소개
 
-예약금 결제와 쿠폰, 정산 화면을 개발해 온 프론트엔드 엔지니어입니다. 사용자 신청부터 병원과 운영팀의 처리까지 함께 맡았습니다. 결제 복귀 시 입력 복원과 일부 저장 성공 후 재시도를 다루며, 사용자가 실패한 작업을 다시 처리할 때 어떤 값과 상태를 유지할지 확인합니다.
+테스트와 검증을 강점으로 삼는 프론트엔드 엔지니어입니다. 예약금 결제와 쿠폰, 정산 화면을 개발하며 실제 폼의 제출값과 API 실패 뒤 동작을 확인해 왔습니다. 결제 복귀 시 입력 복원과 부분 저장 후 재시도를 다루며, 실패한 작업을 다시 처리할 때 입력이 유지되고 중복 등록이 생기지 않는지 검증합니다.
 
-정산에서는 실제 기준 금액을 먼저 확인해 불필요한 가격 이력 구조를 만들지 않았습니다. 현재 개발과 QA, 병원 관리자와 백오피스의 화면 디자인을 맡고 있으며, AI가 구현한 코드와 테스트를 검토합니다.
+현재 개발과 QA, 병원 관리자와 백오피스의 화면 디자인을 맡고 있습니다. AI가 구현한 제품 코드와 테스트를 읽고, 테스트가 실제 앱과 같은 조건을 확인하는지도 검토합니다.
 
 [상세 포트폴리오와 경력기술서](https://github.com/jingeon27/resume/blob/main/portfolio.md) | [AI 활용 경험](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md)
 
 ## 지원동기
 
-법인카드의 발급과 한도, 이용 내역을 다루는 화면에서는 금액과 처리 상태를 정확히 전달해야 한다고 생각합니다. 여러 API와 업무 규칙을 화면에 연결해 온 경험을 고위드의 기업 금융 서비스에 살리고 싶습니다.
+금융 서비스에서는 금액과 처리 상태를 정확히 전달하고, 요청이 실패하거나 재시도해도 사용자가 결과를 오해하지 않도록 안정성을 확보하는 일이 중요하다고 생각합니다. 실제 제출값과 실패 조건을 검증해 온 경험을 고위드의 법인카드 발급과 한도, 이용 내역 화면에 살리고 싶습니다.
 
-결제 복귀와 부분 저장 실패를 처리하고, 운영팀과 정산 기준을 확인하며 기능을 다듬어 왔습니다. 고위드에서도 PM, 디자이너, 사업조직과 예외 조건을 맞추고 사용자가 실패한 작업을 다시 마칠 수 있도록 개발하겠습니다.
+결제 복귀와 부분 저장 실패를 처리하고 운영팀과 정산 기준을 확인하며 기능을 다듬어 왔습니다. 고위드에서도 PM, 디자이너, 사업조직과 예외 조건을 맞추고 테스트와 운영 오류 추적으로 안정성을 확인하며 개발하겠습니다.
 
 ## 경력
 
@@ -34,6 +34,18 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 - 검사항목 일괄 저장이 일부만 성공하면 서버 목록을 다시 받아 발급된 ID를 폼에 반영했습니다. 재시도할 때 이미 저장한 항목이 중복 등록되지 않도록 했습니다.
 
 [건강검진 개발 과정](https://blog.bambyul.com/ko/blog/기존-프로그램-구조에-건강검진을-들이며-화면을-나눈-기준)
+
+#### 테스트와 AI 개발 workflow | 2026.04 – 현재
+
+2026년 7월부터 테스트를 도입해 실제 폼 입력과 제출값, API 실패 뒤 화면 동작을 검증합니다. 4월부터는 에이전트로 구현하며, 완성된 제품 코드와 테스트를 읽고 화면을 띄워 동작을 확인합니다. 반복해서 어긋나는 판단은 skills에 남기고, 의존 방향과 공개 API처럼 자동 검사할 수 있는 항목은 lint rule로 만듭니다.
+
+티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
+
+- 새 기능은 BDD 형식의 `*.spec`에 컴포넌트별 기대 동작을 적고 누락을 검토합니다. 운영이나 QA 오류는 `*.test`에 재현하며, 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지 확인합니다.
+- 실제 폼을 입력하고 제출해 요청값을 검증합니다. 기대 payload는 제품의 변환 함수를 재사용하지 않고 따로 적습니다. API 연동은 dev API 서버를 우선하고 어려운 조건은 MSW로 재현합니다.
+- 테스트용 QueryClient를 앱과 맞춰 첫 조회 실패와 기존 데이터의 재조회 실패를 나눠 확인합니다. 병원 관리자 등록부터 백오피스 검수와 승인까지는 두 앱을 연결한 E2E로 검증합니다. 자체 lint rule은 RuleTester와 fixture, mock으로 확인합니다.
+
+[테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
 #### 정산과 쿠폰 결제, 기업 관리 | 2025.06 – 현재
 
@@ -66,18 +78,6 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 [Sentry 도입](https://blog.bambyul.com/ko/blog/sentry로-에러-수집부터-web-vitalsmcp릴리스까지-연결한-과정) | [크래시 분석](https://blog.bambyul.com/ko/blog/sentry가-잡아-준-bottom-sheet-드래그-크래시-원인-경로가-사라진-버전으로-올리기까지)
 
-#### 테스트와 AI 개발 workflow | 2026.04 – 현재
-
-2026년 4월부터 에이전트로 구현하고 7월부터 테스트를 도입했습니다. 완성된 제품 코드와 테스트를 읽고 화면 동작을 확인합니다. 반복해서 어긋나는 판단은 skills에 남기고, 의존 방향과 공개 API처럼 자동 검사할 수 있는 항목은 lint rule로 만듭니다.
-
-티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
-
-새 기능은 BDD 형식의 `*.spec`에 컴포넌트별 기대 동작을 적고 누락을 검토합니다. 운영이나 QA 오류는 `*.test`에 재현하며, 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지 확인합니다. 기대 payload는 제품의 변환 함수를 재사용하지 않고 따로 적습니다. API 연동은 dev API 서버를 우선하고 어려운 조건은 MSW로 재현합니다. 자체 lint rule은 RuleTester와 fixture, mock으로 검증합니다.
-
-테스트용 QueryClient가 실제 앱과 다르게 오류를 처리하던 문제를 고쳤습니다. 첫 조회 실패와 기존 데이터의 재조회 실패를 나눠 확인하고, 병원 관리자 등록부터 백오피스 검수와 승인까지는 두 앱을 연결한 E2E로 검증합니다.
-
-[테스트 도입 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
-
 #### 글로벌 서비스와 개발 환경
 
 - 기존 제품을 운영하면서 PO의 프로토타입을 사용자 서비스와 CMS로 옮겨 3주 만에 PoC로 배포했습니다. 영어, 한국어, 아랍어와 RTL을 지원하고 인증 전후 입력 유지와 실패 안내를 보완했습니다.
@@ -99,7 +99,9 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 별사대는 사진 대회에서 상시 그룹으로 방향을 바꾸고 기존 사진과 링크를 보존했습니다. GraphQL과 Apollo Client를 사용하며 문서 계약과 캐시 갱신을 테스트합니다. Game Mate는 친추 판매와 코칭 모집 글에서 가격과 조건을 확인한 뒤 1:1 채팅으로 문의하는 서비스입니다. REST와 TanStack Query, NestJS, Prisma, PostgreSQL을 사용하고 S3 직접 업로드와 공개 캐시 갱신을 연결했습니다.
 
-[소스 코드](https://github.com/jingeon27/side-project) | [제품 판단과 구현 상세](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#개인-프로젝트에서-직접-정한-제품-방향)
+API 요청 뒤 실제 PostgreSQL의 저장 결과를 확인하고, 트랜잭션 롤백과 캐시 갱신 재시도, 늦은 응답이 새 변경 기록을 지우는 경합을 통합 테스트로 검증했습니다.
+
+[소스 코드](https://github.com/jingeon27/side-project) | [DB 롤백과 캐시 경합 테스트](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L217) | [제품 판단과 구현 상세](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#개인-프로젝트에서-직접-정한-제품-방향)
 
 ## 기술
 
