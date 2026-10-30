@@ -20,11 +20,12 @@
 | 사용자 흐름과 인터랙션 품질 | 리뷰의 선택과 확정 분리, 결제 복원, 검진 선택 동작 논의, 입력과 포커스를 유지하는 공통 UI |
 | 문제 정의부터 출시와 운영까지 | 직접 찾은 리뷰 불편을 Jira로 공유하고 개선안 배포, 요청된 검진 선택 동작의 문제 제기와 대안 구현, 운영 오류 대응 |
 | AI 활용과 빠른 프로토타입 검증 | 전체 workflow와 테스트 기준, 글로벌 사용자 서비스와 CMS의 3주 PoC, 개인 서비스 두 개와 블로그의 2주 구현 |
+| A/B 테스트 환경과 제품 실험 참여 | Amplitude 기반 환경 구축, 이벤트 140개 이상 추가 및 수정, 로그인 진입과 전화상담 실험의 구현 및 측정, UTM 설정 확인 |
 | 다양한 직군과 협업 | PO에게 문제 전달, 기획과 디자인의 개선안 구현, 개발팀장과 요구사항의 예외 논의, 백엔드와 API 계약 조율, 왓타임의 개발자와 디자이너 협업 |
 | React SSR과 인앱 WebView | prefetch와 hydration, 서버 메타데이터와 JSON-LD, 공개 조회와 인증 쿠키 분리, 외부 링크와 웹 내부 뒤로 가기 구분 |
 | Interaction과 Motion, UX 디테일 | Bottom Sheet와 모달의 열림 및 닫힘 전환, 키보드로 높이 조절, 입력 보존, 닫힌 뒤 포커스 복귀 테스트 |
 
-지원동기는 사용자가 선택한 기존 문안을 유지했습니다. 개인 프로젝트는 실제 공개 소스 `eaf692c52479da09a643c9d13f54be92a1444cd8`와 기존 포트폴리오를 대조했고, 공통 UI 링크는 해당 커밋에 고정했습니다. 두 서비스와 블로그의 2주 구현 기간은 사용자 설명을 반영했습니다.
+지원동기는 큰 제품을 여러 팀과 함께 만들고 싶은 이유에, 실험 참여 경험과 AI로 구현이 빨라진 만큼 판단력과 통찰을 기르고 싶다는 사용자 설명을 연결했습니다. A/B 테스트 환경 구축과 제품 실험의 구현 및 측정 범위를 명시하고, 문제 정의와 출시 뒤 결과 해석은 앞으로 함께 맡고 싶은 역할로 적었습니다. 개인 프로젝트는 실제 공개 소스 `eaf692c52479da09a643c9d13f54be92a1444cd8`와 기존 포트폴리오를 대조했고, 공통 UI 링크는 해당 커밋에 고정했습니다. 두 서비스와 블로그의 2주 구현 기간은 사용자 설명을 반영했습니다.
 
 개인 프로젝트의 인터랙션과 모션은 [Bottom Sheet 구현](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/packages/design-system/src/ui/bottom-sheet/BottomSheet.tsx)과 [전환 CSS](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/packages/design-system/src/ui/bottom-sheet/bottom-sheet.css), [키보드와 포커스 테스트](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/packages/design-system/src/ui/bottom-sheet/BottomSheet.spec.tsx#L83)를 대조했습니다.
 
