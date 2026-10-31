@@ -12,6 +12,7 @@
 - [공통 컬처핏과 업무 사례](공통%20컬처핏%20-%20유니크한%20장점.md)
 - [블로그 수정본](blog/revised/README.md)
 - [개인 블로그](https://blog.bambyul.com/ko/blog)
+- [이력서 작성과 피드백 스킬](.agents/skills/resume-evidence/SKILL.md)
 
 ## 회사별 이력서
 
