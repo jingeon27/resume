@@ -100,7 +100,8 @@ Frontend Engineer | 2024.01 – 2024.11
 - Monitoring & Analytics: Sentry, AWS CloudWatch, Amplitude
 - Tooling: pnpm, Yarn, Turborepo, ESLint, Knip
 - AI: Claude Code, Codex
-- API & Data (개인 프로젝트): NestJS, GraphQL, Apollo Client, Orval, Prisma, PostgreSQL
+- Backend (개인 프로젝트): NestJS, GraphQL, REST, Prisma, PostgreSQL
+- API Client (개인 프로젝트): Apollo Client, Orval
 - Infrastructure (개인 프로젝트): AWS S3, EC2, EBS, Terraform
 
 서버와 인프라는 개인 프로젝트의 설계와 구현, 배포 구성 경험입니다.
