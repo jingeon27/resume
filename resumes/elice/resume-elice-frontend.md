@@ -102,9 +102,9 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 ## 개인 프로젝트 | 2026.10 – 현재
 
-별사대와 Game Mate의 요구사항 정의부터 화면 설계, API와 DB, 테스트 기준과 배포 구성까지 맡습니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고 기술 선택과 완성된 결과를 검토합니다. 두 서비스 모두 공개 전입니다.
+피식과 Game Mate의 요구사항 정의부터 화면 설계, API와 DB, 테스트 기준과 배포 구성까지 맡습니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고 기술 선택과 완성된 결과를 검토합니다. 두 서비스 모두 공개 전입니다.
 
-별사대는 사진 대회에서 상시 그룹으로 방향을 바꾸고 기존 사진과 링크를 보존했습니다. GraphQL과 Apollo Client를 사용하며 문서 계약과 캐시 갱신을 테스트합니다. Game Mate는 친추 판매와 코칭 모집 글에서 가격과 조건을 확인한 뒤 1:1 채팅으로 문의하는 서비스입니다. REST와 TanStack Query, NestJS, Prisma, PostgreSQL을 사용하고 S3 직접 업로드와 공개 캐시 갱신을 연결했습니다.
+피식은 사진 대회에서 상시 그룹으로 방향을 바꾸고 기존 사진과 링크를 보존했습니다. GraphQL과 Apollo Client를 사용하며 문서 계약과 캐시 갱신을 테스트합니다. Game Mate는 친추 판매와 코칭 모집 글에서 가격과 조건을 확인한 뒤 1:1 채팅으로 문의하는 서비스입니다. REST와 TanStack Query, NestJS, Prisma, PostgreSQL을 사용하고 S3 직접 업로드와 공개 캐시 갱신을 연결했습니다.
 
 [소스 코드](https://github.com/jingeon27/side-project) | [제품 판단과 구현 상세](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#개인-프로젝트에서-직접-정한-제품-방향)
 

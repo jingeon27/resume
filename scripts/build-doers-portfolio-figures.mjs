@@ -68,14 +68,14 @@ const screenImage = (file, x, y, width) => {
 const figures = [];
 figures.push({
   name: '01-service-screens',
-  svg: frame('현재 개발 중인 모바일 화면', 'Game Mate 친추 판매와 코칭, 별사대 그룹 탐색 | 2026.10.30 촬영', 1030,
+  svg: frame('현재 개발 중인 모바일 화면', 'Game Mate 친추 판매와 코칭, 피식 소개 | 2026.10.31', 1030,
     text(110, 182, 'Game Mate 친추 판매', { size: 26, weight: 700 }) +
     text(570, 182, 'Game Mate 코칭', { size: 26, weight: 700 }) +
-    text(1030, 182, '사진 커뮤니티 탐색', { size: 26, weight: 700 }) +
+    text(1030, 182, '피식 소개', { size: 26, weight: 700 }) +
     [94, 554, 1014].map((x) => rect(x, 198, 332, 720, { radius: 24 })).join('') +
     screenImage('game-sales.png', 110, 214, 300) +
     screenImage('game-coaching.png', 570, 214, 300) +
-    screenImage('photo-explore.png', 1030, 214, 300)),
+    screenImage('photo-about.png', 1030, 214, 300)),
 });
 
 figures.push({
@@ -210,18 +210,18 @@ const groupHeight = displayedHeight('photo-group.png', 340);
 const profileHeight = displayedHeight('game-profile-edit.png', 340);
 figures.push({
   name: '09-product-interactions',
-  svg: frame('사진을 보고 프로필을 수정하는 실제 화면', '별사대 그룹과 Game Mate 프로필 | 2026.10.30 촬영, 테스트 데이터', Math.max(groupHeight, profileHeight) + 310,
-    text(230, 182, '별사대 그룹', { size: 26, weight: 700 }) +
+  svg: frame('사진을 보고 프로필을 수정하는 실제 화면', '피식 그룹과 Game Mate 프로필 수정 페이지 | 2026.10.31, 테스트 데이터', Math.max(groupHeight, profileHeight) + 360,
+    text(230, 182, '피식 그룹', { size: 26, weight: 700 }) +
     text(870, 182, 'Game Mate 프로필 수정', { size: 26, weight: 700 }) +
     rect(214, 198, 372, groupHeight + 32, { radius: 24 }) +
     rect(854, 198, 372, profileHeight + 32, { radius: 24 }) +
     screenImage('photo-group.png', 230, 214, 340) +
     screenImage('game-profile-edit.png', 870, 214, 340) +
-    lines(870, profileHeight + 278, ['실제 폼에 입력한 화면입니다.', '닉네임과 소개를 함께 수정합니다.'], { size: 24, fill: C.muted })),
+    lines(870, profileHeight + 278, ['사진과 닉네임, 자기소개를', '하단 버튼 한 번으로 저장합니다.'], { size: 24, fill: C.muted })),
 });
 figures.push({
   name: '10-game-marketplace',
-  svg: frame('친추 판매와 코칭을 연결하는 화면', '가격과 조건을 보고 문의할 상대를 고릅니다 | 2026.10.30 촬영, 테스트 데이터', 1110,
+  svg: frame('친추 판매와 코칭을 연결하는 화면', '가격과 조건을 보고 문의할 상대를 고릅니다 | 2026.10.31 촬영, 테스트 데이터', 1110,
     text(230, 182, '친추 판매 모집', { size: 26, weight: 700 }) +
     text(870, 182, '코칭 모집과 수강료', { size: 26, weight: 700 }) +
     rect(214, 198, 392, 812, { radius: 24 }) +
@@ -232,13 +232,21 @@ figures.push({
 const createGroupHeight = displayedHeight('photo-group-create.png', 340);
 figures.push({
   name: '11-photo-group-flow',
-  svg: frame('그룹을 만들고 공개 그룹을 탐색하는 화면', '별사대의 그룹 생성 페이지와 탐색 | 2026.10.30 촬영, 테스트 데이터', createGroupHeight + 310,
+  svg: frame('그룹을 만들고 공개 그룹을 탐색하는 화면', '피식의 그룹 생성과 탐색 | 2026.10.31, 테스트 데이터', Math.max(createGroupHeight, displayedHeight('photo-explore.png', 340)) + 310,
     text(230, 182, '그룹 생성 페이지', { size: 26, weight: 700 }) +
     text(870, 182, '공개 그룹 탐색', { size: 26, weight: 700 }) +
     rect(214, 198, 372, createGroupHeight + 32, { radius: 24 }) +
     rect(854, 198, 372, displayedHeight('photo-explore.png', 340) + 32, { radius: 24 }) +
     screenImage('photo-group-create.png', 230, 214, 340) +
     screenImage('photo-explore.png', 870, 214, 340)),
+});
+
+const introductionHeight = displayedHeight('photo-about-desktop.png', 1280);
+figures.push({
+  name: '12-photo-introduction',
+  svg: frame('피식의 실제 소개 화면', '새 이름과 로고가 반영된 서비스 화면 | 2026.10.31, origin/develop 0deb9209', introductionHeight + 290,
+    rect(64, 174, 1312, introductionHeight + 32, { radius: 20 }) +
+    screenImage('photo-about-desktop.png', 80, 190, 1280)),
 });
 
 const previews = [];
