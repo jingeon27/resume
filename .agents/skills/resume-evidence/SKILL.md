@@ -3,7 +3,7 @@ name: resume-evidence
 description: Write, revise, and evaluate 김진건's engineering resumes, application motivations, career statements, and general or AI-use portfolios using the exact job posting, work history, and side-project code as evidence. Use for recruiting-related skill assessments and requested screening estimates too. Do not activate for ordinary code reviews or blog editing unrelated to applications.
 ---
 
-# 이력서 작성과 근거 기반 피드백
+# 이력서와 포트폴리오 작성, 피드백
 
 공고가 요구하는 일과 지원자가 실제로 한 일을 연결한다. 문서에 덜 드러난 역량은 코드와 기록을 확인해 보완하고, 역할이나 검증 범위를 늘려 쓰지 않는다. 현재 사용자 요청이 이 스킬의 과거 피드백보다 우선한다.
 
@@ -12,7 +12,7 @@ description: Write, revise, and evaluate 김진건's engineering resumes, applic
 - 요청이 작성, 수정, 평가 중 무엇인지 구분한다. 평가 요청만으로 지원서를 바꾸거나 push하지 않는다. 작은 문장 수정에 전체 저장소 감사를 요구하지 않는다.
 - 작업 공간의 `AGENTS.md`, 대상 저장소 지침, 현재 문서와 Git 상태를 확인한다. 저장소 이름과 원격으로 위치를 찾고 특정 Mac의 절대 경로를 전제하지 않는다.
 - 김진건의 자료 위치와 반복해서 틀렸던 범위는 [지원자 맥락](references/candidate-context.md)을 참고한다. 사실관계는 현재 기록과 사용자 정정을 확인한다.
-- 대상 회사, 직무, 팀, 경력 단계가 같은 공고를 사용한다. 사용자가 준 공고 본문을 우선 활용하고, 링크만 있거나 최신 요건이 필요하면 공식 원문을 조회한다. 다른 팀이나 시니어 공고를 대신 평가 기준으로 삼지 않는다.
+- 회사별 문서와 공고 대조 평가에는 대상 회사, 직무, 팀, 경력 단계가 같은 공고를 사용한다. 사용자가 준 공고 본문을 우선 활용하고, 링크만 있거나 최신 요건이 필요하면 공식 원문을 조회한다. 다른 팀이나 시니어 공고를 대신 평가 기준으로 삼지 않는다. 일반 포트폴리오 작성에 특정 회사 공고를 필수로 요구하지 않는다.
 - 필요한 자료는 기존 파일과 연결된 도구에서 먼저 찾는다. 읽을 수 없는 코드나 지표가 있으면 확인된 범위로 진행하고 결론에 영향을 주는 정보만 질문한다. 보이지 않는 것을 경험이 없는 것으로 판정하지 않는다.
 
 ## 근거를 확인하는 방법
@@ -31,6 +31,8 @@ description: Write, revise, and evaluate 김진건's engineering resumes, applic
 ## 작성하거나 수정할 때
 
 [문체와 편집 기준](references/writing-feedback.md)을 읽는다. 강점을 형용사로 선언하기보다 사용자가 겪은 상황, 맡은 결정과 행동, 확인한 결과로 보여준다.
+
+포트폴리오를 새로 만들거나 고칠 때는 [포트폴리오 작성 규칙](references/portfolio-writing.md)을 함께 읽는다. 일반/AI 문서의 역할, 목차와 상세 사례, 트레이드오프의 깊이, 화면과 코드 근거의 배치에 적용한다. 작성 규칙을 추가해 달라는 요청만으로 기존 포트폴리오 본문을 다시 쓰지는 않는다.
 
 - **회사별 이력서:** 공고에서 중요한 경험을 먼저 배치한다. 대표 사례는 판단과 결과가 보일 만큼 쓰고, 지원 직무와 거리가 있는 작업은 비중을 줄인다. 간결하게 쓰되 역량을 기술 이름 몇 개로 축소하지 않는다.
 - **지원동기:** 회사에서 맡고 싶은 구체적인 일과 이미 한 일을 연결한다. 사용자가 말하지 않은 개인 서사, 감정, 회사 비판을 만들지 않는다.
