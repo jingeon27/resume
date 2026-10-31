@@ -126,7 +126,7 @@ Frontend Engineer | 2024.01 – 2024.11
 
 - 모집 글과 문의까지를 첫 구현 범위로 정했습니다. 코치와 수강생 모두 모집하고 수강료 단위를 나눴으며 결제와 정산은 범위에 포함하지 않았습니다. REST API와 OpenAPI 기반 Orval SDK, TanStack Query를 연결했습니다.
 - 글 저장과 캐시 갱신의 실패를 분리했습니다. 변경 내용과 만료 태그를 같은 DB 트랜잭션에 저장하고, 만료 호출이 실패해도 저장 성공으로 응답합니다. 공개 화면의 갱신이 늦어질 수 있는 비용을 받아들이고 재시도와 revision 경합을 통합 테스트에 넣었습니다.
-- 파일은 S3로 직접 전송하고 크기와 형식, 내용 일부를 검사합니다. 검사한 ETag가 같을 때만 최종 객체로 복사하도록 했습니다.
+- API가 발급한 presigned POST로 브라우저에서 S3에 직접 업로드해, API 서버가 파일 전체를 중계하지 않도록 했습니다. 업로드 뒤 크기와 형식, 내용 일부를 검사하고 검사한 ETag가 같을 때만 최종 객체로 복사합니다.
 
 [소스 코드](https://github.com/jingeon27/side-project/tree/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback) | [저장과 캐시 실패 처리](resumes/doers/portfolio-doers-ai-experience.md#글-저장과-캐시-갱신의-실패를-나눴습니다)
 
