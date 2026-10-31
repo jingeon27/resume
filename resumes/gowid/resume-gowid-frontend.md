@@ -6,9 +6,9 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 ## 소개
 
-테스트와 검증을 강점으로 삼는 프론트엔드 엔지니어입니다. 예약금 결제와 쿠폰, 정산 화면을 개발하며 실제 폼의 제출값과 API 실패 뒤 동작을 확인해 왔습니다. 결제 복귀 시 입력 복원과 부분 저장 후 재시도를 다루며, 실패한 작업을 다시 처리할 때 입력이 유지되고 중복 등록이 생기지 않는지 검증합니다.
+테스트와 검증을 강점으로 삼는 프론트엔드 엔지니어입니다. 예약금 결제와 쿠폰, 정산 화면을 개발하며 **공통 구조 설계, 테스트 도입과 운영 오류 대응까지 맡았습니다.** 실제 폼의 제출값과 API 실패 뒤 동작, 결제 복귀와 부분 저장 후 재시도를 검증합니다.
 
-현재 개발과 QA, 병원 관리자와 백오피스의 화면 디자인을 맡고 있습니다. AI가 구현한 제품 코드와 테스트를 읽고, 테스트가 실제 앱과 같은 조건을 확인하는지도 검토합니다.
+세이프닥에서는 2026년 4월부터 전사 프론트엔드를 단독으로 담당하며 QA와 병원 관리자, 백오피스의 화면 디자인도 맡습니다. 요구사항에서 빠진 예외와 실제 업무 조건을 담당자와 맞추고, AI가 구현한 제품 코드와 테스트를 읽어 검증합니다.
 
 [상세 포트폴리오와 경력기술서](https://github.com/jingeon27/resume/blob/main/portfolio.md) | [AI 활용 경험](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md)
 
@@ -26,7 +26,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 #### 건강검진 예약과 결제 | 2026.09 – 현재
 
-검사 구성과 기업지원 코드, 예약금이 비급여 프로그램과 달라 기존 서비스로 관리하기 어려웠습니다. 제휴 병원의 요청으로 시작해 개발팀장, 부팀장과 빠진 동작과 예외를 확인하며 세 제품의 프론트엔드를 맡았습니다. 9월 9일 개발을 시작해 23일 운영에 배포하고 30일 정식 오픈했습니다.
+검사 구성과 기업지원 코드, 예약금이 비급여 프로그램과 달라 기존 서비스로 관리하기 어려웠습니다. 제휴 병원의 요청으로 시작해 개발팀장, 부팀장과 빠진 동작과 예외를 확인했습니다. **세 제품의 프론트엔드를 맡아 9월 9일 개발을 시작하고 23일 운영 배포, 30일 정식 오픈했습니다.**
 
 복지몰의 검사 선택과 기업 검진 코드, 토스페이먼츠 예약금 결제, 병원 관리자의 예약 관리와 결제취소 요청 접수, 백오피스의 검진 구성과 결제취소, 환불 승인을 개발했습니다.
 
@@ -62,7 +62,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 서버의 `ensureQuery` 결과를 render props로 받던 화면은 Query 캐시를 구독하지 않아 무효화해도 갱신되지 않았습니다. 2025년 5월 예약 화면부터 prefetch와 hydration으로 바꿔, 서버가 준비한 데이터를 클라이언트도 같은 캐시에서 읽고 갱신하게 했습니다.
 
 - 예약 화면의 가족과 날짜 값이 Query, Zustand, 로컬 상태에 흩어져 선택한 일시가 어긋났습니다. 서버 목록은 Query, 작성 중인 값은 React Hook Form, 제출 조건은 Zod로 나눴습니다.
-- 공통 검색 필터의 예외 분기를 화면별 조합으로 바꿔 27개 화면에 적용했습니다. JSX 중복은 일부 감수하고 URL과 폼, API 요청은 같은 Zod 스키마를 따르도록 했습니다.
+- 공통 검색 필터의 예외 분기를 화면별 조합으로 바꿔 **27개 화면에 적용했습니다.** JSX 중복은 일부 감수하고 URL과 폼, API 요청은 같은 Zod 스키마를 따르도록 했습니다.
 - Ant Design Form에는 재귀 조건부 타입과 `infer`를 쓴 `createTypedForm<T>`를 만들어 중첩 필드명과 값의 타입을 검사했습니다. 라이브러리 연결에 필요한 단언은 래퍼 안에 뒀습니다.
 - 공통 UI는 접근성 primitive와 조합 유연성을 보고 Headless UI에서 Radix UI로 옮겼습니다. Bottom Sheet는 Compound Components와 overlay-kit으로 구성해 본문과 하단 버튼이 같은 폼을 쓰게 했습니다.
 
@@ -72,7 +72,7 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 복지몰의 브라우저, 서버, Edge에 Sentry를 도입했습니다. 오류별 level과 중복 수집을 정리하고 release와 브라우저 소스맵을 연결했습니다. SDK와 전송 payload를 확인해 의료 정보와 인증 정보가 담긴 값은 제거했습니다.
 
-- Bottom Sheet 크래시를 라이브러리의 null ref 접근까지 추적해 버전업으로 해결했습니다. 달라진 snap point는 공통 Root에서 변환했습니다. 누적 75건, 57명 이상에게 발생한 오류 그룹은 9월 10일 배포 뒤 28일까지 18일간 추가 발생 0건이었습니다.
+- Bottom Sheet 크래시를 라이브러리의 null ref 접근까지 추적해 버전업으로 해결했습니다. 달라진 snap point는 공통 Root에서 변환했습니다. 누적 75건, 57명 이상에게 발생한 오류 그룹은 **9월 10일 배포 뒤 28일까지 18일간 추가 발생 0건**이었습니다.
 - 회원 조회가 타임아웃이나 서버 오류로 실패해도 로그아웃되던 동작은 401일 때만 끊도록 나눴습니다. 일시적인 실패는 다시 시도할 수 있게 했습니다.
 - 동의서의 외부 문서 조회가 실패해도 고객명과 동의 내역은 남도록 오류 경계를 나누고 실패 응답으로 테스트했습니다. 관리자 서비스의 API 오류와 Zod 응답 불일치는 CloudWatch로 트래킹합니다.
 
@@ -95,13 +95,14 @@ Frontend Engineer | jingeon27@gmail.com | [GitHub](https://github.com/jingeon27)
 
 ## 개인 프로젝트 | 2026.10 – 현재
 
-별사대와 Game Mate의 요구사항 정의부터 화면 설계, API와 DB, 테스트 기준과 배포 구성까지 맡습니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고 기술 선택과 완성된 결과를 검토합니다. 두 서비스 모두 공개 전입니다.
+별사대와 Game Mate의 **요구사항 정의부터 화면 설계, API와 DB, 테스트 기준과 배포 구성까지 맡습니다.** 기술 선택과 실패 처리 기준을 정하고, 코딩 에이전트가 구현한 코드와 테스트를 검토합니다. 두 서비스 모두 공개 전입니다.
 
 별사대는 사진 대회에서 상시 그룹으로 방향을 바꾸고 기존 사진과 링크를 보존했습니다. GraphQL과 Apollo Client를 사용하며 문서 계약과 캐시 갱신을 테스트합니다. Game Mate는 친추 판매와 코칭 모집 글에서 가격과 조건을 확인한 뒤 1:1 채팅으로 문의하는 서비스입니다. REST와 TanStack Query, NestJS, Prisma, PostgreSQL을 사용하고 S3 직접 업로드와 공개 캐시 갱신을 연결했습니다.
 
-API 요청 뒤 실제 PostgreSQL의 저장 결과를 확인하고, 트랜잭션 롤백과 캐시 갱신 재시도, 늦은 응답이 새 변경 기록을 지우는 경합을 통합 테스트로 검증했습니다.
+- 글 저장과 캐시 갱신의 실패를 분리해 데이터 변경과 만료 태그를 같은 DB 트랜잭션에 저장했습니다. 실패한 만료 요청만 재시도하고, 늦은 응답이 새 변경 기록을 지우지 않도록 revision을 비교합니다.
+- API 요청 뒤 실제 PostgreSQL의 저장 결과를 확인합니다. 트랜잭션 롤백과 애플리케이션 재시작 후 재시도, 응답 순서가 뒤바뀌는 경합은 통합 테스트로 검증했습니다.
 
-[소스 코드](https://github.com/jingeon27/side-project) | [DB 롤백과 캐시 경합 테스트](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L217) | [제품 판단과 구현 상세](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#개인-프로젝트에서-직접-정한-제품-방향)
+[저장과 캐시 갱신 설계](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.service.ts) | [DB 롤백과 캐시 경합 테스트](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L217) | [제품 판단과 구현 상세](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#개인-프로젝트에서-직접-정한-제품-방향)
 
 ## 기술
 

@@ -6,9 +6,9 @@ AI Product Engineer 지원 | jingeon27@gmail.com | [GitHub](https://github.com/j
 
 ## 소개
 
-AI를 활용해 생산성을 높이고, 제품에 필요한 기획과 디자인, 프론트엔드와 서버 개발을 함께 다룹니다. **두 서비스와 개인 기술 블로그를 혼자 2주 만에 구현했습니다.** 사용자의 입장에서 필요한 기능과 입력 흐름을 생각하며, 화면 설계부터 API와 DB, 테스트 기준과 배포 구성까지 정합니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고, 완성된 코드와 테스트를 읽고 화면을 띄워 동작을 확인합니다.
+AI를 활용해 생산성을 높이고, 제품에 필요한 기획과 디자인, 프론트엔드와 서버 개발을 함께 다룹니다. **두 서비스와 개인 기술 블로그를 혼자 2주 만에 구현했습니다.** 사용자의 입장에서 기능 범위와 화면을 정하고 API 계약과 DB 모델, 실패 처리와 테스트 기준, 배포 구성을 설계합니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고, 완성된 코드와 테스트를 읽고 화면을 띄워 동작을 확인합니다.
 
-실무에서는 세이프닥의 전사 프론트엔드와 QA, 병원 관리자와 백오피스의 화면 설계를 맡습니다. 건강검진을 세 제품에 연결해 정식 오픈했고, 글로벌 사용자 서비스와 CMS는 3주 만에 PoC로 배포했습니다.
+실무에서는 세이프닥의 전사 프론트엔드와 QA, 병원 관리자와 백오피스의 화면 설계를 맡습니다. 건강검진은 세 제품의 프론트엔드를 맡아 정식 오픈했고, **기존 제품 운영과 병행해 글로벌 사용자 서비스와 CMS를 3주 만에 PoC로 배포했습니다.** 요구사항의 빠진 동작과 API 계약을 담당자와 맞추고 공통 구조 설계와 운영 오류 대응도 맡습니다.
 
 [AI 활용 경험과 실제 화면](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md) | [상세 포트폴리오와 경력기술서](https://github.com/jingeon27/resume/blob/main/portfolio.md) | [개인 프로젝트 코드](https://github.com/jingeon27/side-project)
 
@@ -71,7 +71,7 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자 주도 실험의
 
 ## 개인 프로젝트 | 2026.10 – 현재
 
-사진 커뮤니티 별사대와 Game Mate, 개인 기술 블로그를 만듭니다. 요구사항 정의부터 화면 설계, API와 DB, 테스트와 배포 구성까지 맡습니다. 별사대와 Game Mate는 공개 전이며 초기 사용자 검증을 준비하고 있습니다.
+사진 커뮤니티 별사대와 Game Mate, 개인 기술 블로그를 만듭니다. 요구사항 정의와 화면 설계, 기술 선택, API 계약과 DB 모델, 테스트 기준과 배포 구성을 정합니다. 구현과 테스트 작성은 코딩 에이전트에 맡기고 설계와 검증 결과를 검토합니다. 별사대와 Game Mate는 공개 전이며 초기 사용자 검증을 준비하고 있습니다.
 
 ### 제품 범위와 화면 설계
 
@@ -83,10 +83,10 @@ Amplitude 기반 A/B 테스트 환경을 구축하고 담당자 주도 실험의
 
 ### API와 실패 처리
 
-NestJS와 Prisma, PostgreSQL을 사용하며 별사대는 schema-first GraphQL과 Apollo Client, Game Mate는 OpenAPI 기반 Orval SDK와 TanStack Query로 연결했습니다. GraphQL 문서는 서버 스키마와 대조합니다.
+NestJS로 API를 만들고 Prisma로 PostgreSQL 모델과 migration을 관리합니다. 별사대는 schema-first GraphQL과 Apollo Client, Game Mate는 OpenAPI 기반 Orval SDK와 TanStack Query로 연결했습니다. GraphQL 문서는 서버 스키마와 대조합니다.
 
 - **글 저장 성공과 캐시 갱신 실패를 분리했습니다.** 데이터와 만료 태그를 같은 DB 트랜잭션에 저장하고 실패한 만료 요청만 재시도합니다. 늦은 응답이 새 변경의 기록을 지우지 않도록 revision을 비교하고 재시작과 경합을 통합 테스트로 확인했습니다.
-- 파일은 S3로 직접 보내 API가 전체 파일을 메모리에 올리지 않게 했습니다. Game Mate는 내용 일부와 ETag를 확인해 확정하고 별사대는 원본 보관과 HEAD 확인을 사용했습니다.
+- 파일은 S3로 직접 보내 API가 전체 파일을 메모리에 올리지 않게 했습니다. Game Mate는 크기와 형식, 내용 일부를 검사한 뒤 같은 ETag일 때만 최종 객체로 복사해 검사 뒤 바뀐 파일이 확정되는 것을 막았습니다. 별사대는 원본 보관과 HEAD 확인을 사용했습니다.
 
 [캐시 실패 처리 코드](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.service.ts) | [API와 업로드 설계](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#글-저장과-캐시-갱신의-실패를-나눴습니다)
 
@@ -94,7 +94,7 @@ NestJS와 Prisma, PostgreSQL을 사용하며 별사대는 schema-first GraphQL�
 
 - UI는 폼 입력과 제출값, Apollo 캐시는 페이지네이션과 낙관적 갱신, API는 Supertest 요청 뒤 실제 PostgreSQL 저장 결과를 확인합니다. 웹과 Expo WebView의 연결도 테스트하며 OS와 외부 OAuth는 fixture로 대체합니다.
 - Sentry와 Amplitude에 확인용 이벤트를 보내고 MCP로 실제 저장된 데이터를 조회해 중복 페이지뷰와 URL에 남는 검색어를 찾아 고쳤습니다.
-- 초기 비용을 줄이려고 두 서비스와 PostgreSQL을 EC2 한 대에서 실행하도록 구성했습니다. 함께 중단될 위험에 대비해 DB는 별도 EBS에 두고 S3 백업과 배포 실패 시 이전 이미지 복귀를 구성했습니다. Terraform은 mock provider로 테스트하며 실제 AWS 적용과 운영 부하 검증은 별도입니다.
+- 초기 비용을 줄이려고 두 서비스와 PostgreSQL을 EC2 한 대에서 실행하도록 구성했습니다. 함께 중단될 위험에 대비해 DB는 별도 EBS에 두고 S3 백업을 준비했습니다. 백업 업로드에 실패하면 migration을 중단하고, readiness 검사에 실패하면 이전 이미지로 돌아가도록 구성했습니다. Terraform은 mock provider로 테스트하며 실제 AWS 적용과 운영 부하 검증은 별도입니다.
 
 [검증 범위와 결과](https://github.com/jingeon27/resume/blob/main/resumes/doers/portfolio-doers-ai-experience.md#테스트마다-확인할-결과를-나눴습니다) | [배포 구성](https://github.com/jingeon27/side-project/blob/eaf692c52479da09a643c9d13f54be92a1444cd8/deploy/shared-instance/README.md)
 
