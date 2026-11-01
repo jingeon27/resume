@@ -1,6 +1,7 @@
 # 두어스 AI Product Engineer 지원 서류
 
 - [이력서](resume-doers-ai-product-engineer.md)
+- [경력과 역량별 구성의 이력서 초안](resume-doers-ai-product-engineer-draft.md)
 - [AI 활용 경험 포트폴리오](portfolio-doers-ai-experience.md)
 - [일반 포트폴리오와 경력기술서](../../portfolio.md)
 - [포트폴리오 이미지와 생성 방법](assets/ai-experience/README.md)

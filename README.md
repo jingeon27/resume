@@ -4,6 +4,8 @@
 
 - [최신 공통 이력서](resumev7.md)
 - [경력과 역량 중심 이력서 초안](resume-draft.md)
+- [별도 제출용 경력기술서 초안](career-statement-draft.md)
+- [이미지 포트폴리오 초안](portfolio-draft.md)
 - [상세 이력서](resume.md)
 - [일반 포트폴리오와 경력기술서](portfolio.md)
 - [AI 활용 경험 포트폴리오](resumes/doers/portfolio-doers-ai-experience.md)

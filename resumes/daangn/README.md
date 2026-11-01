@@ -1,6 +1,7 @@
 # 당근 Frontend 산업기능요원 캠페인 지원서
 
 - [캠페인 이력서](resume-daangn-frontend-campaign.md)
+- [경력과 역량별 구성의 캠페인 이력서 초안](resume-daangn-frontend-campaign-draft.md)
 - [공식 공고](https://careers.daangn.com/jobs/role/8043875003/)
 - [상세 포트폴리오와 경력기술서](../../portfolio.md)
 - [AI 개발 workflow와 개인 프로젝트](../doers/portfolio-doers-ai-experience.md)
