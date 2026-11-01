@@ -1,0 +1,28 @@
+{
+  "source": "Public production website; anonymous browser with no saved sign-in",
+  "pixelEdits": false,
+  "captures": [
+    {
+      "file": "01-blog-list-desktop.png",
+      "url": "https://blog.bambyul.com/ko/blog",
+      "title": "글 목록 - 밤별 블로그",
+      "viewport": {
+        "width": 1440,
+        "height": 1080
+      },
+      "capturedAt": "2026-11-01T00:49:31.498Z",
+      "sha256": "2c68435b6c77452d333fad97e25f676d2fb0dfc51ef3f3574edf0e28beaa0dc2"
+    },
+    {
+      "file": "02-blog-article-mobile.png",
+      "url": "https://blog.bambyul.com/ko/blog/%EC%82%AC%EC%9D%B4%EB%93%9C-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%9D%B8%ED%94%84%EB%9D%BC%EB%A5%BC-ec2-%ED%95%9C-%EB%8C%80%EB%A1%9C-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%EB%A1%9C-%ED%95%9C-%EC%9D%B4%EC%9C%A0",
+      "title": "일단 EC2 한 대에 올려보기로 했어요 - 밤별 블로그",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "capturedAt": "2026-11-01T00:49:33.371Z",
+      "sha256": "f5a5abd04179b1048bdc2b3a62c5fef5bcf0d7b0b2b64da057c187c058bafa56"
+    }
+  ]
+}
