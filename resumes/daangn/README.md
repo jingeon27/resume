@@ -2,9 +2,13 @@
 
 - [캠페인 이력서](resume-daangn-frontend-campaign.md)
 - [경력과 역량별 구성의 캠페인 이력서 초안](resume-daangn-frontend-campaign-draft.md)
+- [캠페인 경력기술서 초안](career-statement-daangn-frontend-campaign-draft.md)
+- [캠페인 이미지 포트폴리오 초안](portfolio-daangn-frontend-campaign-draft.md)
 - [공식 공고](https://careers.daangn.com/jobs/role/8043875003/)
 - [상세 포트폴리오와 경력기술서](../../portfolio.md)
 - [AI 개발 workflow와 개인 프로젝트](../doers/portfolio-doers-ai-experience.md)
+
+이력서와 경력기술서, 이미지 포트폴리오 Draft는 각각 단독으로 읽는 제출 원고입니다. 본문에 다른 문서나 코드의 참조 링크를 넣지 않았고 포트폴리오의 이미지는 로컬 파일로 포함합니다. 이력서의 지원동기는 소개 다음, 경력 앞에 배치합니다.
 
 ## 공고 확인 범위
 

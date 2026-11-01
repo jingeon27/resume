@@ -2,10 +2,14 @@
 
 - [이력서](resume-doers-ai-product-engineer.md)
 - [경력과 역량별 구성의 이력서 초안](resume-doers-ai-product-engineer-draft.md)
+- [AI Product Engineer 경력기술서 초안](career-statement-doers-ai-product-engineer-draft.md)
+- [AI Product Engineer 이미지 포트폴리오 초안](portfolio-doers-ai-product-engineer-draft.md)
 - [AI 활용 경험 포트폴리오](portfolio-doers-ai-experience.md)
 - [일반 포트폴리오와 경력기술서](../../portfolio.md)
 - [포트폴리오 이미지와 생성 방법](assets/ai-experience/README.md)
 - [공식 공고](https://doers.company/careers/175322?lang=ko)
+
+이력서와 경력기술서, 이미지 포트폴리오 Draft는 각각 단독으로 읽는 제출 원고입니다. 본문에 다른 문서나 코드의 참조 링크를 넣지 않았고 포트폴리오의 이미지는 로컬 파일로 포함합니다. 이력서의 지원동기는 소개 다음, 경력 앞에 배치합니다.
 
 2026년 10월 24일 공고와 저장소를 확인해 작성했습니다. 실무의 프론트엔드 경력과 개인 프로젝트의 서버, 인프라 경험을 구분했습니다. AI 활용은 질문 횟수나 생성 코드량보다 제품과 디자인의 수정, 기술 선택, 검증 기준을 중심으로 설명합니다.
 

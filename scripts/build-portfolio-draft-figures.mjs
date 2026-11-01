@@ -59,6 +59,12 @@ const figures = [
     card(80, 405, 600, 195, '공통 실행 단계', ['단계의 순서와 실행을 공통화', '모듈 경계와 생성자 주입 참고'], '#f4f6f8') +
     card(760, 405, 600, 195, '사이트별 adapter', ['잡플래닛과 게임잡 연동', '사이트별 화면과 수집 방식 분리'], '#f4f6f8') +
     text(80, 656, 'NestJS는 CTO 피드백으로 제거하고, 공통 단계와 adapter로 나눈 구조는 유지했습니다.', 25))],
+  ['04-bottom-sheet-interaction', frame('반응형 Bottom Sheet의 상태와 검증 기준', '개인 프로젝트: 같은 입력 폼을 유지한 채 시트와 모달로 전환', 870,
+    card(80, 190, 520, 210, '모바일 시트', ['하단에서 열고 닫기', '키보드로 시트 높이 조절']) +
+    card(840, 190, 520, 210, '데스크톱 모달', ['중앙에서 열고 닫기', '같은 입력 폼과 포커스 유지']) +
+    arrow(616, 294, 824, 294) + text(636, 259, '화면 크기 전환', 23) +
+    card(80, 470, 1280, 190, '같은 Root와 Popup에서 유지하는 상태', ['작성 중인 입력, 열림과 닫힘, snap point', '높이를 바꿔도 입력 보존, 닫으면 연 버튼으로 포커스 복귀'], '#f4f6f8') +
+    text(80, 739, '키보드 높이 조절과 Escape 닫힘, 입력 보존과 포커스 복귀를 테스트에 명세했습니다.', 25))],
 ];
 
 const previews = [];
@@ -71,4 +77,4 @@ for (const [name, svg] of figures) {
   console.log(`${name}.png`);
 }
 mkdirSync(join(root, '.pdfbuild'), { recursive: true });
-await sharp({ create: { width: 720, height: 1470, channels: 4, background: '#f4f6f8' } }).composite(previews).png().toFile(join(root, '.pdfbuild/portfolio-draft-figures-contact.png'));
+await sharp({ create: { width: 720, height: figures.length * 490, channels: 4, background: '#f4f6f8' } }).composite(previews).png().toFile(join(root, '.pdfbuild/portfolio-draft-figures-contact.png'));
