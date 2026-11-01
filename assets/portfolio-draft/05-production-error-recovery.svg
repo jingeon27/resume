@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="690" viewBox="0 0 1440 690">
+<title>Bottom Sheet 오류 그룹의 발생 기록</title><desc>기존 Sentry 확인 기록을 정리한 설명 그림 | 확인 시점 2026.09.28</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#8494a7"/></marker></defs>
+<style>text{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif}</style>
+<rect width="1440" height="690" fill="#fff"/>
+<text x="72" y="78" font-size="40" font-weight="700" fill="#172b4d">Bottom Sheet 오류 그룹의 발생 기록</text><text x="72" y="124" font-size="24" font-weight="400" fill="#52647a">기존 Sentry 확인 기록을 정리한 설명 그림 | 확인 시점 2026.09.28</text>
+<rect x="80" y="195" width="520" height="220" rx="20" fill="#eef4ff" stroke="#dbe4f0"/><text x="106" y="240" font-size="29" font-weight="700" fill="#172b4d">수정 운영 배포 전</text><text x="106" y="288" font-size="24" font-weight="400" fill="#52647a">누적 오류 75건</text><text x="106" y="324" font-size="24" font-weight="400" fill="#52647a">영향받은 사용자 57명 이상</text><rect x="840" y="195" width="520" height="220" rx="20" fill="#edf8f3" stroke="#dbe4f0"/><text x="866" y="240" font-size="29" font-weight="700" fill="#172b4d">배포 후 확인 기간</text><text x="866" y="288" font-size="24" font-weight="400" fill="#52647a">같은 오류 그룹 추가 발생 0건</text><text x="866" y="324" font-size="24" font-weight="400" fill="#52647a">2026.09.10 – 09.28, 18일</text><path d="M620 300 H820 V300" stroke="#8494a7" stroke-width="3" fill="none" marker-end="url(#arrow)"/><text x="635" y="263" font-size="23" font-weight="400" fill="#172b4d">9월 10일 배포</text><text x="80" y="494" font-size="24" font-weight="400" fill="#172b4d">라이브러리의 null ref 접근을 추적해 버전업하고, snap point는 공통 Root에서 변환했습니다.</text><text x="80" y="547" font-size="24" font-weight="400" fill="#172b4d">수정 전 누적 값과 수정 배포 후 18일간 같은 오류 그룹의 추가 발생을 구분했습니다.</text>
+<path d="M72 624 H1368" stroke="#dbe4f0"/>
+<text x="72" y="659" font-size="19" font-weight="400" fill="#52647a">김진건 | 포트폴리오 | 설명용 구성도</text>
+</svg>

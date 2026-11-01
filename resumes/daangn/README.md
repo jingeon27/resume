@@ -2,13 +2,14 @@
 
 - [캠페인 이력서](resume-daangn-frontend-campaign.md)
 - [경력과 역량별 구성의 캠페인 이력서 초안](resume-daangn-frontend-campaign-draft.md)
-- [캠페인 경력기술서 초안](career-statement-daangn-frontend-campaign-draft.md)
 - [캠페인 이미지 포트폴리오 초안](portfolio-daangn-frontend-campaign-draft.md)
 - [공식 공고](https://careers.daangn.com/jobs/role/8043875003/)
 - [상세 포트폴리오와 경력기술서](../../portfolio.md)
 - [AI 개발 workflow와 개인 프로젝트](../doers/portfolio-doers-ai-experience.md)
 
-이력서와 경력기술서, 이미지 포트폴리오 Draft는 각각 단독으로 읽는 제출 원고입니다. 본문에 다른 문서나 코드의 참조 링크를 넣지 않았고 포트폴리오의 이미지는 로컬 파일로 포함합니다. 이력서의 지원동기는 소개 다음, 경력 앞에 배치합니다.
+제출용 Draft는 이력서와 이미지 포트폴리오 두 문서로 정리했습니다. 별도 경력기술서 초안은 제거했습니다. 두 문서는 다른 문서나 코드의 참조 링크 없이 단독으로 읽히며, 포트폴리오의 이미지는 로컬 파일로 포함합니다. 이력서의 지원동기는 소개 다음, 경력 앞에 배치합니다.
+
+포트폴리오는 프로그램 개발에서 건강검진 내재화까지의 흐름, SSR과 아키텍처, Sentry와 운영 오류, 공통 UI와 인터랙션, 피식의 GraphQL 판단 등 5개 사례에 집중했습니다. 실험과 협업은 짧게 요약했습니다. 이력서에는 3개 제품의 3주 출시, 오류 그룹의 수정 후 18일간 추가 발생 0건, 타입 검사 12.5초에서 1.9초 등 확인된 수치를 보강했습니다. PDF는 갱신하지 않습니다.
 
 ## 공고 확인 범위
 
