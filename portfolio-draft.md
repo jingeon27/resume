@@ -422,6 +422,17 @@ SSE는 React 외부 스토어와 `useSyncExternalStore`로 연결했습니다. �
 
 API 연동은 dev API 서버를 우선하고 만들기 어려운 조건에만 MSW를 씁니다. 성공만 반환하는 목이 서버 계약 위반을 가리지 않도록 실제 인증으로 연결하는 계약 테스트도 뒀습니다. 자체 lint rule은 RuleTester와 fixture, mock으로 검사하고 미사용 코드는 Knip으로 찾습니다. 병렬 worktree의 전체 검사가 겹치는 부담은 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 실행하는 방식으로 조정했습니다.
 
+**테스트에 적용한 기준**
+
+| 검증 기준 | 적용한 방식 |
+| --- | --- |
+| 새 기능과 확인한 오류 구분 | 새 기능의 기대 동작은 BDD 형식의 `*.spec`, 운영과 QA에서 발견한 오류는 `*.test`에 재현 |
+| 실제 제출 경로 사용 | 테스트가 제출 코드를 다시 쓰는 Harness를 걷어내고 실제 폼과 Drawer를 렌더해 입력부터 요청까지 확인 |
+| 기대값을 독립적으로 작성 | 제품의 변환 함수를 기대 payload 계산에 그대로 쓰지 않고 요청에 실려야 할 값을 따로 작성 |
+| 새 테스트의 실패 여부 확인 | 보호하려는 제품 코드를 잠시 틀리게 바꿔 테스트가 실패하는지 확인한 뒤 원복 |
+| API와 Mock의 범위 구분 | 연결 가능한 dev API 서버의 계약을 먼저 확인하고, 반복하기 어려운 오류와 빈 상태는 MSW로 고정 |
+| 브라우저와 규칙 자체도 검사 | 직접 진입과 뒤로 가기, 포커스와 스크롤은 Playwright로, lint rule은 RuleTester와 fixture, mock으로 확인 |
+
 **트레이드오프**
 
 테스트와 리뷰를 추가하면 검증 비용도 늘어납니다. 병렬 worktree마다 전체 검사를 반복하는 대신 변경분과 영향 범위를 먼저 검사하고, 타입 검사는 앱과 패키지 단위로 실행했습니다. 실제 API 테스트는 계약을 확인할 수 있지만 서버 환경과 데이터의 영향을 받으므로 MSW와 용도를 나눴습니다.
@@ -567,6 +578,20 @@ Query key와 조회 함수를 공용화하고 공통 드래그 컴포넌트를 �
 세 프로젝트를 Yarn workspace 모노레포에서 개발하며 요구사항 정의부터 화면 설계, API와 DB, 테스트 기준과 배포 구성까지 맡습니다. 만들 기능과 아키텍처, 필요한 동작은 제가 정합니다. 세부 구현과 테스트 작성 및 실행은 코딩 에이전트에 맡기고, 저는 실제 화면을 써 보고 코드의 전반적인 구조와 검증 보고를 보며 피드백합니다. 두 서비스와 개인 블로그를 2주 동안 만들었고 이후 보완하고 있습니다. 블로그는 공개했으며 두 서비스는 공개 전입니다.
 
 작업 목표와 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI
+
+개인 프로젝트의 세부 구현과 테스트 작성 및 실행은 에이전트가 맡습니다. 저는 원하는 동작과 실패 조건을 정하고 실제 화면과 전반적인 구조, 검증 보고를 보며 피드백합니다.
+
+**개인 프로젝트에서 구성한 테스트**
+
+![함수와 UI, API와 DB, 브라우저로 나눈 개인 프로젝트의 테스트 범위](resumes/doers/assets/ai-experience/06-test-strategy.png)
+
+| 사례와 GitHub 근거 | 확인하려는 동작 | 테스트에 둔 조건 |
+| --- | --- | --- |
+| [피식의 익명 기록 승계](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/api/src/auth/anonymous/anonymous-auth.service.integration.spec.ts#L75) | 익명으로 작성한 글과 그룹 가입을 회원가입 뒤에도 유지 | 가입 전후 사용자 ID, 게시물과 멤버십이 유지되는지 실제 DB에서 확인 |
+| [피식의 Apollo 캐시](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/web/src/features/post/model/post.cache.spec.ts#L41) | 그룹과 카테고리가 다른 목록이 섞이지 않도록 분리 | 실제 InMemoryCache에 조건별로 쓰고 읽어 목록을 비교 |
+| [Game Mate 채팅 재전송](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/chat/chat.controller.integration.test.ts#L206) | 저장 뒤 응답을 놓쳐 재전송해도 같은 메시지로 처리 | 같은 요청의 응답 ID와 DB 메시지 수, 다른 내용 재사용 시 거절 확인 |
+| [Game Mate 캐시 복구](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L235) | 글 저장 성공과 캐시 전달 실패를 분리 | 전달 실패 뒤 재시작해 복구하고 늦은 호출이 새 revision을 지우지 않는지 확인 |
+| [블로그의 번역과 주소](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/blog/apps/web/scripts/content.test.ts#L40) | 없는 번역을 노출하지 않고 기존 글 주소를 유지 | 실제 번역 연결과 slug 중복, 사라진 주소의 301 대상 검사 |
 
 ### 사진 커뮤니티 피식
 

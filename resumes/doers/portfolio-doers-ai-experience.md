@@ -42,7 +42,22 @@ jingeon27@gmail.com | [GitHub](https://github.com/jingeon27) | [기술 블로그
 
 티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
 
+![에이전트 구현과 직접 검토, 검사와 QA 요청을 연결한 실무 workflow](../../assets/portfolio-draft/02-ai-workflow.png)
+
+*실무의 작업 순서입니다. 개인 프로젝트의 구현과 테스트 작성 및 실행은 에이전트가 맡고, QA 더블 체크 요청은 실무에서 수행했습니다.*
+
 에이전트가 완성본을 제출하면 검토하고 부족한 부분은 수정을 요청해 다시 확인합니다. 기능 개발과 리팩터링에서는 변경된 제품 코드와 테스트를 읽습니다. 새 기능은 BDD 형식의 `*.spec`에 컴포넌트별 기대 동작을 적고 누락을 검토하며, 운영이나 QA 오류는 `*.test`에 재현합니다. 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실패하는지도 확인합니다.
+
+**실무 테스트에 적용한 기준**
+
+| 검증 기준 | 적용한 방식 |
+| --- | --- |
+| 새 기능과 확인한 오류 구분 | 새 기능의 기대 동작은 BDD 형식의 `*.spec`, 운영과 QA에서 발견한 오류는 `*.test`에 재현 |
+| 실제 제출 경로 사용 | 테스트가 제출 코드를 다시 쓰는 Harness를 걷어내고 실제 폼과 Drawer를 렌더해 입력부터 요청까지 확인 |
+| 기대값을 독립적으로 작성 | 제품의 변환 함수를 기대 payload 계산에 그대로 쓰지 않고 요청에 실려야 할 값을 따로 작성 |
+| 새 테스트의 실패 여부 확인 | 보호하려는 제품 코드를 잠시 틀리게 바꿔 테스트가 실패하는지 확인한 뒤 원복 |
+| API와 Mock의 범위 구분 | 연결 가능한 dev API 서버의 계약을 먼저 확인하고, 반복하기 어려운 오류와 빈 상태는 MSW로 고정 |
+| 브라우저와 규칙 자체도 검사 | 직접 진입과 뒤로 가기, 포커스와 스크롤은 Playwright로, lint rule은 RuleTester와 fixture, mock으로 확인 |
 
 [테스트 도입과 검증 기준](https://blog.bambyul.com/ko/blog/테스트-코드를-도입하면서-세운-기준) | [AI 개발 workflow](https://blog.bambyul.com/ko/blog/ai가-코드를-잘-짜기-시작했는데-제가-덜-바빠지지는-않았어요)
 
@@ -364,7 +379,7 @@ GraphQL 문서와 fragment를 서버 스키마와 대조하고 페이지네이�
 
 ### 테스트마다 확인할 결과를 나눴습니다
 
-**담당과 기여:** 기대 결과와 실패 조건, 실제 연결할 DB/S3와 fixture의 경계를 정했습니다. 에이전트가 작성한 테스트의 입력과 assertion, 격리와 정리 대상을 검토합니다.
+**담당과 기여:** 원하는 동작과 실패 조건, 실제 연결할 DB/S3와 fixture의 경계를 정했습니다. 세부 테스트 작성과 실행은 에이전트가 맡고 저는 실제 화면과 전반적인 코드 구조, 검증 보고를 보며 피드백합니다.
 
 **문제 상황**
 
@@ -379,6 +394,16 @@ GraphQL 문서와 fragment를 서버 스키마와 대조하고 페이지네이�
 웹과 WebView 호스트를 연결한 테스트는 글 작성과 댓글, 채팅과 화면 이동을 확인합니다. OS 기능과 외부 OAuth를 fixture로 대신한 테스트를 실기기나 실제 제공자 연동의 성공으로 해석하지 않습니다. DB와 S3의 테스트 데이터도 실행별로 나누고 해당 실행이 만든 스키마와 객체만 정리합니다.
 
 공통 lint rule도 RuleTester와 fixture로 검사합니다. FSD 경계와 공개 API, 직접 fetch와 오버레이 상태 중복을 규칙으로 옮기되 DOM 관련 규칙은 Expo에 적용하지 않습니다. 작성과 수정의 책임을 어디서 나눌지처럼 맥락에 따라 달라지는 판단은 skills와 코드 리뷰에 남깁니다.
+
+**구현에 연결한 확인 조건과 GitHub 테스트**
+
+| 사례와 GitHub 근거 | 확인하려는 동작 | 테스트에 둔 조건 |
+| --- | --- | --- |
+| [피식의 익명 기록 승계](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/api/src/auth/anonymous/anonymous-auth.service.integration.spec.ts#L75) | 익명으로 작성한 글과 그룹 가입을 회원가입 뒤에도 유지 | 가입 전후 사용자 ID, 게시물과 멤버십이 유지되는지 실제 DB에서 확인 |
+| [피식의 Apollo 캐시](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/web/src/features/post/model/post.cache.spec.ts#L41) | 그룹과 카테고리가 다른 목록이 섞이지 않도록 분리 | 실제 InMemoryCache에 조건별로 쓰고 읽어 목록을 비교 |
+| [Game Mate 채팅 재전송](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/chat/chat.controller.integration.test.ts#L206) | 저장 뒤 응답을 놓쳐 재전송해도 같은 메시지로 처리 | 같은 요청의 응답 ID와 DB 메시지 수, 다른 내용 재사용 시 거절 확인 |
+| [Game Mate 캐시 복구](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L235) | 글 저장 성공과 캐시 전달 실패를 분리 | 전달 실패 뒤 재시작해 복구하고 늦은 호출이 새 revision을 지우지 않는지 확인 |
+| [블로그의 번역과 주소](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/blog/apps/web/scripts/content.test.ts#L40) | 없는 번역을 노출하지 않고 기존 글 주소를 유지 | 실제 번역 연결과 slug 중복, 사라진 주소의 301 대상 검사 |
 
 **트레이드오프**
 

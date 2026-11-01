@@ -11,7 +11,7 @@ AI를 활용해 두 서비스와 블로그를 2주 동안 만들었고 이후 �
 - 친추 판매와 코칭을 연결하는 Game Mate
 - 사진 커뮤니티 피식
 - 개인 기술 블로그
-- AI 구현을 검토하고 검증 기준을 고친 과정
+- AI 개발 workflow와 테스트
 - 프로그램 개발에서 건강검진 내재화까지
 
 ## 경력과 기여 범위
@@ -174,35 +174,66 @@ MDX와 정적 검색 인덱스를 사용해 콘텐츠를 코드와 함께 검토
 
 구현과 검증: [번역과 이전 주소 계약 검사](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/blog/apps/web/scripts/content.test.ts#L40) | [검색 키보드 동작 검사](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/blog/apps/web/src/features/article-search/ui/article-search.spec.tsx)
 
-## AI 구현을 검토하고 검증 기준을 고친 과정
+## AI 개발 workflow와 테스트
 
-2026.04 – 현재 | 세이프닥 실무
+2026.04 – 현재 | 세이프닥 실무, 개인 프로젝트는 2026.10부터 적용
 
-**담당과 기여:** 요구사항과 검증 범위, 에이전트 완성본의 코드와 테스트 검토, 반려와 재검토, skills와 lint rule 보완을 맡습니다. 테스트는 2026년 7월부터 도입했습니다.
+**담당과 기여:** 실무에서는 티켓과 검증 범위 확인, 에이전트가 제출한 코드와 테스트 검토, 반려와 재검토, skills와 lint rule 보완을 맡습니다. 코딩 에이전트는 2026년 4월부터 활용했고 테스트는 7월부터 도입했습니다. 개인 프로젝트는 기능과 아키텍처, 필요한 동작을 제가 정하고 세부 구현과 테스트 작성 및 실행은 에이전트에 맡깁니다. 저는 실제 화면과 전반적인 코드 구조, 검증 보고를 보며 피드백합니다.
 
 **문제 상황**
 
-에이전트가 작성한 테스트가 통과해도 앱과 다른 조건을 검증하거나 화면 회귀를 놓칠 수 있었습니다. 테스트용 QueryClient는 실제 앱과 다르게 오류를 처리했고, diff를 읽고도 Bottom Sheet 헤더까지 스크롤되는 회귀를 놓친 적이 있었습니다.
+에이전트가 작성한 테스트가 통과해도 실제 제출 코드를 실행하지 않거나 앱과 다른 조건을 검증할 수 있었습니다. 테스트용 QueryClient는 실제 앱과 다르게 오류를 처리했고, 글로벌 CMS의 초기 통합 테스트는 등록 Drawer 대신 제출을 복제한 Harness를 확인했습니다. 코드 diff를 읽고도 Bottom Sheet 헤더까지 스크롤되는 회귀를 놓친 적도 있었습니다.
 
 **해결 방법**
 
+실무에서는 아래 순서로 작업합니다. 단계에서 문제가 나오면 앞 단계로 돌아가 수정을 요청하고 다시 확인합니다.
+
 티켓과 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI(테스트, knip, lint) → QA 더블 체크 요청
 
-![에이전트 구현과 직접 검토, 검사와 QA 요청을 연결한 작업 순서](../../assets/portfolio-draft/02-ai-workflow.png)
+![에이전트 구현과 직접 리뷰, 검사와 QA 요청을 연결한 실무 workflow](../../assets/portfolio-draft/02-ai-workflow.png)
 
-*실무에서 수행하는 순서입니다. 개인 프로젝트에는 QA 더블 체크 요청 단계를 두지 않습니다.*
+*실무에서 수행하는 순서와 역할을 정리한 구성도입니다.*
 
-QueryClient 설정을 앱과 맞추고 첫 조회 실패와 기존 데이터의 재조회 실패를 나눴습니다. 헤더 스크롤은 본문만 스크롤되게 고치고 브라우저 레이아웃 회귀 테스트로 남겼습니다. 기대 payload는 제품의 변환 함수를 그대로 호출하지 않고 따로 적어 같은 실수가 테스트에도 복제되지 않게 했습니다.
+검증 기준은 실제로 놓쳤던 경로를 고치며 정했습니다.
 
-새 기능은 BDD 형식의 `*.spec`, 운영과 QA 오류는 `*.test`로 다룹니다. 새 테스트 패턴은 제품 코드를 일부러 깨뜨려 실제 실패하는지 확인합니다. 반복되는 판단은 skills에, 정적으로 검사할 수 있는 import 방향과 공개 API, queryKey는 lint rule에 남기며 규칙 자체도 RuleTester와 fixture로 검증합니다.
+| 검증 기준 | 적용한 방식 |
+| --- | --- |
+| 새 기능과 확인한 오류 구분 | 새 기능의 기대 동작은 BDD 형식의 `*.spec`, 운영과 QA에서 발견한 오류는 `*.test`에 재현 |
+| 실제 제출 경로 사용 | 테스트가 제출 코드를 다시 쓰는 Harness를 걷어내고 실제 폼과 Drawer를 렌더해 입력부터 요청까지 확인 |
+| 기대값을 독립적으로 작성 | 제품의 변환 함수를 기대 payload 계산에 그대로 쓰지 않고 요청에 실려야 할 값을 따로 작성 |
+| 새 테스트의 실패 여부 확인 | 보호하려는 제품 코드를 잠시 틀리게 바꿔 테스트가 실패하는지 확인한 뒤 원복 |
+| API와 Mock의 범위 구분 | 연결 가능한 dev API 서버의 계약을 먼저 확인하고, 반복하기 어려운 오류와 빈 상태는 MSW로 고정 |
+| 브라우저와 규칙 자체도 검사 | 직접 진입과 뒤로 가기, 포커스와 스크롤은 Playwright로, lint rule은 RuleTester와 fixture, mock으로 확인 |
+
+QueryClient는 앱과 설정을 맞추고 데이터가 없는 첫 조회 실패와 기존 데이터의 재조회 실패를 나눠 확인했습니다. Harness는 실제 등록 Drawer로 바꾸고, 성공만 반환하던 MSW에는 백엔드 DTO에서 확인한 제약을 반영했습니다. 새 테스트에서 프로그램 코드 전송을 빼면 실제로 실패하는지도 확인했습니다. Bottom Sheet는 본문만 스크롤되게 고친 뒤 브라우저 레이아웃 회귀 테스트로 남겼습니다.
+
+**개인 프로젝트에 적용한 순서와 테스트**
+
+작업 목표와 plan 검토 → 테스트 작성 → 에이전트 구현과 에이전트 코드 리뷰 → 변경분 테스트, lint, typecheck → 직접 diff 리뷰와 화면 동작 확인 → 전체 CI
+
+개인 프로젝트의 테스트 작성과 실행은 에이전트가 맡습니다. 저는 원하는 동작과 실패 조건을 설명하고 실제 화면과 전반적인 구조, 검증 보고를 보며 수정 방향을 정합니다. QA 더블 체크 요청은 실무에서 수행했습니다.
+
+![함수와 UI, 실제 API와 DB, 브라우저로 나눈 개인 프로젝트의 테스트 범위](assets/ai-experience/06-test-strategy.png)
+
+*개인 프로젝트에서 구성한 검증 범위입니다. 테스트 설정은 각 앱에 두고 루트에서는 실행을 위임합니다.*
+
+| 사례와 GitHub 근거 | 확인하려는 동작 | 테스트에 둔 조건 |
+| --- | --- | --- |
+| [피식의 익명 기록 승계](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/api/src/auth/anonymous/anonymous-auth.service.integration.spec.ts#L75) | 익명으로 작성한 글과 그룹 가입을 회원가입 뒤에도 유지 | 가입 전후 사용자 ID, 게시물과 멤버십이 유지되는지 실제 DB에서 확인 |
+| [피식의 Apollo 캐시](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/photo-contest/apps/web/src/features/post/model/post.cache.spec.ts#L41) | 그룹과 카테고리가 다른 목록이 섞이지 않도록 분리 | 실제 InMemoryCache에 조건별로 쓰고 읽어 목록을 비교 |
+| [Game Mate 채팅 재전송](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/chat/chat.controller.integration.test.ts#L206) | 저장 뒤 응답을 놓쳐 재전송해도 같은 메시지로 처리 | 같은 요청의 응답 ID와 DB 메시지 수, 다른 내용 재사용 시 거절 확인 |
+| [Game Mate 캐시 복구](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/game-feedback/apps/api/src/cache-invalidation/cache-invalidation.integration.spec.ts#L235) | 글 저장 성공과 캐시 전달 실패를 분리 | 전달 실패 뒤 재시작해 복구하고 늦은 호출이 새 revision을 지우지 않는지 확인 |
+| [블로그의 번역과 주소](https://github.com/jingeon27/side-project/blob/9576836125cfd91e977b417b50dd9b049e649cff/projects/blog/apps/web/scripts/content.test.ts#L40) | 없는 번역을 노출하지 않고 기존 글 주소를 유지 | 실제 번역 연결과 slug 중복, 사라진 주소의 301 대상 검사 |
+
+같은 설명이 반복되면 skills에 남기고, import 방향과 공개 API, queryKey처럼 정적으로 검사할 수 있는 기준은 lint rule로 옮깁니다. 화면과 테스트의 결과를 확인한 뒤 다음 구현부터 같은 기준이 적용되도록 합니다.
 
 **트레이드오프**
 
-검토와 테스트는 비용이 들어 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 실행합니다. 실제 API 연동은 계약을 확인할 수 있지만 서버 환경과 데이터의 영향을 받으므로 dev API 서버와 MSW의 용도를 나눴습니다.
+리뷰와 테스트에는 시간이 듭니다. 변경분과 영향 범위를 먼저 검사하고 타입 검사는 앱과 패키지 단위로 실행한 뒤 전체 CI를 확인합니다. 실제 API는 서버 환경과 공유 데이터의 영향을 받아 MSW와 용도를 나눴습니다. 개인 프로젝트의 PostgreSQL 테스트는 실행별 스키마로 격리합니다. OAuth와 OS 기능은 fixture로 대체하며 실제 제공자 연동과 실기기 확인은 별도로 다룹니다.
 
 **결과 및 배운 점**
 
-잘못된 테스트 전제와 놓친 스크롤을 수정하고 회귀 조건으로 남겼습니다. 코드와 테스트의 통과 여부, 화면에서 실제로 같은 조건을 확인했는지를 나눠 검토합니다. 에이전트의 완성본을 반려하고 검증 기준을 다음 구현에 남기는 방식으로 작업합니다.
+실제 제출 경로를 거치지 않던 테스트와 앱과 다른 오류 전제를 고쳤고, 놓친 스크롤 동작은 회귀 테스트로 남겼습니다. 기대 동작이 명세에 있는지, 제품 코드를 틀리게 바꾸면 실패하는지, 브라우저에서도 같은 흐름인지까지 나눠 확인하는 기준을 세웠습니다. 개인 프로젝트에는 DB 저장과 캐시, 재전송의 실패 조건을 테스트하도록 요청하고 구현과 검증 보고를 보며 피드백했습니다.
 
 ## 프로그램 개발에서 건강검진 내재화까지
 
